@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- A -->
+    <string name="app_name">Zeppa</string>
+    <string name="activity">Activity</string>
+	    
+    <!-- C -->
+    <string name="calendar_title">Calendar</string>
+    <string name="contacts" >Contacts</string>
+    <string name="create_event">Create Event</string>
+
+    <!-- D -->
+    
+    <!-- E -->
+    <string name="example_email">Example@gmail.com</string>
+    <string name="enter_email_hint">Enter Google Account Email Address</string>
+    
+    
+    <!-- F -->
+    <string name="feed_title">Feed</string>
+    <string name="friday_calendar_short">Fr</string>
+    
+    <!-- H -->
+    <string name="hall_of_fame">Hall of Fame</string>
+	<string name="home">Home</string>
+
+	<!-- J -->
+	<string name="join">Join</string>
+	<string name="joinrepost">Join/Repost</string>
+	
+    <!-- M -->
+    <string name="monday_calendar_short">Mo</string>
+	<string name="my_account">My Account</string>
+    
+    <!-- N -->
+
+	<!-- P -->
+	<string name="password">Password</string>
+
+	<!-- R -->
+	<string name="remember_me">Remember Me</string>
+	
+    <!-- S -->
+    <string name="start_new">Start Something</string>
+    <string name="saturday_calendar_short">Sa</string>
+    <string name="send_feedback">Send Me Feedback</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sunday_calendar_short">Su</string>
+
+    <!-- T -->
+    <string name="tuesday_calendar_short">Tu</string>
+    <string name="thursday_calendar_short">Th</string>
+
+    <!-- W -->
+    <string name="watching_title">Watching</string>
+    <string name="watchthis">Watch this</string>
+    <string name="wednesday_calendar_short">We</string>
+	
+    
+    <!-- Content Description -->
+    <string name="contdesc_calendaroptions">Advanced Calendar Options</string>
+    <string name="contdesc_calendarviewtype">Calendar View Type</string>
+	<string name="contdesc_conflictionimage">Confliction Indication</string>
+	<string name="contdesc_contactimage">Contact Image</string>
+	<string name="contdesc_hostimage">Host Image</string>
+    <string name="contdesc_interactbtn">Manage Interaction</string>
+    <string name="contdesc_lastmonth">Go To Last Month</string>
+    <string name="contdesc_navlist_item">Navigation List Item Picture</string>
+    <string name="contdesc_nextmonth">Go To Next Month</string>
+    <string name="contdesc_search">Search Friends</string>
+    <string name="contdesc_settingsbtn">Application Settings</string>
+   	<string name="contdesc_titletext">Title Text</string>
+
+    
+    <!-- Action Menu Options -->
+    <string name="menu_aboutus">About Us</string>
+    <string name="menu_addcontact">Add Contact</string>
+    <string name="menu_explain">Explain This</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_newevent">New Event</string>
+	<string name="menu_refresh">Refresh</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_settings">Settings</string>
+    
+    
+    <!-- Static Arrays -->
+    <string-array name="navigation_options">
+        <item>@string/home</item>
+        <item>@string/contacts</item>
+        <item>@string/activity</item>
+        <item>@string/my_account</item>
+        <item>@string/send_feedback</item>
+    </string-array>
+    
+    <string-array name="event_types">
+        <item>Custom Event</item>
+        <item>Right Now</item>
+        <item>Invite Only</item>
+        <item>Find a Time</item>
+    </string-array>
+    
+
+</resources>

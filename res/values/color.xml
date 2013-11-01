@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+    	File contians all solid colors used in application
+    		- organized by general color -> alphabetical
+    -->
+
+
+    <!-- Neutrals -->
+    <color name="black">#000</color> 
+    <color name="gray">#BFBFBF</color>
+    <color name="gray_light">#DEDEDE</color>
+    <color name="white">#FFF</color>
+    <color name="white_eggshell">#EDEDED</color>
+
+    <!-- Blues -->
+    <color name="blue">#00F</color>
+    <color name="blue_eggshell">#CCF3FF</color>
+    <color name="blue_lightish">#3D61FF</color>
+    <color name="teal_dark">#1FA9FF</color>
+    <color name="teal_light">#A6DDFF</color>  
+    
+    <!-- Red -->
+    <color name="red">#F00</color>
+    <color name="red_notif">#FF1919</color>
+    
+    
+</resources>

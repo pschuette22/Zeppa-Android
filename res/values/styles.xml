@@ -1,0 +1,43 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+    	NOTES:
+    		(Oct 17, 2013) - No API level specific customizations have been made yet.
+    		All operating under assumption that minApi = 11 (Android 3.0)
+    		
+    
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!--  
+    Customize this later, was fucking everything up
+    
+   // Application theme. <- make these comments again
+    <style name="ZeppaTheme" parent="AppBaseTheme">
+       	<item name="android:actionBarStyle">@style/ZeppaActionBarStyle</item>
+    </style>
+    
+    // Action Bar Style 
+    <style name="ZeppaActionBarStyle"
+           parent="@android:style/Theme.Holo">
+        <item name="android:textColor">@color/white_eggshell</item>
+        <item name="android:background">@drawable/background_actionbar</item>
+        <item name="android:actionBarTabStyle">@style/ZeppaActionBarTabs</item>
+    </style>
+    
+    <style name="ZeppaActionBarTabs"
+           parent="@android:style/Widget.Holo.ActionBar.TabView">
+        <item name="android:background">@drawable/background_tabs</item>
+    </style>
+    
+    -->
+    
+</resources>
