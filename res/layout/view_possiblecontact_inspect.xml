@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="15dp" >
+
+    <ImageView
+        android:id="@+id/possiblecontactview_image"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/background_contact_picture"
+        android:padding="1dp"
+        android:src="@drawable/generic_user_male" />
+
+    <TextView
+        android:id="@+id/possiblecontactview_name"
+        style="@style/black_txt18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/possiblecontactview_image" />
+
+    <TextView
+        android:id="@+id/possiblecontactview_email"
+        style="@style/black_teal_txt14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/possiblecontactview_name"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/possiblecontactview_image" />
+
+    <TextView
+        android:id="@+id/possiblecontactview_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/possiblecontactview_email"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/possiblecontactview_image" />
+
+</RelativeLayout>

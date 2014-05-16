@@ -2,40 +2,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" 
-    android:background="@color/white">
-    
-    <ImageView 
-        android:clickable="false"
-        android:id="@+id/navlistItemButton"
-        android:layout_alignParentLeft="true"
-        android:layout_height="40dp"
+    android:background="@drawable/background_navitem"
+    android:orientation="vertical"
+    android:paddingBottom="15dp"
+    android:paddingTop="10dp" >
+
+    <ImageView
+        android:id="@+id/navlistItemIcon"
         android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:layout_margin="5dp"
-        android:src="@drawable/ic_launcher"
-        android:scaleType="fitXY"
-        android:contentDescription="@string/contdesc_navlist_item"
-        />
-    
-    <TextView 
         android:clickable="false"
+        android:contentDescription="@string/contdesc_navlist_item"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
         android:id="@+id/navListItemUpdatesIndicator"
+        style="@style/white_txt12sp"
         android:layout_width="9dp"
         android:layout_height="9dp"
-        style="@style/white_txt12sp"
-        android:visibility="invisible"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:background="@drawable/background_focusitem"
-        />
-    
-    <TextView 
         android:clickable="false"
+        android:visibility="invisible" />
+
+    <TextView
         android:id="@+id/navlistItemText"
+        style="@style/black_teal_txt14sp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/navListItemUpdatesIndicator"
-        android:layout_toLeftOf="@id/navlistItemButton"
+        android:layout_centerVertical="true"
         android:layout_margin="5dp"
-        style="@style/black_teal_txt14sp"
-        />
+        android:layout_toLeftOf="@id/navListItemUpdatesIndicator"
+        android:layout_toRightOf="@id/navlistItemIcon"
+        android:clickable="false" />
 
 </RelativeLayout>

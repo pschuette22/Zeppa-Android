@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_listitem_default"
+    android:orientation="horizontal" >
+
+    <CheckBox
+        android:id="@+id/inviteitem_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="3dp" />
+
+    <ImageView
+        android:id="@+id/inviteitem_contactimage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/background_contact_picture"
+        android:contentDescription="@string/contdesc_userimage"
+        android:padding="1dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/generic_user_male" />
+
+    <TextView
+        android:id="@+id/inviteitem_contactname"
+        style="@style/black_txt18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp" />
+
+</LinearLayout>

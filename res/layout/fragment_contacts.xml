@@ -2,14 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:animateLayoutChanges="true"
     android:orientation="vertical" >
-    
-    <ListView 
+
+    <include
+        android:id="@+id/contacts_loaderview"
+        layout="@layout/view_loaderview"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/contactsListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/contactsListView"
-        android:background="@color/white"
         android:divider="@color/gray_light"
         android:dividerHeight="2dp" />
-    
+
 </LinearLayout>

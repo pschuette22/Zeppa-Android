@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/menu_event_stopwatching"
+        android:checkable="true"
+        android:icon="@drawable/ic_stopwatching"
+        android:orderInCategory="0"
+        android:showAsAction="ifRoom"
+        android:title="@string/watch"/>
+    <item
+        android:id="@+id/menu_event_join"
+        android:checkable="true"
+        android:icon="@drawable/ic_join"
+        android:orderInCategory="1"
+        android:showAsAction="ifRoom"
+        android:title="@string/join"/>
+    <item
+        android:id="@+id/menu_event_repost"
+        android:icon="@drawable/ic_repost"
+        android:orderInCategory="2"
+        android:showAsAction="ifRoom"
+        android:title="@string/repost"/>
+    <item
+        android:id="@+id/menu_event_directions"
+        android:icon="@drawable/ic_menu_compass"
+        android:orderInCategory="3"
+        android:showAsAction="never"
+        android:title="@string/directions"/>
+    <item
+        android:id="@+id/menu_event_refresh"
+        android:orderInCategory="4"
+        android:showAsAction="never"
+        android:title="@string/menu_refresh"/>
+    <item
+        android:id="@+id/menu_event_texthost"
+        android:orderInCategory="5"
+        android:showAsAction="never"
+        android:title="@string/text_host"/>
+    <item
+        android:id="@+id/menu_event_emailhost"
+        android:orderInCategory="6"
+        android:showAsAction="never"
+        android:title="@string/email_host"/>
+
+</menu>

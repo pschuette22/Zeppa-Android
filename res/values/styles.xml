@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
@@ -16,28 +17,18 @@
             backward-compatibility can go here.
         -->
     </style>
-
-    <!--  
-    Customize this later, was fucking everything up
     
-   // Application theme. <- make these comments again
-    <style name="ZeppaTheme" parent="AppBaseTheme">
+      <!-- Application theme -->
+    <style name="ZeppaTheme" parent="@android:style/Theme.Holo.Light">
        	<item name="android:actionBarStyle">@style/ZeppaActionBarStyle</item>
     </style>
     
-    // Action Bar Style 
+        <!-- Action Bar Style --> 
     <style name="ZeppaActionBarStyle"
-           parent="@android:style/Theme.Holo">
-        <item name="android:textColor">@color/white_eggshell</item>
-        <item name="android:background">@drawable/background_actionbar</item>
-        <item name="android:actionBarTabStyle">@style/ZeppaActionBarTabs</item>
+           parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:titleTextStyle">@style/white_black_txt18sp</item>
+        <item name="android:background">@color/teal</item>
     </style>
     
-    <style name="ZeppaActionBarTabs"
-           parent="@android:style/Widget.Holo.ActionBar.TabView">
-        <item name="android:background">@drawable/background_tabs</item>
-    </style>
-    
-    -->
-    
+
 </resources>

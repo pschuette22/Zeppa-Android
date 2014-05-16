@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/accountfragment_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/background_contact_picture"
+                android:contentDescription="@string/contdesc_contactimage"
+                android:padding="1dp"
+                android:src="@drawable/generic_user_male" />
+
+            <LinearLayout
+                android:id="@+id/accountfragment_nameholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/accountfragment_image"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/accountfragment_firstname"
+                    style="@style/black_txt18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/accountfragment_lastname"
+                    style="@style/black_txt18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/accountfragment_birthday"
+                style="@style/black_txt18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/accountfragment_image" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/accountfragment_phonenumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/background_listitem_default" />
+
+        <TextView
+            android:id="@+id/accountfragment_emailaddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/background_listitem_default" />
+
+        <LinearLayout
+            android:id="@+id/accountfragment_tagholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical" />
+
+        <Button
+            android:id="@+id/accountfragment_newtagbutton"
+            style="@style/black_teal_txt14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_listitem_default"
+            android:padding="5dp"/>
+
+        <LinearLayout
+            android:id="@+id/accountfragment_eventholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true"
+            android:padding="7dp" />
+
+        <Button
+            android:id="@+id/accountfragment_neweventbutton"
+            style="@style/black_teal_txt14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_listitem_default"
+            android:padding="5dp"
+            android:text="@string/add_event" />
+    </LinearLayout>
+
+</ScrollView>

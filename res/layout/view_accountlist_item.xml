@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_listitem_default"
+    android:orientation="horizontal" >
+
+    <RadioButton
+        android:id="@+id/accountslist_item_radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="5dp" />
+
+    <TextView
+        android:id="@+id/accountslist_item_text"
+        style="@style/black_txt18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:lines="1" />
+
+</LinearLayout>

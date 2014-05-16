@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_eggshell" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/feedback_edittext_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/background_edittext_default"
+            android:ems="10"
+            android:hint="@string/feedback_title"
+            android:lines="1"
+            android:minWidth="120dp"
+            android:padding="3dp"
+            android:paddingBottom="2dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="2dp" />
+
+        <RatingBar
+            android:id="@+id/feedback_ratingbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp" />
+
+        <EditText
+            android:id="@+id/feedback_edittext_main"
+            android:gravity="top|left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background_edittext_default"
+            android:hint="@string/feedback_main"
+            android:minLines="4"
+            android:paddingBottom="3dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="3dp" />
+
+        <Button
+            android:id="@+id/feedback_button_send"
+            style="@style/white_txt18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/background_button_default"
+            android:paddingBottom="3dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="3dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/send_feedback" />
+    </LinearLayout>
+
+</ScrollView>

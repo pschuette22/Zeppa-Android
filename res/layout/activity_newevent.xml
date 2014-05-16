@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/neweventactivity_cancel"
+            style="?android:attr/actionBarTabStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/cancel_icon"
+            android:gravity="center"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/neweventactivity_create"
+            style="?android:attr/actionBarTabStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/done_icon"
+            android:gravity="center"
+            android:text="@string/done" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/teal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="30dp" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <Spinner
+                    android:id="@+id/neweventactivity_eventscope"
+                    style="?android:attr/spinnerItemStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="3dp"
+                    android:paddingBottom="-5dp"
+                    android:paddingTop="-5dp"
+                    android:spinnerMode="dropdown" />
+
+                <EditText
+                    android:id="@+id/neweventactivity_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@id/neweventactivity_eventscope"
+                    android:hint="@string/event_title"
+                    android:inputType="textCapWords"
+                    android:lines="1"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <ImageView
+                    android:id="@+id/neweventactivity_exactlocation"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/background_fragimg"
+                    android:contentDescription="@string/contdesc_addexactlocation"
+                    android:src="@drawable/ic_menu_compass" />
+
+                <EditText
+                    android:id="@+id/neweventactivity_shortlocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="4dp"
+                    android:layout_toLeftOf="@id/neweventactivity_exactlocation"
+                    android:hint="@string/location_short"
+                    android:inputType="textCapWords"
+                    android:padding="3dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/neweventactivity_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="6dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/from"
+                android:textColor="@color/gray_dark" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:id="@+id/neweventactivity_starttime"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="2dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="3dp" />
+
+                <TextView
+                    android:id="@+id/neweventactivity_startdate"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/neweventactivity_starttime"
+                    android:padding="3dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/neweventactivity_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/to"
+                android:textColor="@color/gray_dark" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:id="@+id/neweventactivity_endtime"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="2dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="3dp" />
+
+                <TextView
+                    android:id="@+id/neweventactivity_enddate"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/neweventactivity_endtime"
+                    android:padding="3dp" />
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/neweventactivity_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="@string/desciption_newevent"
+                android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+                android:padding="3dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+
+            <LinearLayout
+                android:id="@+id/neweventactivity_taglineholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <ImageView
+                    android:id="@+id/neweventactivity_addnewtag"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/background_imagebutton"
+                    android:contentDescription="@string/contdesc_addtag"
+                    android:src="@drawable/ic_cab_done_holo_light" />
+
+                <EditText
+                    android:id="@+id/neweventactivity_tagtext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/neweventactivity_addnewtag"
+                    android:drawableLeft="@drawable/hashtag"
+                    android:hint="@string/newtag"
+                    android:inputType="textCapWords"
+                    android:lines="1"
+                    android:maxLength="25"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/neweventactivity_addinvites"
+                style="@style/black_txt18sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/background_listitem_default"
+                android:gravity="center"
+                android:padding="3dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/add_invites" />
+
+            <LinearLayout
+                android:id="@+id/neweventactivity_invitesholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:animateLayoutChanges="true"
+                android:paddingRight="10dp" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notificationsfragment_ptr"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:orientation="vertical" >
-    
 
-</LinearLayout>
+    <include
+        android:id="@+id/notifications_loaderview"
+        layout="@layout/view_loaderview"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/notificationsListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/background_fragment"
+        android:clickable="false"
+        android:divider="@color/gray_light"
+        android:dividerHeight="1dp" />
+
+</uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_listitem_default"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp" >
+
+    <ImageView
+        android:id="@+id/newcontact_senditem_picture"
+        android:layout_width="@dimen/view_contactlistitem_picture"
+        android:layout_height="@dimen/view_contactlistitem_picture"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/background_contact_picture"
+        android:contentDescription="@string/contdesc_contactimage"
+        android:padding="1dp"
+        android:src="@drawable/generic_user_male" />
+
+    <CheckBox
+        android:id="@+id/newcontact_senditem_button"
+        android:layout_width="60dp"
+        android:layout_height="45dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="right|center_vertical"
+        android:button="@drawable/background_button_contactrequest" />
+
+    <TextView
+        android:id="@+id/newcontact_senditem_name"
+        style="@style/black_txt18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="4dp"
+        android:layout_toLeftOf="@id/newcontact_senditem_button"
+        android:layout_toRightOf="@id/newcontact_senditem_picture" />
+
+</RelativeLayout>

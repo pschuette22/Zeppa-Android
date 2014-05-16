@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple Text View to populate the spinner with when account is selected -->
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textview_accounts"
+    style="@style/white_black_txt18sp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center" />

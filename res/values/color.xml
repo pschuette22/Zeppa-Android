@@ -9,21 +9,39 @@
 
     <!-- Neutrals -->
     <color name="black">#000</color> 
+    <color name="black_transparent">#8000</color>
     <color name="gray">#BFBFBF</color>
-    <color name="gray_light">#DEDEDE</color>
+    <color name="gray_dark">#878787</color>
+    <color name="gray_comment">#696E6E</color>
+    <color name="gray_light">#BFBFBF</color>
+    <color name="gray_neutral_border">#B3B3B3</color>
     <color name="white">#FFF</color>
+    <color name="white_gray">#FDFDFF</color>
     <color name="white_eggshell">#EDEDED</color>
 
     <!-- Blues -->
     <color name="blue">#00F</color>
     <color name="blue_eggshell">#CCF3FF</color>
     <color name="blue_lightish">#3D61FF</color>
+    <color name="blue_link">#5CA8FF</color>
+    <color name="teal">#0AD2FF</color>
     <color name="teal_dark">#1FA9FF</color>
-    <color name="teal_light">#A6DDFF</color>  
+    <color name="teal_light">#A6DDFF</color>
+    <color name="teal_transparent">#500AD2FF</color>  
+    
+    <!-- Green -->
+    <color name="green">#0F0</color>
+    <color name="green_dark">#00D100</color>
+    <color name="green_transparent">#80F0</color>
     
     <!-- Red -->
     <color name="red">#F00</color>
+    <color name="red_dark">#CF1313</color>
     <color name="red_notif">#FF1919</color>
+    <color name="red_transparent">#8F00</color>
     
+    <!-- Yellow -->
+    <color name="yellow">#252500</color>
+    <color name="yellow_highlight">#88FEFF14</color>
     
-</resources>
+</resources> 

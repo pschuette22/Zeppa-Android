@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_fragment" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white" >
+
+            <ImageView
+                android:id="@+id/useractivity_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/background_contact_picture"
+                android:contentDescription="@string/contdesc_contactimage"
+                android:padding="1dp"
+                android:src="@drawable/generic_user_male" />
+
+            <TextView
+                android:id="@+id/useractivity_username"
+                style="@style/black_txt18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="12dp"
+                android:layout_toRightOf="@id/useractivity_image" />
+
+            <Button
+                android:id="@+id/useractivity_mutualfriends"
+                style="@style/black_txt14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/useractivity_username"
+                android:layout_margin="0dp"
+                android:layout_toRightOf="@id/useractivity_image"
+                android:background="@drawable/background_listitem_default"
+                android:gravity="left|center_vertical"
+                android:paddingBottom="1dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="1dp" />
+
+            <Switch
+                android:id="@+id/useractivity_followswitch"
+                style="@style/black_txt14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/useractivity_mutualfriends"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_toRightOf="@id/useractivity_image"
+                android:background="@drawable/background_listitem_default"
+                android:text="@string/follow_new"
+                android:textOff="@string/no"
+                android:textOn="@string/yes" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/useractivity_tagholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:id="@+id/useractivity_eventholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerPadding="3dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+</ScrollView>
