@@ -14,6 +14,7 @@
 
 
     <!-- C -->
+    <string name="calendar_list_title">Calendars Synced</string>
     <string name="calendar_title">Calendar</string>
     <string name="cancel"> Cancel</string>
     <string name="casual">Casual</string>
@@ -60,6 +61,7 @@
 
     <!-- G -->
     <string name="getting_details">Getting Account Details</string>
+    <string name="going">Going</string>
     <string name="got_it">Got It</string>
     
     <!-- H -->
@@ -120,6 +122,7 @@
     <!-- R -->
     <string name="remember_me">Remember Me</string>
     <string name="repost">Repost</string>
+    <string name="reposts">Reposts</string>
 
     <!-- S -->
     <string name="start_new">Start Something</string>
@@ -153,6 +156,9 @@
 
     <!-- Y -->
     <string name="yes">Yes</string>
+    
+    <!-- Z -->
+    <string name="zeppa">Zeppa</string>
 
     <!-- Content Description -->
     <string name="contdesc_addexactlocation">Add Exact Location</string>
@@ -203,8 +209,9 @@
     <string-array name="navigation_options">
         <item>@string/home</item>
         <item>@string/contacts</item>
-        <item>@string/notifications</item>
-        <item>@string/my_account</item>
+<!--         <item>@string/notifications</item>
+ -->        
+ 		<item>@string/my_account</item>
         <item>@string/send_feedback</item>
         <item>@string/invite_people</item>
     </string-array>

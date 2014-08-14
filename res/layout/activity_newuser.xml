@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/newuseractivity_cancel"
+            style="?android:attr/actionBarTabStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/cancel_icon"
+            android:gravity="center"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/newuseractivity_create"
+            style="?android:attr/actionBarTabStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/done_icon"
+            android:gravity="center"
+            android:text="@string/done" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/teal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/newuseractivity_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/background_contact_picture" />
+
+                <EditText
+                    android:id="@+id/newuseractivty_givenname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="3dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toRightOf="@id/newuseractivity_image"
+                    android:maxLines="1" />
+
+                <EditText
+                    android:id="@+id/newuseractivty_familyname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/newuseractivty_givenname"
+                    android:layout_margin="3dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@id/newuseractivity_image"
+                    android:maxLines="1" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/newuseractivity_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:drawableLeft="@drawable/ic_mail_image"
+                android:drawablePadding="5dp"
+                android:textAppearance="@style/black_txt16sp" />
+
+            <TextView
+                android:id="@+id/newuseractivity_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:drawableLeft="@drawable/ic_phone_image"
+                android:drawablePadding="5dp"
+                android:textAppearance="@style/black_txt16sp" />
+
+            <TextView
+                android:id="@+id/newuseractivity_calendarlayouttitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray_light"
+                android:text="@string/calendar_list_title" />
+
+            <LinearLayout
+                android:id="@+id/newuseractivity_calendarlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

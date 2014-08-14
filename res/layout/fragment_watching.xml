@@ -3,19 +3,12 @@
     android:id="@+id/watchingfragment_ptr"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     android:orientation="vertical" >
-
-    <include
-        android:id="@+id/watching_loaderview"
-        layout="@layout/view_loaderview"
-        android:visibility="gone" />
 
     <ListView
         android:id="@+id/watchingListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
         android:background="@drawable/background_fragment"
         android:divider="@color/white_eggshell"
         android:dividerHeight="10dp"

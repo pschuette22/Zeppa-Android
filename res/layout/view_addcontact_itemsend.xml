@@ -9,7 +9,7 @@
     android:paddingRight="12dp" >
 
     <ImageView
-        android:id="@+id/newcontact_senditem_picture"
+        android:id="@+id/newcontact_picture"
         android:layout_width="@dimen/view_contactlistitem_picture"
         android:layout_height="@dimen/view_contactlistitem_picture"
         android:layout_alignParentLeft="true"
@@ -17,7 +17,7 @@
         android:background="@drawable/background_contact_picture"
         android:contentDescription="@string/contdesc_contactimage"
         android:padding="1dp"
-        android:src="@drawable/generic_user_male" />
+        android:src="@drawable/default_user_image" />
 
     <CheckBox
         android:id="@+id/newcontact_senditem_button"
@@ -29,7 +29,7 @@
         android:button="@drawable/background_button_contactrequest" />
 
     <TextView
-        android:id="@+id/newcontact_senditem_name"
+        android:id="@+id/newcontact_name"
         style="@style/black_txt18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,6 +37,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="4dp"
         android:layout_toLeftOf="@id/newcontact_senditem_button"
-        android:layout_toRightOf="@id/newcontact_senditem_picture" />
+        android:layout_toRightOf="@id/newcontact_picture" />
 
 </RelativeLayout>

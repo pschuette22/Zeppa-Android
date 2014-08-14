@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="/Users/DrunkWithFunk21/SDKs/android-sdk-macosx/extras/android/support/v4/android-support-v4.jar"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/plus-v1r125lv1.16.0-rc"/>
-	<classpathentry kind="src" path="endpoint-libs/libcontainers-v1/containers/containers-v1-generated-source"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="lib" path="/Users/DrunkWithFunk21/SDKs/android-sdk-macosx/extras/android/support/v4/android-support-v4.jar"/>
+	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/calendar-v3r89lv1.18.0-rc"/>
+	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/plus-v1r145lv1.18.0-rc"/>
+	<classpathentry kind="src" path="endpoint-libs/libdeviceinfoendpoint-v1/deviceinfoendpoint/deviceinfoendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libeventcommentendpoint-v1/eventcommentendpoint/eventcommentendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libeventtagendpoint-v1/eventtagendpoint/eventtagendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libeventtagfollowendpoint-v1/eventtagfollowendpoint/eventtagfollowendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libzeppaeventendpoint-v1/zeppaeventendpoint/zeppaeventendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libzeppaeventtouserrelationshipendpoint-v1/zeppaeventtouserrelationshipendpoint/zeppaeventtouserrelationshipendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libzeppafeedbackendpoint-v1/zeppafeedbackendpoint/zeppafeedbackendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libzeppanotificationendpoint-v1/zeppanotificationendpoint/zeppanotificationendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libzeppauserendpoint-v1/zeppauserendpoint/zeppauserendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libzeppauserinfoendpoint-v1/zeppauserinfoendpoint/zeppauserinfoendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libzeppausertouserrelationshipendpoint-v1/zeppausertouserrelationshipendpoint/zeppausertouserrelationshipendpoint-v1-generated-source"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

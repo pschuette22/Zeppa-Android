@@ -3,18 +3,19 @@ package com.minook.zeppa.singleton;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.view.View;
+import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
-import com.minook.zeppa.ZeppaApplication;
+import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint;
 import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint.GetNotificationList;
 import com.minook.zeppa.zeppanotificationendpoint.model.CollectionResponseZeppaNotification;
@@ -23,8 +24,9 @@ import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 public class NotificationSingleton {
 	private static NotificationSingleton singleton;
 
+	private final String TAG = "NotificationSingleton";
 	private List<ZeppaNotification> notifications;
-	private List<View> loaderViews;
+	private List<OnLoadListener> loadListeners;
 	private boolean hasLoadedInitial;
 
 	/*
@@ -33,7 +35,7 @@ public class NotificationSingleton {
 
 	private NotificationSingleton() {
 		notifications = new ArrayList<ZeppaNotification>();
-		loaderViews = new ArrayList<View>();
+		loadListeners = new ArrayList<OnLoadListener>();
 		hasLoadedInitial = false;
 	}
 
@@ -41,12 +43,6 @@ public class NotificationSingleton {
 		if (singleton == null)
 			singleton = new NotificationSingleton();
 		return singleton;
-	}
-
-	public void loadInitialNotificationsInAsync(Context context) {
-		GoogleAccountCredential credential = ((ZeppaApplication) context
-				.getApplicationContext()).getGoogleAccountCredential();
-		loadInitialNotificationsInAsync(credential);
 	}
 
 	/*
@@ -69,9 +65,10 @@ public class NotificationSingleton {
 	 * Setters
 	 */
 
-	public void hideOnInitialLoad(View view) {
-		if (!loaderViews.contains(view))
-			loaderViews.add(view);
+	public void registerOnLoadListener(OnLoadListener listener) {
+		if (!loadListeners.contains(listener)) {
+			this.loadListeners.add(listener);
+		}
 	}
 
 	public void addNotification(ZeppaNotification notification) {
@@ -90,15 +87,17 @@ public class NotificationSingleton {
 	 * Private
 	 */
 
-	private void hideViews() {
-		if (!loaderViews.isEmpty()) {
-			for (View loaderView : loaderViews) {
-				try {
-					loaderView.setVisibility(View.GONE);
-				} catch (NullPointerException ex) {
-					ex.printStackTrace();
-				}
+	private void onFinishLoad() {
+		Iterator<OnLoadListener> listeners = loadListeners.iterator();
+
+		while (listeners.hasNext()) {
+			OnLoadListener listener = listeners.next();
+			try {
+				listener.onFinishLoad();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+
 		}
 	}
 
@@ -106,7 +105,30 @@ public class NotificationSingleton {
 	 * Loaders
 	 */
 
-	private void loadInitialNotificationsInAsync(
+	public boolean markNotificationAsSeen(Long notificationId,
+			GoogleAccountCredential credential) {
+		boolean success = false;
+
+		Zeppanotificationendpoint.Builder endpointBuilder = new Zeppanotificationendpoint.Builder(
+				AndroidHttp.newCompatibleTransport(),
+				AndroidJsonFactory.getDefaultInstance(), credential);
+		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
+		Zeppanotificationendpoint notificationEndpoint = endpointBuilder
+				.build();
+
+		try {
+			notificationEndpoint.userHasSeen(notificationId).execute();
+			success = true;
+		} catch (GoogleAuthIOException aEx) {
+			Log.wtf(TAG, "AuthException");
+			success = false;
+		} catch (IOException ex) {
+
+		}
+		return success;
+	}
+
+	public void loadInitialNotificationsInAsync(
 			GoogleAccountCredential credential) {
 
 		GoogleAccountCredential[] params = { credential };
@@ -120,7 +142,7 @@ public class NotificationSingleton {
 
 				Zeppanotificationendpoint.Builder endpointBuilder = new Zeppanotificationendpoint.Builder(
 						AndroidHttp.newCompatibleTransport(),
-						new JacksonFactory(), credential);
+						AndroidJsonFactory.getDefaultInstance(), credential);
 				endpointBuilder = CloudEndpointUtils
 						.updateBuilder(endpointBuilder);
 				Zeppanotificationendpoint notificationEndpoint = endpointBuilder
@@ -129,32 +151,22 @@ public class NotificationSingleton {
 				try {
 
 					int start = 0;
-					ZeppaNotification lastNotification = null;
 
-					while (start <= 30
-							|| (lastNotification != null && !lastNotification
-									.getHasSeen())) {
+					GetNotificationList getNotificationList = notificationEndpoint
+							.getNotificationList(getUserId(), start);
+					CollectionResponseZeppaNotification result = getNotificationList
+							.execute();
 
-						GetNotificationList getNotificationList = notificationEndpoint
-								.getNotificationList(getUserId(), start);
-						CollectionResponseZeppaNotification result = getNotificationList
-								.execute();
+					if (result == null || result.getItems() == null
+							|| result.getItems().isEmpty()) {
+					} else {
 						List<ZeppaNotification> resultList = result.getItems();
-
-						if (resultList == null || resultList.isEmpty()) {
-							break;
-						} else {
-
-							notifications.addAll(resultList);
-
-							if (resultList.size() < 15) {
-								break;
-							} else {
-								start += 15;
-							}
-						}
+						notifications.addAll(resultList);
 
 					}
+
+				} catch (GoogleAuthIOException aEx) {
+					Log.wtf(TAG, "AuthException");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -166,7 +178,7 @@ public class NotificationSingleton {
 			protected void onPostExecute(Void result) {
 				super.onPostExecute(result);
 				hasLoadedInitial = true;
-				hideViews();
+				onFinishLoad();
 			}
 		}.execute(params);
 

@@ -4,26 +4,34 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
 import com.minook.zeppa.CloudEndpointUtils;
-import com.minook.zeppa.ZeppaApplication;
-import com.minook.zeppa.adapters.tagadapter.MyTagAdapter;
+import com.minook.zeppa.adapter.tagadapter.MyTagAdapter;
 import com.minook.zeppa.eventtagendpoint.Eventtagendpoint;
 import com.minook.zeppa.eventtagendpoint.Eventtagendpoint.GetUserTags;
 import com.minook.zeppa.eventtagendpoint.model.CollectionResponseEventTag;
 import com.minook.zeppa.eventtagendpoint.model.EventTag;
-import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
-import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
+import com.minook.zeppa.mediator.MyEventTagMediator;
 
+/**
+ * This class holds all the Event Tag Managers for the users event Tags. it does
+ * not hold other friends event tags because they are held by the
+ * UserInfoManager
+ * 
+ * @author DrunkWithFunk21
+ * 
+ */
 public class EventTagSingleton {
 	private static EventTagSingleton singleton;
 
-	private List<EventTag> tags;
+	private final String TAG = "EventTagSingleton";
+	private List<MyEventTagMediator> tagManagers;
 	private MyTagAdapter waitingAdapter;
 	private boolean hasLoadedTags;
 
@@ -32,7 +40,8 @@ public class EventTagSingleton {
 	 */
 
 	private EventTagSingleton() {
-		tags = new ArrayList<EventTag>();
+		tagManagers = new ArrayList<MyEventTagMediator>();
+		waitingAdapter = null;
 		hasLoadedTags = false;
 	}
 
@@ -59,7 +68,6 @@ public class EventTagSingleton {
 		tag.setUserId(getUserId());
 		tag.setDayCreated(time);
 		tag.setTagText(new String());
-		tag.setUsersFollowingIds(new ArrayList<Long>());
 
 		return tag;
 	}
@@ -72,16 +80,16 @@ public class EventTagSingleton {
 		return ZeppaUserSingleton.getInstance().getUserId();
 	}
 
-	public List<EventTag> getTags() {
-		return tags;
+	public List<MyEventTagMediator> getTags() {
+		return tagManagers;
 	}
 
-	public List<EventTag> getTagsFrom(List<Long> tagIds) {
-		List<EventTag> usedTags = new ArrayList<EventTag>();
-		for (EventTag tag : tags) {
-			if (tagIds.contains(tag.getKey().getId()))
-				usedTags.add(tag);
-		}
+	public List<MyEventTagMediator> getTagsFrom(List<Long> tagIds) {
+		List<MyEventTagMediator> usedTags = new ArrayList<MyEventTagMediator>();
+		// for (EventTag tag : tags) {
+		// if (tagIds.contains(tag.getKey().getId()))
+		// usedTags.add(tag);
+		// }
 		return usedTags;
 	}
 
@@ -93,26 +101,23 @@ public class EventTagSingleton {
 	 * Setters
 	 */
 
-	private boolean addAllEventTags(List<EventTag> tags) {
-		
-		boolean didChange = false;
-		if (this.tags.containsAll(tags) && tags.containsAll(this.tags)) {
-			didChange = true;
-		} else {
-			this.tags.removeAll(tags);
-			this.tags.addAll(tags);
-		}
-		
+	private boolean addAllEventTags(List<MyEventTagMediator> tags) {
+
+		boolean didChange = true;
+		// if (this.tags.containsAll(tags) && tags.containsAll(this.tags)) {
+		// didChange = false;
+		// } else {
+		// this.tags.removeAll(tags);
+		// this.tags.addAll(tags);
+		// }
+
 		return didChange;
 	}
 
-	private void addEventTag(EventTag tag) {
-		if (!tags.contains(tag))
-			this.tags.add(tag);
-	}
-
-	public void waitForLoad(MyTagAdapter adapter) {
-		waitingAdapter = adapter;
+	private void addEventTag(EventTag tag, GoogleAccountCredential credential) {
+		MyEventTagMediator myTagManager = new MyEventTagMediator(tag,
+				credential);
+		tagManagers.add(myTagManager);
 	}
 
 	/*
@@ -123,97 +128,99 @@ public class EventTagSingleton {
 	 * Loader Methods
 	 */
 
-	public void loadTagsInAsync(Context context) {
+	public void loadTagsInAsync(GoogleAccountCredential credential) {
 
-		GoogleAccountCredential credential = ((ZeppaApplication) context
-				.getApplicationContext()).getGoogleAccountCredential();
 		GoogleAccountCredential[] params = { credential };
 
-		new AsyncTask<GoogleAccountCredential, Void, List<EventTag>>() {
+		new AsyncTask<GoogleAccountCredential, Void, Boolean>() {
 
 			@Override
-			protected List<EventTag> doInBackground(GoogleAccountCredential... params) {
+			protected Boolean doInBackground(GoogleAccountCredential... params) {
 
+				Boolean success = Boolean.FALSE;
 				GoogleAccountCredential credential = params[0];
 				Eventtagendpoint.Builder endpointBuilder = new Eventtagendpoint.Builder(
 						AndroidHttp.newCompatibleTransport(),
-						new JacksonFactory(), credential);
+						AndroidJsonFactory.getDefaultInstance(), credential);
 				endpointBuilder = CloudEndpointUtils
 						.updateBuilder(endpointBuilder);
 				Eventtagendpoint tagEndpoint = endpointBuilder.build();
 
-				List<EventTag> result = new ArrayList<EventTag>();
-				
 				try {
 
 					int start = 0;
 					while (true) {
 
 						GetUserTags getUserTags = tagEndpoint.getUserTags(
-								getUserId(), start, (start + 15));
-						start += 15;
+								getUserId(), start, 40);
+
 						CollectionResponseEventTag response = getUserTags
 								.execute();
+						success = Boolean.TRUE;
 
-						if (response == null)
+						if (response == null || response.getItems() == null
+								|| response.getItems().isEmpty()) {
 							break;
-
-						List<EventTag> listResponse = response.getItems();
-						if (listResponse != null && !listResponse.isEmpty()) {
-							result.addAll(result);
-							if (listResponse.size() < 15) {
-								break;
-							}
 
 						} else {
-							break;
+
 						}
+
 					}
 
+				} catch (GoogleAuthIOException aEx) {
+					Log.wtf(TAG, "AuthException");
+					success = false;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 
-				return result;
+				return success;
 			}
 
 			@Override
-			protected void onPostExecute(List<EventTag> result) {
+			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
-				
-				boolean didChange = false;
-				if(!result.isEmpty()){
-					didChange = addAllEventTags(result);
-				}
-				
+				// TODO: indicate an error here and/or try again
+
 				hasLoadedTags = true;
-				if(waitingAdapter != null && didChange)
+				if (waitingAdapter != null) {
 					waitingAdapter.notifyDataSetChanged();
+					waitingAdapter = null;
+				}
 			}
 
 		}.execute(params);
 
 	}
 
-	public EventTag insertEventTag(EventTag tag,
+	public MyEventTagMediator insertEventTag(EventTag tag,
 			GoogleAccountCredential credential) {
 
 		Eventtagendpoint.Builder endpointBuilder = new Eventtagendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				credential);
+				AndroidHttp.newCompatibleTransport(),
+				AndroidJsonFactory.getDefaultInstance(), credential);
 		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 		Eventtagendpoint endpoint = endpointBuilder.build();
 
 		try {
 
 			tag = endpoint.insertEventTag(tag).execute();
-			addEventTag(tag);
+			addEventTag(tag, credential);
 
+		} catch (GoogleAuthIOException aEx) {
+			Log.wtf(TAG, "AuthException");
 		} catch (IOException ioEx) {
+			tag = null;
 			ioEx.printStackTrace();
 		}
 
-		return tag;
+		if (tag != null) {
+			return new MyEventTagMediator(tag, credential);
+		} else {
+			return null;
+		}
+
 	}
 
 	public boolean deleteEventTag(EventTag tag,
@@ -221,16 +228,18 @@ public class EventTagSingleton {
 		boolean success = false;
 
 		Eventtagendpoint.Builder endpointBuilder = new Eventtagendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				credential);
+				AndroidHttp.newCompatibleTransport(),
+				AndroidJsonFactory.getDefaultInstance(), credential);
 		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 		Eventtagendpoint endpoint = endpointBuilder.build();
 
 		try {
 
 			endpoint.removeEventTag(tag.getKey().getId()).execute();
-			tags.remove(tag);
+
 			success = true;
+		} catch (GoogleAuthIOException aEx) {
+			Log.wtf(TAG, "AuthException");
 		} catch (IOException ioEx) {
 			ioEx.printStackTrace();
 		}
@@ -239,95 +248,6 @@ public class EventTagSingleton {
 		// references to this
 
 		return success;
-	}
-
-	public boolean followTag(EventTag tag, GoogleAccountCredential credential) {
-
-		boolean success = false;
-		Eventtagendpoint.Builder endpointBuilder = new Eventtagendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				credential);
-		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-		Eventtagendpoint endpoint = endpointBuilder.build();
-
-		try {
-			endpoint.addFollowingUser(tag.getKey().getId(), getUserId())
-					.execute();
-			success = true;
-
-		} catch (IOException ioEx) {
-			ioEx.printStackTrace();
-		}
-
-		return success;
-	}
-
-	public boolean unfollowTag(EventTag tag, GoogleAccountCredential credential) {
-
-		boolean success = false;
-		Eventtagendpoint.Builder endpointBuilder = new Eventtagendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				credential);
-		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-		Eventtagendpoint endpoint = endpointBuilder.build();
-
-		try {
-			endpoint.removeFollowingUser(tag.getKey().getId(), getUserId())
-					.execute();
-			success = true;
-
-		} catch (IOException ioEx) {
-			ioEx.printStackTrace();
-		}
-
-		return success;
-	}
-
-	public boolean followNewTags(ZeppaUser user,
-			GoogleAccountCredential credential) {
-		boolean success = false;
-
-		Zeppauserendpoint.Builder endpointBuilder = new Zeppauserendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				credential);
-		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-		Zeppauserendpoint endpoint = endpointBuilder.build();
-
-		try {
-			user = endpoint.addNewTagFollower(getUserId(),
-					user.getKey().getId()).execute();
-			user.getNewTagFollowerIds().remove(getUserId());
-			success = true;
-		} catch (IOException ioEx) {
-			ioEx.printStackTrace();
-		}
-
-		return success;
-
-	}
-
-	public boolean unfollowNewTags(ZeppaUser user,
-			GoogleAccountCredential credential) {
-		boolean success = false;
-
-		Zeppauserendpoint.Builder endpointBuilder = new Zeppauserendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				credential);
-		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-		Zeppauserendpoint endpoint = endpointBuilder.build();
-
-		try {
-			user = endpoint.removeNewtagFollower(getUserId(),
-					user.getKey().getId()).execute();
-			user.getNewTagFollowerIds().add(getUserId());
-			success = true;
-
-		} catch (IOException ioEx) {
-			ioEx.printStackTrace();
-		}
-
-		return success;
-
 	}
 
 }

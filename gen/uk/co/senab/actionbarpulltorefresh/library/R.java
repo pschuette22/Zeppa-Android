@@ -8,42 +8,42 @@ package uk.co.senab.actionbarpulltorefresh.library;
 
 public final class R {
 	public static final class attr {
-		public static final int ptrHeaderBackground = 0x7f010002;
-		public static final int ptrHeaderHeight = 0x7f010003;
-		public static final int ptrHeaderStyle = 0x7f010001;
-		public static final int ptrHeaderTitleTextAppearance = 0x7f010004;
-		public static final int ptrProgressBarColor = 0x7f010005;
-		public static final int ptrProgressBarCornerRadius = 0x7f010006;
-		public static final int ptrProgressBarHeight = 0x7f010008;
-		public static final int ptrProgressBarStyle = 0x7f010007;
-		public static final int ptrPullText = 0x7f010009;
-		public static final int ptrRefreshingText = 0x7f01000a;
-		public static final int ptrReleaseText = 0x7f01000b;
-		public static final int ptrViewDelegateClass = 0x7f010000;
+		public static final int ptrHeaderBackground = 0x7f010013;
+		public static final int ptrHeaderHeight = 0x7f010014;
+		public static final int ptrHeaderStyle = 0x7f010012;
+		public static final int ptrHeaderTitleTextAppearance = 0x7f010015;
+		public static final int ptrProgressBarColor = 0x7f010016;
+		public static final int ptrProgressBarCornerRadius = 0x7f010017;
+		public static final int ptrProgressBarHeight = 0x7f010019;
+		public static final int ptrProgressBarStyle = 0x7f010018;
+		public static final int ptrPullText = 0x7f01001a;
+		public static final int ptrRefreshingText = 0x7f01001b;
+		public static final int ptrReleaseText = 0x7f01001c;
+		public static final int ptrViewDelegateClass = 0x7f010011;
 	}
 	public static final class color {
-		public static final int default_progress_bar_color = 0x7f050059;
+		public static final int default_progress_bar_color = 0x7f050063;
 	}
 	public static final class dimen {
 		public static final int default_corner_radius = 0x7f0700d5;
 	}
 	public static final class id {
-		public static final int inside = 0x7f0c0000;
-		public static final int outside = 0x7f0c0001;
-		public static final int ptr_content = 0x7f0c0002;
-		public static final int ptr_progress = 0x7f0c0004;
-		public static final int ptr_text = 0x7f0c0003;
+		public static final int inside = 0x7f0c0005;
+		public static final int outside = 0x7f0c0006;
+		public static final int ptr_content = 0x7f0c0007;
+		public static final int ptr_progress = 0x7f0c0009;
+		public static final int ptr_text = 0x7f0c0008;
 	}
 	public static final class layout {
-		public static final int default_header = 0x7f030008;
+		public static final int default_header = 0x7f03000a;
 	}
 	public static final class string {
-		public static final int pull_to_refresh_pull_label = 0x7f0a0011;
-		public static final int pull_to_refresh_refreshing_label = 0x7f0a0013;
-		public static final int pull_to_refresh_release_label = 0x7f0a0012;
+		public static final int pull_to_refresh_pull_label = 0x7f0a002c;
+		public static final int pull_to_refresh_refreshing_label = 0x7f0a002e;
+		public static final int pull_to_refresh_release_label = 0x7f0a002d;
 	}
 	public static final class styleable {
-		public static final int[] PullToRefreshHeader = { 0x7f010002, 0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007, 0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b };
+		public static final int[] PullToRefreshHeader = { 0x7f010013, 0x7f010014, 0x7f010015, 0x7f010016, 0x7f010017, 0x7f010018, 0x7f010019, 0x7f01001a, 0x7f01001b, 0x7f01001c };
 		public static final int PullToRefreshHeader_ptrHeaderBackground = 0;
 		public static final int PullToRefreshHeader_ptrHeaderHeight = 1;
 		public static final int PullToRefreshHeader_ptrHeaderTitleTextAppearance = 2;
@@ -54,7 +54,7 @@ public final class R {
 		public static final int PullToRefreshHeader_ptrPullText = 7;
 		public static final int PullToRefreshHeader_ptrRefreshingText = 8;
 		public static final int PullToRefreshHeader_ptrReleaseText = 9;
-		public static final int[] PullToRefreshView = { 0x7f010000 };
+		public static final int[] PullToRefreshView = { 0x7f010011 };
 		public static final int PullToRefreshView_ptrViewDelegateClass = 0;
 	}
 }

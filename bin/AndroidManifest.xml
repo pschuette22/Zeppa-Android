@@ -37,7 +37,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="com.minook.zeppa.activity.LoginActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_icon"
             android:screenOrientation="portrait" >
@@ -47,40 +47,50 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.AuthenticatedFragmentActivity" >
+        <activity android:name="com.minook.zeppa.activity.AuthenticatedFragmentActivity" >
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.minook.zeppa.activity.MainActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_icon" >
         </activity>
         <activity
-            android:name=".activities.NewFriendsActivity"
+            android:name="com.minook.zeppa.activity.NewAccountActivity"
+            android:label="@string/app_name"
+            android:logo="@drawable/zeppa_icon" >
+        </activity>
+        <activity
+            android:name="com.minook.zeppa.activity.MyEventViewActivity"
+            android:label="@string/app_name"
+            android:logo="@drawable/zeppa_icon" >
+        </activity>
+        <activity
+            android:name="com.minook.zeppa.activity.NewFriendsActivity"
             android:label="@string/add_friends"
             android:logo="@drawable/zeppa_icon" >
         </activity>
         <activity
-            android:name=".activities.EventViewActivity"
+            android:name="com.minook.zeppa.activity.AbstractEventViewActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activities.NewEventActivity"
+            android:name="com.minook.zeppa.activity.NewEventActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.UserActivity"
+            android:name="com.minook.zeppa.activity.UserActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_icon" />
 
-        <provider
-            android:name="com.example.calendarview.CalendarProvider"
-            android:authorities="com.example.calendarview.calendarprovider"
-            android:permission="signature" /> 
+        <!--
+        <provider android:authorities="com.facade.calendar.calendarprovider" android:name="com.facade.calendar.CalendarFacade" android:permission="signature"/> 
         
-        <!--  
+        
         <provider
             android:name="com.tyczj.extendedcalendarview.CalendarProvider"
             android:authorities="com.tyczj.extendedcalendarview.calendarprovider" 
-            android:permission="signature"/> -->
+            android:permission="signature"/>
+        -->
+
 
         <!--
         <receiver
@@ -95,6 +105,8 @@
                 <category android:name="com.minook.zeppa" />
             </intent-filter>
         </receiver>
+        
+        <service android:name=".GCMIntentService"/>
         -->
 
         <receiver
@@ -112,6 +124,21 @@
         <service
             android:name="com.minook.zeppa.gcmhandler.ZeppaGCMService"
             android:enabled="true" />
+
+        <receiver
+            android:name="com.google.android.gcm.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.minook.zeppa" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.minook.zeppa" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

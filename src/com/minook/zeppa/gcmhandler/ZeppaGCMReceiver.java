@@ -16,26 +16,23 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
-import com.minook.zeppa.activities.EventViewActivity;
-import com.minook.zeppa.activities.MainActivity;
-import com.minook.zeppa.activities.NewFriendsActivity;
-import com.minook.zeppa.activities.UserActivity;
+import com.minook.zeppa.activity.AbstractEventViewActivity;
+import com.minook.zeppa.activity.MainActivity;
+import com.minook.zeppa.activity.NewFriendsActivity;
+import com.minook.zeppa.activity.UserActivity;
+import com.minook.zeppa.deviceinfoendpoint.model.DeviceInfo;
 import com.minook.zeppa.singleton.NotificationSingleton;
-import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint;
 import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint.GetUnseenNotifications;
 import com.minook.zeppa.zeppanotificationendpoint.model.CollectionResponseZeppaNotification;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
-import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
-import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint.RegisterUserDevice;
-import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 
 
 public class ZeppaGCMReceiver extends WakefulBroadcastReceiver {
@@ -43,55 +40,32 @@ public class ZeppaGCMReceiver extends WakefulBroadcastReceiver {
 	final private static String TAG = "GCMIntentService";
 	private static String registrationId = null;
 
-	public static void register(final ZeppaApplication application) {
+	/**
+	 * This parameter takes an info object and returns the corresponding</p>
+	 * Zeppa App Engine deviceInfo object
+	 * 
+	 * @param context
+	 * @return deviceInfo object for this device
+	 */
+	public static DeviceInfo register(Context context) {
 
-		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(application
-				.getApplicationContext());
+		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
+		
+		DeviceInfo device = null;
 		try {
-
+			
 			registrationId = gcm.register(Constants.PROJECT_NUMBER);
 			Log.d(TAG, "gcm.register( " + registrationId + " )");
-
-			ZeppaUser currentUser = ZeppaUserSingleton.getInstance().getUser();
-			if (currentUser.getDevices() == null
-					|| !currentUser.getDevices().contains(registrationId)) {
-				new AsyncTask<Void, Void, Void>() {
-
-					@Override
-					protected Void doInBackground(Void... params) {
-						Zeppauserendpoint.Builder endpointBuilder = new Zeppauserendpoint.Builder(
-								AndroidHttp.newCompatibleTransport(),
-								new JacksonFactory(),
-								application.getGoogleAccountCredential());
-						endpointBuilder = CloudEndpointUtils
-								.updateBuilder(endpointBuilder);
-
-						Zeppauserendpoint userEndpoint = endpointBuilder
-								.build();
-						try {
-							RegisterUserDevice registerTask = userEndpoint
-									.registerUserDevice(ZeppaUserSingleton
-											.getInstance().getUserId(),
-											registrationId);
-							registerTask.execute();
-
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-						return null;
-					}
-
-				}.execute();
-			} else {
-				Log.d(TAG, "Already Registered");
-			}
+			device = new DeviceInfo();
+			device.setPhoneType("ANDROID");
+			device.setRegistrationId(registrationId);
+			device.setTimeRegisteredInMillis(Long.valueOf(System.currentTimeMillis()));
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+		return device;
 	}
 
 	public static void unregister(final ZeppaApplication application) {
@@ -147,13 +121,13 @@ public class ZeppaGCMReceiver extends WakefulBroadcastReceiver {
 			@Override
 			protected Void doInBackground(Context... params) {
 				Context context = params[0];
-				GoogleAccountCredential credential = getCredential(context);
+				GoogleCredential credential = getCredential(context);
 				if (credential == null) {
 					return null;
 				}
 
 				Zeppanotificationendpoint.Builder endpointBuilder = new Zeppanotificationendpoint.Builder(
-						AndroidHttp.newCompatibleTransport(),
+						new NetHttpTransport(),
 						new JacksonFactory(), credential);
 				endpointBuilder = CloudEndpointUtils
 						.updateBuilder(endpointBuilder);
@@ -200,24 +174,26 @@ public class ZeppaGCMReceiver extends WakefulBroadcastReceiver {
 
 	}
 
-	private GoogleAccountCredential getCredential(Context context) {
-		GoogleAccountCredential credential = ((ZeppaApplication) context
-				.getApplicationContext()).getGoogleAccountCredential();
-		if (credential == null) {
-			SharedPreferences prefs = context.getSharedPreferences(
-					Constants.SHARED_PREFS, Context.MODE_PRIVATE);
-			String email = prefs.getString(Constants.EMAIL_ADDRESS, null);
-			if (email != null && !email.isEmpty() && Constants.IS_CONNECTED) {
-				credential = GoogleAccountCredential.usingAudience(context,
-						Constants.APP_ENGINE_AUDIENCE_CODE);
-				credential.setSelectedAccountName(email);
-				return credential;
-			}
-
-			return null;
-		} else {
-			return credential;
-		}
+	private GoogleCredential getCredential(Context context) {
+//		GoogleCredential credential = ((ZeppaApplication) context
+//				.getApplicationContext()).getGoogleCredential();
+//		if (credential == null) {
+//			SharedPreferences prefs = context.getSharedPreferences(
+//					Constants.SHARED_PREFS, Context.MODE_PRIVATE);
+//			String email = prefs.getString(Constants.EMAIL_ADDRESS, null);
+//			if (email != null && !email.isEmpty() && Constants.IS_CONNECTED) {
+//				credential = GoogleCredential.usingAudience(context,
+//						Constants.APP_ENGINE_AUDIENCE_CODE);
+//				credential.setSelectedAccountName(email);
+//				return credential;
+//			}
+//
+//			return null;
+//		} else {
+//			return credential;
+//		}
+		
+		return null;
 	}
 
 	@SuppressLint("NewApi")
@@ -288,21 +264,21 @@ public class ZeppaGCMReceiver extends WakefulBroadcastReceiver {
 
 		case 2:
 			builder.setContentTitle("Event Recommendation");
-			intent = new Intent(context, EventViewActivity.class);
+			intent = new Intent(context, AbstractEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			break;
 
 		case 3:
 			builder.setContentTitle("New Invite");
-			intent = new Intent(context, EventViewActivity.class);
+			intent = new Intent(context, AbstractEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			break;
 
 		case 4:
 			builder.setContentTitle("Event Comment");
-			intent = new Intent(context, EventViewActivity.class);
+			intent = new Intent(context, AbstractEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			break;
@@ -315,21 +291,21 @@ public class ZeppaGCMReceiver extends WakefulBroadcastReceiver {
 
 		case 6:
 			builder.setContentTitle("Event Updated");
-			intent = new Intent(context, EventViewActivity.class);
+			intent = new Intent(context, AbstractEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			break;
 
 		case 7:
 			builder.setContentTitle("Friend Joined Event");
-			intent = new Intent(context, EventViewActivity.class);
+			intent = new Intent(context, AbstractEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			break;
 
 		case 8:
 			builder.setContentTitle("Friend Left Event");
-			intent = new Intent(context, EventViewActivity.class);
+			intent = new Intent(context, AbstractEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			break;
@@ -344,7 +320,7 @@ public class ZeppaGCMReceiver extends WakefulBroadcastReceiver {
 
 		case 11:
 			builder.setContentTitle("Event Reposted");
-			intent = new Intent(context, EventViewActivity.class);
+			intent = new Intent(context, AbstractEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			break;

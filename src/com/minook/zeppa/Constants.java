@@ -3,15 +3,10 @@ package com.minook.zeppa;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
-import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 
 public class Constants {
 
@@ -48,18 +43,29 @@ public class Constants {
 
 		USER_LEAVING, FIND_TIME, TIME_FOUND
 	}
+	
+	public static enum UserDataRelationship {
+		IS_USER,
+		MINGLING,
+		SENT_REQUEST,
+		PENDING_REQUEST,
+		NOT_CONNECTED,
+		NOT_USING,
+		DID_EXTEND_BID,
+		UNKNOWN
+		
+	}
 
 	/*
 	 * Application - Wide constants
 	 */
-	public final static double APP_VERSION = 0.1;
+	public final static double APP_VERSION = 1.0;
 
 	/*
 	 * Debug variables
 	 */
-	public final static boolean IS_CONNECTED = true; // TODO: set this to true
-														// when connected to app
-														// engine
+	public final static boolean IS_CONNECTED = true; 
+	
 
 	// Internal Database Constants
 	public static final String DB_NAME = "Zeppa_Internal_Database";
@@ -67,7 +73,7 @@ public class Constants {
 
 	/*
 	 * ---------------- Preferences -------------------
-	 */
+	 */ 
 	// Calendar Objects
 	public final static String CAL_NAME_INTERNAL = "Local Zeppa Calendar";
 	public final static String CAL_NAME_DISPLAY = "Zeppa Events";
@@ -77,11 +83,11 @@ public class Constants {
 	public final static String PREFS_VERSION = "Preference Version Code";
 
 	// Account Preferences
-	public final static String EMAIL_ADDRESS = "Account Email Address";
+	public final static String GOOGLE_ACCOUNT = "Account Email Address";
 	public final static String USER_ID = "Zeppa User Id";
 	public final static String ZEPPA_INTERNAL_CALENDAR_ID = "Zeppa Internal Calendar Id";
 	public final static String ZEPPA_GOOGLE_CALENDAR_ID = "Zeppa Google Calendar Id";
-
+	
 	// System Preferences
 	public final static String SHOW_TUTORIAL = "Has Seen Initial Tutorial";
 	public final static String IS_12HR_FORMAT = "Used 12-hr time format";
@@ -102,15 +108,30 @@ public class Constants {
 	 * practice
 	 */
 
-	public final static String ANDROID_API_KEY = "AIzaSyB-IlNHS9u8HmuybpFHPLu-gK_dDCqXM-w";
 	public final static String PROJECT_NUMBER = "587859844920";
-	public final static String WEB_CLIENT_ID = "587859844920-jiqoh8rn4j8d0941vunu4jfdcl2huv4l.apps.googleusercontent.com";
+	
+	public final static String REDIRECT_URL = "urn:ietf:wg:oauth:2.0:oob";
+	public final static String APP_ENGINE_CLIENT_ID = "587859844920-jiqoh8rn4j8d0941vunu4jfdcl2huv4l.apps.googleusercontent.com";
+	public final static String APP_ENGINE_CLIENT_SECRET = "C0L8jW9hLtobNSjIyp1J52gk";
+
 	public final static String APP_ENGINE_AUDIENCE_CODE = "server:client_id:"
-			+ WEB_CLIENT_ID;
+			+ APP_ENGINE_CLIENT_ID;
+	
+	
+	/*
+	 * Scopes
+	 * 
+	 * List of the scopes needed for the authentication client
+	 */
+	
+	private final static String SCOPE_PLUS = "https://www.googleapis.com/auth/plus.login";
+	private final static String SCOPE_CALENDAR = "https://www.googleapis.com/auth/calendar";
+	// Publicly accessed scopes
+	public final static String SCOPES = SCOPE_PLUS + "oauth2:server:client_id:" + APP_ENGINE_CLIENT_ID +":api_scope:" + SCOPE_CALENDAR;
+	
+	
 
-	// Try to implement this
-	public final static String AUTHORIZATION_SCOPE = "audience:server:client_id:587859844920.apps.googleusercontent.com";
-
+	
 	/*
 	 * Navigation items are for labeling back stack instances When back button
 	 * is pressed, this makes sure that correct nav item is selected
@@ -134,6 +155,20 @@ public class Constants {
 	public final static String INTENT_ZEPPA_USER = "Zeppa User Passed";
 	public final static String INTENT_ZEPPA_USER_ID = "Zeppa User Id Passed";
 
+	/*
+	 * Query limit constants
+	 * 
+	 * THIS MUST STAY CONSISTENT WITH THE ENDPOINT CONSTANTS
+	 * 
+	 */
+	
+	public static final int QUERY_LIMIT_EVENT = 10;
+	public static final int QUERY_LIMIT_USER = 10;
+	public static final int QUERY_LIMIT_TAG = 25;
+	public static final int QUERY_LIMIT_COMMENT = 10;
+	public static final int QUERY_LIMIT_NOTIFICATIONS = 10;
+	public static final int QUERY_LIMIT_RELATIONSHIP = 20;
+	
 	/*
 	 * encoding methods
 	 */
@@ -314,52 +349,66 @@ public class Constants {
 
 		return builder.toString();
 	}
+	
+	
+	/*
+	 * max call sizes for each item.. do this if i have an issue with query sizes
+	 * 
+	 * */
+	
+	private static final int MAX_TRANSACTION_BYTES = 500; // bytes
+	private static final int LONG_BYTES = 8; // bytes
+	private static final int BOOLEAN_BYTES = 1; // bytes
+	
+	public static final int ENUM_BYTES = 10;
+	
+	// defines the expected size of a user to user relationship;
 
 	/*
 	 * Comparators
 	 */
 
-	public static final Comparator<ZeppaUser> USER_COMPARATOR = new Comparator<ZeppaUser>() {
-
-		@Override
-		public int compare(ZeppaUser lhs, ZeppaUser rhs) {
-			// TODO Auto-generated method stub
-			return lhs.getDisplayName().compareToIgnoreCase(
-					rhs.getDisplayName());
-		}
-
-	};
-
-	public static final Comparator<ZeppaUser> USER_FINDER_COMPARATOR = new Comparator<ZeppaUser>() {
-
-		@Override
-		public int compare(ZeppaUser lhs, ZeppaUser rhs) {
-			List<Long> requestIds = ZeppaUserSingleton.getInstance().getUser()
-					.getFriendRequestIds();
-			boolean lRequested = requestIds.contains(lhs.getKey().getId());
-			boolean rRequested = requestIds.contains(rhs.getKey().getId());
-			if (lRequested && !rRequested) {
-				return 1;
-			} else if (!lRequested && rRequested) {
-				return -1;
-			} else {
-				return lhs.getDisplayName().compareToIgnoreCase(
-						rhs.getDisplayName());
-			}
-		}
-
-	};
-
-	public static final Comparator<ZeppaEvent> EVENT_COMPARATOR = new Comparator<ZeppaEvent>() {
-
-		@Override
-		public int compare(ZeppaEvent lhs, ZeppaEvent rhs) {
-			// TODO Auto-generated method stub
-			return ((int) (((long) lhs.getStart()) - ((long) rhs.getStart())));
-
-		}
-
-	};
+//	public static final Comparator<ZeppaUser> USER_COMPARATOR = new Comparator<ZeppaUser>() {
+//
+//		@Override
+//		public int compare(ZeppaUser lhs, ZeppaUser rhs) {
+//			// TODO Auto-generated method stub
+//			return (lhs.getGivenName() + " " + lhs.getFamilyName()).compareToIgnoreCase(
+//					rhs.getGivenName() + " " + rhs.getFamilyName());
+//		}
+//
+//	};
+//
+//	public static final Comparator<ZeppaUser> USER_FINDER_COMPARATOR = new Comparator<ZeppaUser>() {
+//
+//		@Override
+//		public int compare(ZeppaUser lhs, ZeppaUser rhs) {
+//			List<Long> requestIds = ZeppaUserSingleton.getInstance().getUser()
+//					.getFriendRequestIds();
+//			boolean lRequested = requestIds.contains(lhs.getKey().getId());
+//			boolean rRequested = requestIds.contains(rhs.getKey().getId());
+//			if (lRequested && !rRequested) {
+//				return 1;
+//			} else if (!lRequested && rRequested) {
+//				return -1;
+//			} else {
+//				return (lhs.getGivenName() + " " + lhs.getFamilyName()).compareToIgnoreCase(
+//						rhs.getGivenName() + " " + rhs.getFamilyName());
+//			}
+//		}
+//
+//	};
+//
+//	public static final Comparator<ZeppaEvent> EVENT_COMPARATOR = new Comparator<ZeppaEvent>() {
+//
+//		@Override
+//		public int compare(ZeppaEvent lhs, ZeppaEvent rhs) {
+//			// TODO Auto-generated method stub
+//			return ((int) (((long) lhs.getStart()) - ((long) rhs.getStart())));
+//
+//		}
+//
+//	};
 
 	public static final Comparator<ZeppaNotification> NOTIFICAITON_COMPARATOR = new Comparator<ZeppaNotification>() {
 

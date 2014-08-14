@@ -3,22 +3,15 @@
     android:id="@+id/feedfragment_ptr"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     android:orientation="vertical" >
-
-    <include
-        android:id="@+id/feed_loaderview"
-        layout="@layout/view_loaderview"
-        android:visibility="gone" />
 
     <ListView
         android:id="@+id/feedListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
         android:background="@drawable/background_fragment"
-        android:dividerHeight="10dp"
         android:divider="@color/white_eggshell"
+        android:dividerHeight="10dp"
         android:paddingBottom="1dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"

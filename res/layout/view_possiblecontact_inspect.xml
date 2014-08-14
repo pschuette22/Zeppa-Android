@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/background_contact_picture"
         android:padding="1dp"
-        android:src="@drawable/generic_user_male" />
+        android:src="@drawable/default_user_image" />
 
     <TextView
         android:id="@+id/possiblecontactview_name"
