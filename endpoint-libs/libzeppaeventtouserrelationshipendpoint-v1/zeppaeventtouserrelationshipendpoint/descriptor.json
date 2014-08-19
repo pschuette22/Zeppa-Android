@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/zeppaeventtouserrelationshipendpoint/v1/20140813194324/java/1.18.0-rc/minook.com-zeppaeventtouserrelationshipendpoint-v1-20140813194324-java-1.18.0-rc-sources.jar", 
-      "path": "minook.com-zeppaeventtouserrelationshipendpoint-v1-20140813194324-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/zeppaeventtouserrelationshipendpoint/v1/20140819194538/java/1.18.0-rc/minook.com-zeppaeventtouserrelationshipendpoint-v1-20140819194538-java-1.18.0-rc-sources.jar", 
+      "path": "minook.com-zeppaeventtouserrelationshipendpoint-v1-20140819194538-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-08-13 19:43"
+      "timestamp": "2014-08-19 19:45"
     }, 
     {
-      "path": "minook.com-zeppaeventtouserrelationshipendpoint-v1-20140813194324-java-1.18.0-rc.jar.properties", 
+      "path": "minook.com-zeppaeventtouserrelationshipendpoint-v1-20140819194538-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -675,5 +675,5 @@
   "packagePath": "zeppa", 
   "language_version": "1.18.0-rc", 
   "id": "zeppaeventtouserrelationshipendpoint:v1", 
-  "revision": 20140813194324
+  "revision": 20140819194538
 }

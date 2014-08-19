@@ -2,6 +2,7 @@ package com.minook.zeppa.singleton;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -31,7 +32,7 @@ public class EventTagSingleton {
 	private static EventTagSingleton singleton;
 
 	private final String TAG = "EventTagSingleton";
-	private List<MyEventTagMediator> tagManagers;
+	private List<MyEventTagMediator> myTagMediators;
 	private MyTagAdapter waitingAdapter;
 	private boolean hasLoadedTags;
 
@@ -40,7 +41,7 @@ public class EventTagSingleton {
 	 */
 
 	private EventTagSingleton() {
-		tagManagers = new ArrayList<MyEventTagMediator>();
+		myTagMediators = new ArrayList<MyEventTagMediator>();
 		waitingAdapter = null;
 		hasLoadedTags = false;
 	}
@@ -62,13 +63,8 @@ public class EventTagSingleton {
 	 */
 
 	public EventTag newTagInstance() {
-		Long time = System.currentTimeMillis();
 		EventTag tag = new EventTag();
-
 		tag.setUserId(getUserId());
-		tag.setDayCreated(time);
-		tag.setTagText(new String());
-
 		return tag;
 	}
 
@@ -81,7 +77,7 @@ public class EventTagSingleton {
 	}
 
 	public List<MyEventTagMediator> getTags() {
-		return tagManagers;
+		return myTagMediators;
 	}
 
 	public List<MyEventTagMediator> getTagsFrom(List<Long> tagIds) {
@@ -101,23 +97,12 @@ public class EventTagSingleton {
 	 * Setters
 	 */
 
-	private boolean addAllEventTags(List<MyEventTagMediator> tags) {
 
-		boolean didChange = true;
-		// if (this.tags.containsAll(tags) && tags.containsAll(this.tags)) {
-		// didChange = false;
-		// } else {
-		// this.tags.removeAll(tags);
-		// this.tags.addAll(tags);
-		// }
-
-		return didChange;
-	}
-
-	private void addEventTag(EventTag tag, GoogleAccountCredential credential) {
-		MyEventTagMediator myTagManager = new MyEventTagMediator(tag,
+	private MyEventTagMediator addEventTag(EventTag tag, GoogleAccountCredential credential) {
+		MyEventTagMediator myTagMediator = new MyEventTagMediator(tag,
 				credential);
-		tagManagers.add(myTagManager);
+		myTagMediators.add(myTagMediator);
+		return myTagMediator;
 	}
 
 	/*
@@ -163,7 +148,12 @@ public class EventTagSingleton {
 							break;
 
 						} else {
-
+							Iterator<EventTag> iterator = response.getItems().iterator();
+							
+							while(iterator.hasNext()){
+								myTagMediators.add(new MyEventTagMediator(iterator.next(), credential));
+							}
+							
 						}
 
 					}
@@ -194,6 +184,14 @@ public class EventTagSingleton {
 
 	}
 
+	
+	/**
+	 * This is a blocking call which creates a new event tag in the backedn and returns the mediator.
+	 * 
+	 * @param tag
+	 * @param credential
+	 * @return mediator
+	 */
 	public MyEventTagMediator insertEventTag(EventTag tag,
 			GoogleAccountCredential credential) {
 

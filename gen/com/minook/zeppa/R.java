@@ -1246,6 +1246,7 @@ containing a value of this type.
         public static final int add_friends=0x7f0a0031;
         public static final int add_invites=0x7f0a0032;
         public static final int addremove_tags=0x7f0a0033;
+        public static final int agenda_title=0x7f0a0034;
         public static final int agenda_today=0x7f0a0003;
         public static final int agenda_tomorrow=0x7f0a0005;
         public static final int agenda_yesterday=0x7f0a0004;
@@ -1275,13 +1276,13 @@ containing a value of this type.
         public static final int auth_client_using_bad_version_title=0x7f0a0025;
         /**  B 
          */
-        public static final int birthday_=0x7f0a0034;
+        public static final int birthday_=0x7f0a0035;
         /**  C 
          */
-        public static final int calendar_list_title=0x7f0a0035;
-        public static final int calendar_title=0x7f0a0036;
-        public static final int cancel=0x7f0a0037;
-        public static final int casual=0x7f0a0038;
+        public static final int calendar_list_title=0x7f0a0036;
+        public static final int calendar_title=0x7f0a0037;
+        public static final int cancel=0x7f0a0038;
+        public static final int casual=0x7f0a0039;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
@@ -1353,204 +1354,204 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f0a0024;
-        public static final int contacts=0x7f0a0039;
-        public static final int contacts_using=0x7f0a003a;
+        public static final int contacts=0x7f0a003a;
+        public static final int contacts_using=0x7f0a003b;
         /**  Content Description 
          */
-        public static final int contdesc_addexactlocation=0x7f0a0099;
-        public static final int contdesc_addtag=0x7f0a009a;
-        public static final int contdesc_addtags=0x7f0a009b;
-        public static final int contdesc_calendaroptions=0x7f0a009c;
-        public static final int contdesc_calendarviewtype=0x7f0a009d;
-        public static final int contdesc_conflictionimage=0x7f0a009e;
-        public static final int contdesc_contactimage=0x7f0a009f;
-        public static final int contdesc_hostimage=0x7f0a00a0;
-        public static final int contdesc_interactbtn=0x7f0a00a1;
-        public static final int contdesc_lastmonth=0x7f0a00a2;
-        public static final int contdesc_loginimage=0x7f0a00a3;
-        public static final int contdesc_navlist_item=0x7f0a00a4;
-        public static final int contdesc_navsuggestion=0x7f0a00a5;
-        public static final int contdesc_nextmonth=0x7f0a00a6;
-        public static final int contdesc_search=0x7f0a00a7;
-        public static final int contdesc_settingsbtn=0x7f0a00a8;
-        public static final int contdesc_slogan=0x7f0a00a9;
-        public static final int contdesc_titletext=0x7f0a00aa;
-        public static final int contdesc_userimage=0x7f0a00ab;
-        public static final int couldntfind=0x7f0a003b;
-        public static final int create=0x7f0a003c;
-        public static final int create_account=0x7f0a003d;
-        public static final int create_event=0x7f0a003e;
-        public static final int create_tag=0x7f0a003f;
-        public static final int creating_profile=0x7f0a0040;
+        public static final int contdesc_addexactlocation=0x7f0a009a;
+        public static final int contdesc_addtag=0x7f0a009b;
+        public static final int contdesc_addtags=0x7f0a009c;
+        public static final int contdesc_calendaroptions=0x7f0a009d;
+        public static final int contdesc_calendarviewtype=0x7f0a009e;
+        public static final int contdesc_conflictionimage=0x7f0a009f;
+        public static final int contdesc_contactimage=0x7f0a00a0;
+        public static final int contdesc_hostimage=0x7f0a00a1;
+        public static final int contdesc_interactbtn=0x7f0a00a2;
+        public static final int contdesc_lastmonth=0x7f0a00a3;
+        public static final int contdesc_loginimage=0x7f0a00a4;
+        public static final int contdesc_navlist_item=0x7f0a00a5;
+        public static final int contdesc_navsuggestion=0x7f0a00a6;
+        public static final int contdesc_nextmonth=0x7f0a00a7;
+        public static final int contdesc_search=0x7f0a00a8;
+        public static final int contdesc_settingsbtn=0x7f0a00a9;
+        public static final int contdesc_slogan=0x7f0a00aa;
+        public static final int contdesc_titletext=0x7f0a00ab;
+        public static final int contdesc_userimage=0x7f0a00ac;
+        public static final int couldntfind=0x7f0a003c;
+        public static final int create=0x7f0a003d;
+        public static final int create_account=0x7f0a003e;
+        public static final int create_event=0x7f0a003f;
+        public static final int create_tag=0x7f0a0040;
+        public static final int creating_profile=0x7f0a0041;
         public static final int date_time_fmt=0x7f0a000a;
         public static final int day_view_new_event_hint=0x7f0a000d;
         /**  D 
          */
-        public static final int delete=0x7f0a0041;
-        public static final int desciption_newevent=0x7f0a0042;
-        public static final int directions=0x7f0a0043;
-        public static final int dismiss=0x7f0a0044;
-        public static final int done=0x7f0a0045;
+        public static final int delete=0x7f0a0042;
+        public static final int desciption_newevent=0x7f0a0043;
+        public static final int directions=0x7f0a0044;
+        public static final int dismiss=0x7f0a0045;
+        public static final int done=0x7f0a0046;
         /**  E 
          */
-        public static final int edit=0x7f0a0046;
-        public static final int email_=0x7f0a0047;
-        public static final int email_host=0x7f0a0048;
-        public static final int enter_email_hint=0x7f0a0049;
-        public static final int enter_phone=0x7f0a004a;
-        public static final int error_deletetag=0x7f0a004b;
-        public static final int error_network=0x7f0a004c;
-        public static final int error_newevent=0x7f0a004d;
-        public static final int error_newevent_location=0x7f0a00b6;
-        public static final int error_newevent_time=0x7f0a00b7;
+        public static final int edit=0x7f0a0047;
+        public static final int email_=0x7f0a0048;
+        public static final int email_host=0x7f0a0049;
+        public static final int enter_email_hint=0x7f0a004a;
+        public static final int enter_phone=0x7f0a004b;
+        public static final int error_deletetag=0x7f0a004c;
+        public static final int error_network=0x7f0a004d;
+        public static final int error_newevent=0x7f0a004e;
+        public static final int error_newevent_location=0x7f0a00b7;
+        public static final int error_newevent_time=0x7f0a00b8;
         /**  Error Description 
          */
-        public static final int error_newevent_title=0x7f0a00b5;
-        public static final int error_signin=0x7f0a004e;
+        public static final int error_newevent_title=0x7f0a00b6;
+        public static final int error_signin=0x7f0a004f;
         public static final int event_create=0x7f0a000c;
-        public static final int event_details=0x7f0a004f;
-        public static final int event_title=0x7f0a0050;
-        public static final int example_email=0x7f0a0051;
+        public static final int event_details=0x7f0a0050;
+        public static final int event_title=0x7f0a0051;
+        public static final int example_email=0x7f0a0052;
         /**  F 
          */
-        public static final int feed_title=0x7f0a0052;
-        public static final int feedback_main=0x7f0a0058;
-        public static final int feedback_title=0x7f0a0057;
-        public static final int find_friends_message=0x7f0a0053;
-        public static final int find_time=0x7f0a0054;
-        public static final int follow_new=0x7f0a0059;
-        public static final int followers=0x7f0a005a;
-        public static final int friday_calendar_short=0x7f0a0055;
-        public static final int from=0x7f0a0056;
+        public static final int feed_title=0x7f0a0053;
+        public static final int feedback_main=0x7f0a0059;
+        public static final int feedback_title=0x7f0a0058;
+        public static final int find_friends_message=0x7f0a0054;
+        public static final int find_time=0x7f0a0055;
+        public static final int follow_new=0x7f0a005a;
+        public static final int followers=0x7f0a005b;
+        public static final int friday_calendar_short=0x7f0a0056;
+        public static final int from=0x7f0a0057;
         /**  G 
          */
-        public static final int getting_details=0x7f0a005b;
-        public static final int going=0x7f0a005c;
-        public static final int got_it=0x7f0a005d;
+        public static final int getting_details=0x7f0a005c;
+        public static final int going=0x7f0a005d;
+        public static final int got_it=0x7f0a005e;
         /**  H 
          */
-        public static final int hall_of_fame=0x7f0a005e;
+        public static final int hall_of_fame=0x7f0a005f;
         public static final int hello_world=0x7f0a0001;
-        public static final int home=0x7f0a005f;
-        public static final int insufficientfields_message=0x7f0a0061;
+        public static final int home=0x7f0a0060;
+        public static final int insufficientfields_message=0x7f0a0062;
         /**  I 
          */
-        public static final int insufficientfields_title=0x7f0a0060;
-        public static final int invite=0x7f0a0063;
-        public static final int invite_list=0x7f0a0064;
-        public static final int invite_only=0x7f0a0065;
-        public static final int invite_people=0x7f0a0066;
-        public static final int invlaid_text=0x7f0a0062;
+        public static final int insufficientfields_title=0x7f0a0061;
+        public static final int invite=0x7f0a0064;
+        public static final int invite_list=0x7f0a0065;
+        public static final int invite_only=0x7f0a0066;
+        public static final int invite_people=0x7f0a0067;
+        public static final int invlaid_text=0x7f0a0063;
         /**  J 
          */
-        public static final int join=0x7f0a0067;
+        public static final int join=0x7f0a0068;
         /**  L 
          */
-        public static final int leave=0x7f0a0068;
-        public static final int loading=0x7f0a0069;
+        public static final int leave=0x7f0a0069;
+        public static final int loading=0x7f0a006a;
         /**  Location client code resources (prefix with location_client) 
          */
         public static final int location_client_powered_by_google=0x7f0a002b;
-        public static final int location_long=0x7f0a006b;
-        public static final int location_long_title=0x7f0a006a;
-        public static final int location_short=0x7f0a006c;
-        public static final int login_activity=0x7f0a006d;
+        public static final int location_long=0x7f0a006c;
+        public static final int location_long_title=0x7f0a006b;
+        public static final int location_short=0x7f0a006d;
+        public static final int login_activity=0x7f0a006e;
         /**  M 
          */
-        public static final int manage_tags=0x7f0a006e;
-        public static final int mass_email=0x7f0a006f;
-        public static final int mass_text=0x7f0a0070;
+        public static final int manage_tags=0x7f0a006f;
+        public static final int mass_email=0x7f0a0070;
+        public static final int mass_text=0x7f0a0071;
         /**  Action Menu Options 
          */
-        public static final int menu_aboutus=0x7f0a00ac;
-        public static final int menu_addcontact=0x7f0a00ad;
-        public static final int menu_explain=0x7f0a00ae;
-        public static final int menu_help=0x7f0a00af;
-        public static final int menu_newevent=0x7f0a00b0;
-        public static final int menu_notifications=0x7f0a00b1;
-        public static final int menu_refresh=0x7f0a00b2;
-        public static final int menu_search=0x7f0a00b3;
+        public static final int menu_aboutus=0x7f0a00ad;
+        public static final int menu_addcontact=0x7f0a00ae;
+        public static final int menu_explain=0x7f0a00af;
+        public static final int menu_help=0x7f0a00b0;
+        public static final int menu_newevent=0x7f0a00b1;
+        public static final int menu_notifications=0x7f0a00b2;
+        public static final int menu_refresh=0x7f0a00b3;
+        public static final int menu_search=0x7f0a00b4;
         public static final int menu_settings=0x7f0a0002;
-        public static final int menu_signout=0x7f0a00b4;
-        public static final int monday_calendar_short=0x7f0a0071;
-        public static final int my_account=0x7f0a0072;
-        public static final int navigation_closed=0x7f0a0074;
+        public static final int menu_signout=0x7f0a00b5;
+        public static final int monday_calendar_short=0x7f0a0072;
+        public static final int my_account=0x7f0a0073;
+        public static final int navigation_closed=0x7f0a0075;
         /**  N 
          */
-        public static final int navigation_open=0x7f0a0073;
+        public static final int navigation_open=0x7f0a0074;
         public static final int new_event_dialog_label=0x7f0a000e;
         public static final int new_event_dialog_option=0x7f0a000f;
-        public static final int newtag=0x7f0a0075;
-        public static final int no=0x7f0a0076;
-        public static final int no_repost=0x7f0a0077;
+        public static final int newtag=0x7f0a0076;
+        public static final int no=0x7f0a0077;
+        public static final int no_repost=0x7f0a0078;
         public static final int no_title_label=0x7f0a000b;
-        public static final int notifications=0x7f0a0078;
+        public static final int notifications=0x7f0a0079;
         /**  O 
          */
-        public static final int one_moment=0x7f0a0079;
+        public static final int one_moment=0x7f0a007a;
         /**  P 
     	- Public/ Private threw errors w/out '_' appended
     	
          */
-        public static final int password=0x7f0a007a;
-        public static final int pending_requests=0x7f0a007b;
-        public static final int phone_=0x7f0a007c;
-        public static final int post=0x7f0a007d;
-        public static final int post_comment=0x7f0a007e;
-        public static final int posting_event=0x7f0a007f;
-        public static final int private_=0x7f0a0080;
-        public static final int public_=0x7f0a0081;
+        public static final int password=0x7f0a007b;
+        public static final int pending_requests=0x7f0a007c;
+        public static final int phone_=0x7f0a007d;
+        public static final int post=0x7f0a007e;
+        public static final int post_comment=0x7f0a007f;
+        public static final int posting_event=0x7f0a0080;
+        public static final int private_=0x7f0a0081;
+        public static final int public_=0x7f0a0082;
         public static final int pull_to_refresh_pull_label=0x7f0a002c;
         public static final int pull_to_refresh_refreshing_label=0x7f0a002e;
         public static final int pull_to_refresh_release_label=0x7f0a002d;
         /**  R 
          */
-        public static final int remember_me=0x7f0a0082;
-        public static final int repost=0x7f0a0083;
-        public static final int reposts=0x7f0a0084;
-        public static final int saturday_calendar_short=0x7f0a0086;
-        public static final int send=0x7f0a0087;
-        public static final int send_feedback=0x7f0a0088;
-        public static final int sign_in=0x7f0a0089;
-        public static final int signing_in=0x7f0a008a;
-        public static final int slogan=0x7f0a008b;
+        public static final int remember_me=0x7f0a0083;
+        public static final int repost=0x7f0a0084;
+        public static final int reposts=0x7f0a0085;
+        public static final int saturday_calendar_short=0x7f0a0087;
+        public static final int send=0x7f0a0088;
+        public static final int send_feedback=0x7f0a0089;
+        public static final int sign_in=0x7f0a008a;
+        public static final int signing_in=0x7f0a008b;
+        public static final int slogan=0x7f0a008c;
         /**  S 
          */
-        public static final int start_new=0x7f0a0085;
-        public static final int stopwatching=0x7f0a008c;
-        public static final int sunday_calendar_short=0x7f0a008d;
+        public static final int start_new=0x7f0a0086;
+        public static final int stopwatching=0x7f0a008d;
+        public static final int sunday_calendar_short=0x7f0a008e;
         public static final int template_announce_item_index=0x7f0a0010;
-        public static final int text_host=0x7f0a008f;
-        public static final int thursday_calendar_short=0x7f0a0091;
+        public static final int text_host=0x7f0a0090;
+        public static final int thursday_calendar_short=0x7f0a0092;
         /**  T 
          */
-        public static final int to=0x7f0a008e;
+        public static final int to=0x7f0a008f;
         /**  Toast Texts 
          */
-        public static final int toast_feedback_success=0x7f0a00b8;
-        public static final int toast_network_error=0x7f0a00b9;
+        public static final int toast_feedback_success=0x7f0a00b9;
+        public static final int toast_network_error=0x7f0a00ba;
         public static final int today=0x7f0a0006;
         public static final int today_at_time_fmt=0x7f0a0008;
         public static final int tomorrow=0x7f0a0007;
         public static final int tomorrow_at_time_fmt=0x7f0a0009;
-        public static final int tuesday_calendar_short=0x7f0a0090;
+        public static final int tuesday_calendar_short=0x7f0a0091;
         /**  U 
          */
-        public static final int usage=0x7f0a0092;
+        public static final int usage=0x7f0a0093;
         /**  V 
          */
-        public static final int verifying=0x7f0a0093;
-        public static final int watch=0x7f0a0095;
+        public static final int verifying=0x7f0a0094;
+        public static final int watch=0x7f0a0096;
         /**  W 
          */
-        public static final int watching_title=0x7f0a0094;
-        public static final int wednesday_calendar_short=0x7f0a0096;
+        public static final int watching_title=0x7f0a0095;
+        public static final int wednesday_calendar_short=0x7f0a0097;
         /**  Y 
          */
-        public static final int yes=0x7f0a0097;
+        public static final int yes=0x7f0a0098;
         /**  Z 
          */
-        public static final int zeppa=0x7f0a0098;
+        public static final int zeppa=0x7f0a0099;
     }
     public static final class style {
         /** 

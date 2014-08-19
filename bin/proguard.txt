@@ -47,10 +47,10 @@
 -keep class com.minook.zeppa.activity.UserActivity { <init>(...); }
 
 # view AndroidManifest.xml #generated:112
--keep class com.minook.zeppa.gcmhandler.ZeppaGCMReceiver { <init>(...); }
+-keep class com.minook.zeppa.gcm.ZeppaGCMReceiver { <init>(...); }
 
 # view AndroidManifest.xml #generated:124
--keep class com.minook.zeppa.gcmhandler.ZeppaGCMService { <init>(...); }
+-keep class com.minook.zeppa.gcm.ZeppaGCMService { <init>(...); }
 
 # view res/layout/fragment_feed.xml #generated:2
 # view res/layout/fragment_notifications.xml #generated:2

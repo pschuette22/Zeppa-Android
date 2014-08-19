@@ -110,7 +110,7 @@
         -->
 
         <receiver
-            android:name="com.minook.zeppa.gcmhandler.ZeppaGCMReceiver"
+            android:name="com.minook.zeppa.gcm.ZeppaGCMReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
@@ -122,7 +122,7 @@
         </receiver>
 
         <service
-            android:name="com.minook.zeppa.gcmhandler.ZeppaGCMService"
+            android:name="com.minook.zeppa.gcm.ZeppaGCMService"
             android:enabled="true" />
 
         <receiver
