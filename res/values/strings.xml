@@ -6,8 +6,10 @@
     <string name="add_event">Add Event</string>
     <string name="add_friends">Add Friends</string>
     <string name="add_invites">Add Invites</string>
-    <string name="app_name">Zeppa</string>
     <string name="addremove_tags">Add/Remove Tags</string>
+    <string name="agenda_title">Agenda</string>
+    <string name="app_name">Zeppa</string>
+    
     
     <!-- B -->
 	<string name="birthday:">Birthday:</string>
@@ -218,13 +220,14 @@
     <string-array name="home_tab_options">
         <item>@string/calendar_title</item>
         <item>@string/feed_title</item>
-        <item>@string/watching_title</item>
+        <item>@string/agenda_title</item>
     </string-array>
     
     <string-array name="event_types">
+        <item>@string/casual</item>
         <item>@string/public_</item>
         <item>@string/private_</item>
-        <item>@string/casual</item>
+        <item>@string/no_repost</item>
     </string-array>
     <string-array name="mytag_options">
         <item>@string/followers</item>

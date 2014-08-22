@@ -3,7 +3,6 @@ package com.minook.zeppa.activity;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
@@ -17,6 +16,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -36,7 +36,7 @@ import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.InviteListAdapter;
-import com.minook.zeppa.adapter.tagadapter.NewEventTagAdapter;
+import com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter;
 import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
@@ -69,7 +69,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	private EditText descriptionField;
 	private EditText shortLocationField;
 
-	private Spinner eventScopeField;
+	private Spinner eventPrivacyField;
 	private TextView startDateField;
 	private TextView startTimeField;
 	private TextView endDateField;
@@ -87,7 +87,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	private Calendar startCalendar;
 	private Calendar endCalendar;
 	private String longLocation;
-	private NewEventTagAdapter tagAdapter;
+	private CreateEventTagAdapter tagAdapter;
 	private InviteListAdapter invitesAdapter;
 
 	// Picker Variables:
@@ -101,6 +101,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(TAG, "Activity created");
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		getActionBar().hide();
 
@@ -124,13 +125,13 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 		addLocationField = (ImageView) findViewById(R.id.neweventactivity_exactlocation);
 
-		eventScopeField = (Spinner) findViewById(R.id.neweventactivity_eventscope);
+		eventPrivacyField = (Spinner) findViewById(R.id.neweventactivity_eventscope);
 		startCalendar = new GregorianCalendar();
 		endCalendar = new GregorianCalendar();
 
 		LinearLayout tagHolder = (LinearLayout) findViewById(R.id.neweventactivity_taglineholder);
-		tagAdapter = new NewEventTagAdapter(this, tagHolder, EventTagSingleton
-				.getInstance().getTags());
+		tagAdapter = new CreateEventTagAdapter(this, tagHolder,
+				EventTagSingleton.getInstance().getTags());
 		tagAdapter.drawTags();
 		invitesAdapter = new InviteListAdapter(this);
 
@@ -158,7 +159,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
 				this, android.R.layout.simple_spinner_dropdown_item,
 				spinnerArray);
-		eventScopeField.setAdapter(spinnerArrayAdapter);
+		eventPrivacyField.setAdapter(spinnerArrayAdapter);
 
 		// Set Button Listeners
 		cancelButton.setOnClickListener(this);
@@ -195,7 +196,9 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 			break;
 
 		case R.id.neweventactivity_addnewtag:
-			tagAdapter.createdTagInAsync(newTagTextField);
+			if (newTagTextField.isEnabled()) {
+				tagAdapter.createdTagInAsync(newTagTextField);
+			}
 			break;
 		case R.id.neweventactivity_exactlocation:
 			AlertDialog.Builder addressDialog = new AlertDialog.Builder(this);
@@ -292,61 +295,61 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 	private void startEventInAcync() {
 
-		// TODO: show progress dialog
-		final ZeppaUserSingleton userSingleton = ZeppaUserSingleton
-				.getInstance();
-		final ZeppaEventSingleton eventSingleton = ZeppaEventSingleton
-				.getInstance();
-
+		ZeppaUserSingleton userSingleton = ZeppaUserSingleton.getInstance();
+		ZeppaEventSingleton eventSingleton = ZeppaEventSingleton.getInstance();
 		ZeppaEvent event = eventSingleton.newEventInstance();
 
 		event.setTitle(titleField.getText().toString());
 		event.setHostId(userSingleton.getUserId());
-		// event.setEventScope(eventScopeField.getSelectedItemPosition());
+		event.setPrivacy(Integer.valueOf(eventPrivacyField
+				.getSelectedItemPosition()));
 		event.setDescription(descriptionField.getText().toString());
-		// event.setShortLocation(shortLocationField.getText().toString());
+		event.setDisplayLocation(shortLocationField.getText().toString());
 		if (longLocation != null)
 			event.setMapsLocation(longLocation); // May be null
 		event.setStart(startCalendar.getTimeInMillis());
 		event.setEnd(endCalendar.getTimeInMillis());
+		event.setRepostedFromEventId(Long.valueOf(-1));
+		event.setTagIds(tagAdapter.getSelectedTagIds());
 
 		if (isValidEvent(event)) {
-			List<Long> tagIds = tagAdapter.getSelectedTagIds();
 
-			event.setTagIds(tagIds);
-			// event.setUsersInvited(invitedFriendIds);
-
-			ZeppaEvent[] params = { event };
-
-			final ProgressDialog progressDialog = new ProgressDialog(this);
+			ProgressDialog progressDialog = new ProgressDialog(this);
 			progressDialog.setTitle(R.string.posting_event);
 			progressDialog.setMessage(getResources().getText(
 					R.string.one_moment));
 			progressDialog.setCancelable(false);
 			progressDialog.show();
 
-			new AsyncTask<ZeppaEvent, Void, Boolean>() {
+			Object[] params = { event, progressDialog };
+
+			new AsyncTask<Object, Void, ZeppaEvent>() {
 
 				@Override
-				protected Boolean doInBackground(ZeppaEvent... params) {
-					ZeppaEvent event = params[0];
+				protected ZeppaEvent doInBackground(Object... params) {
+					ZeppaEvent event = (ZeppaEvent) params[0];
+					ProgressDialog dialog = (ProgressDialog) params[1];
 					try {
-					event = eventSingleton.createZeppaEvent(
-							getApplicationContext(), getGoogleAccountCredential(), event,
-							getContentResolver());
-					
-					return Boolean.TRUE;
-					} catch (IOException e){
-						return Boolean.FALSE;
-					} 
+						event = ZeppaEventSingleton.getInstance()
+								.createZeppaEvent(getApplicationContext(),
+										getGoogleAccountCredential(), event,
+										getContentResolver());
+
+					} catch (IOException e) {
+						e.printStackTrace();
+						event = null;
+					}
+
+					dialog.dismiss();
+
+					return event;
 				}
 
 				@Override
-				protected void onPostExecute(Boolean success) {
-					super.onPostExecute(success);
+				protected void onPostExecute(ZeppaEvent result) {
+					super.onPostExecute(result);
 
-					progressDialog.dismiss();
-					if (success) {
+					if (result != null) {
 
 						onBackPressed();
 					} else {

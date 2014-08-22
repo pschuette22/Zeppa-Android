@@ -59,10 +59,12 @@ public class ZeppaContract {
 	public static final class ZeppaEventContract implements CommonColumns {
 		public static final String LOCAL_EVENT_ID = "LocalEventID";
 		public static final String HOST_ID  = "ZeppaHostID";
+		public static final String RELATIONSHIP_STATUS = "RelationshipToEventStatus";
 		public static final String ZEPPA_RELATIONSHIP_ID = "ZeppaUserToEventRelationship";
 		public static final String ORIGINAL_EVENT_ID = "OriginalEventID";
 		public static final String REPOSTED_EVENT_ID = "RepostedFromEventID";
-		public static final String UNEXACT_LOCATION = "ShortLocation";
+		public static final String DISPLAY_LOCATION = "ShortLocation";
+		public static final String MAPS_LOCATION = "MapsLocation";
 		public static final String TAG_ID1 = "EventTagID1";
 		public static final String TAG_ID2 = "EventTagID2";
 		public static final String TAG_ID3 = "EventTagID3";
@@ -77,10 +79,12 @@ public class ZeppaContract {
 			LAST_UPDATE,
 			LOCAL_EVENT_ID,
 			HOST_ID,
+			RELATIONSHIP_STATUS,
 			ZEPPA_RELATIONSHIP_ID,
 			ORIGINAL_EVENT_ID,
 			REPOSTED_EVENT_ID,
-			UNEXACT_LOCATION,
+			DISPLAY_LOCATION,
+			MAPS_LOCATION,
 			TAG_ID1,
 			TAG_ID2,
 			TAG_ID3,
@@ -92,41 +96,20 @@ public class ZeppaContract {
 		
 		public static final int INDEX_LOCAL_EVENT_ID = 3;
 		public static final int INDEX_HOST_ID = 4;
-		public static final int INDEX_ZEPPA_RELATIONSHIP_ID = 5;
-		public static final int INDEX_ORIGINAL_EVENT_ID = 6;
-		public static final int INDEX_REPOSTED_EVENT_ID = 7;
-		public static final int INDEX_UNEXACT_LOCATION = 8;
-		public static final int INDEX_TAG_ID1 = 9;
-		public static final int INDEX_TAG_ID2 = 10;
-		public static final int INDEX_TAG_ID3 = 11;
-		public static final int INDEX_TAG_ID4 = 12;
-		public static final int INDEX_TAG_ID5 = 13;
-		public static final int INDEX_TAG_ID6 = 14;
-		public static final int INDEX_EVENT_SCOPE = 15;
+		public static final int INDEX_RELATIONSHIP_STATUS = 5;
+		public static final int INDEX_ZEPPA_RELATIONSHIP_ID = 6;
+		public static final int INDEX_ORIGINAL_EVENT_ID = 7;
+		public static final int INDEX_REPOSTED_EVENT_ID = 8;
+		public static final int INDEX_DISPLAY_LOCATION = 9;
+		public static final int INDEX_MAPS_LOCATION = 10;
+		public static final int INDEX_TAG_ID1 = 11;
+		public static final int INDEX_TAG_ID2 = 12;
+		public static final int INDEX_TAG_ID3 = 13;
+		public static final int INDEX_TAG_ID4 = 14;
+		public static final int INDEX_TAG_ID5 = 15;
+		public static final int INDEX_TAG_ID6 = 16;
+		public static final int INDEX_EVENT_PRIVACY = 17;
 		 
-	}
-
-	public static final class EventTagContract implements CommonColumns {
-		public static final String OWNER_ID = "OwnerZeppaID";
-		public static final String TEXT = "EventTagText";
-		public static final String CREATED = "DateTagCreated";
-		public static final String RELATIONSHIP_ID = "UserFollowID";
-		
-		public static final String[] PROJECTION = {
-			_ID,
-			ZEPPA_ID,
-			LAST_UPDATE,
-			OWNER_ID,
-			TEXT,
-			CREATED,
-			RELATIONSHIP_ID
-		};
-		
-		public static final int INDEX_OWNER_ID = 3;
-		public static final int INDEX_TEXT = 4;
-		public static final int INDEX_CREATED = 5;
-		public static final int INDEX_RELATIONSHIP_ID = 6;
-		
 	}
 
 	public static final class ActivityContract implements CommonColumns {

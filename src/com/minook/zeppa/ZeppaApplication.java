@@ -72,10 +72,10 @@ public class ZeppaApplication extends Application {
 		ZeppaUserSingleton userSingleton = ZeppaUserSingleton.getInstance();
 		userSingleton.setUser(user);
 
-		userSingleton.loadConnectedUsers(credential);
-		ZeppaEventSingleton.getInstance().loadInitialEvents(credential);
-		NotificationSingleton.getInstance().loadInitialNotificationsInAsync(
-				credential);
+//		userSingleton.loadConnectedUsers(credential);
+//		ZeppaEventSingleton.getInstance().loadInitialEvents(credential);
+//		NotificationSingleton.getInstance().loadInitialNotificationsInAsync(
+//				credential);
 		EventTagSingleton.getInstance().loadTagsInAsync(credential);
 
 	}

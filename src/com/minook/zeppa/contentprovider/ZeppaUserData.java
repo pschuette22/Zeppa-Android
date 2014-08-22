@@ -80,7 +80,7 @@ public class ZeppaUserData {
 	 * @param relationship	retrieved ZeppaUserToUserRelationship object
 	 * @return data			resulting data
 	 */
-	public static ZeppaUserData generateFromRetrieved(ZeppaUserInfo userInfo, ZeppaUserToUserRelationship relationship) throws NullPointerException{
+	public static ZeppaUserData generateFromUserInfo(ZeppaUserInfo userInfo, ZeppaUserToUserRelationship relationship) throws NullPointerException{
 		if(userInfo == null){
 			throw new NullPointerException("tried generating ZeppaUserData from null ZeppaUserInfo");
 		}

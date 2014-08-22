@@ -23,6 +23,7 @@ public abstract class AbstractTagAdapter extends BaseAdapter {
 		this.activity = activity;
 		this.inflater = activity.getLayoutInflater();
 		this.tagHolder = tagHolder;
+		this.tagHolder.setClickable(false);
 
 	}
 

@@ -114,35 +114,6 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 		
 		return credential;
 	}
-
-//	/**
-//	 * This method is for retrieving GoogleCredential
-//	 * 
-//	 * @return GoogleCredential	
-//	 * @throws IOException
-//	 */
-//	public GoogleCredential getCredentialWithBlocking() throws IOException {
-//		if (credential == null) {
-//			buildCredential();
-//		} else if (credential.getExpiresInSeconds() == 0) {
-//			credential.refreshToken();
-//		}
-//		return credential;
-//	}
-//
-//	/**
-//	 * This method builds the GoogleCredential from client id and secret
-//	 */
-//	private void buildCredential() {
-//		
-//		GoogleCredential.Builder builder = new GoogleCredential.Builder();
-//		builder.setClientSecrets(Constants.APP_ENGINE_CLIENT_ID,
-//				Constants.APP_ENGINE_CLIENT_SECRET);
-//		builder.setTransport(AndroidHttp.newCompatibleTransport());
-//		builder.setJsonFactory(AndroidJsonFactory.getDefaultInstance());
-//		credential = builder.build();
-//		
-//	}
 	
 	/**
 	 * This method clears the current account address and launches Login Activity

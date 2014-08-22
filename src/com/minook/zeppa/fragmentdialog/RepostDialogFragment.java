@@ -19,7 +19,7 @@ import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.adapter.InviteListAdapter;
-import com.minook.zeppa.adapter.tagadapter.NewEventTagAdapter;
+import com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
 import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
@@ -94,12 +94,12 @@ public class RepostDialogFragment extends DialogFragment implements
 
 	private class RepostDialogAdapter extends BaseAdapter {
 
-		private NewEventTagAdapter tagAdapter;
+		private CreateEventTagAdapter tagAdapter;
 		private InviteListAdapter inviteAdapter;
 		private LinearLayout tagHolder;
 
 		RepostDialogAdapter() {
-			tagAdapter = new NewEventTagAdapter(activity, tagHolder,
+			tagAdapter = new CreateEventTagAdapter(activity, tagHolder,
 					EventTagSingleton.getInstance().getTags());
 			inviteAdapter = new InviteListAdapter(activity);
 

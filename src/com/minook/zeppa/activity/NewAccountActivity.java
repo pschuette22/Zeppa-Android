@@ -25,7 +25,7 @@ import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
-import com.minook.zeppa.gcmhandler.ZeppaGCMReceiver;
+import com.minook.zeppa.gcm.ZeppaGCMReceiver;
 import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUserInfo;
