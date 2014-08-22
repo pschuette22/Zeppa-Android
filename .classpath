@@ -5,7 +5,6 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="/Users/DrunkWithFunk21/SDKs/android-sdk-macosx/extras/android/support/v4/android-support-v4.jar"/>
 	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/calendar-v3r89lv1.18.0-rc"/>
 	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/plus-v1r145lv1.18.0-rc"/>
 	<classpathentry kind="src" path="endpoint-libs/libdeviceinfoendpoint-v1/deviceinfoendpoint/deviceinfoendpoint-v1-generated-source"/>
@@ -19,5 +18,6 @@
 	<classpathentry kind="src" path="endpoint-libs/libzeppauserendpoint-v1/zeppauserendpoint/zeppauserendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libzeppauserinfoendpoint-v1/zeppauserinfoendpoint/zeppauserinfoendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libzeppausertouserrelationshipendpoint-v1/zeppausertouserrelationshipendpoint/zeppausertouserrelationshipendpoint-v1-generated-source"/>
+	<classpathentry kind="lib" path="/Users/Afro/Development/adt-bundle-mac-x86_64-20140702/sdk/extras/android/support/v4/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
