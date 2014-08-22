@@ -61,6 +61,76 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int adUnitId=0x7f010002;
+        /**  Appearance of the buy button. Must be one of "classic", "grayscale" and "monochrome" 
+         <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>classic</code></td><td>1</td><td></td></tr>
+<tr><td><code>grayscale</code></td><td>2</td><td></td></tr>
+<tr><td><code>monochrome</code></td><td>3</td><td></td></tr>
+</table>
+         */
+        public static final int buyButtonAppearance=0x7f010018;
+        /**  Height of the buy button. This includes an 8dp padding (4dp on each side) used for
+             pressed and focused states of the button. The value can be a specific height, e.g.
+             "48dp", or special values "match_parent" and "wrap_content". 
+         <p>May be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+<p>May be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>match_parent</code></td><td>-1</td><td></td></tr>
+<tr><td><code>wrap_content</code></td><td>-2</td><td></td></tr>
+</table>
+         */
+        public static final int buyButtonHeight=0x7f010015;
+        /**  Text on the buy button. Must be one of "buy_with_google", "buy_now" and "book_now" 
+         <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>buy_with_google</code></td><td>1</td><td></td></tr>
+<tr><td><code>buy_now</code></td><td>2</td><td></td></tr>
+<tr><td><code>book_now</code></td><td>3</td><td></td></tr>
+</table>
+         */
+        public static final int buyButtonText=0x7f010017;
+        /**  Width of the buy button. This includes an 8dp padding (4dp on each side) used for
+             pressed and focused states of the button. The value can be a specific width, e.g.
+             "300dp", or special values "match_parent" and "wrap_content". 
+         <p>May be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+<p>May be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>match_parent</code></td><td>-1</td><td></td></tr>
+<tr><td><code>wrap_content</code></td><td>-2</td><td></td></tr>
+</table>
+         */
+        public static final int buyButtonWidth=0x7f010016;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -109,7 +179,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int dividerColor=0x7f01001f;
+        public static final int dividerColor=0x7f01002e;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -119,7 +189,37 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int dividerPadding=0x7f010022;
+        public static final int dividerPadding=0x7f010031;
+        /**  Google Wallet environment to use 
+         <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>production</code></td><td>1</td><td></td></tr>
+<tr><td><code>sandbox</code></td><td>0</td><td></td></tr>
+<tr><td><code>strict_sandbox</code></td><td>2</td><td></td></tr>
+</table>
+         */
+        public static final int environment=0x7f010012;
+        /**  Fragment mode 
+         <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>buyButton</code></td><td>1</td><td></td></tr>
+<tr><td><code>selectionDetails</code></td><td>2</td><td></td></tr>
+</table>
+         */
+        public static final int fragmentMode=0x7f010014;
+        /**  A style resource specifing attributes to customize the look and feel of WalletFragment 
+         <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int fragmentStyle=0x7f010013;
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
@@ -128,7 +228,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int indicatorColor=0x7f01001d;
+        public static final int indicatorColor=0x7f01002c;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -138,7 +238,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int indicatorHeight=0x7f010020;
+        public static final int indicatorHeight=0x7f01002f;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -153,13 +253,64 @@ containing a value of this type.
 </table>
          */
         public static final int mapType=0x7f010003;
+        /**  Masked wallet details background 
+         <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+<p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+         */
+        public static final int maskedWalletDetailsBackground=0x7f01001b;
+        /**  "Change" button background in masked wallet details view 
+         <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+<p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+         */
+        public static final int maskedWalletDetailsButtonBackground=0x7f01001d;
+        /**  TextAppearance for the "Change" button in masked wallet details view 
+         <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int maskedWalletDetailsButtonTextAppearance=0x7f01001c;
+        /**  TextAppearance for headers describing masked wallet details 
+         <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int maskedWalletDetailsHeaderTextAppearance=0x7f01001a;
+        /**  Type of the wallet logo image in masked wallet details view 
+         <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>classic</code></td><td>1</td><td></td></tr>
+<tr><td><code>monochrome</code></td><td>2</td><td></td></tr>
+</table>
+         */
+        public static final int maskedWalletDetailsLogoImageType=0x7f01001f;
+        /**  Color of the Google Wallet logo text in masked wallet details view 
+         <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int maskedWalletDetailsLogoTextColor=0x7f01001e;
+        /**  TextAppearance for masked wallet details 
+         <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int maskedWalletDetailsTextAppearance=0x7f010019;
         /**  A drawable to use as the background of the Header View 
          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
 <p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
          */
-        public static final int ptrHeaderBackground=0x7f010013;
+        public static final int ptrHeaderBackground=0x7f010022;
         /**  The height of the Header View 
          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
@@ -167,24 +318,24 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
          */
-        public static final int ptrHeaderHeight=0x7f010014;
+        public static final int ptrHeaderHeight=0x7f010023;
         /**  The attribute to set in your Application/Activity theme to reference your custom theme 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int ptrHeaderStyle=0x7f010012;
+        public static final int ptrHeaderStyle=0x7f010021;
         /**  The Text Appearance of the Header View's Title text 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int ptrHeaderTitleTextAppearance=0x7f010015;
+        public static final int ptrHeaderTitleTextAppearance=0x7f010024;
         /**  The color that the Progress Bar should be tinted with 
          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
 <p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
          */
-        public static final int ptrProgressBarColor=0x7f010016;
+        public static final int ptrProgressBarColor=0x7f010025;
         /**  The radius of the rounded corner on the progress bar 
          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
@@ -192,7 +343,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
          */
-        public static final int ptrProgressBarCornerRadius=0x7f010017;
+        public static final int ptrProgressBarCornerRadius=0x7f010026;
         /**  The height of the Progress Bar 
          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
@@ -200,7 +351,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
          */
-        public static final int ptrProgressBarHeight=0x7f010019;
+        public static final int ptrProgressBarHeight=0x7f010028;
         /**  The style of the Progress Bar 
          <p>Must be one or more (separated by '|') of the following constant values.</p>
 <table>
@@ -212,31 +363,31 @@ in (inches), mm (millimeters).
 <tr><td><code>outside</code></td><td>0x1</td><td></td></tr>
 </table>
          */
-        public static final int ptrProgressBarStyle=0x7f010018;
+        public static final int ptrProgressBarStyle=0x7f010027;
         /**  Text to show to prompt the user is pull (or keep pulling) 
          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
 <p>May be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
          */
-        public static final int ptrPullText=0x7f01001a;
+        public static final int ptrPullText=0x7f010029;
         /**  Text to show to tell the user that a refresh is currently in progress 
          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
 <p>May be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
          */
-        public static final int ptrRefreshingText=0x7f01001b;
+        public static final int ptrRefreshingText=0x7f01002a;
         /**  Text to show to tell the user has scrolled enough to refresh 
          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
 <p>May be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
          */
-        public static final int ptrReleaseText=0x7f01001c;
+        public static final int ptrReleaseText=0x7f01002b;
         /**  The class to use as a View's View Delegate. Can be relative path from app's package name 
          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
 <p>May be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
          */
-        public static final int ptrViewDelegateClass=0x7f010011;
+        public static final int ptrViewDelegateClass=0x7f010020;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -246,7 +397,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int scrollOffset=0x7f010024;
+        public static final int scrollOffset=0x7f010033;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -254,11 +405,11 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int shouldExpand=0x7f010026;
+        public static final int shouldExpand=0x7f010035;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int tabBackground=0x7f010025;
+        public static final int tabBackground=0x7f010034;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -268,7 +419,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int tabPaddingLeftRight=0x7f010023;
+        public static final int tabPaddingLeftRight=0x7f010032;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -276,7 +427,19 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int textAllCaps=0x7f010027;
+        public static final int textAllCaps=0x7f010036;
+        /**  Theme to be used for the Wallet selector 
+         <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>holo_dark</code></td><td>0</td><td></td></tr>
+<tr><td><code>holo_light</code></td><td>1</td><td></td></tr>
+</table>
+         */
+        public static final int theme=0x7f010011;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -333,7 +496,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int underlineColor=0x7f01001e;
+        public static final int underlineColor=0x7f01002d;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -343,7 +506,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int underlineHeight=0x7f010021;
+        public static final int underlineHeight=0x7f010030;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -365,460 +528,480 @@ containing a value of this type.
         /**  when on, event info launched from agenda view is shown in full screen, 
  when off, shown as a popup. 
          */
-        public static final int agenda_show_event_info_full_screen=0x7f060004;
+        public static final int agenda_show_event_info_full_screen=0x7f0a0004;
         /**   A global var used to set the main layout theme (one pane vs multiple panes) 
          */
-        public static final int multiple_pane_config=0x7f060007;
+        public static final int multiple_pane_config=0x7f0a0007;
         /**  turn on/off month with agenda view 
  not supported for X-large devices 
          */
-        public static final int show_agenda_with_month=0x7f060001;
+        public static final int show_agenda_with_month=0x7f0a0001;
         /**  turn on/off the mini-calendar and calendar picker 
  supported only for x-large devices  
          */
-        public static final int show_calendar_controls=0x7f060000;
+        public static final int show_calendar_controls=0x7f0a0000;
         /**  when on, shows details of event in month view, when off, shows busy bits 
  the "show details" mode is recommended for devices with large screens 
          */
-        public static final int show_details_in_month=0x7f060002;
+        public static final int show_details_in_month=0x7f0a0002;
         /**  when on, shows the event next to the agenda list,
          when off, shows the event on top of the agenda list after it was clicked. 
          */
-        public static final int show_event_details_with_agenda=0x7f060003;
+        public static final int show_event_details_with_agenda=0x7f0a0003;
         /**  when on, event info launched from day/week/month view is shown in full screen, 
  when off, shown as a popup. 
          */
-        public static final int show_event_info_full_screen=0x7f060005;
+        public static final int show_event_info_full_screen=0x7f0a0005;
         /**   A global var used to tablet vs phone settings 
          */
-        public static final int tablet_config=0x7f060006;
+        public static final int tablet_config=0x7f0a0006;
     }
     public static final class color {
         /**  Background Color of present/future events in agenda view  
          */
-        public static final int agenda_day_bar_background_color=0x7f050032;
+        public static final int agenda_day_bar_background_color=0x7f060049;
         /**  Agenda day item text color  
          */
-        public static final int agenda_day_item_text_color=0x7f050036;
+        public static final int agenda_day_item_text_color=0x7f06004d;
         /**  General background color in agenda view  
          */
-        public static final int agenda_general_background_color=0x7f050035;
+        public static final int agenda_general_background_color=0x7f06004c;
         /**  Text color of declined events in agenda view 
          */
-        public static final int agenda_item_declined_color=0x7f050030;
+        public static final int agenda_item_declined_color=0x7f060047;
         /**  Text color of the date in the Calendar widget 
          */
-        public static final int agenda_item_not_selected=0x7f05002f;
+        public static final int agenda_item_not_selected=0x7f060046;
         /**  Text color of non-declined events in agenda view 
          */
-        public static final int agenda_item_standard_color=0x7f050031;
+        public static final int agenda_item_standard_color=0x7f060048;
         /**  Color of the event location's text in an agenda item  
          */
-        public static final int agenda_item_where_declined_text_color=0x7f050038;
+        public static final int agenda_item_where_declined_text_color=0x7f06004f;
         /**  Color of the event location's text in an agenda item  
          */
-        public static final int agenda_item_where_text_color=0x7f050037;
+        public static final int agenda_item_where_text_color=0x7f06004e;
         /**  Color of the separator between items in the agenda list 
          */
-        public static final int agenda_list_separator_color=0x7f05003b;
+        public static final int agenda_list_separator_color=0x7f060052;
         /**  Background Color of past events in agenda view  
          */
-        public static final int agenda_past_days_bar_background_color=0x7f050033;
+        public static final int agenda_past_days_bar_background_color=0x7f06004a;
         /**  Color of the separator between the past and the present/future in agenda view  
          */
-        public static final int agenda_past_present_separator_color=0x7f050034;
+        public static final int agenda_past_present_separator_color=0x7f06004b;
         /**  Text color of a selected items in the agenda list - trumps all other text colors 
          */
-        public static final int agenda_selected_background_color=0x7f05003c;
+        public static final int agenda_selected_background_color=0x7f060053;
         /**  Background color of a selected items in the agenda list 
          */
-        public static final int agenda_selected_text_color=0x7f05003d;
-        public static final int alert_event_other=0x7f05004c;
-        public static final int alert_event_title=0x7f05004b;
-        public static final int alert_past_event=0x7f05004d;
-        public static final int appwidget_date=0x7f05004f;
+        public static final int agenda_selected_text_color=0x7f060054;
+        public static final int alert_event_other=0x7f060063;
+        public static final int alert_event_title=0x7f060062;
+        public static final int alert_past_event=0x7f060064;
+        public static final int appwidget_date=0x7f060066;
         /**  Text color for all day events in widget view 
          */
-        public static final int appwidget_item_allday_color=0x7f050054;
+        public static final int appwidget_item_allday_color=0x7f06006b;
         /**  Text color of declined events in widget view 
          */
-        public static final int appwidget_item_declined_color=0x7f050052;
+        public static final int appwidget_item_declined_color=0x7f060069;
         /**  Text color of non-declined events in widget view 
          */
-        public static final int appwidget_item_standard_color=0x7f050053;
-        public static final int appwidget_month=0x7f050051;
-        public static final int appwidget_no_events=0x7f050058;
-        public static final int appwidget_row_in_progress=0x7f05004e;
-        public static final int appwidget_title=0x7f050055;
-        public static final int appwidget_week=0x7f050050;
-        public static final int appwidget_when=0x7f050056;
-        public static final int appwidget_where=0x7f050057;
+        public static final int appwidget_item_standard_color=0x7f06006a;
+        public static final int appwidget_month=0x7f060068;
+        public static final int appwidget_no_events=0x7f06006f;
+        public static final int appwidget_row_in_progress=0x7f060065;
+        public static final int appwidget_title=0x7f06006c;
+        public static final int appwidget_week=0x7f060067;
+        public static final int appwidget_when=0x7f06006d;
+        public static final int appwidget_where=0x7f06006e;
         /**  The app wide background color 
          */
-        public static final int background_color=0x7f050002;
-        public static final int background_tab_pressed=0x7f050064;
+        public static final int background_color=0x7f060019;
+        public static final int background_tab_pressed=0x7f060071;
         /** 
     	File contians all solid colors used in application
     		- organized by general color -> alphabetical
     
  Neutrals 
          */
-        public static final int black=0x7f050065;
-        public static final int black_transparent=0x7f050066;
+        public static final int black=0x7f060072;
+        public static final int black_transparent=0x7f060073;
         /**  Blues 
          */
-        public static final int blue=0x7f05006f;
-        public static final int blue_eggshell=0x7f050070;
-        public static final int blue_lightish=0x7f050071;
-        public static final int blue_link=0x7f050072;
-        public static final int calendar_ampm_label=0x7f05000c;
-        public static final int calendar_date_banner_background=0x7f05000e;
-        public static final int calendar_date_banner_text_color=0x7f05000f;
-        public static final int calendar_date_range_color=0x7f050007;
-        public static final int calendar_event_text_color=0x7f050005;
-        public static final int calendar_future_bg_color=0x7f05000a;
-        public static final int calendar_grid_area_selected=0x7f050010;
-        public static final int calendar_grid_line_highlight_color=0x7f050013;
-        public static final int calendar_grid_line_inner_horizontal_color=0x7f050011;
-        public static final int calendar_grid_line_inner_vertical_color=0x7f050012;
-        public static final int calendar_hidden=0x7f05002c;
-        public static final int calendar_hour_background=0x7f05000d;
-        public static final int calendar_hour_label=0x7f05000b;
-        public static final int calendar_owner_text_color=0x7f050006;
-        public static final int calendar_secondary_hidden=0x7f05002e;
-        public static final int calendar_secondary_visible=0x7f05002d;
+        public static final int blue=0x7f06007c;
+        public static final int blue_eggshell=0x7f06007d;
+        public static final int blue_lightish=0x7f06007e;
+        public static final int blue_link=0x7f06007f;
+        public static final int calendar_ampm_label=0x7f060023;
+        public static final int calendar_date_banner_background=0x7f060025;
+        public static final int calendar_date_banner_text_color=0x7f060026;
+        public static final int calendar_date_range_color=0x7f06001e;
+        public static final int calendar_event_text_color=0x7f06001c;
+        public static final int calendar_future_bg_color=0x7f060021;
+        public static final int calendar_grid_area_selected=0x7f060027;
+        public static final int calendar_grid_line_highlight_color=0x7f06002a;
+        public static final int calendar_grid_line_inner_horizontal_color=0x7f060028;
+        public static final int calendar_grid_line_inner_vertical_color=0x7f060029;
+        public static final int calendar_hidden=0x7f060043;
+        public static final int calendar_hour_background=0x7f060024;
+        public static final int calendar_hour_label=0x7f060022;
+        public static final int calendar_owner_text_color=0x7f06001d;
+        public static final int calendar_secondary_hidden=0x7f060045;
+        public static final int calendar_secondary_visible=0x7f060044;
         /**  Color of text in the calendar view selection menu 
          */
-        public static final int calendar_view_switch_menu_text_color=0x7f050039;
+        public static final int calendar_view_switch_menu_text_color=0x7f060050;
         /**  Light color of text in the calendar view selection menu 
          */
-        public static final int calendar_view_switch_menu_text_color_light=0x7f05003a;
-        public static final int calendar_visible=0x7f05002b;
-        public static final int common_action_bar_splitter=0x7f050062;
+        public static final int calendar_view_switch_menu_text_color_light=0x7f060051;
+        public static final int calendar_visible=0x7f060042;
+        public static final int common_action_bar_splitter=0x7f060009;
         /**  Sign-in Button Colors 
          */
-        public static final int common_signin_btn_dark_text_default=0x7f050059;
-        public static final int common_signin_btn_dark_text_disabled=0x7f05005b;
-        public static final int common_signin_btn_dark_text_focused=0x7f05005c;
-        public static final int common_signin_btn_dark_text_pressed=0x7f05005a;
-        public static final int common_signin_btn_default_background=0x7f050061;
-        public static final int common_signin_btn_light_text_default=0x7f05005d;
-        public static final int common_signin_btn_light_text_disabled=0x7f05005f;
-        public static final int common_signin_btn_light_text_focused=0x7f050060;
-        public static final int common_signin_btn_light_text_pressed=0x7f05005e;
-        public static final int common_signin_btn_text_dark=0x7f050080;
-        public static final int common_signin_btn_text_light=0x7f050081;
+        public static final int common_signin_btn_dark_text_default=0x7f060000;
+        public static final int common_signin_btn_dark_text_disabled=0x7f060002;
+        public static final int common_signin_btn_dark_text_focused=0x7f060003;
+        public static final int common_signin_btn_dark_text_pressed=0x7f060001;
+        public static final int common_signin_btn_default_background=0x7f060008;
+        public static final int common_signin_btn_light_text_default=0x7f060004;
+        public static final int common_signin_btn_light_text_disabled=0x7f060006;
+        public static final int common_signin_btn_light_text_focused=0x7f060007;
+        public static final int common_signin_btn_light_text_pressed=0x7f060005;
+        public static final int common_signin_btn_text_dark=0x7f06008d;
+        public static final int common_signin_btn_text_light=0x7f06008e;
         /**  background color for for clicked days in month view
          */
-        public static final int day_clicked_background_color=0x7f050040;
+        public static final int day_clicked_background_color=0x7f060057;
         /**  Text color of a clicked event in the day/week view 
          */
-        public static final int day_event_clicked_background_color=0x7f05003f;
+        public static final int day_event_clicked_background_color=0x7f060056;
         /**  background color for the past 
          */
-        public static final int day_past_background_color=0x7f050041;
-        public static final int default_progress_bar_color=0x7f050063;
-        public static final int edit_event_separator=0x7f05002a;
-        public static final int event_background=0x7f050003;
-        public static final int event_center=0x7f050029;
-        public static final int event_info_body_color=0x7f050047;
-        public static final int event_info_description_color=0x7f050046;
+        public static final int day_past_background_color=0x7f060058;
+        public static final int default_progress_bar_color=0x7f060070;
+        public static final int edit_event_separator=0x7f060041;
+        public static final int event_background=0x7f06001a;
+        public static final int event_center=0x7f060040;
+        public static final int event_info_body_color=0x7f06005e;
+        public static final int event_info_description_color=0x7f06005d;
         /**  Event info colors 
          */
-        public static final int event_info_headline_color=0x7f050042;
-        public static final int event_info_headline_link_color=0x7f050044;
-        public static final int event_info_headline_transparent_color=0x7f050043;
-        public static final int event_info_label_background_color=0x7f050049;
-        public static final int event_info_label_color=0x7f050048;
-        public static final int event_info_organizer_color=0x7f050045;
-        public static final int gray=0x7f050067;
-        public static final int gray_comment=0x7f050069;
-        public static final int gray_dark=0x7f050068;
-        public static final int gray_light=0x7f05006a;
-        public static final int gray_neutral_border=0x7f05006b;
+        public static final int event_info_headline_color=0x7f060059;
+        public static final int event_info_headline_link_color=0x7f06005b;
+        public static final int event_info_headline_transparent_color=0x7f06005a;
+        public static final int event_info_label_background_color=0x7f060060;
+        public static final int event_info_label_color=0x7f06005f;
+        public static final int event_info_organizer_color=0x7f06005c;
+        public static final int gray=0x7f060074;
+        public static final int gray_comment=0x7f060076;
+        public static final int gray_dark=0x7f060075;
+        public static final int gray_light=0x7f060077;
+        public static final int gray_neutral_border=0x7f060078;
         /**  Green 
          */
-        public static final int green=0x7f050077;
-        public static final int green_dark=0x7f050078;
-        public static final int green_transparent=0x7f050079;
-        public static final int mini_month_bg_color=0x7f050014;
-        public static final int mini_month_today_outline_color=0x7f050015;
-        public static final int month_bgcolor=0x7f050027;
-        public static final int month_day_names_color=0x7f05001a;
-        public static final int month_day_number=0x7f050016;
-        public static final int month_day_number_other=0x7f050018;
-        public static final int month_dna_conflict_time_color=0x7f050028;
-        public static final int month_event_color=0x7f05001c;
-        public static final int month_event_extra_color=0x7f05001d;
-        public static final int month_event_extra_other_color=0x7f05001f;
-        public static final int month_event_other_color=0x7f05001e;
-        public static final int month_grid_lines=0x7f050022;
-        public static final int month_mini_day_number=0x7f050017;
-        public static final int month_other_bgcolor=0x7f050024;
-        public static final int month_other_month_day_number=0x7f050023;
-        public static final int month_saturday=0x7f050020;
-        public static final int month_selected_week_bgcolor=0x7f050025;
-        public static final int month_sunday=0x7f050021;
-        public static final int month_today_bgcolor=0x7f050026;
-        public static final int month_today_number=0x7f05001b;
-        public static final int month_week_num_color=0x7f050019;
+        public static final int green=0x7f060084;
+        public static final int green_dark=0x7f060085;
+        public static final int green_transparent=0x7f060086;
+        public static final int mini_month_bg_color=0x7f06002b;
+        public static final int mini_month_today_outline_color=0x7f06002c;
+        public static final int month_bgcolor=0x7f06003e;
+        public static final int month_day_names_color=0x7f060031;
+        public static final int month_day_number=0x7f06002d;
+        public static final int month_day_number_other=0x7f06002f;
+        public static final int month_dna_conflict_time_color=0x7f06003f;
+        public static final int month_event_color=0x7f060033;
+        public static final int month_event_extra_color=0x7f060034;
+        public static final int month_event_extra_other_color=0x7f060036;
+        public static final int month_event_other_color=0x7f060035;
+        public static final int month_grid_lines=0x7f060039;
+        public static final int month_mini_day_number=0x7f06002e;
+        public static final int month_other_bgcolor=0x7f06003b;
+        public static final int month_other_month_day_number=0x7f06003a;
+        public static final int month_saturday=0x7f060037;
+        public static final int month_selected_week_bgcolor=0x7f06003c;
+        public static final int month_sunday=0x7f060038;
+        public static final int month_today_bgcolor=0x7f06003d;
+        public static final int month_today_number=0x7f060032;
+        public static final int month_week_num_color=0x7f060030;
         /**  Text color of the "new event" hint in day and week views 
          */
-        public static final int new_event_hint_text_color=0x7f05003e;
-        public static final int panel_text_foreground=0x7f050004;
-        public static final int pressed=0x7f050000;
+        public static final int new_event_hint_text_color=0x7f060055;
+        public static final int panel_text_foreground=0x7f06001b;
+        public static final int pressed=0x7f060017;
         /**  Red 
          */
-        public static final int red=0x7f05007a;
-        public static final int red_dark=0x7f05007b;
-        public static final int red_notif=0x7f05007c;
-        public static final int red_transparent=0x7f05007d;
-        public static final int teal=0x7f050073;
-        public static final int teal_dark=0x7f050074;
-        public static final int teal_light=0x7f050075;
-        public static final int teal_transparent=0x7f050076;
-        public static final int text_shadow_color=0x7f05004a;
-        public static final int today_highlight_color=0x7f050001;
-        public static final int week_saturday=0x7f050008;
-        public static final int week_sunday=0x7f050009;
-        public static final int white=0x7f05006c;
-        public static final int white_eggshell=0x7f05006e;
-        public static final int white_gray=0x7f05006d;
+        public static final int red=0x7f060087;
+        public static final int red_dark=0x7f060088;
+        public static final int red_notif=0x7f060089;
+        public static final int red_transparent=0x7f06008a;
+        public static final int teal=0x7f060080;
+        public static final int teal_dark=0x7f060081;
+        public static final int teal_light=0x7f060082;
+        public static final int teal_transparent=0x7f060083;
+        public static final int text_shadow_color=0x7f060061;
+        public static final int today_highlight_color=0x7f060018;
+        public static final int wallet_bright_foreground_disabled_holo_light=0x7f06000f;
+        /** 
+         Wallet colors to support consistent Wallet fragment holo dark UI in client application
+         regardless of the theme and device type
+    
+         */
+        public static final int wallet_bright_foreground_holo_dark=0x7f06000a;
+        public static final int wallet_bright_foreground_holo_light=0x7f060010;
+        public static final int wallet_dim_foreground_disabled_holo_dark=0x7f06000c;
+        public static final int wallet_dim_foreground_holo_dark=0x7f06000b;
+        public static final int wallet_dim_foreground_inverse_disabled_holo_dark=0x7f06000e;
+        public static final int wallet_dim_foreground_inverse_holo_dark=0x7f06000d;
+        public static final int wallet_highlighted_text_holo_dark=0x7f060014;
+        public static final int wallet_highlighted_text_holo_light=0x7f060013;
+        public static final int wallet_hint_foreground_holo_dark=0x7f060012;
+        public static final int wallet_hint_foreground_holo_light=0x7f060011;
+        public static final int wallet_holo_blue_light=0x7f060015;
+        public static final int wallet_link_text_light=0x7f060016;
+        public static final int wallet_primary_text_holo_light=0x7f06008f;
+        public static final int wallet_secondary_text_holo_dark=0x7f060090;
+        public static final int week_saturday=0x7f06001f;
+        public static final int week_sunday=0x7f060020;
+        public static final int white=0x7f060079;
+        public static final int white_eggshell=0x7f06007b;
+        public static final int white_gray=0x7f06007a;
         /**  Yellow 
          */
-        public static final int yellow=0x7f05007e;
-        public static final int yellow_highlight=0x7f05007f;
+        public static final int yellow=0x7f06008b;
+        public static final int yellow_highlight=0x7f06008c;
     }
     public static final class dimen {
-        public static final int action_bar_date_text_size=0x7f0700c5;
-        public static final int action_bar_switch_padding=0x7f07004a;
-        public static final int action_confirm_button_margin=0x7f07006a;
+        public static final int action_bar_date_text_size=0x7f0b00c5;
+        public static final int action_bar_switch_padding=0x7f0b004a;
+        public static final int action_confirm_button_margin=0x7f0b006a;
         /**  Default screen margins, per the Android Design guidelines. 
 
          Customize dimensions originally defined in res/values/dimens.xml (such as
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f0700d6;
-        public static final int activity_vertical_margin=0x7f0700d7;
-        public static final int agenda_item_right_margin=0x7f0700d3;
-        public static final int all_day_bottom_margin=0x7f0700b3;
-        public static final int allday_text_size=0x7f0700b8;
-        public static final int ampm_text_size=0x7f0700b9;
-        public static final int app_icon_area_height=0x7f070085;
-        public static final int app_icon_area_width=0x7f070084;
-        public static final int at_place_card_content_height=0x7f07002d;
-        public static final int auto_scroll_padding=0x7f070031;
-        public static final int calendar_controls_height=0x7f0700d2;
-        public static final int calendar_controls_width=0x7f0700cf;
-        public static final int card_action_button_height=0x7f0700a6;
-        public static final int card_action_small_text=0x7f07009d;
-        public static final int card_action_text=0x7f07009e;
-        public static final int card_grid_font_size=0x7f070097;
-        public static final int card_horizontal_map_height=0x7f0700a4;
-        public static final int card_large_text=0x7f07009a;
-        public static final int card_medium_text=0x7f07009b;
-        public static final int card_minimum_padding=0x7f07006c;
-        public static final int card_padding=0x7f07009f;
-        public static final int card_small_padding=0x7f0700a7;
-        public static final int card_small_text=0x7f07009c;
-        public static final int card_spacer_margin=0x7f0700a8;
-        public static final int card_temperature_size=0x7f070098;
-        public static final int card_xl_text=0x7f070099;
-        public static final int cards_max_column_width=0x7f07002c;
-        public static final int cards_padding_inbetween=0x7f07002a;
-        public static final int cards_padding_inbetween_adjusted=0x7f07002b;
-        public static final int contact_avatar_height=0x7f070086;
-        public static final int contact_avatar_width=0x7f070087;
-        public static final int contact_select_fragment_padding=0x7f070088;
-        public static final int context_header_padding=0x7f070053;
-        public static final int control_size=0x7f070035;
-        public static final int corpus_bar_left_padding=0x7f070024;
-        public static final int corpus_bar_more_padding=0x7f070025;
-        public static final int corpus_bar_vertical_padding=0x7f070023;
-        public static final int corpus_selector_element_margin=0x7f070028;
-        public static final int corpus_selector_horizontal_margin=0x7f070026;
-        public static final int corpus_selector_text_size=0x7f070027;
-        public static final int correction_popup_width_1buttons=0x7f070057;
-        public static final int correction_popup_width_2buttons=0x7f070058;
-        public static final int correction_popup_width_3buttons=0x7f070059;
-        public static final int date_header_text_size=0x7f0700b6;
-        public static final int day_header_bottom_margin=0x7f0700b5;
+        public static final int activity_horizontal_margin=0x7f0b00d6;
+        public static final int activity_vertical_margin=0x7f0b00d7;
+        public static final int agenda_item_right_margin=0x7f0b00d3;
+        public static final int all_day_bottom_margin=0x7f0b00b3;
+        public static final int allday_text_size=0x7f0b00b8;
+        public static final int ampm_text_size=0x7f0b00b9;
+        public static final int app_icon_area_height=0x7f0b0085;
+        public static final int app_icon_area_width=0x7f0b0084;
+        public static final int at_place_card_content_height=0x7f0b002d;
+        public static final int auto_scroll_padding=0x7f0b0031;
+        public static final int calendar_controls_height=0x7f0b00d2;
+        public static final int calendar_controls_width=0x7f0b00cf;
+        public static final int card_action_button_height=0x7f0b00a6;
+        public static final int card_action_small_text=0x7f0b009d;
+        public static final int card_action_text=0x7f0b009e;
+        public static final int card_grid_font_size=0x7f0b0097;
+        public static final int card_horizontal_map_height=0x7f0b00a4;
+        public static final int card_large_text=0x7f0b009a;
+        public static final int card_medium_text=0x7f0b009b;
+        public static final int card_minimum_padding=0x7f0b006c;
+        public static final int card_padding=0x7f0b009f;
+        public static final int card_small_padding=0x7f0b00a7;
+        public static final int card_small_text=0x7f0b009c;
+        public static final int card_spacer_margin=0x7f0b00a8;
+        public static final int card_temperature_size=0x7f0b0098;
+        public static final int card_xl_text=0x7f0b0099;
+        public static final int cards_max_column_width=0x7f0b002c;
+        public static final int cards_padding_inbetween=0x7f0b002a;
+        public static final int cards_padding_inbetween_adjusted=0x7f0b002b;
+        public static final int contact_avatar_height=0x7f0b0086;
+        public static final int contact_avatar_width=0x7f0b0087;
+        public static final int contact_select_fragment_padding=0x7f0b0088;
+        public static final int context_header_padding=0x7f0b0053;
+        public static final int control_size=0x7f0b0035;
+        public static final int corpus_bar_left_padding=0x7f0b0024;
+        public static final int corpus_bar_more_padding=0x7f0b0025;
+        public static final int corpus_bar_vertical_padding=0x7f0b0023;
+        public static final int corpus_selector_element_margin=0x7f0b0028;
+        public static final int corpus_selector_horizontal_margin=0x7f0b0026;
+        public static final int corpus_selector_text_size=0x7f0b0027;
+        public static final int correction_popup_width_1buttons=0x7f0b0057;
+        public static final int correction_popup_width_2buttons=0x7f0b0058;
+        public static final int correction_popup_width_3buttons=0x7f0b0059;
+        public static final int date_header_text_size=0x7f0b00b6;
+        public static final int day_header_bottom_margin=0x7f0b00b5;
         /**  size of day header in day and week views  
          */
-        public static final int day_header_height=0x7f0700c2;
-        public static final int day_label_text_size=0x7f0700b2;
-        public static final int day_view_event_text_size=0x7f0700ba;
-        public static final int default_corner_radius=0x7f0700d5;
-        public static final int dialog_corner_radius=0x7f07005c;
-        public static final int dialog_height=0x7f07005e;
-        public static final int dialog_pos_left=0x7f070060;
-        public static final int dialog_pos_top=0x7f070061;
-        public static final int dialog_text_size=0x7f070066;
-        public static final int dialog_width=0x7f07005d;
-        public static final int divider_height=0x7f070064;
-        public static final int edit_event_view_padding_left=0x7f0700c8;
-        public static final int edit_event_view_padding_right=0x7f0700c9;
-        public static final int edit_event_view_width=0x7f0700c7;
-        public static final int edit_reminder_min_size=0x7f0700ca;
-        public static final int event_info_desc_margin_left=0x7f0700cc;
-        public static final int event_info_desc_margin_right=0x7f0700cd;
-        public static final int event_info_padding=0x7f0700ce;
-        public static final int event_info_text_size=0x7f0700cb;
-        public static final int event_min_height=0x7f0700be;
-        public static final int event_text_horizontal_margin=0x7f0700bd;
-        public static final int event_text_vertical_margin=0x7f0700bc;
-        public static final int extra_height_to_account_for_system_space_in_landscape=0x7f07001b;
-        public static final int first_run_context_image_height=0x7f070029;
-        public static final int first_run_padding=0x7f0700a0;
-        public static final int footer_height=0x7f070021;
-        public static final int gmail_card_button_height=0x7f070022;
-        public static final int google_header_margin_bottom=0x7f07001c;
-        public static final int google_logo_margin_left=0x7f070039;
-        public static final int google_logo_margin_right=0x7f07003a;
-        public static final int half_unit=0x7f070076;
-        public static final int hands_free_padding=0x7f07008c;
-        public static final int hands_free_small_padding=0x7f07008b;
-        public static final int header_footer_size=0x7f070065;
-        public static final int high_confidence_answer_card_image_height=0x7f070071;
-        public static final int high_confidence_answer_card_image_width=0x7f070072;
-        public static final int high_confidence_answer_card_min_spacing=0x7f070070;
-        public static final int hint_bubble_offset=0x7f07005b;
-        public static final int histogram_bar_padding=0x7f0700b0;
-        public static final int histogram_bar_size=0x7f0700af;
-        public static final int histogram_width=0x7f0700b1;
-        public static final int horizontal_static_map_height=0x7f0700a5;
+        public static final int day_header_height=0x7f0b00c2;
+        public static final int day_label_text_size=0x7f0b00b2;
+        public static final int day_view_event_text_size=0x7f0b00ba;
+        public static final int default_corner_radius=0x7f0b00d5;
+        public static final int dialog_corner_radius=0x7f0b005c;
+        public static final int dialog_height=0x7f0b005e;
+        public static final int dialog_pos_left=0x7f0b0060;
+        public static final int dialog_pos_top=0x7f0b0061;
+        public static final int dialog_text_size=0x7f0b0066;
+        public static final int dialog_width=0x7f0b005d;
+        public static final int divider_height=0x7f0b0064;
+        public static final int edit_event_view_padding_left=0x7f0b00c8;
+        public static final int edit_event_view_padding_right=0x7f0b00c9;
+        public static final int edit_event_view_width=0x7f0b00c7;
+        public static final int edit_reminder_min_size=0x7f0b00ca;
+        public static final int event_info_desc_margin_left=0x7f0b00cc;
+        public static final int event_info_desc_margin_right=0x7f0b00cd;
+        public static final int event_info_padding=0x7f0b00ce;
+        public static final int event_info_text_size=0x7f0b00cb;
+        public static final int event_min_height=0x7f0b00be;
+        public static final int event_text_horizontal_margin=0x7f0b00bd;
+        public static final int event_text_vertical_margin=0x7f0b00bc;
+        public static final int extra_height_to_account_for_system_space_in_landscape=0x7f0b001b;
+        public static final int first_run_context_image_height=0x7f0b0029;
+        public static final int first_run_padding=0x7f0b00a0;
+        public static final int footer_height=0x7f0b0021;
+        public static final int gmail_card_button_height=0x7f0b0022;
+        public static final int google_header_margin_bottom=0x7f0b001c;
+        public static final int google_logo_margin_left=0x7f0b0039;
+        public static final int google_logo_margin_right=0x7f0b003a;
+        public static final int half_unit=0x7f0b0076;
+        public static final int hands_free_padding=0x7f0b008c;
+        public static final int hands_free_small_padding=0x7f0b008b;
+        public static final int header_footer_size=0x7f0b0065;
+        public static final int high_confidence_answer_card_image_height=0x7f0b0071;
+        public static final int high_confidence_answer_card_image_width=0x7f0b0072;
+        public static final int high_confidence_answer_card_min_spacing=0x7f0b0070;
+        public static final int hint_bubble_offset=0x7f0b005b;
+        public static final int histogram_bar_padding=0x7f0b00b0;
+        public static final int histogram_bar_size=0x7f0b00af;
+        public static final int histogram_width=0x7f0b00b1;
+        public static final int horizontal_static_map_height=0x7f0b00a5;
         /**  margins size of hours column in day/week view 
          */
-        public static final int hours_left_margin=0x7f0700c0;
-        public static final int hours_right_margin=0x7f0700c1;
-        public static final int hours_text_size=0x7f0700b7;
-        public static final int image_result_carousel_height=0x7f070049;
-        public static final int image_result_height=0x7f070048;
-        public static final int image_view_padding=0x7f07003d;
-        public static final int ime_button_text_size=0x7f070092;
-        public static final int ime_land_height=0x7f07008e;
-        public static final int ime_mic_size=0x7f070093;
-        public static final int ime_padding_bottom=0x7f070094;
-        public static final int ime_padding_top=0x7f070095;
-        public static final int ime_port_height=0x7f07008d;
-        public static final int ime_spinner_text=0x7f07008f;
-        public static final int ime_state_text_size=0x7f070091;
-        public static final int ime_title_text_size=0x7f070090;
-        public static final int indicator_size=0x7f070062;
-        public static final int indicator_stroke=0x7f070063;
-        public static final int intent_api_mic_area_size=0x7f070096;
-        public static final int large_preview_width=0x7f07002e;
-        public static final int load_more_button_margin=0x7f0700a9;
-        public static final int local_result_vertical_divider_height=0x7f070073;
-        public static final int local_results_item_margin=0x7f070074;
-        public static final int local_results_map_height=0x7f070075;
-        public static final int main_fragment_top_padding=0x7f070019;
-        public static final int map_preview_image_height=0x7f07006f;
-        public static final int map_preview_image_width=0x7f07006e;
-        public static final int max_height_for_fullscreen=0x7f07005f;
-        public static final int max_portrait_calendar_controls_width=0x7f0700d1;
-        public static final int max_preview_area_width=0x7f070033;
-        public static final int max_waveform_height=0x7f070067;
-        public static final int menu_header_line=0x7f070002;
-        public static final int menu_header_padding_top=0x7f070001;
-        public static final int menu_icon_side=0x7f070003;
-        public static final int menu_item_padding=0x7f070000;
-        public static final int mic_height=0x7f070069;
-        public static final int min_height_background_image=0x7f070052;
+        public static final int hours_left_margin=0x7f0b00c0;
+        public static final int hours_right_margin=0x7f0b00c1;
+        public static final int hours_text_size=0x7f0b00b7;
+        public static final int image_result_carousel_height=0x7f0b0049;
+        public static final int image_result_height=0x7f0b0048;
+        public static final int image_view_padding=0x7f0b003d;
+        public static final int ime_button_text_size=0x7f0b0092;
+        public static final int ime_land_height=0x7f0b008e;
+        public static final int ime_mic_size=0x7f0b0093;
+        public static final int ime_padding_bottom=0x7f0b0094;
+        public static final int ime_padding_top=0x7f0b0095;
+        public static final int ime_port_height=0x7f0b008d;
+        public static final int ime_spinner_text=0x7f0b008f;
+        public static final int ime_state_text_size=0x7f0b0091;
+        public static final int ime_title_text_size=0x7f0b0090;
+        public static final int indicator_size=0x7f0b0062;
+        public static final int indicator_stroke=0x7f0b0063;
+        public static final int intent_api_mic_area_size=0x7f0b0096;
+        public static final int large_preview_width=0x7f0b002e;
+        public static final int load_more_button_margin=0x7f0b00a9;
+        public static final int local_result_vertical_divider_height=0x7f0b0073;
+        public static final int local_results_item_margin=0x7f0b0074;
+        public static final int local_results_map_height=0x7f0b0075;
+        public static final int main_fragment_top_padding=0x7f0b0019;
+        public static final int map_preview_image_height=0x7f0b006f;
+        public static final int map_preview_image_width=0x7f0b006e;
+        public static final int max_height_for_fullscreen=0x7f0b005f;
+        public static final int max_portrait_calendar_controls_width=0x7f0b00d1;
+        public static final int max_preview_area_width=0x7f0b0033;
+        public static final int max_waveform_height=0x7f0b0067;
+        public static final int menu_header_line=0x7f0b0002;
+        public static final int menu_header_padding_top=0x7f0b0001;
+        public static final int menu_icon_side=0x7f0b0003;
+        public static final int menu_item_padding=0x7f0b0000;
+        public static final int mic_height=0x7f0b0069;
+        public static final int min_height_background_image=0x7f0b0052;
         /**  minimum size of hours column in day/week view 
          */
-        public static final int min_hours_width=0x7f0700bf;
-        public static final int min_portrait_calendar_controls_width=0x7f0700d0;
-        public static final int min_preview_area_width=0x7f070032;
-        public static final int negative_unit=0x7f07007b;
-        public static final int new_event_hint_text_size=0x7f0700c6;
-        public static final int one_day_header_height=0x7f0700b4;
-        public static final int photo_crop_stroke_width=0x7f070008;
-        public static final int photo_crop_width=0x7f070007;
-        public static final int photo_preview_size=0x7f070009;
-        public static final int playpausebutton_size=0x7f070037;
-        public static final int preview_image_height=0x7f070030;
-        public static final int preview_image_size=0x7f07006d;
-        public static final int preview_image_width=0x7f07002f;
-        public static final int recording_popup_size=0x7f07005a;
-        public static final int retry_button_size=0x7f07000a;
-        public static final int sample_card_width=0x7f0700aa;
-        public static final int searchResultListItemHeight=0x7f070056;
-        public static final int search_bar_padding=0x7f07003e;
-        public static final int search_bar_text_size=0x7f07003b;
-        public static final int search_box_width=0x7f07003c;
-        public static final int search_device_footer_bottom_margin=0x7f07000e;
-        public static final int search_plate_expand_threshold=0x7f070080;
-        public static final int search_plate_height=0x7f070038;
-        public static final int search_plate_icon_height=0x7f070083;
-        public static final int search_plate_icon_width=0x7f070082;
-        public static final int search_plate_minimum_padding=0x7f070081;
-        public static final int shadow_width=0x7f070004;
-        public static final int slidingmenu_offset=0x7f070005;
-        public static final int small_unit=0x7f07007c;
-        public static final int small_units_2=0x7f07007d;
-        public static final int small_units_3=0x7f07007e;
-        public static final int small_units_4=0x7f07007f;
-        public static final int speak_now_speech_height=0x7f070051;
-        public static final int sports_card_image_height=0x7f07008a;
-        public static final int sports_card_image_width=0x7f070089;
-        public static final int sticky_height=0x7f070006;
-        public static final int stock_chart_height=0x7f0700ad;
-        public static final int stock_chart_width=0x7f0700ae;
-        public static final int stock_price_padding=0x7f0700ac;
-        public static final int suggest_summons_area_padding=0x7f07003f;
-        public static final int suggest_web_height=0x7f070040;
-        public static final int suggest_web_padding=0x7f070041;
-        public static final int suggestion_footer_view_height=0x7f07000d;
-        public static final int suggestion_icon1_left_padding=0x7f070015;
-        public static final int suggestion_icon_size=0x7f070011;
-        public static final int suggestion_large_image_max_height=0x7f070013;
-        public static final int suggestion_large_image_max_width=0x7f070012;
-        public static final int suggestion_text2_height=0x7f070014;
-        public static final int suggestion_text_padding=0x7f070016;
-        public static final int suggestion_view_height=0x7f07000f;
-        public static final int suggestion_view_height_large=0x7f070010;
-        public static final int suggestions_divider_margin_left_right=0x7f070018;
-        public static final int suggestions_padding=0x7f070017;
-        public static final int summons_height=0x7f070042;
-        public static final int summons_inter_source_padding=0x7f070045;
-        public static final int summons_padding=0x7f070043;
-        public static final int summons_width=0x7f070044;
-        public static final int suppressed_web_results_min_visible_height=0x7f070046;
-        public static final int table_row_vertical_padding=0x7f0700ab;
-        public static final int text_block_bottom_padding=0x7f0700a2;
-        public static final int text_block_side_padding=0x7f0700a3;
-        public static final int text_block_top_padding=0x7f0700a1;
-        public static final int tidbit_padding=0x7f070034;
-        public static final int today_icon_text_size=0x7f0700d4;
-        public static final int unit=0x7f070077;
-        public static final int unit_small_caps=0x7f07006b;
-        public static final int units_2=0x7f070078;
-        public static final int units_3=0x7f070079;
-        public static final int units_4=0x7f07007a;
-        public static final int view_contactlistitem_picture=0x7f0700d8;
-        public static final int voice_popup_margin=0x7f070068;
-        public static final int weather_current_icon_height=0x7f070055;
-        public static final int weather_forecast_icon_height=0x7f070054;
-        public static final int web_snapshots_default_visible_width=0x7f07004c;
-        public static final int web_snapshots_dismiss_from_offset=0x7f070050;
-        public static final int web_snapshots_just_added_extra_height=0x7f07004e;
-        public static final int web_snapshots_launch_browser_from_offset=0x7f07004f;
-        public static final int web_snapshots_text_size=0x7f07004d;
-        public static final int web_snapshots_width=0x7f07004b;
-        public static final int web_suggestion_icon_size=0x7f07000c;
-        public static final int web_suggestion_view_height=0x7f07000b;
-        public static final int websearch_card_top_margin=0x7f07001a;
-        public static final int websearch_collapse_card_padding_offscreen_leeway=0x7f070047;
-        public static final int websearch_fragment_inbetween_padding=0x7f07001d;
-        public static final int websearch_header_left_padding=0x7f07001e;
-        public static final int webview_margin_left=0x7f070036;
-        public static final int week_view_event_text_size=0x7f0700bb;
-        public static final int widget_day_num_size=0x7f0700c3;
-        public static final int widget_day_num_top_padding=0x7f0700c4;
-        public static final int widget_margin_left_right=0x7f07001f;
-        public static final int widget_margin_top_bottom=0x7f070020;
+        public static final int min_hours_width=0x7f0b00bf;
+        public static final int min_portrait_calendar_controls_width=0x7f0b00d0;
+        public static final int min_preview_area_width=0x7f0b0032;
+        public static final int negative_unit=0x7f0b007b;
+        public static final int new_event_hint_text_size=0x7f0b00c6;
+        public static final int one_day_header_height=0x7f0b00b4;
+        public static final int photo_crop_stroke_width=0x7f0b0008;
+        public static final int photo_crop_width=0x7f0b0007;
+        public static final int photo_preview_size=0x7f0b0009;
+        public static final int playpausebutton_size=0x7f0b0037;
+        public static final int preview_image_height=0x7f0b0030;
+        public static final int preview_image_size=0x7f0b006d;
+        public static final int preview_image_width=0x7f0b002f;
+        public static final int recording_popup_size=0x7f0b005a;
+        public static final int retry_button_size=0x7f0b000a;
+        public static final int sample_card_width=0x7f0b00aa;
+        public static final int searchResultListItemHeight=0x7f0b0056;
+        public static final int search_bar_padding=0x7f0b003e;
+        public static final int search_bar_text_size=0x7f0b003b;
+        public static final int search_box_width=0x7f0b003c;
+        public static final int search_device_footer_bottom_margin=0x7f0b000e;
+        public static final int search_plate_expand_threshold=0x7f0b0080;
+        public static final int search_plate_height=0x7f0b0038;
+        public static final int search_plate_icon_height=0x7f0b0083;
+        public static final int search_plate_icon_width=0x7f0b0082;
+        public static final int search_plate_minimum_padding=0x7f0b0081;
+        public static final int shadow_width=0x7f0b0004;
+        public static final int slidingmenu_offset=0x7f0b0005;
+        public static final int small_unit=0x7f0b007c;
+        public static final int small_units_2=0x7f0b007d;
+        public static final int small_units_3=0x7f0b007e;
+        public static final int small_units_4=0x7f0b007f;
+        public static final int speak_now_speech_height=0x7f0b0051;
+        public static final int sports_card_image_height=0x7f0b008a;
+        public static final int sports_card_image_width=0x7f0b0089;
+        public static final int sticky_height=0x7f0b0006;
+        public static final int stock_chart_height=0x7f0b00ad;
+        public static final int stock_chart_width=0x7f0b00ae;
+        public static final int stock_price_padding=0x7f0b00ac;
+        public static final int suggest_summons_area_padding=0x7f0b003f;
+        public static final int suggest_web_height=0x7f0b0040;
+        public static final int suggest_web_padding=0x7f0b0041;
+        public static final int suggestion_footer_view_height=0x7f0b000d;
+        public static final int suggestion_icon1_left_padding=0x7f0b0015;
+        public static final int suggestion_icon_size=0x7f0b0011;
+        public static final int suggestion_large_image_max_height=0x7f0b0013;
+        public static final int suggestion_large_image_max_width=0x7f0b0012;
+        public static final int suggestion_text2_height=0x7f0b0014;
+        public static final int suggestion_text_padding=0x7f0b0016;
+        public static final int suggestion_view_height=0x7f0b000f;
+        public static final int suggestion_view_height_large=0x7f0b0010;
+        public static final int suggestions_divider_margin_left_right=0x7f0b0018;
+        public static final int suggestions_padding=0x7f0b0017;
+        public static final int summons_height=0x7f0b0042;
+        public static final int summons_inter_source_padding=0x7f0b0045;
+        public static final int summons_padding=0x7f0b0043;
+        public static final int summons_width=0x7f0b0044;
+        public static final int suppressed_web_results_min_visible_height=0x7f0b0046;
+        public static final int table_row_vertical_padding=0x7f0b00ab;
+        public static final int text_block_bottom_padding=0x7f0b00a2;
+        public static final int text_block_side_padding=0x7f0b00a3;
+        public static final int text_block_top_padding=0x7f0b00a1;
+        public static final int tidbit_padding=0x7f0b0034;
+        public static final int today_icon_text_size=0x7f0b00d4;
+        public static final int unit=0x7f0b0077;
+        public static final int unit_small_caps=0x7f0b006b;
+        public static final int units_2=0x7f0b0078;
+        public static final int units_3=0x7f0b0079;
+        public static final int units_4=0x7f0b007a;
+        public static final int view_contactlistitem_picture=0x7f0b00d8;
+        public static final int voice_popup_margin=0x7f0b0068;
+        public static final int weather_current_icon_height=0x7f0b0055;
+        public static final int weather_forecast_icon_height=0x7f0b0054;
+        public static final int web_snapshots_default_visible_width=0x7f0b004c;
+        public static final int web_snapshots_dismiss_from_offset=0x7f0b0050;
+        public static final int web_snapshots_just_added_extra_height=0x7f0b004e;
+        public static final int web_snapshots_launch_browser_from_offset=0x7f0b004f;
+        public static final int web_snapshots_text_size=0x7f0b004d;
+        public static final int web_snapshots_width=0x7f0b004b;
+        public static final int web_suggestion_icon_size=0x7f0b000c;
+        public static final int web_suggestion_view_height=0x7f0b000b;
+        public static final int websearch_card_top_margin=0x7f0b001a;
+        public static final int websearch_collapse_card_padding_offscreen_leeway=0x7f0b0047;
+        public static final int websearch_fragment_inbetween_padding=0x7f0b001d;
+        public static final int websearch_header_left_padding=0x7f0b001e;
+        public static final int webview_margin_left=0x7f0b0036;
+        public static final int week_view_event_text_size=0x7f0b00bb;
+        public static final int widget_day_num_size=0x7f0b00c3;
+        public static final int widget_day_num_top_padding=0x7f0b00c4;
+        public static final int widget_margin_left_right=0x7f0b001f;
+        public static final int widget_margin_top_bottom=0x7f0b0020;
     }
     public static final class drawable {
         public static final int accept_icon_white=0x7f020000;
@@ -928,247 +1111,264 @@ containing a value of this type.
         public static final int notif_ic_zeppa=0x7f020068;
         public static final int panel_month_event_holo_light=0x7f020069;
         public static final int pending_contact_request=0x7f02006a;
-        public static final int requestresonse_background=0x7f02006b;
-        public static final int send_contact_request=0x7f02006c;
-        public static final int sent_contact_request=0x7f02006d;
-        public static final int small_circle_blue=0x7f02006e;
-        public static final int small_circle_green=0x7f02006f;
-        public static final int small_circle_red=0x7f020070;
-        public static final int small_circle_yellow=0x7f020071;
-        public static final int timeline_indicator_activated_holo_light=0x7f020072;
-        public static final int timeline_indicator_holo_light=0x7f020073;
-        public static final int today_blue_week_holo_light=0x7f020074;
-        public static final int zeppa_icon=0x7f020075;
-        public static final int zeppa_logo=0x7f020076;
+        public static final int powered_by_google_dark=0x7f02006b;
+        public static final int powered_by_google_light=0x7f02006c;
+        public static final int requestresonse_background=0x7f02006d;
+        public static final int send_contact_request=0x7f02006e;
+        public static final int sent_contact_request=0x7f02006f;
+        public static final int small_circle_blue=0x7f020070;
+        public static final int small_circle_green=0x7f020071;
+        public static final int small_circle_red=0x7f020072;
+        public static final int small_circle_yellow=0x7f020073;
+        public static final int timeline_indicator_activated_holo_light=0x7f020074;
+        public static final int timeline_indicator_holo_light=0x7f020075;
+        public static final int today_blue_week_holo_light=0x7f020076;
+        public static final int zeppa_icon=0x7f020077;
+        public static final int zeppa_logo=0x7f020078;
     }
     public static final class id {
-        public static final int accountfragment_birthday=0x7f0c004d;
-        public static final int accountfragment_emailaddress=0x7f0c004f;
-        public static final int accountfragment_eventholder=0x7f0c0052;
-        public static final int accountfragment_firstname=0x7f0c004b;
-        public static final int accountfragment_image=0x7f0c0049;
-        public static final int accountfragment_lastname=0x7f0c004c;
-        public static final int accountfragment_nameholder=0x7f0c004a;
-        public static final int accountfragment_neweventbutton=0x7f0c0053;
-        public static final int accountfragment_newtagbutton=0x7f0c0051;
-        public static final int accountfragment_phonenumber=0x7f0c004e;
-        public static final int accountfragment_tagholder=0x7f0c0050;
-        public static final int accountslist_item_radio=0x7f0c0074;
-        public static final int accountslist_item_text=0x7f0c0075;
-        public static final int action_aboutus=0x7f0c00bb;
-        public static final int action_addcontact=0x7f0c00a3;
-        public static final int action_delete=0x7f0c00a6;
-        public static final int action_explain=0x7f0c00ba;
-        public static final int action_findtime=0x7f0c00a7;
-        public static final int action_help=0x7f0c00a5;
-        public static final int action_invite=0x7f0c00bd;
-        public static final int action_launchthrough=0x7f0c00bc;
-        public static final int action_newevent=0x7f0c00b6;
-        public static final int action_notifications=0x7f0c00b7;
-        public static final int action_refresh=0x7f0c00a4;
-        public static final int action_send=0x7f0c00be;
-        public static final int action_settings=0x7f0c00b8;
-        public static final int action_signout=0x7f0c00b9;
-        public static final int activity_drawer_list=0x7f0c001d;
-        public static final int bubble_layout=0x7f0c0041;
-        public static final int cal_frame=0x7f0c0047;
-        public static final int calendarsync_colorbox=0x7f0c007d;
-        public static final int calendarsync_switch=0x7f0c007e;
-        public static final int calendarsync_text=0x7f0c007f;
-        public static final int calfragment_calframe=0x7f0c0054;
-        public static final int comment_date=0x7f0c0083;
-        public static final int comment_name=0x7f0c0081;
-        public static final int comment_pic=0x7f0c0080;
-        public static final int comment_text=0x7f0c0082;
-        public static final int contactfragment_contactimage=0x7f0c0055;
-        public static final int contactfragment_contactname=0x7f0c0056;
-        public static final int contactfragment_tags=0x7f0c0057;
-        public static final int contactfragmnet_events=0x7f0c0058;
-        public static final int contactsListView=0x7f0c005a;
-        public static final int contacts_listitem_name=0x7f0c007c;
-        public static final int contacts_listitem_picture=0x7f0c007b;
-        public static final int contacts_loaderview=0x7f0c0059;
-        public static final int content_frame=0x7f0c001b;
-        public static final int d0_label=0x7f0c006c;
-        public static final int d1_label=0x7f0c006d;
-        public static final int d2_label=0x7f0c006e;
-        public static final int d3_label=0x7f0c006f;
-        public static final int d4_label=0x7f0c0070;
-        public static final int d5_label=0x7f0c0071;
-        public static final int d6_label=0x7f0c0072;
-        public static final int day_names=0x7f0c006a;
-        public static final int drawer_layout=0x7f0c001a;
-        public static final int event_title=0x7f0c0042;
-        public static final int eventactivity_attending=0x7f0c0011;
-        public static final int eventactivity_commentbox=0x7f0c000a;
-        public static final int eventactivity_commentholder=0x7f0c0018;
-        public static final int eventactivity_commenttext=0x7f0c000b;
-        public static final int eventactivity_description=0x7f0c0015;
-        public static final int eventactivity_eventtitle=0x7f0c000e;
-        public static final int eventactivity_hostimage=0x7f0c0012;
-        public static final int eventactivity_hostname=0x7f0c0013;
-        public static final int eventactivity_location=0x7f0c0010;
-        public static final int eventactivity_postcomment=0x7f0c000c;
-        public static final int eventactivity_stateindicator=0x7f0c000d;
-        public static final int eventactivity_tagholder=0x7f0c0016;
-        public static final int eventactivity_tagloaderview=0x7f0c0017;
-        public static final int eventactivity_time=0x7f0c000f;
-        public static final int eventactivity_vianame=0x7f0c0014;
-        public static final int eventview_buttonleft=0x7f0c008c;
-        public static final int eventview_buttonmiddle=0x7f0c008d;
-        public static final int eventview_buttonright=0x7f0c008e;
-        public static final int eventview_conflictionindicator=0x7f0c0087;
-        public static final int eventview_description=0x7f0c008b;
-        public static final int eventview_eventtime=0x7f0c0088;
-        public static final int eventview_eventtitle=0x7f0c0089;
-        public static final int eventview_hostimage=0x7f0c0085;
-        public static final int eventview_hostinfo=0x7f0c0084;
-        public static final int eventview_hostname=0x7f0c0086;
-        public static final int eventview_via=0x7f0c008a;
-        public static final int feedListView=0x7f0c005c;
-        public static final int feedback_button_send=0x7f0c0060;
-        public static final int feedback_edittext_main=0x7f0c005f;
-        public static final int feedback_edittext_subject=0x7f0c005d;
-        public static final int feedback_ratingbar=0x7f0c005e;
-        public static final int feedfragment_ptr=0x7f0c005b;
-        public static final int home_pager_tabs=0x7f0c0061;
-        public static final int hybrid=0x7f0c0004;
-        public static final int inside=0x7f0c0005;
-        public static final int inviteitem_checkbox=0x7f0c008f;
-        public static final int inviteitem_contactimage=0x7f0c0090;
-        public static final int inviteitem_contactname=0x7f0c0091;
-        public static final int loaderview_progressbar=0x7f0c0092;
-        public static final int loaderview_text=0x7f0c0093;
-        public static final int main_pager=0x7f0c0062;
-        public static final int menu_event_cancel=0x7f0c00af;
-        public static final int menu_event_directions=0x7f0c00ab;
-        public static final int menu_event_emailhost=0x7f0c00ae;
-        public static final int menu_event_invite=0x7f0c00b1;
-        public static final int menu_event_join=0x7f0c00a9;
-        public static final int menu_event_leave=0x7f0c00b4;
-        public static final int menu_event_massemail=0x7f0c00b3;
-        public static final int menu_event_masstext=0x7f0c00b2;
-        public static final int menu_event_refresh=0x7f0c00ac;
-        public static final int menu_event_repost=0x7f0c00aa;
-        public static final int menu_event_seereposts=0x7f0c00b0;
-        public static final int menu_event_stopwatching=0x7f0c00b5;
-        public static final int menu_event_texthost=0x7f0c00ad;
-        public static final int menu_event_watch=0x7f0c00a8;
-        public static final int menu_settings=0x7f0c00a2;
-        public static final int month=0x7f0c0068;
-        public static final int month_name=0x7f0c0069;
-        public static final int msgView=0x7f0c0039;
-        public static final int navListItemUpdatesIndicator=0x7f0c0095;
-        public static final int navigation_drawer_list=0x7f0c001c;
-        public static final int navlistItemIcon=0x7f0c0094;
-        public static final int navlistItemText=0x7f0c0096;
-        public static final int newcontact_confirm_button=0x7f0c0078;
-        public static final int newcontact_deny_button=0x7f0c0077;
-        public static final int newcontact_name=0x7f0c0079;
-        public static final int newcontact_picture=0x7f0c0076;
-        public static final int newcontact_senditem_button=0x7f0c007a;
-        public static final int neweventactivity_addinvites=0x7f0c002e;
-        public static final int neweventactivity_addnewtag=0x7f0c002c;
-        public static final int neweventactivity_cancel=0x7f0c001e;
-        public static final int neweventactivity_create=0x7f0c001f;
-        public static final int neweventactivity_description=0x7f0c002a;
-        public static final int neweventactivity_enddate=0x7f0c0029;
-        public static final int neweventactivity_endtime=0x7f0c0028;
-        public static final int neweventactivity_eventscope=0x7f0c0020;
-        public static final int neweventactivity_exactlocation=0x7f0c0022;
-        public static final int neweventactivity_from=0x7f0c0024;
-        public static final int neweventactivity_invitesholder=0x7f0c002f;
-        public static final int neweventactivity_shortlocation=0x7f0c0023;
-        public static final int neweventactivity_startdate=0x7f0c0026;
-        public static final int neweventactivity_starttime=0x7f0c0025;
-        public static final int neweventactivity_taglineholder=0x7f0c002b;
-        public static final int neweventactivity_tagtext=0x7f0c002d;
-        public static final int neweventactivity_title=0x7f0c0021;
-        public static final int neweventactivity_to=0x7f0c0027;
-        public static final int newuseractivity_calendarlayout=0x7f0c0038;
-        public static final int newuseractivity_calendarlayouttitle=0x7f0c0037;
-        public static final int newuseractivity_cancel=0x7f0c0030;
-        public static final int newuseractivity_create=0x7f0c0031;
-        public static final int newuseractivity_email=0x7f0c0035;
-        public static final int newuseractivity_image=0x7f0c0032;
-        public static final int newuseractivity_phone=0x7f0c0036;
-        public static final int newuseractivty_familyname=0x7f0c0034;
-        public static final int newuseractivty_givenname=0x7f0c0033;
-        public static final int none=0x7f0c0000;
-        public static final int normal=0x7f0c0001;
-        public static final int notificationitem_date=0x7f0c0098;
-        public static final int notificationitem_text=0x7f0c0099;
-        public static final int notificationitem_userimage=0x7f0c0097;
-        public static final int notificationsListView=0x7f0c0065;
-        public static final int notifications_loaderview=0x7f0c0064;
-        public static final int notificationsfragment_ptr=0x7f0c0063;
-        public static final int outside=0x7f0c0006;
-        public static final int possiblecontactview_email=0x7f0c009c;
-        public static final int possiblecontactview_image=0x7f0c009a;
-        public static final int possiblecontactview_name=0x7f0c009b;
-        public static final int possiblecontactview_phone=0x7f0c009d;
-        public static final int ptr_content=0x7f0c0007;
-        public static final int ptr_progress=0x7f0c0009;
-        public static final int ptr_text=0x7f0c0008;
-        public static final int regButton=0x7f0c003a;
-        public static final int reminder_icon=0x7f0c0043;
-        public static final int repeat_icon=0x7f0c0044;
-        public static final int satellite=0x7f0c0002;
-        public static final int sectionheader_text=0x7f0c009e;
-        public static final int sign_in_button=0x7f0c0019;
-        public static final int spinneritem_text=0x7f0c009f;
-        public static final int switcher=0x7f0c0048;
-        public static final int tagview_mytagtext=0x7f0c00a1;
-        public static final int tagview_tagtext=0x7f0c00a0;
-        public static final int terrain=0x7f0c0003;
-        public static final int textview_accounts=0x7f0c0073;
-        public static final int time=0x7f0c0045;
-        public static final int useractivity_eventholder=0x7f0c0040;
-        public static final int useractivity_followswitch=0x7f0c003e;
-        public static final int useractivity_image=0x7f0c003b;
-        public static final int useractivity_mutualfriends=0x7f0c003d;
-        public static final int useractivity_tagholder=0x7f0c003f;
-        public static final int useractivity_username=0x7f0c003c;
-        public static final int watchingListView=0x7f0c0067;
-        public static final int watchingfragment_ptr=0x7f0c0066;
-        public static final int where=0x7f0c0046;
-        public static final int wk_label=0x7f0c006b;
+        public static final int accountfragment_birthday=0x7f08005c;
+        public static final int accountfragment_emailaddress=0x7f08005e;
+        public static final int accountfragment_eventholder=0x7f080061;
+        public static final int accountfragment_firstname=0x7f08005a;
+        public static final int accountfragment_image=0x7f080058;
+        public static final int accountfragment_lastname=0x7f08005b;
+        public static final int accountfragment_nameholder=0x7f080059;
+        public static final int accountfragment_neweventbutton=0x7f080062;
+        public static final int accountfragment_newtagbutton=0x7f080060;
+        public static final int accountfragment_phonenumber=0x7f08005d;
+        public static final int accountfragment_tagholder=0x7f08005f;
+        public static final int accountslist_item_radio=0x7f080083;
+        public static final int accountslist_item_text=0x7f080084;
+        public static final int action_aboutus=0x7f0800ca;
+        public static final int action_addcontact=0x7f0800b2;
+        public static final int action_delete=0x7f0800b5;
+        public static final int action_explain=0x7f0800c9;
+        public static final int action_findtime=0x7f0800b6;
+        public static final int action_help=0x7f0800b4;
+        public static final int action_invite=0x7f0800cc;
+        public static final int action_launchthrough=0x7f0800cb;
+        public static final int action_newevent=0x7f0800c5;
+        public static final int action_notifications=0x7f0800c6;
+        public static final int action_refresh=0x7f0800b3;
+        public static final int action_send=0x7f0800cd;
+        public static final int action_settings=0x7f0800c7;
+        public static final int action_signout=0x7f0800c8;
+        public static final int activity_drawer_list=0x7f08002c;
+        public static final int book_now=0x7f080010;
+        public static final int bubble_layout=0x7f080050;
+        public static final int buyButton=0x7f08000a;
+        public static final int buy_now=0x7f08000f;
+        public static final int buy_with_google=0x7f08000e;
+        public static final int cal_frame=0x7f080056;
+        public static final int calendarsync_colorbox=0x7f08008c;
+        public static final int calendarsync_switch=0x7f08008d;
+        public static final int calendarsync_text=0x7f08008e;
+        public static final int calfragment_calframe=0x7f080063;
+        public static final int classic=0x7f080011;
+        public static final int comment_date=0x7f080092;
+        public static final int comment_name=0x7f080090;
+        public static final int comment_pic=0x7f08008f;
+        public static final int comment_text=0x7f080091;
+        public static final int contactfragment_contactimage=0x7f080064;
+        public static final int contactfragment_contactname=0x7f080065;
+        public static final int contactfragment_tags=0x7f080066;
+        public static final int contactfragmnet_events=0x7f080067;
+        public static final int contactsListView=0x7f080069;
+        public static final int contacts_listitem_name=0x7f08008b;
+        public static final int contacts_listitem_picture=0x7f08008a;
+        public static final int contacts_loaderview=0x7f080068;
+        public static final int content_frame=0x7f08002a;
+        public static final int d0_label=0x7f08007b;
+        public static final int d1_label=0x7f08007c;
+        public static final int d2_label=0x7f08007d;
+        public static final int d3_label=0x7f08007e;
+        public static final int d4_label=0x7f08007f;
+        public static final int d5_label=0x7f080080;
+        public static final int d6_label=0x7f080081;
+        public static final int day_names=0x7f080079;
+        public static final int drawer_layout=0x7f080029;
+        public static final int event_title=0x7f080051;
+        public static final int eventactivity_attending=0x7f080020;
+        public static final int eventactivity_commentbox=0x7f080019;
+        public static final int eventactivity_commentholder=0x7f080027;
+        public static final int eventactivity_commenttext=0x7f08001a;
+        public static final int eventactivity_description=0x7f080024;
+        public static final int eventactivity_eventtitle=0x7f08001d;
+        public static final int eventactivity_hostimage=0x7f080021;
+        public static final int eventactivity_hostname=0x7f080022;
+        public static final int eventactivity_location=0x7f08001f;
+        public static final int eventactivity_postcomment=0x7f08001b;
+        public static final int eventactivity_stateindicator=0x7f08001c;
+        public static final int eventactivity_tagholder=0x7f080025;
+        public static final int eventactivity_tagloaderview=0x7f080026;
+        public static final int eventactivity_time=0x7f08001e;
+        public static final int eventactivity_vianame=0x7f080023;
+        public static final int eventview_buttonleft=0x7f08009b;
+        public static final int eventview_buttonmiddle=0x7f08009c;
+        public static final int eventview_buttonright=0x7f08009d;
+        public static final int eventview_conflictionindicator=0x7f080096;
+        public static final int eventview_description=0x7f08009a;
+        public static final int eventview_eventtime=0x7f080097;
+        public static final int eventview_eventtitle=0x7f080098;
+        public static final int eventview_hostimage=0x7f080094;
+        public static final int eventview_hostinfo=0x7f080093;
+        public static final int eventview_hostname=0x7f080095;
+        public static final int eventview_via=0x7f080099;
+        public static final int feedListView=0x7f08006b;
+        public static final int feedback_button_send=0x7f08006f;
+        public static final int feedback_edittext_main=0x7f08006e;
+        public static final int feedback_edittext_subject=0x7f08006c;
+        public static final int feedback_ratingbar=0x7f08006d;
+        public static final int feedfragment_ptr=0x7f08006a;
+        public static final int grayscale=0x7f080012;
+        public static final int holo_dark=0x7f080005;
+        public static final int holo_light=0x7f080006;
+        public static final int home_pager_tabs=0x7f080070;
+        public static final int hybrid=0x7f080004;
+        public static final int inside=0x7f080014;
+        public static final int inviteitem_checkbox=0x7f08009e;
+        public static final int inviteitem_contactimage=0x7f08009f;
+        public static final int inviteitem_contactname=0x7f0800a0;
+        public static final int loaderview_progressbar=0x7f0800a1;
+        public static final int loaderview_text=0x7f0800a2;
+        public static final int main_pager=0x7f080071;
+        public static final int match_parent=0x7f08000c;
+        public static final int menu_event_cancel=0x7f0800be;
+        public static final int menu_event_directions=0x7f0800ba;
+        public static final int menu_event_emailhost=0x7f0800bd;
+        public static final int menu_event_invite=0x7f0800c0;
+        public static final int menu_event_join=0x7f0800b8;
+        public static final int menu_event_leave=0x7f0800c3;
+        public static final int menu_event_massemail=0x7f0800c2;
+        public static final int menu_event_masstext=0x7f0800c1;
+        public static final int menu_event_refresh=0x7f0800bb;
+        public static final int menu_event_repost=0x7f0800b9;
+        public static final int menu_event_seereposts=0x7f0800bf;
+        public static final int menu_event_stopwatching=0x7f0800c4;
+        public static final int menu_event_texthost=0x7f0800bc;
+        public static final int menu_event_watch=0x7f0800b7;
+        public static final int menu_settings=0x7f0800b1;
+        public static final int monochrome=0x7f080013;
+        public static final int month=0x7f080077;
+        public static final int month_name=0x7f080078;
+        public static final int msgView=0x7f080048;
+        public static final int navListItemUpdatesIndicator=0x7f0800a4;
+        public static final int navigation_drawer_list=0x7f08002b;
+        public static final int navlistItemIcon=0x7f0800a3;
+        public static final int navlistItemText=0x7f0800a5;
+        public static final int newcontact_confirm_button=0x7f080087;
+        public static final int newcontact_deny_button=0x7f080086;
+        public static final int newcontact_name=0x7f080088;
+        public static final int newcontact_picture=0x7f080085;
+        public static final int newcontact_senditem_button=0x7f080089;
+        public static final int neweventactivity_addinvites=0x7f08003d;
+        public static final int neweventactivity_addnewtag=0x7f08003b;
+        public static final int neweventactivity_cancel=0x7f08002d;
+        public static final int neweventactivity_create=0x7f08002e;
+        public static final int neweventactivity_description=0x7f080039;
+        public static final int neweventactivity_enddate=0x7f080038;
+        public static final int neweventactivity_endtime=0x7f080037;
+        public static final int neweventactivity_eventscope=0x7f08002f;
+        public static final int neweventactivity_exactlocation=0x7f080031;
+        public static final int neweventactivity_from=0x7f080033;
+        public static final int neweventactivity_invitesholder=0x7f08003e;
+        public static final int neweventactivity_shortlocation=0x7f080032;
+        public static final int neweventactivity_startdate=0x7f080035;
+        public static final int neweventactivity_starttime=0x7f080034;
+        public static final int neweventactivity_taglineholder=0x7f08003a;
+        public static final int neweventactivity_tagtext=0x7f08003c;
+        public static final int neweventactivity_title=0x7f080030;
+        public static final int neweventactivity_to=0x7f080036;
+        public static final int newuseractivity_calendarlayout=0x7f080047;
+        public static final int newuseractivity_calendarlayouttitle=0x7f080046;
+        public static final int newuseractivity_cancel=0x7f08003f;
+        public static final int newuseractivity_create=0x7f080040;
+        public static final int newuseractivity_email=0x7f080044;
+        public static final int newuseractivity_image=0x7f080041;
+        public static final int newuseractivity_phone=0x7f080045;
+        public static final int newuseractivty_familyname=0x7f080043;
+        public static final int newuseractivty_givenname=0x7f080042;
+        public static final int none=0x7f080000;
+        public static final int normal=0x7f080001;
+        public static final int notificationitem_date=0x7f0800a7;
+        public static final int notificationitem_text=0x7f0800a8;
+        public static final int notificationitem_userimage=0x7f0800a6;
+        public static final int notificationsListView=0x7f080074;
+        public static final int notifications_loaderview=0x7f080073;
+        public static final int notificationsfragment_ptr=0x7f080072;
+        public static final int outside=0x7f080015;
+        public static final int possiblecontactview_email=0x7f0800ab;
+        public static final int possiblecontactview_image=0x7f0800a9;
+        public static final int possiblecontactview_name=0x7f0800aa;
+        public static final int possiblecontactview_phone=0x7f0800ac;
+        public static final int production=0x7f080007;
+        public static final int ptr_content=0x7f080016;
+        public static final int ptr_progress=0x7f080018;
+        public static final int ptr_text=0x7f080017;
+        public static final int regButton=0x7f080049;
+        public static final int reminder_icon=0x7f080052;
+        public static final int repeat_icon=0x7f080053;
+        public static final int sandbox=0x7f080008;
+        public static final int satellite=0x7f080002;
+        public static final int sectionheader_text=0x7f0800ad;
+        public static final int selectionDetails=0x7f08000b;
+        public static final int sign_in_button=0x7f080028;
+        public static final int spinneritem_text=0x7f0800ae;
+        public static final int strict_sandbox=0x7f080009;
+        public static final int switcher=0x7f080057;
+        public static final int tagview_mytagtext=0x7f0800b0;
+        public static final int tagview_tagtext=0x7f0800af;
+        public static final int terrain=0x7f080003;
+        public static final int textview_accounts=0x7f080082;
+        public static final int time=0x7f080054;
+        public static final int useractivity_eventholder=0x7f08004f;
+        public static final int useractivity_followswitch=0x7f08004d;
+        public static final int useractivity_image=0x7f08004a;
+        public static final int useractivity_mutualfriends=0x7f08004c;
+        public static final int useractivity_tagholder=0x7f08004e;
+        public static final int useractivity_username=0x7f08004b;
+        public static final int watchingListView=0x7f080076;
+        public static final int watchingfragment_ptr=0x7f080075;
+        public static final int where=0x7f080055;
+        public static final int wk_label=0x7f08007a;
+        public static final int wrap_content=0x7f08000d;
     }
     public static final class integer {
         /**  The time (in milliseconds) to scroll in or out the mini month and calendar controls 
          */
-        public static final int calendar_controls_animation_time=0x7f08000a;
+        public static final int calendar_controls_animation_time=0x7f09000b;
         /**  The size of the color chip in the agenda view for all day events 
          */
-        public static final int color_chip_all_day_height=0x7f080006;
+        public static final int color_chip_all_day_height=0x7f090007;
         /**  The size of the color chip in the agenda view 
          */
-        public static final int color_chip_height=0x7f080007;
+        public static final int color_chip_height=0x7f090008;
         /**  The default alpha level of photos of attendees 
          */
-        public static final int default_attendee_photo_alpha_level=0x7f080004;
+        public static final int default_attendee_photo_alpha_level=0x7f090005;
         /**  max number of lines in the description without showing More/Less button  
          */
-        public static final int event_info_desc_line_num=0x7f080002;
-        public static final int google_play_services_version=0x7f08000b;
+        public static final int event_info_desc_line_num=0x7f090003;
+        public static final int google_play_services_version=0x7f090000;
         /**  margin between the day number and the edge of the day in month view 
          */
-        public static final int month_day_number_margin=0x7f080005;
+        public static final int month_day_number_margin=0x7f090006;
         /**  The alpha level of photos of attendees that didn't respond 
          */
-        public static final int noresponse_attendee_photo_alpha_level=0x7f080003;
+        public static final int noresponse_attendee_photo_alpha_level=0x7f090004;
         /**  size of event title font in month view  
          */
-        public static final int text_size_event_title=0x7f080000;
+        public static final int text_size_event_title=0x7f090001;
         /**  size of day date font in month view  
          */
-        public static final int text_size_month_number=0x7f080001;
+        public static final int text_size_month_number=0x7f090002;
         /**  The time of day in minutes usually considered the end of the work day, eg. 8pm in the US 
          */
-        public static final int work_end_minutes=0x7f080009;
+        public static final int work_end_minutes=0x7f09000a;
         /**  The time of day in minutes usually considered the start of the work day, eg. 6am in the US 
          */
-        public static final int work_start_minutes=0x7f080008;
+        public static final int work_start_minutes=0x7f090009;
     }
     public static final class layout {
         public static final int activity_eventview=0x7f030000;
@@ -1229,329 +1429,325 @@ containing a value of this type.
         public static final int menu_newevent=0x7f0e000a;
     }
     public static final class plurals {
-        public static final int N_remaining_events=0x7f090007;
-        public static final int Ndays=0x7f090003;
-        public static final int Nevents=0x7f090006;
-        public static final int Nhours=0x7f090002;
-        public static final int Nmins=0x7f090001;
-        public static final int Nminutes=0x7f090000;
-        public static final int month_more_events=0x7f090005;
-        public static final int weekN=0x7f090004;
+        public static final int N_remaining_events=0x7f0c0007;
+        public static final int Ndays=0x7f0c0003;
+        public static final int Nevents=0x7f0c0006;
+        public static final int Nhours=0x7f0c0002;
+        public static final int Nmins=0x7f0c0001;
+        public static final int Nminutes=0x7f0c0000;
+        public static final int month_more_events=0x7f0c0005;
+        public static final int weekN=0x7f0c0004;
     }
     public static final class string {
         /**  A 
          */
-        public static final int add_account=0x7f0a002f;
-        public static final int add_event=0x7f0a0030;
-        public static final int add_friends=0x7f0a0031;
-        public static final int add_invites=0x7f0a0032;
-        public static final int addremove_tags=0x7f0a0033;
-        public static final int agenda_title=0x7f0a0034;
-        public static final int agenda_today=0x7f0a0003;
-        public static final int agenda_tomorrow=0x7f0a0005;
-        public static final int agenda_yesterday=0x7f0a0004;
-        public static final int app_name=0x7f0a0000;
-        /**   Title for notification shown when GooglePlayServices needs to be
-        enabled for a application to work. [CHAR LIMIT=70] 
-         */
-        public static final int auth_client_needs_enabling_title=0x7f0a0026;
-        /**   Title for notification shown when GooglePlayServices needs to be
-        installed for a application to work. [CHAR LIMIT=70] 
-         */
-        public static final int auth_client_needs_installation_title=0x7f0a0027;
-        /**   Title for notification shown when GooglePlayServices needs to be
-        udpated for a application to work. [CHAR LIMIT=70] 
-         */
-        public static final int auth_client_needs_update_title=0x7f0a0028;
-        /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
-         */
-        public static final int auth_client_play_services_err_notification_msg=0x7f0a0029;
-        /**   Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
-         */
-        public static final int auth_client_requested_by_msg=0x7f0a002a;
-        /**   Title for notification shown when a bad version of GooglePlayServices
-        has been installed and needs correction for an application to work.
-        [CHAR LIMIT=70] 
-         */
-        public static final int auth_client_using_bad_version_title=0x7f0a0025;
+        public static final int add_account=0x7f07002e;
+        public static final int add_event=0x7f07002f;
+        public static final int add_friends=0x7f070030;
+        public static final int add_invites=0x7f070031;
+        public static final int addremove_tags=0x7f070032;
+        public static final int agenda_title=0x7f070033;
+        public static final int agenda_today=0x7f07001d;
+        public static final int agenda_tomorrow=0x7f07001f;
+        public static final int agenda_yesterday=0x7f07001e;
+        public static final int app_name=0x7f07001a;
         /**  B 
          */
-        public static final int birthday_=0x7f0a0035;
+        public static final int birthday_=0x7f070034;
         /**  C 
          */
-        public static final int calendar_list_title=0x7f0a0036;
-        public static final int calendar_title=0x7f0a0037;
-        public static final int cancel=0x7f0a0038;
-        public static final int casual=0x7f0a0039;
+        public static final int calendar_list_title=0x7f070035;
+        public static final int calendar_title=0x7f070036;
+        public static final int cancel=0x7f070037;
+        public static final int casual=0x7f070038;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_enable_button=0x7f0a0017;
+        public static final int common_google_play_services_enable_button=0x7f07000b;
         /**  Message in confirmation dialog informing user they need to enable
         Google Play services in application settings [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_enable_text=0x7f0a0016;
+        public static final int common_google_play_services_enable_text=0x7f07000a;
         /**  Title of confirmation dialog informing user they need to enable
         Google Play services in application settings [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_enable_title=0x7f0a0015;
+        public static final int common_google_play_services_enable_title=0x7f070009;
+        /**   Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
+         */
+        public static final int common_google_play_services_error_notification_requested_by_msg=0x7f070004;
         /**  Button in confirmation dialog for installing Google Play services [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_install_button=0x7f0a0014;
+        public static final int common_google_play_services_install_button=0x7f070008;
         /**  (For phones) Message in confirmation dialog informing user that
         they need to install Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_install_text_phone=0x7f0a0012;
+        public static final int common_google_play_services_install_text_phone=0x7f070006;
         /**  (For tablets) Message in confirmation dialog informing user that
         they need to install Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_install_text_tablet=0x7f0a0013;
+        public static final int common_google_play_services_install_text_tablet=0x7f070007;
         /**  Title of confirmation dialog informing user that they need to install
         Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_install_title=0x7f0a0011;
+        public static final int common_google_play_services_install_title=0x7f070005;
         /**  Message in confirmation dialog informing the user that they provided an invalid account. [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_invalid_account_text=0x7f0a001d;
+        public static final int common_google_play_services_invalid_account_text=0x7f070011;
         /**  Title of confirmation dialog informing the user that they provided an invalid account. [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_invalid_account_title=0x7f0a001c;
+        public static final int common_google_play_services_invalid_account_title=0x7f070010;
+        /**   Title for notification shown when GooglePlayServices needs to be enabled for an
+        application to work. [CHAR LIMIT=70] 
+         */
+        public static final int common_google_play_services_needs_enabling_title=0x7f070003;
         /**  Message in confirmation dialog informing the user that a network error occurred. [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_network_error_text=0x7f0a001b;
+        public static final int common_google_play_services_network_error_text=0x7f07000f;
         /**  Title of confirmation dialog informing the user that a network error occurred. [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_network_error_title=0x7f0a001a;
+        public static final int common_google_play_services_network_error_title=0x7f07000e;
+        /**   Title for notification shown when GooglePlayServices needs to be installed
+        for an application to work. [CHAR LIMIT=70] 
+         */
+        public static final int common_google_play_services_notification_needs_installation_title=0x7f070001;
+        /**   Title for notification shown when GooglePlayServices needs to be updated for an
+        application to work. [CHAR LIMIT=70] 
+         */
+        public static final int common_google_play_services_notification_needs_update_title=0x7f070002;
+        /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
+         */
+        public static final int common_google_play_services_notification_ticker=0x7f070000;
         /**  Message in confirmation dialog informing user there is an unknown issue in Google Play
         services [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unknown_issue=0x7f0a001e;
+        public static final int common_google_play_services_unknown_issue=0x7f070012;
         /**  Message in confirmation dialog informing user that date on the device is not correct,
     causing certificate checks to fail. [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unsupported_date_text=0x7f0a0021;
+        public static final int common_google_play_services_unsupported_date_text=0x7f070015;
         /**  Message in confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unsupported_text=0x7f0a0020;
+        public static final int common_google_play_services_unsupported_text=0x7f070014;
         /**  Title of confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_unsupported_title=0x7f0a001f;
+        public static final int common_google_play_services_unsupported_title=0x7f070013;
         /**  Button in confirmation dialog for updating Google Play services [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_update_button=0x7f0a0022;
+        public static final int common_google_play_services_update_button=0x7f070016;
         /**  Message in confirmation dialog informing user that they need to update
         Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_update_text=0x7f0a0019;
+        public static final int common_google_play_services_update_text=0x7f07000d;
         /**  Title of confirmation dialog informing user that they need to update
         Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_update_title=0x7f0a0018;
+        public static final int common_google_play_services_update_title=0x7f07000c;
         /**  Sign-in button text [CHAR LIMIT=15] 
          */
-        public static final int common_signin_button_text=0x7f0a0023;
+        public static final int common_signin_button_text=0x7f070017;
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
-        public static final int common_signin_button_text_long=0x7f0a0024;
-        public static final int contacts=0x7f0a003a;
-        public static final int contacts_using=0x7f0a003b;
+        public static final int common_signin_button_text_long=0x7f070018;
+        public static final int contacts=0x7f070039;
+        public static final int contacts_using=0x7f07003a;
         /**  Content Description 
          */
-        public static final int contdesc_addexactlocation=0x7f0a009a;
-        public static final int contdesc_addtag=0x7f0a009b;
-        public static final int contdesc_addtags=0x7f0a009c;
-        public static final int contdesc_calendaroptions=0x7f0a009d;
-        public static final int contdesc_calendarviewtype=0x7f0a009e;
-        public static final int contdesc_conflictionimage=0x7f0a009f;
-        public static final int contdesc_contactimage=0x7f0a00a0;
-        public static final int contdesc_hostimage=0x7f0a00a1;
-        public static final int contdesc_interactbtn=0x7f0a00a2;
-        public static final int contdesc_lastmonth=0x7f0a00a3;
-        public static final int contdesc_loginimage=0x7f0a00a4;
-        public static final int contdesc_navlist_item=0x7f0a00a5;
-        public static final int contdesc_navsuggestion=0x7f0a00a6;
-        public static final int contdesc_nextmonth=0x7f0a00a7;
-        public static final int contdesc_search=0x7f0a00a8;
-        public static final int contdesc_settingsbtn=0x7f0a00a9;
-        public static final int contdesc_slogan=0x7f0a00aa;
-        public static final int contdesc_titletext=0x7f0a00ab;
-        public static final int contdesc_userimage=0x7f0a00ac;
-        public static final int couldntfind=0x7f0a003c;
-        public static final int create=0x7f0a003d;
-        public static final int create_account=0x7f0a003e;
-        public static final int create_event=0x7f0a003f;
-        public static final int create_tag=0x7f0a0040;
-        public static final int creating_profile=0x7f0a0041;
-        public static final int date_time_fmt=0x7f0a000a;
-        public static final int day_view_new_event_hint=0x7f0a000d;
+        public static final int contdesc_addexactlocation=0x7f070099;
+        public static final int contdesc_addtag=0x7f07009a;
+        public static final int contdesc_addtags=0x7f07009b;
+        public static final int contdesc_calendaroptions=0x7f07009c;
+        public static final int contdesc_calendarviewtype=0x7f07009d;
+        public static final int contdesc_conflictionimage=0x7f07009e;
+        public static final int contdesc_contactimage=0x7f07009f;
+        public static final int contdesc_hostimage=0x7f0700a0;
+        public static final int contdesc_interactbtn=0x7f0700a1;
+        public static final int contdesc_lastmonth=0x7f0700a2;
+        public static final int contdesc_loginimage=0x7f0700a3;
+        public static final int contdesc_navlist_item=0x7f0700a4;
+        public static final int contdesc_navsuggestion=0x7f0700a5;
+        public static final int contdesc_nextmonth=0x7f0700a6;
+        public static final int contdesc_search=0x7f0700a7;
+        public static final int contdesc_settingsbtn=0x7f0700a8;
+        public static final int contdesc_slogan=0x7f0700a9;
+        public static final int contdesc_titletext=0x7f0700aa;
+        public static final int contdesc_userimage=0x7f0700ab;
+        public static final int couldntfind=0x7f07003b;
+        public static final int create=0x7f07003c;
+        public static final int create_account=0x7f07003d;
+        public static final int create_event=0x7f07003e;
+        public static final int create_tag=0x7f07003f;
+        public static final int creating_profile=0x7f070040;
+        public static final int date_time_fmt=0x7f070024;
+        public static final int day_view_new_event_hint=0x7f070027;
         /**  D 
          */
-        public static final int delete=0x7f0a0042;
-        public static final int desciption_newevent=0x7f0a0043;
-        public static final int directions=0x7f0a0044;
-        public static final int dismiss=0x7f0a0045;
-        public static final int done=0x7f0a0046;
+        public static final int delete=0x7f070041;
+        public static final int desciption_newevent=0x7f070042;
+        public static final int directions=0x7f070043;
+        public static final int dismiss=0x7f070044;
+        public static final int done=0x7f070045;
         /**  E 
          */
-        public static final int edit=0x7f0a0047;
-        public static final int email_=0x7f0a0048;
-        public static final int email_host=0x7f0a0049;
-        public static final int enter_email_hint=0x7f0a004a;
-        public static final int enter_phone=0x7f0a004b;
-        public static final int error_deletetag=0x7f0a004c;
-        public static final int error_network=0x7f0a004d;
-        public static final int error_newevent=0x7f0a004e;
-        public static final int error_newevent_location=0x7f0a00b7;
-        public static final int error_newevent_time=0x7f0a00b8;
+        public static final int edit=0x7f070046;
+        public static final int email_=0x7f070047;
+        public static final int email_host=0x7f070048;
+        public static final int enter_email_hint=0x7f070049;
+        public static final int enter_phone=0x7f07004a;
+        public static final int error_deletetag=0x7f07004b;
+        public static final int error_network=0x7f07004c;
+        public static final int error_newevent=0x7f07004d;
+        public static final int error_newevent_location=0x7f0700b6;
+        public static final int error_newevent_time=0x7f0700b7;
         /**  Error Description 
          */
-        public static final int error_newevent_title=0x7f0a00b6;
-        public static final int error_signin=0x7f0a004f;
-        public static final int event_create=0x7f0a000c;
-        public static final int event_details=0x7f0a0050;
-        public static final int event_title=0x7f0a0051;
-        public static final int example_email=0x7f0a0052;
+        public static final int error_newevent_title=0x7f0700b5;
+        public static final int error_signin=0x7f07004e;
+        public static final int event_create=0x7f070026;
+        public static final int event_details=0x7f07004f;
+        public static final int event_title=0x7f070050;
+        public static final int example_email=0x7f070051;
         /**  F 
          */
-        public static final int feed_title=0x7f0a0053;
-        public static final int feedback_main=0x7f0a0059;
-        public static final int feedback_title=0x7f0a0058;
-        public static final int find_friends_message=0x7f0a0054;
-        public static final int find_time=0x7f0a0055;
-        public static final int follow_new=0x7f0a005a;
-        public static final int followers=0x7f0a005b;
-        public static final int friday_calendar_short=0x7f0a0056;
-        public static final int from=0x7f0a0057;
+        public static final int feed_title=0x7f070052;
+        public static final int feedback_main=0x7f070058;
+        public static final int feedback_title=0x7f070057;
+        public static final int find_friends_message=0x7f070053;
+        public static final int find_time=0x7f070054;
+        public static final int follow_new=0x7f070059;
+        public static final int followers=0x7f07005a;
+        public static final int friday_calendar_short=0x7f070055;
+        public static final int from=0x7f070056;
         /**  G 
          */
-        public static final int getting_details=0x7f0a005c;
-        public static final int going=0x7f0a005d;
-        public static final int got_it=0x7f0a005e;
+        public static final int getting_details=0x7f07005b;
+        public static final int going=0x7f07005c;
+        public static final int got_it=0x7f07005d;
         /**  H 
          */
-        public static final int hall_of_fame=0x7f0a005f;
-        public static final int hello_world=0x7f0a0001;
-        public static final int home=0x7f0a0060;
-        public static final int insufficientfields_message=0x7f0a0062;
+        public static final int hall_of_fame=0x7f07005e;
+        public static final int hello_world=0x7f07001b;
+        public static final int home=0x7f07005f;
+        public static final int insufficientfields_message=0x7f070061;
         /**  I 
          */
-        public static final int insufficientfields_title=0x7f0a0061;
-        public static final int invite=0x7f0a0064;
-        public static final int invite_list=0x7f0a0065;
-        public static final int invite_only=0x7f0a0066;
-        public static final int invite_people=0x7f0a0067;
-        public static final int invlaid_text=0x7f0a0063;
+        public static final int insufficientfields_title=0x7f070060;
+        public static final int invite=0x7f070063;
+        public static final int invite_list=0x7f070064;
+        public static final int invite_only=0x7f070065;
+        public static final int invite_people=0x7f070066;
+        public static final int invlaid_text=0x7f070062;
         /**  J 
          */
-        public static final int join=0x7f0a0068;
+        public static final int join=0x7f070067;
         /**  L 
          */
-        public static final int leave=0x7f0a0069;
-        public static final int loading=0x7f0a006a;
-        /**  Location client code resources (prefix with location_client) 
-         */
-        public static final int location_client_powered_by_google=0x7f0a002b;
-        public static final int location_long=0x7f0a006c;
-        public static final int location_long_title=0x7f0a006b;
-        public static final int location_short=0x7f0a006d;
-        public static final int login_activity=0x7f0a006e;
+        public static final int leave=0x7f070068;
+        public static final int loading=0x7f070069;
+        public static final int location_long=0x7f07006b;
+        public static final int location_long_title=0x7f07006a;
+        public static final int location_short=0x7f07006c;
+        public static final int login_activity=0x7f07006d;
         /**  M 
          */
-        public static final int manage_tags=0x7f0a006f;
-        public static final int mass_email=0x7f0a0070;
-        public static final int mass_text=0x7f0a0071;
+        public static final int manage_tags=0x7f07006e;
+        public static final int mass_email=0x7f07006f;
+        public static final int mass_text=0x7f070070;
         /**  Action Menu Options 
          */
-        public static final int menu_aboutus=0x7f0a00ad;
-        public static final int menu_addcontact=0x7f0a00ae;
-        public static final int menu_explain=0x7f0a00af;
-        public static final int menu_help=0x7f0a00b0;
-        public static final int menu_newevent=0x7f0a00b1;
-        public static final int menu_notifications=0x7f0a00b2;
-        public static final int menu_refresh=0x7f0a00b3;
-        public static final int menu_search=0x7f0a00b4;
-        public static final int menu_settings=0x7f0a0002;
-        public static final int menu_signout=0x7f0a00b5;
-        public static final int monday_calendar_short=0x7f0a0072;
-        public static final int my_account=0x7f0a0073;
-        public static final int navigation_closed=0x7f0a0075;
+        public static final int menu_aboutus=0x7f0700ac;
+        public static final int menu_addcontact=0x7f0700ad;
+        public static final int menu_explain=0x7f0700ae;
+        public static final int menu_help=0x7f0700af;
+        public static final int menu_newevent=0x7f0700b0;
+        public static final int menu_notifications=0x7f0700b1;
+        public static final int menu_refresh=0x7f0700b2;
+        public static final int menu_search=0x7f0700b3;
+        public static final int menu_settings=0x7f07001c;
+        public static final int menu_signout=0x7f0700b4;
+        public static final int monday_calendar_short=0x7f070071;
+        public static final int my_account=0x7f070072;
+        public static final int navigation_closed=0x7f070074;
         /**  N 
          */
-        public static final int navigation_open=0x7f0a0074;
-        public static final int new_event_dialog_label=0x7f0a000e;
-        public static final int new_event_dialog_option=0x7f0a000f;
-        public static final int newtag=0x7f0a0076;
-        public static final int no=0x7f0a0077;
-        public static final int no_repost=0x7f0a0078;
-        public static final int no_title_label=0x7f0a000b;
-        public static final int notifications=0x7f0a0079;
+        public static final int navigation_open=0x7f070073;
+        public static final int new_event_dialog_label=0x7f070028;
+        public static final int new_event_dialog_option=0x7f070029;
+        public static final int newtag=0x7f070075;
+        public static final int no=0x7f070076;
+        public static final int no_repost=0x7f070077;
+        public static final int no_title_label=0x7f070025;
+        public static final int notifications=0x7f070078;
         /**  O 
          */
-        public static final int one_moment=0x7f0a007a;
+        public static final int one_moment=0x7f070079;
         /**  P 
     	- Public/ Private threw errors w/out '_' appended
     	
          */
-        public static final int password=0x7f0a007b;
-        public static final int pending_requests=0x7f0a007c;
-        public static final int phone_=0x7f0a007d;
-        public static final int post=0x7f0a007e;
-        public static final int post_comment=0x7f0a007f;
-        public static final int posting_event=0x7f0a0080;
-        public static final int private_=0x7f0a0081;
-        public static final int public_=0x7f0a0082;
-        public static final int pull_to_refresh_pull_label=0x7f0a002c;
-        public static final int pull_to_refresh_refreshing_label=0x7f0a002e;
-        public static final int pull_to_refresh_release_label=0x7f0a002d;
+        public static final int password=0x7f07007a;
+        public static final int pending_requests=0x7f07007b;
+        public static final int phone_=0x7f07007c;
+        public static final int post=0x7f07007d;
+        public static final int post_comment=0x7f07007e;
+        public static final int posting_event=0x7f07007f;
+        public static final int private_=0x7f070080;
+        public static final int public_=0x7f070081;
+        public static final int pull_to_refresh_pull_label=0x7f07002b;
+        public static final int pull_to_refresh_refreshing_label=0x7f07002d;
+        public static final int pull_to_refresh_release_label=0x7f07002c;
         /**  R 
          */
-        public static final int remember_me=0x7f0a0083;
-        public static final int repost=0x7f0a0084;
-        public static final int reposts=0x7f0a0085;
-        public static final int saturday_calendar_short=0x7f0a0087;
-        public static final int send=0x7f0a0088;
-        public static final int send_feedback=0x7f0a0089;
-        public static final int sign_in=0x7f0a008a;
-        public static final int signing_in=0x7f0a008b;
-        public static final int slogan=0x7f0a008c;
+        public static final int remember_me=0x7f070082;
+        public static final int repost=0x7f070083;
+        public static final int reposts=0x7f070084;
+        public static final int saturday_calendar_short=0x7f070086;
+        public static final int send=0x7f070087;
+        public static final int send_feedback=0x7f070088;
+        public static final int sign_in=0x7f070089;
+        public static final int signing_in=0x7f07008a;
+        public static final int slogan=0x7f07008b;
         /**  S 
          */
-        public static final int start_new=0x7f0a0086;
-        public static final int stopwatching=0x7f0a008d;
-        public static final int sunday_calendar_short=0x7f0a008e;
-        public static final int template_announce_item_index=0x7f0a0010;
-        public static final int text_host=0x7f0a0090;
-        public static final int thursday_calendar_short=0x7f0a0092;
+        public static final int start_new=0x7f070085;
+        public static final int stopwatching=0x7f07008c;
+        public static final int sunday_calendar_short=0x7f07008d;
+        public static final int template_announce_item_index=0x7f07002a;
+        public static final int text_host=0x7f07008f;
+        public static final int thursday_calendar_short=0x7f070091;
         /**  T 
          */
-        public static final int to=0x7f0a008f;
+        public static final int to=0x7f07008e;
         /**  Toast Texts 
          */
-        public static final int toast_feedback_success=0x7f0a00b9;
-        public static final int toast_network_error=0x7f0a00ba;
-        public static final int today=0x7f0a0006;
-        public static final int today_at_time_fmt=0x7f0a0008;
-        public static final int tomorrow=0x7f0a0007;
-        public static final int tomorrow_at_time_fmt=0x7f0a0009;
-        public static final int tuesday_calendar_short=0x7f0a0091;
+        public static final int toast_feedback_success=0x7f0700b8;
+        public static final int toast_network_error=0x7f0700b9;
+        public static final int today=0x7f070020;
+        public static final int today_at_time_fmt=0x7f070022;
+        public static final int tomorrow=0x7f070021;
+        public static final int tomorrow_at_time_fmt=0x7f070023;
+        public static final int tuesday_calendar_short=0x7f070090;
         /**  U 
          */
-        public static final int usage=0x7f0a0093;
+        public static final int usage=0x7f070092;
         /**  V 
          */
-        public static final int verifying=0x7f0a0094;
-        public static final int watch=0x7f0a0096;
+        public static final int verifying=0x7f070093;
+        /**  Text on a placeholder buy button when Google Play services is not
+         available or up-to-date 
+         */
+        public static final int wallet_buy_button_place_holder=0x7f070019;
+        public static final int watch=0x7f070095;
         /**  W 
          */
-        public static final int watching_title=0x7f0a0095;
-        public static final int wednesday_calendar_short=0x7f0a0097;
+        public static final int watching_title=0x7f070094;
+        public static final int wednesday_calendar_short=0x7f070096;
         /**  Y 
          */
-        public static final int yes=0x7f0a0098;
+        public static final int yes=0x7f070097;
         /**  Z 
          */
-        public static final int zeppa=0x7f0a0099;
+        public static final int zeppa=0x7f070098;
     }
     public static final class style {
         /** 
@@ -1600,42 +1796,52 @@ containing a value of this type.
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f0b0000;
+        public static final int AppBaseTheme=0x7f050005;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f0b0001;
-        public static final int MonthView_DayLabel=0x7f0b0005;
-        public static final int MonthView_MiniMonthLabel=0x7f0b0004;
-        public static final int TextAppearance=0x7f0b0002;
-        public static final int TextAppearance_MonthView_DayLabel=0x7f0b0006;
-        public static final int TextAppearance_MonthView_MiniDayLabel=0x7f0b0003;
+        public static final int AppTheme=0x7f050006;
+        public static final int MonthView_DayLabel=0x7f05000a;
+        public static final int MonthView_MiniMonthLabel=0x7f050009;
+        public static final int TextAppearance=0x7f050007;
+        public static final int TextAppearance_MonthView_DayLabel=0x7f05000b;
+        public static final int TextAppearance_MonthView_MiniDayLabel=0x7f050008;
+        public static final int Theme_IAPTheme=0x7f050000;
+        public static final int WalletFragmentDefaultButtonTextAppearance=0x7f050003;
+        public static final int WalletFragmentDefaultDetailsHeaderTextAppearance=0x7f050002;
+        public static final int WalletFragmentDefaultDetailsTextAppearance=0x7f050001;
+        /** 
+         Default style of the wallet fragment that will be used if not set explicitly
+         when fragment is created
+    
+         */
+        public static final int WalletFragmentDefaultStyle=0x7f050004;
         /**  Action Bar Style 
          */
-        public static final int ZeppaActionBarStyle=0x7f0b0008;
+        public static final int ZeppaActionBarStyle=0x7f05000d;
         /**  Application theme 
          */
-        public static final int ZeppaTheme=0x7f0b0007;
+        public static final int ZeppaTheme=0x7f05000c;
         /**  Black w/ teal outline 
          */
-        public static final int black_teal_txt14sp=0x7f0b000d;
-        public static final int black_txt12sp=0x7f0b0012;
-        public static final int black_txt14sp=0x7f0b0011;
-        public static final int black_txt16sp=0x7f0b0010;
-        public static final int black_txt18sp=0x7f0b000f;
+        public static final int black_teal_txt14sp=0x7f050012;
+        public static final int black_txt12sp=0x7f050017;
+        public static final int black_txt14sp=0x7f050016;
+        public static final int black_txt16sp=0x7f050015;
+        public static final int black_txt18sp=0x7f050014;
         /**  Black no outline 
          */
-        public static final int black_txt21sp=0x7f0b000e;
-        public static final int blue_link_txt12sp=0x7f0b0014;
+        public static final int black_txt21sp=0x7f050013;
+        public static final int blue_link_txt12sp=0x7f050019;
         /**  Blue Link Text 
          */
-        public static final int blue_link_txt14sp=0x7f0b0013;
-        public static final int gray_date_txt12sp=0x7f0b0018;
-        public static final int gray_txt12sp=0x7f0b0017;
+        public static final int blue_link_txt14sp=0x7f050018;
+        public static final int gray_date_txt12sp=0x7f05001d;
+        public static final int gray_txt12sp=0x7f05001c;
         /**  Gray 
          */
-        public static final int gray_txt15sp=0x7f0b0016;
-        public static final int teal_txt20sp=0x7f0b0015;
+        public static final int gray_txt15sp=0x7f05001b;
+        public static final int teal_txt20sp=0x7f05001a;
         /** 
     THINGS TO NOTE:
     
@@ -1645,12 +1851,12 @@ containing a value of this type.
     
  White w/ black outline 
          */
-        public static final int white_black_txt14sp=0x7f0b0009;
-        public static final int white_black_txt18sp=0x7f0b000a;
+        public static final int white_black_txt14sp=0x7f05000e;
+        public static final int white_black_txt18sp=0x7f05000f;
         /**  White no outline 
          */
-        public static final int white_txt12sp=0x7f0b000b;
-        public static final int white_txt18sp=0x7f0b000c;
+        public static final int white_txt12sp=0x7f050010;
+        public static final int white_txt18sp=0x7f050011;
     }
     public static final class styleable {
         /** Attributes that can be used with a AdsAttrs.
@@ -2003,9 +2209,9 @@ containing a value of this type.
            @see #PagerSlidingTabStrip_underlineHeight
          */
         public static final int[] PagerSlidingTabStrip = {
-            0x7f01001d, 0x7f01001e, 0x7f01001f, 0x7f010020,
-            0x7f010021, 0x7f010022, 0x7f010023, 0x7f010024,
-            0x7f010025, 0x7f010026, 0x7f010027
+            0x7f01002c, 0x7f01002d, 0x7f01002e, 0x7f01002f,
+            0x7f010030, 0x7f010031, 0x7f010032, 0x7f010033,
+            0x7f010034, 0x7f010035, 0x7f010036
         };
         /**
           <p>This symbol is the offset where the {@link com.minook.zeppa.R.attr#dividerColor}
@@ -2199,9 +2405,9 @@ containing a value of this type.
            @see #PullToRefreshHeader_ptrReleaseText
          */
         public static final int[] PullToRefreshHeader = {
-            0x7f010013, 0x7f010014, 0x7f010015, 0x7f010016,
-            0x7f010017, 0x7f010018, 0x7f010019, 0x7f01001a,
-            0x7f01001b, 0x7f01001c
+            0x7f010022, 0x7f010023, 0x7f010024, 0x7f010025,
+            0x7f010026, 0x7f010027, 0x7f010028, 0x7f010029,
+            0x7f01002a, 0x7f01002b
         };
         /**
           <p>
@@ -2357,7 +2563,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
            @see #PullToRefreshView_ptrViewDelegateClass
          */
         public static final int[] PullToRefreshView = {
-            0x7f010011
+            0x7f010020
         };
         /**
           <p>
@@ -2372,5 +2578,328 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
           @attr name com.minook.zeppa:ptrViewDelegateClass
         */
         public static final int PullToRefreshView_ptrViewDelegateClass = 0;
+        /**  Attributes for the WalletFragment &lt;fragment&gt; tag 
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #WalletFragmentOptions_environment com.minook.zeppa:environment}</code></td><td> Google Wallet environment to use </td></tr>
+           <tr><td><code>{@link #WalletFragmentOptions_fragmentMode com.minook.zeppa:fragmentMode}</code></td><td> Fragment mode </td></tr>
+           <tr><td><code>{@link #WalletFragmentOptions_fragmentStyle com.minook.zeppa:fragmentStyle}</code></td><td> A style resource specifing attributes to customize the look and feel of WalletFragment </td></tr>
+           <tr><td><code>{@link #WalletFragmentOptions_theme com.minook.zeppa:theme}</code></td><td> Theme to be used for the Wallet selector </td></tr>
+           </table>
+           @see #WalletFragmentOptions_environment
+           @see #WalletFragmentOptions_fragmentMode
+           @see #WalletFragmentOptions_fragmentStyle
+           @see #WalletFragmentOptions_theme
+         */
+        public static final int[] WalletFragmentOptions = {
+            0x7f010011, 0x7f010012, 0x7f010013, 0x7f010014
+        };
+        /**
+          <p>
+          @attr description
+           Google Wallet environment to use 
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>production</code></td><td>1</td><td></td></tr>
+<tr><td><code>sandbox</code></td><td>0</td><td></td></tr>
+<tr><td><code>strict_sandbox</code></td><td>2</td><td></td></tr>
+</table>
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:environment
+        */
+        public static final int WalletFragmentOptions_environment = 1;
+        /**
+          <p>
+          @attr description
+           Fragment mode 
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>buyButton</code></td><td>1</td><td></td></tr>
+<tr><td><code>selectionDetails</code></td><td>2</td><td></td></tr>
+</table>
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:fragmentMode
+        */
+        public static final int WalletFragmentOptions_fragmentMode = 3;
+        /**
+          <p>
+          @attr description
+           A style resource specifing attributes to customize the look and feel of WalletFragment 
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:fragmentStyle
+        */
+        public static final int WalletFragmentOptions_fragmentStyle = 2;
+        /**
+          <p>
+          @attr description
+           Theme to be used for the Wallet selector 
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>holo_dark</code></td><td>0</td><td></td></tr>
+<tr><td><code>holo_light</code></td><td>1</td><td></td></tr>
+</table>
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:theme
+        */
+        public static final int WalletFragmentOptions_theme = 0;
+        /**  Attributes that may be specified in a style resource to customize the look and feel of
+         WalletFragment 
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_buyButtonAppearance com.minook.zeppa:buyButtonAppearance}</code></td><td> Appearance of the buy button.</td></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_buyButtonHeight com.minook.zeppa:buyButtonHeight}</code></td><td> Height of the buy button.</td></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_buyButtonText com.minook.zeppa:buyButtonText}</code></td><td> Text on the buy button.</td></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_buyButtonWidth com.minook.zeppa:buyButtonWidth}</code></td><td> Width of the buy button.</td></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_maskedWalletDetailsBackground com.minook.zeppa:maskedWalletDetailsBackground}</code></td><td> Masked wallet details background </td></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_maskedWalletDetailsButtonBackground com.minook.zeppa:maskedWalletDetailsButtonBackground}</code></td><td> "Change" button background in masked wallet details view </td></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_maskedWalletDetailsButtonTextAppearance com.minook.zeppa:maskedWalletDetailsButtonTextAppearance}</code></td><td> TextAppearance for the "Change" button in masked wallet details view </td></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_maskedWalletDetailsHeaderTextAppearance com.minook.zeppa:maskedWalletDetailsHeaderTextAppearance}</code></td><td> TextAppearance for headers describing masked wallet details </td></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_maskedWalletDetailsLogoImageType com.minook.zeppa:maskedWalletDetailsLogoImageType}</code></td><td> Type of the wallet logo image in masked wallet details view </td></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_maskedWalletDetailsLogoTextColor com.minook.zeppa:maskedWalletDetailsLogoTextColor}</code></td><td> Color of the Google Wallet logo text in masked wallet details view </td></tr>
+           <tr><td><code>{@link #WalletFragmentStyle_maskedWalletDetailsTextAppearance com.minook.zeppa:maskedWalletDetailsTextAppearance}</code></td><td> TextAppearance for masked wallet details </td></tr>
+           </table>
+           @see #WalletFragmentStyle_buyButtonAppearance
+           @see #WalletFragmentStyle_buyButtonHeight
+           @see #WalletFragmentStyle_buyButtonText
+           @see #WalletFragmentStyle_buyButtonWidth
+           @see #WalletFragmentStyle_maskedWalletDetailsBackground
+           @see #WalletFragmentStyle_maskedWalletDetailsButtonBackground
+           @see #WalletFragmentStyle_maskedWalletDetailsButtonTextAppearance
+           @see #WalletFragmentStyle_maskedWalletDetailsHeaderTextAppearance
+           @see #WalletFragmentStyle_maskedWalletDetailsLogoImageType
+           @see #WalletFragmentStyle_maskedWalletDetailsLogoTextColor
+           @see #WalletFragmentStyle_maskedWalletDetailsTextAppearance
+         */
+        public static final int[] WalletFragmentStyle = {
+            0x7f010015, 0x7f010016, 0x7f010017, 0x7f010018,
+            0x7f010019, 0x7f01001a, 0x7f01001b, 0x7f01001c,
+            0x7f01001d, 0x7f01001e, 0x7f01001f
+        };
+        /**
+          <p>
+          @attr description
+           Appearance of the buy button. Must be one of "classic", "grayscale" and "monochrome" 
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>classic</code></td><td>1</td><td></td></tr>
+<tr><td><code>grayscale</code></td><td>2</td><td></td></tr>
+<tr><td><code>monochrome</code></td><td>3</td><td></td></tr>
+</table>
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:buyButtonAppearance
+        */
+        public static final int WalletFragmentStyle_buyButtonAppearance = 3;
+        /**
+          <p>
+          @attr description
+           Height of the buy button. This includes an 8dp padding (4dp on each side) used for
+             pressed and focused states of the button. The value can be a specific height, e.g.
+             "48dp", or special values "match_parent" and "wrap_content". 
+
+
+          <p>May be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+<p>May be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>match_parent</code></td><td>-1</td><td></td></tr>
+<tr><td><code>wrap_content</code></td><td>-2</td><td></td></tr>
+</table>
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:buyButtonHeight
+        */
+        public static final int WalletFragmentStyle_buyButtonHeight = 0;
+        /**
+          <p>
+          @attr description
+           Text on the buy button. Must be one of "buy_with_google", "buy_now" and "book_now" 
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>buy_with_google</code></td><td>1</td><td></td></tr>
+<tr><td><code>buy_now</code></td><td>2</td><td></td></tr>
+<tr><td><code>book_now</code></td><td>3</td><td></td></tr>
+</table>
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:buyButtonText
+        */
+        public static final int WalletFragmentStyle_buyButtonText = 2;
+        /**
+          <p>
+          @attr description
+           Width of the buy button. This includes an 8dp padding (4dp on each side) used for
+             pressed and focused states of the button. The value can be a specific width, e.g.
+             "300dp", or special values "match_parent" and "wrap_content". 
+
+
+          <p>May be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+<p>May be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>match_parent</code></td><td>-1</td><td></td></tr>
+<tr><td><code>wrap_content</code></td><td>-2</td><td></td></tr>
+</table>
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:buyButtonWidth
+        */
+        public static final int WalletFragmentStyle_buyButtonWidth = 1;
+        /**
+          <p>
+          @attr description
+           Masked wallet details background 
+
+
+          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+<p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:maskedWalletDetailsBackground
+        */
+        public static final int WalletFragmentStyle_maskedWalletDetailsBackground = 6;
+        /**
+          <p>
+          @attr description
+           "Change" button background in masked wallet details view 
+
+
+          <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+<p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:maskedWalletDetailsButtonBackground
+        */
+        public static final int WalletFragmentStyle_maskedWalletDetailsButtonBackground = 8;
+        /**
+          <p>
+          @attr description
+           TextAppearance for the "Change" button in masked wallet details view 
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:maskedWalletDetailsButtonTextAppearance
+        */
+        public static final int WalletFragmentStyle_maskedWalletDetailsButtonTextAppearance = 7;
+        /**
+          <p>
+          @attr description
+           TextAppearance for headers describing masked wallet details 
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:maskedWalletDetailsHeaderTextAppearance
+        */
+        public static final int WalletFragmentStyle_maskedWalletDetailsHeaderTextAppearance = 5;
+        /**
+          <p>
+          @attr description
+           Type of the wallet logo image in masked wallet details view 
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>classic</code></td><td>1</td><td></td></tr>
+<tr><td><code>monochrome</code></td><td>2</td><td></td></tr>
+</table>
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:maskedWalletDetailsLogoImageType
+        */
+        public static final int WalletFragmentStyle_maskedWalletDetailsLogoImageType = 10;
+        /**
+          <p>
+          @attr description
+           Color of the Google Wallet logo text in masked wallet details view 
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:maskedWalletDetailsLogoTextColor
+        */
+        public static final int WalletFragmentStyle_maskedWalletDetailsLogoTextColor = 9;
+        /**
+          <p>
+          @attr description
+           TextAppearance for masked wallet details 
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          <p>This is a private symbol.
+          @attr name com.minook.zeppa:maskedWalletDetailsTextAppearance
+        */
+        public static final int WalletFragmentStyle_maskedWalletDetailsTextAppearance = 4;
     };
 }
