@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/zeppauserinfoendpoint/v1/20140819194606/java/1.18.0-rc/minook.com-zeppauserinfoendpoint-v1-20140819194606-java-1.18.0-rc-sources.jar", 
-      "path": "minook.com-zeppauserinfoendpoint-v1-20140819194606-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/zeppauserinfoendpoint/v1/20140820153147/java/1.18.0-rc/minook.com-zeppauserinfoendpoint-v1-20140820153147-java-1.18.0-rc-sources.jar", 
+      "path": "minook.com-zeppauserinfoendpoint-v1-20140820153147-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-08-19 19:46"
+      "timestamp": "2014-08-20 15:31"
     }, 
     {
-      "path": "minook.com-zeppauserinfoendpoint-v1-20140819194606-java-1.18.0-rc.jar.properties", 
+      "path": "minook.com-zeppauserinfoendpoint-v1-20140820153147-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -675,5 +675,5 @@
   "packagePath": "zeppa", 
   "language_version": "1.18.0-rc", 
   "id": "zeppauserinfoendpoint:v1", 
-  "revision": 20140819194606
+  "revision": 20140820153147
 }

@@ -2,6 +2,7 @@ package com.minook.zeppa.activity;
 
 import java.io.IOException;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
@@ -49,7 +50,6 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	 * http://developer.android.com/google/play-services/auth.html#obtain
 	 */
 
-	// ----------- Global Variables Bank ------------- \\
 	// Debug
 	private String TAG = "LoginActivity";
 
@@ -57,6 +57,8 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		FETCH_SUCCESS, CREATE_NEW_USER, NETWORK_FAIL, AUTHORIZATION_FAIL, NOT_FOUND, UNKNOWN
 
 	};
+
+	private boolean tryingLogin;
 
 	/*
 	 * ------------------- Override methods ----------------------- NOTES:
@@ -69,6 +71,11 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		setContentView(R.layout.activity_login);
 		findViewById(R.id.sign_in_button).setOnClickListener(this);
 
+		if (apiClient.isConnecting()) {
+			tryingLogin = true;
+		} else {
+			tryingLogin = true;
+		}
 	}
 
 	@Override
@@ -76,7 +83,11 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		switch (v.getId()) {
 		case R.id.sign_in_button:
 
-			if (checkPlayServices()) {
+			if (!tryingLogin && checkPlayServices()) {
+				if(!connectionProgress.isShowing()){
+					connectionProgress.show();
+				}
+				
 				if (apiClient == null
 						|| (!apiClient.isConnecting() && !apiClient
 								.isConnected())) {
@@ -120,6 +131,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		if (connectionProgress.isShowing()) {
 			connectionProgress.dismiss();
 		}
+		tryingLogin = false;
 
 		Toast.makeText(this, "Connection Failed", Toast.LENGTH_SHORT).show();
 	}
@@ -217,7 +229,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 					}
 
 				} catch (GoogleJsonResponseException ex) {
-					
+
 					resultCode = UserResult.CREATE_NEW_USER;
 					ex.printStackTrace();
 					return null;
@@ -287,6 +299,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 					startActivity(launchMain);
 					finish();
 				}
+				tryingLogin = false;
 
 			}
 
