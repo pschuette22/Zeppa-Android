@@ -15,10 +15,12 @@ public class ZeppaContract {
 	public static interface CommonColumns extends BaseColumns {
 		public static final String ZEPPA_ID = "ZeppaDatabaseId";
 		public static final String LAST_UPDATE = "LastUpdateTime";
+		public static final String DEFAULT_SORT_ORDER = "createdAt DESC";
 		
 		public static final int INDEX_LOCAL_ID = 0;
 		public static final int INDEX_ZEPPA_ID = 1;
 		public static final int INDEX_LAST_UPDATE = 2;
+		
 	}
 
 	public static final class UserInfoContract implements CommonColumns {
