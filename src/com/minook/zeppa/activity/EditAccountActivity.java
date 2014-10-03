@@ -8,6 +8,18 @@ import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 public class EditAccountActivity extends AbstractAccountBaseActivity {
 
+	private MyZeppaUserMediator myMediator;
+	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		myMediator = ZeppaUserSingleton.getInstance().getUserMediator();
+		myMediator.setContext(this);
+		
+	}
+	
+	
 
 	@Override
 	protected void onStart() {
@@ -17,15 +29,17 @@ public class EditAccountActivity extends AbstractAccountBaseActivity {
 
 	@Override
 	public void onClick(View v) {
+		switch(v.getId()){
 		
+		}
 		
 	}
 
 	@Override
 	protected void setInfo() {
-		// TODO Auto-generated method stub
-		MyZeppaUserMediator mediator = ZeppaUserSingleton.getInstance().getUserMediator();
-		
+		givenNameField.setText(myMediator.getGivenName());
+		familyNameField.setText(myMediator.getFamilyName());
+		myMediator.setImageWhenReady(userImage);
 		
 	}
 

@@ -2,7 +2,6 @@ package com.minook.zeppa.fragment;
 
 import java.util.List;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
+import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.activity.MainActivity;
 import com.minook.zeppa.activity.NewFriendsActivity;
 import com.minook.zeppa.adapter.ContactListAdapter;
@@ -37,16 +38,15 @@ public class ContactsFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		((MainActivity) getActivity()).setCurrentFragment(this);
 
 		layout = inflater.inflate(R.layout.fragment_contacts, container, false);
 		contactList = (ListView) layout.findViewById(R.id.contactsListView);
 
-		List<DefaultUserInfoMediator> friendInfoManagers = ZeppaUserSingleton.getInstance().getFriendInfoManagers();
-		adapter = new ContactListAdapter(getActivity(), friendInfoManagers);
+		List<DefaultUserInfoMediator> friendInfoManagers = ZeppaUserSingleton
+				.getInstance().getFriendInfoMediators();
+		adapter = new ContactListAdapter((AuthenticatedFragmentActivity) getActivity(), friendInfoManagers);
 
 		contactList.setAdapter(adapter);
-		contactList.setOnItemClickListener(adapter);
 
 		setHasOptionsMenu(true);
 
@@ -56,8 +56,8 @@ public class ContactsFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setTitle(R.string.app_name);
+		((MainActivity) getActivity()).setNavigationItem(Constants.NAVIGATION_CONTACTS_INDEX);
+		adapter.notifyDataSetChanged();
 
 	}
 

@@ -69,13 +69,18 @@ public class ZeppaApplication extends Application {
 
 	public void initialize(ZeppaUser user, GoogleAccountCredential credential) {
 
+		// Set the User singleton to hold the current user object
 		ZeppaUserSingleton userSingleton = ZeppaUserSingleton.getInstance();
 		userSingleton.setUser(user);
-
-//		userSingleton.loadConnectedUsers(credential);
-//		ZeppaEventSingleton.getInstance().loadInitialEvents(credential);
-//		NotificationSingleton.getInstance().loadInitialNotificationsInAsync(
-//				credential);
+		// Load Users this user has relationships with
+		userSingleton.loadConnectedUsers(credential);
+		
+		// Load events to show in the feed
+		ZeppaEventSingleton.getInstance().loadInitialEvents(credential);
+		// Load notifications for this user
+		NotificationSingleton.getInstance().loadInitialNotificationsInAsync(
+				credential);
+		// Load this users event tags
 		EventTagSingleton.getInstance().loadTagsInAsync(credential);
 
 	}

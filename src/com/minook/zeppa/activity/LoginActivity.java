@@ -2,7 +2,6 @@ package com.minook.zeppa.activity;
 
 import java.io.IOException;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
@@ -11,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.google.android.gms.common.AccountPicker;
@@ -32,24 +32,6 @@ import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 public class LoginActivity extends AuthenticatedFragmentActivity implements
 		OnClickListener {
 
-	/*
-	 * This class handles user launching the app and ensuring that they have
-	 * connection to the backend/ authentication Reference:
-	 * 
-	 * For plus client:
-	 * https://developers.google.com/+/mobile/android/getting-started
-	 * https://developers.google.com/+/mobile/android/sign-in
-	 * 
-	 * implements: PlusClient.ConnectionCallbacks,
-	 * PlusClient.OnConnectionFailedListener,
-	 * PlusClient.OnMomentsLoadedListener,
-	 * 
-	 * For GoogleAuthUtil
-	 * http://developer.android.com/reference/com/google/android
-	 * /gms/auth/GoogleAuthUtil.html
-	 * http://developer.android.com/google/play-services/auth.html#obtain
-	 */
-
 	// Debug
 	private String TAG = "LoginActivity";
 
@@ -58,7 +40,8 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 	};
 
-	private boolean tryingLogin;
+	private boolean signinClicked;
+	private final int resolveConnectionFail = 5;
 
 	/*
 	 * ------------------- Override methods ----------------------- NOTES:
@@ -67,27 +50,33 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		getActionBar().hide();
 
 		setContentView(R.layout.activity_login);
 		findViewById(R.id.sign_in_button).setOnClickListener(this);
 
-		if (apiClient.isConnecting()) {
-			tryingLogin = true;
-		} else {
-			tryingLogin = true;
-		}
+
+	}
+
+	@Override
+	protected void onStart() {
+		signinClicked = false;
+		super.onStart();
+		
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.sign_in_button:
+			signinClicked = true;
+			if (!connectionProgress.isShowing()) {
+				connectionProgress.show();
+			}
 
-			if (!tryingLogin && checkPlayServices()) {
-				if(!connectionProgress.isShowing()){
-					connectionProgress.show();
-				}
-				
+			if (checkPlayServices()) {
+
 				if (apiClient == null
 						|| (!apiClient.isConnecting() && !apiClient
 								.isConnected())) {
@@ -100,9 +89,9 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 								false, null, null, null, null);
 						startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
 					} else if (connectionResult == null) {
-						connectionProgress.show();
+						// No connectioconnectn result, try to connect
 						apiClient.connect();
-					} else {
+					} else if (connectionResult.hasResolution()) {
 						try {
 							connectionResult.startResolutionForResult(this,
 									REQUEST_CODE_RESOLVE_ERR);
@@ -127,23 +116,55 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	}
 
 	@Override
-	public void onConnectionFailed(ConnectionResult arg0) {
-		if (connectionProgress.isShowing()) {
-			connectionProgress.dismiss();
-		}
-		tryingLogin = false;
+	public void onConnectionFailed(ConnectionResult result) {
 
-		Toast.makeText(this, "Connection Failed", Toast.LENGTH_SHORT).show();
+		try {
+			if (signinClicked && result.hasResolution()) {
+				result.startResolutionForResult(this, resolveConnectionFail);
+			}
+		} catch (SendIntentException e) {
+			e.printStackTrace();
+			Toast.makeText(this, "Connection Failed", Toast.LENGTH_SHORT)
+					.show();
+		}
+
 	}
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		loadAndLaunch();
+
+		if (connectionProgress.isShowing()) {
+			connectionProgress.dismiss();
+		}
+
+		if (signinClicked) {
+			loadAndLaunch();
+		}
 	}
 
 	/*
 	 * ---------------------- My Methods ---------------------------- NOTES:
 	 */
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+
+		case resolveConnectionFail:
+			if (resultCode != RESULT_OK) {
+				signinClicked = false;
+
+			} else if (!apiClient.isConnecting()) {
+				apiClient.connect();
+
+			}
+
+			break;
+		}
+
+	}
 
 	/**
 	 * Verify device has GooglePlayServices
@@ -159,6 +180,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 						PLAY_SERVICES_RESOLUTION_REQUEST).show();
 			} else {
 				Log.i(TAG, "This device is not supported.");
+				// TODO: display a dialog saying the device wont work out
 				finish();
 			}
 			return false;
@@ -188,19 +210,20 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 				Zeppauserendpoint userEndpoint = endpointBuilder.build();
 				try {
 
-					resultCode = UserResult.UNKNOWN;
-					Long appEngineId = getSharedPreferences(
+					long appEngineId = getSharedPreferences(
 							Constants.SHARED_PREFS, MODE_PRIVATE).getLong(
 							Constants.USER_ID, -1);
 
-					if (appEngineId.longValue() > 0) {
+					if (appEngineId > 0) {
 
 						GetZeppaUser fetchUserById = userEndpoint
-								.getZeppaUser(appEngineId);
+								.getZeppaUser(Long.valueOf(appEngineId));
 						zeppaUser = fetchUserById.execute();
 
-						resultCode = UserResult.FETCH_SUCCESS;
-						return zeppaUser;
+						if (zeppaUser != null) {
+							resultCode = UserResult.FETCH_SUCCESS;
+							return zeppaUser;
+						}
 
 					}
 					Person currentPerson = Plus.PeopleApi
@@ -208,14 +231,22 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 					if (currentPerson == null) {
 						// TODO: throw new unrecognized user error
+						Toast.makeText(getApplicationContext(),
+								"Unreccognized User", Toast.LENGTH_SHORT)
+								.show();
 						return null;
 					}
 
+					Log.d(TAG,
+							"Fetching object for G+ ID: "
+									+ currentPerson.getId());
 					zeppaUser = userEndpoint.fetchMatchingUser(
 							currentPerson.getId()).execute();
 
-					if (zeppaUser != null) {
+					if (zeppaUser == null) {
+						resultCode = UserResult.CREATE_NEW_USER;
 
+					} else {
 						SharedPreferences.Editor editor = getSharedPreferences(
 								Constants.SHARED_PREFS, MODE_PRIVATE).edit();
 						editor.putLong(Constants.USER_ID, zeppaUser.getKey()
@@ -224,13 +255,11 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 						resultCode = UserResult.FETCH_SUCCESS;
 
-					} else {
-						resultCode = UserResult.CREATE_NEW_USER;
 					}
 
 				} catch (GoogleJsonResponseException ex) {
 
-					resultCode = UserResult.CREATE_NEW_USER;
+					// resultCode = UserResult.CREATE_NEW_USER;
 					ex.printStackTrace();
 					return null;
 				} catch (IOException ioEx) {
@@ -239,6 +268,9 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 					ioEx.printStackTrace();
 					resultCode = UserResult.NETWORK_FAIL;
 
+
+					return null;
+				} catch (Exception ex) {
 					return null;
 				}
 
@@ -264,12 +296,12 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 						break;
 
 					case 2: // UserResut.NETWORK_FAIL
-						Toast.makeText(getApplicationContext(),
+						Toast.makeText(LoginActivity.this,
 								"Connection Error", Toast.LENGTH_SHORT).show();
 						break;
 
 					case 3: // UserResult.AUTHORIZATION_FAIL
-						Toast.makeText(getApplicationContext(),
+						Toast.makeText(LoginActivity.this,
 								"Authorization Error", Toast.LENGTH_SHORT)
 								.show();
 						break;
@@ -277,15 +309,15 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 					case 4:
 						// TODO: raise toast asking if this is an error or if a
 						// new account should be made
-						Toast.makeText(getApplicationContext(),
+						Toast.makeText(LoginActivity.this,
 								"Saved Account Not Found", Toast.LENGTH_SHORT)
 								.show();
 						break;
 
 					case 5: // UserResult.UNKNOWN
 					default:
-						Toast.makeText(getApplicationContext(),
-								"Error Occured", Toast.LENGTH_SHORT).show();
+						Toast.makeText(LoginActivity.this,
+								"Error Occured!!!", Toast.LENGTH_SHORT).show();
 
 					}
 
@@ -299,8 +331,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 					startActivity(launchMain);
 					finish();
 				}
-				tryingLogin = false;
-
+				
 			}
 
 		}.execute();

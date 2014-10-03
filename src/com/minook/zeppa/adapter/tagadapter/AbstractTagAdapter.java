@@ -1,5 +1,7 @@
 package com.minook.zeppa.adapter.tagadapter;
 
+import java.util.List;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -8,20 +10,19 @@ import android.widget.LinearLayout;
 
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
+import com.minook.zeppa.mediator.AbstractEventTagMediator;
 
 public abstract class AbstractTagAdapter extends BaseAdapter {
 
 	protected AuthenticatedFragmentActivity activity;
-
-	protected LayoutInflater inflater;
 	protected LinearLayout tagHolder;
 	protected boolean hasLoadedTags;
+	protected List<AbstractEventTagMediator> tagMediators;
 	
 	public AbstractTagAdapter(AuthenticatedFragmentActivity activity,
 			LinearLayout tagHolder) {
 
 		this.activity = activity;
-		this.inflater = activity.getLayoutInflater();
 		this.tagHolder = tagHolder;
 		this.tagHolder.setClickable(false);
 
@@ -32,12 +33,33 @@ public abstract class AbstractTagAdapter extends BaseAdapter {
 		super.notifyDataSetChanged();
 		drawTags();
 	}
+	
+	
 		
+	@Override
+	public AbstractEventTagMediator getItem(int position) {
+		if(tagMediators.isEmpty())
+			return null;
+		
+		return tagMediators.get(position);
+	}
+	
+	
+
+	@Override
+	public int getCount() {
+		if(tagMediators == null)
+			return 0;
+		
+		return tagMediators.size();
+	}
+
 	public void drawTags() {
 		tagHolder.removeAllViews();
 
 		if (getCount() > 0) {
 
+			LayoutInflater inflater = activity.getLayoutInflater();
 			LinearLayout currentLine = (LinearLayout) inflater.inflate(
 					R.layout.view_tag_line, null, false);
 

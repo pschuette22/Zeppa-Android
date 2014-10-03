@@ -28,16 +28,16 @@ public abstract class AbstractEventLayoutAdapter extends AbstractEventListAdapte
 	public void drawEvents() {
 		eventHolder.removeAllViews();
 		if (didLoadInitial()) {
-			if (!eventManagers.isEmpty()) {
+			if (!eventMediators.isEmpty()) {
 				
-				for (int i = eventHolder.getChildCount(); i < eventManagers.size(); i++) {
+				for (int i = eventHolder.getChildCount(); i < eventMediators.size(); i++) {
 					eventHolder.addView(getView(i, null, eventHolder));
 
 				}
 			}
 		} else {
 			if(loaderView == null){
-				loaderView = makeLoaderView();
+				loaderView = getLoaderView();
 			}
 			eventHolder.addView(loaderView);
 		}

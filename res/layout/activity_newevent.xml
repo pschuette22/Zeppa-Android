@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableStart="@drawable/cancel_icon"
+            android:drawableLeft="@drawable/cancel_icon"
             android:gravity="center"
             android:text="@string/cancel" />
 
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableStart="@drawable/done_icon"
+            android:drawableLeft="@drawable/done_icon"
             android:gravity="center"
             android:text="@string/done" />
     </LinearLayout>
@@ -192,12 +192,12 @@
                 android:id="@+id/neweventactivity_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:hint="@string/desciption_newevent"
                 android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
-                android:padding="3dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" />
+                android:padding="3dp" />
 
             <LinearLayout
                 android:id="@+id/neweventactivity_taglineholder"
@@ -224,16 +224,15 @@
 
                 <EditText
                     android:id="@+id/neweventactivity_tagtext"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/neweventactivity_addnewtag"
-                    android:drawableLeft="@drawable/hashtag"
                     android:hint="@string/newtag"
                     android:inputType="textCapWords"
                     android:lines="1"
                     android:maxLength="25"
+                    android:minWidth="200dp"
                     android:paddingBottom="2dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp" />
@@ -257,9 +256,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
-                android:animateLayoutChanges="true"
                 android:paddingRight="10dp" />
         </LinearLayout>
     </ScrollView>

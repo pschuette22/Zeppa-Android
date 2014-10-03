@@ -33,21 +33,18 @@ public class WatchingFragment extends Fragment implements OnRefreshListener {
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		layout = inflater.inflate(R.layout.fragment_watching, null, false);
-		
-		
-		watchingList = (ListView) layout
-				.findViewById(R.id.watchingListView);
+
+		watchingList = (ListView) layout.findViewById(R.id.watchingListView);
 		pullToRefreshLayout = (PullToRefreshLayout) layout
-				.findViewById(R.id.watchingfragment_ptr);	
-		
+				.findViewById(R.id.watchingfragment_ptr);
+
 		if (wlAdapter == null) {
 			wlAdapter = new WatchListAdapter(
 					(AuthenticatedFragmentActivity) getActivity(), watchingList);
 		}
-		
+
 		wlAdapter.verifyDatasetValid();
 		watchingList.setAdapter(wlAdapter);
-		
 
 		ActionBarPullToRefresh.from(getActivity())
 				.options(Options.create().scrollDistance(.4f).build())
@@ -56,11 +53,18 @@ public class WatchingFragment extends Fragment implements OnRefreshListener {
 
 		return layout;
 	}
-	
 
 	@Override
 	public void onRefreshStarted(View view) {
 		wlAdapter.fetchNewEventsInAsync(pullToRefreshLayout);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		wlAdapter.notifyDataSetChanged();
+
 	}
 
 	/*

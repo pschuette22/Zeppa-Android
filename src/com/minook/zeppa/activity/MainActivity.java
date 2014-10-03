@@ -52,15 +52,17 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -71,31 +73,30 @@ import com.minook.zeppa.fragment.AccountFragment;
 import com.minook.zeppa.fragment.ContactsFragment;
 import com.minook.zeppa.fragment.FeedbackFragment;
 import com.minook.zeppa.fragment.HomeFragment;
-import com.minook.zeppa.fragment.InviteFragment;
-import com.minook.zeppa.fragment.NotificationsFragment;
+import com.minook.zeppa.fragment.SettingsFragment;
+import com.minook.zeppa.mediator.MyZeppaUserMediator;
+import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
-public class MainActivity extends AuthenticatedFragmentActivity{
+public class MainActivity extends AuthenticatedFragmentActivity {
 
 	// ----------- Global Variables Bank ------------- \\
+	private final String TAG = getClass().getName();
 	// Debug
 
-	// Private
 	private DrawerLayout drawerLayout;
+	private LinearLayout navigationCabinet;
 	private ListView navigationList;
 	private ListView activityList;
 	private String[] navigationOptions;
 	private ActionBarDrawerToggle drawerToggle;
 	private NotificationsAdapter notifictionsAdapter;
-	private int currentPage;
 
+	// Navigation options:
+	private AccountFragment accountFragment;
 	private HomeFragment homeFragment;
 	private ContactsFragment contactsFragment;
-	private NotificationsFragment notificationsFragment;
-	private AccountFragment accountFragment;
 	private FeedbackFragment feedbackFragment;
-	private InviteFragment inviteFragment;
-
-	private Fragment currentFragment;
+	private SettingsFragment settingsFragment;
 
 	/*
 	 * -------------- OVERRIDE EVENTS ---------------------- NOTES:
@@ -112,23 +113,15 @@ public class MainActivity extends AuthenticatedFragmentActivity{
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(false);
-		
+
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		navigationList = (ListView) findViewById(R.id.navigation_drawer_list);
 		activityList = (ListView) findViewById(R.id.activity_drawer_list);
-		
-
-		navigationOptions = getResources().getStringArray(
-				R.array.navigation_options);
-
-		FragmentManager fm = getSupportFragmentManager();
-		homeFragment = new HomeFragment();
-
-		fm.beginTransaction().add(R.id.content_frame, homeFragment).commit();
+		navigationCabinet = (LinearLayout) findViewById(R.id.navigation_cabinet);
 
 		// Options Menu setup
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-				R.drawable.ic_menubars, R.string.navigation_open,
+				R.drawable.ic_menu_navigation, R.string.navigation_open,
 				R.string.navigation_closed) {
 
 			public void onDrawerClosed(View view) {
@@ -139,35 +132,34 @@ public class MainActivity extends AuthenticatedFragmentActivity{
 			public void onDrawerOpened(View view) {
 
 				if (view.equals(activityList)
-						&& drawerLayout.isDrawerOpen(navigationList)) {
-					drawerLayout.closeDrawer(navigationList);
+						&& drawerLayout.isDrawerOpen(navigationCabinet)) {
+					drawerLayout.closeDrawer(navigationCabinet);
 				}
 
-				if (view.equals(navigationList)) {
-					
-					if(navigationList.getCheckedItemCount() == 0)
-						navigationList.setItemChecked(currentPage, true);
-
-					if (drawerLayout.isDrawerOpen(navigationList))
-						drawerLayout.closeDrawer(activityList);
+				if (view.equals(navigationCabinet)
+						&& drawerLayout.isDrawerOpen(activityList)) {
+					drawerLayout.closeDrawer(activityList);
 				}
-				
+
 				invalidateOptionsMenu();
 			}
 
 		};
 
-		navigationList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		
+		navigationOptions = getResources().getStringArray(
+				R.array.navigation_options);
 		NavigationItemAdapter navListAdapter = new NavigationItemAdapter(this,
 				R.layout.view_navlist_item, navigationOptions);
 		navigationList.setAdapter(navListAdapter);
 		navigationList.setOnItemClickListener(navListAdapter);
-		
+		navigationList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
 		notifictionsAdapter = new NotificationsAdapter(this, activityList);
 		activityList.setAdapter(notifictionsAdapter);
-		
+
 		drawerLayout.setDrawerListener(drawerToggle);
+		selectItem(1, false);
+
 
 	}
 
@@ -175,12 +167,28 @@ public class MainActivity extends AuthenticatedFragmentActivity{
 	protected void onResume() {
 		super.onResume();
 
+//		if (navigationList.getCheckedItemCount() > 0) {
+//			// If an item is already selected, make sure that the correct
+//			// fragment is showing
+//			selectItem(navigationList.getSelectedItemPosition(), false);
+//		} else {
+//			// else default and show home
+//		}
+
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.onConfigurationChanged(newConfig);
+	}
+	
+	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
@@ -191,15 +199,15 @@ public class MainActivity extends AuthenticatedFragmentActivity{
 			return true;
 		}
 
-//		if (item.getItemId() == R.id.action_notifications) {
-//
-//			drawerLayout.openDrawer(activityList);
-//
-//		}
+		if (item.getItemId() == R.id.action_notifications) {
 
-		if (drawerLayout.isDrawerVisible(navigationList)){
+			drawerLayout.openDrawer(activityList);
 
-				//				|| drawerLayout.isDrawerVisible(activityList)) {
+		}
+
+		if (drawerLayout.isDrawerVisible(navigationCabinet)) {
+
+			// || drawerLayout.isDrawerVisible(activityList)) {
 			drawerLayout.closeDrawers();
 			return true;
 		}
@@ -216,103 +224,113 @@ public class MainActivity extends AuthenticatedFragmentActivity{
 	@Override
 	public void onBackPressed() {
 		// Close Drawer if Open
-		if (drawerLayout.isDrawerVisible(navigationList)){
-//				|| drawerLayout.isDrawerVisible(activityList)) {
+		if (drawerLayout.isDrawerVisible(navigationCabinet)
+				|| drawerLayout.isDrawerVisible(activityList)) {
 			drawerLayout.closeDrawers();
 			return;
-		} else if (currentPage == 0 && homeFragment.didHandleDayView()) {
+		} else if (currentPage() == 1 && homeFragment.didHandleDayView()) {
 			return;
 		}
 
 		super.onBackPressed();
-	}
 
+	}
 
 	/*
 	 * ----------------- MY METHODS ----------------------- NOTES:
 	 */
 
+	public void setNavigationItem(int navigationIndex){
+		navigationList.setItemChecked(navigationIndex, true);
+	}
+	
+	private int currentPage() {
+		return navigationList.getSelectedItemPosition();
+	}
+
+//	private int getFragmentNavigationIndex(Fragment fragment) {
+//		if (fragment instanceof AccountFragment) {
+//			return 0;
+//		} else if (fragment instanceof HomeFragment) {
+//			return 1;
+//		} else if (fragment instanceof ContactsFragment) {
+//			return 2;
+//		} else if (fragment instanceof FeedbackFragment) {
+//			return 3;
+//		} else if (fragment instanceof SettingsFragment) {
+//			return 4;
+//		} else {
+//			Log.wtf(TAG, "Unknown Fragment in BackStack");
+//			return -1;
+//		}
+//
+//	}
+
 	public void selectItem(int position, boolean addToBackStack) {
 
-		if (position != currentPage) {
+		if (position != currentPage()) {
 			invalidateOptionsMenu();
-			Fragment fragment = new Fragment();
-			String transactionTitle = null;
-			currentPage = position;
+			FragmentTransaction transaction = getSupportFragmentManager()
+					.beginTransaction();
+
+			String transactionTitle;
 
 			switch (position) {
+
 			case 0:
-				if (homeFragment == null)
-					homeFragment = new HomeFragment();
-				fragment = homeFragment;
-				transactionTitle = Constants.NAVIGATION_HOME;
-				break;
-
-			case 1:
-				if (contactsFragment == null)
-					contactsFragment = new ContactsFragment();
-				fragment = contactsFragment;
-				transactionTitle = Constants.NAVIGATION_CONTACTS;
-				break;
-
-			case 2:
-				if (notificationsFragment == null)
-					notificationsFragment = new NotificationsFragment();
-				fragment = notificationsFragment;
-				transactionTitle = Constants.NAVIGATION_ACTIVITY;
-				break;
-
-			case 3:
 				if (accountFragment == null)
 					accountFragment = new AccountFragment();
-				fragment = accountFragment;
+				transaction.replace(R.id.content_frame, accountFragment);
 				transactionTitle = Constants.NAVIGATION_ACCOUNT;
 				break;
 
-			case 4:
-				if (feedbackFragment == null)
-					feedbackFragment = new FeedbackFragment();
-				fragment = feedbackFragment;
-				transactionTitle = Constants.NAVIGATION_FEEDBACK;
-				break;
-
-			case 5:
-				if (inviteFragment == null)
-					inviteFragment = new InviteFragment();
-				fragment = inviteFragment;
-				transactionTitle = Constants.NAVIGATION_INVITE;
-				break;
-
-			default:
+			case 1:
 				if (homeFragment == null)
 					homeFragment = new HomeFragment();
-				fragment = homeFragment;
+				transaction.replace(R.id.content_frame, homeFragment);
 				transactionTitle = Constants.NAVIGATION_HOME;
 				break;
 
+			case 2:
+				if (contactsFragment == null)
+					contactsFragment = new ContactsFragment();
+				transaction.replace(R.id.content_frame, contactsFragment);
+				transactionTitle = Constants.NAVIGATION_CONTACTS;
+				break;
+
+			case 3:
+				if (feedbackFragment == null)
+					feedbackFragment = new FeedbackFragment();
+				transaction.replace(R.id.content_frame, feedbackFragment);
+				transactionTitle = Constants.NAVIGATION_FEEDBACK;
+				break;
+
+			case 4:
+				if (settingsFragment == null)
+					settingsFragment = new SettingsFragment();
+				transaction.replace(R.id.content_frame, settingsFragment);
+				transactionTitle = Constants.NAVIGATION_SETTINGS;
+				break;
+
+			default:
+				Log.wtf(TAG, "Invalid Position");
+				return;
 			}
 
-			// Insert the fragment by replacing any existing fragment
-			// Add to backstack with transaction title
-
-			if (addToBackStack) {
-				getSupportFragmentManager().beginTransaction()
-						.replace(R.id.content_frame, fragment)
-						.addToBackStack(transactionTitle).commit();
-			} else {
-				getSupportFragmentManager().beginTransaction()
-						.replace(R.id.content_frame, fragment).commit();
+			if (addToBackStack) { // if this change should be added to back
+									// stack
+				transaction.addToBackStack(transactionTitle); // add to
+																// backstack
 			}
+
+			transaction.commit();
+
 			navigationList.setItemChecked(position, true);
 
 		}
 
-		drawerLayout.closeDrawer(navigationList);
+		drawerLayout.closeDrawer(navigationCabinet);
 
-	}
-
-	public void setCurrentFragment(Fragment fragment) {
-		this.currentFragment = fragment;
 	}
 
 	/*
@@ -323,62 +341,91 @@ public class MainActivity extends AuthenticatedFragmentActivity{
 			ListView.OnItemClickListener {
 
 		private int layoutRes;
-		String[] navOptions;
+		private String[] navOptions;
 
-		public NavigationItemAdapter(Context context_, int resource_,
-				String[] navOptions_) {
-			super(context_, resource_, navOptions_);
-			layoutRes = resource_;
-			navOptions = navOptions_;
+		public NavigationItemAdapter(Context context, int resource,
+				String[] navOptions) {
+			super(context, resource, navOptions);
+
+			this.layoutRes = resource;
+			this.navOptions = navOptions;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			Log.d("TAG", "Making Naviagtion View " + position);
+			if (position == 0) {
 
-			View row = convertView;
-			if (row == null) {
-				row = getLayoutInflater().inflate(layoutRes, parent, false);
+				convertView = getLayoutInflater().inflate(
+						R.layout.view_navlist_profile, parent, false);
+				ImageView profileImage = (ImageView) convertView
+						.findViewById(R.id.navigation_profile_image);
+				TextView profileName = (TextView) convertView
+						.findViewById(R.id.navigation_profile_name);
+
+				MyZeppaUserMediator mediator = ZeppaUserSingleton.getInstance()
+						.getUserMediator();
+				mediator.setImageWhenReady(profileImage);
+				profileName.setText(mediator.getDisplayName());
+			} else {
+
+				convertView = getLayoutInflater().inflate(layoutRes, parent,
+						false);
+
+				int iconResource = 0;
+				switch (position) {
+
+				case 1: // Home
+					iconResource = R.drawable.ic_home;
+					if (currentPage() == 1) {
+						convertView.setSelected(true);
+					}
+					break;
+
+				case 2: // Minglers
+					iconResource = R.drawable.ic_minglers;
+					if (currentPage() == 2) {
+						convertView.setSelected(true);
+					}
+					break;
+
+				case 3: // Feedback
+					iconResource = R.drawable.ic_feedback;
+					if (currentPage() == 4) {
+						convertView.setSelected(true);
+					}
+
+					break;
+				case 4: // Settings
+					iconResource = R.drawable.ic_settings;
+					if (currentPage() == 5) {
+						convertView.setSelected(true);
+					}
+					break;
+
+				default:
+					iconResource = R.drawable.zeppa_logo;
+				}
+
+				ImageView iconImage = (ImageView) convertView
+						.findViewById(R.id.navlistItemIcon);
+				iconImage.setImageDrawable(getResources().getDrawable(
+						iconResource));
+
+				TextView optionText = (TextView) convertView
+						.findViewById(R.id.navlistItemText);
+				optionText.setText(navOptions[position]);
+
 			}
 
-			int iconResource = 0;
-			switch (position) {
-			case 0:
-				iconResource = R.drawable.ic_menu_home;
-				break;
-			case 1:
-				iconResource = R.drawable.ic_menu_allfriends;
-				break;
+			return convertView;
 
-			case 2:
-				iconResource = R.drawable.ic_menu_account_list;
-				break;
-
-			case 3:
-				iconResource = R.drawable.ic_menu_send;
-				break;
-			case 4:
-				iconResource = R.drawable.ic_menu_invite;
-				break;
-
-			default:
-				iconResource = R.drawable.ic_launcher;
-			}
-
-			ImageView iconImage = (ImageView) row
-					.findViewById(R.id.navlistItemIcon);
-			iconImage
-					.setImageDrawable(getResources().getDrawable(iconResource));
-
-			TextView optionText = (TextView) row
-					.findViewById(R.id.navlistItemText);
-			optionText.setText(navOptions[position]);
-
-			return row;
 		}
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+
 			selectItem(position, true);
 		}
 

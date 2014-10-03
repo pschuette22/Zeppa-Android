@@ -15,74 +15,73 @@ import com.minook.zeppa.singleton.ZeppaEventSingleton;
 
 public class FeedListAdapter extends AbstractEventListAdapter {
 
-	private ListView listView;
+	protected ListView listView;
 
 	public FeedListAdapter(AuthenticatedFragmentActivity activity, ListView list) {
 		super(activity);
 		this.listView = list;
-		
-		if(ZeppaEventSingleton.getInstance().hasLoadedInitial()){
+
+		if (ZeppaEventSingleton.getInstance().hasLoadedInitial()) {
 			initialDidLoad = true;
-			setEventManagers();
+			setEventMediators();
 		} else {
 			initialDidLoad = false;
-			loaderView = makeLoaderView();
+			loaderView = getLoaderView();
 			listView.addHeaderView(loaderView);
-		}
-		
-	}
+			ZeppaEventSingleton.getInstance().registerObserver(this);
 
-	
+		}
+
+	}
 
 	@Override
 	public boolean didLoadInitial() {
 		return initialDidLoad;
 	}
 
-
-
 	@Override
 	public void onFinishLoad() {
-		if(!initialDidLoad){
+		if (!initialDidLoad) {
 			initialDidLoad = true;
 			listView.removeHeaderView(loaderView);
 			loaderView = null; // deallocate loader view
 		}
-		
+
 		notifyDataSetChanged();
-		
+
 	}
-
-
 
 	@Override
 	public void verifyDatasetValid() {
 
-//		List<ZeppaEvent> heldEventList = ZeppaEventSingleton.getInstance().getZeppaEvents();
-//		
-//		if(!heldEventList.containsAll(events) || !events.containsAll(heldEventList)){
-//			notifyDataSetChanged();
-//		}
-		
-	}
+		// List<ZeppaEvent> heldEventList =
+		// ZeppaEventSingleton.getInstance().getZeppaEvents();
+		//
+		// if(!heldEventList.containsAll(events) ||
+		// !events.containsAll(heldEventList)){
+		// notifyDataSetChanged();
+		// }
 
-	
+	}
 
 	@Override
-	protected void setEventManagers() {
-		eventManagers = ZeppaEventSingleton.getInstance().getEventManagers();
+	protected void setEventMediators() {
+		eventMediators = ZeppaEventSingleton.getInstance().getEventMediators();
 	}
-	
-	
-	
+
 	@Override
 	public void notifyDataSetChanged() {
 
-		setEventManagers();
+		setEventMediators();
 		super.notifyDataSetChanged();
+
+		if (loaderView != null) {
+			// try to remove header. Ndb if it isnt there.
+			listView.removeHeaderView(loaderView);
+		}
+
 	}
-	
-	
+
 	public void fetchNewEventsInAsync(PullToRefreshLayout refreshLayout) {
 		Object[] params = { refreshLayout };
 
@@ -93,13 +92,13 @@ public class FeedListAdapter extends AbstractEventListAdapter {
 			@Override
 			protected Boolean doInBackground(Object... params) {
 				try {
-				refreshLayout = (PullToRefreshLayout) params[0];
-				return ZeppaEventSingleton.getInstance().loadNewEvents(
-						getCredential());
-				} catch (IOException e ){
+					refreshLayout = (PullToRefreshLayout) params[0];
+					return ZeppaEventSingleton.getInstance().loadNewEvents(
+							getCredential());
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 				return Boolean.FALSE;
 			}
 
@@ -136,9 +135,9 @@ public class FeedListAdapter extends AbstractEventListAdapter {
 				loaderView = (View) params[1];
 
 				try {
-				return ZeppaEventSingleton.getInstance().loadNewEvents(
-						getCredential());
-				} catch (IOException e){
+					return ZeppaEventSingleton.getInstance().loadNewEvents(
+							getCredential());
+				} catch (IOException e) {
 					return Boolean.FALSE;
 				}
 			}

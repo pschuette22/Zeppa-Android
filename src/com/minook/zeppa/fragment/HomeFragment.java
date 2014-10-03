@@ -37,14 +37,13 @@ public class HomeFragment extends Fragment {
 	 * -------------- OVERRIDE METHODS ------------------- NOTES:
 	 */
 
-	// Call to inflate the view:
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		// initialize dynamic variables:
-		layout = inflater.inflate(R.layout.fragment_home, null, false);
+		layout = inflater.inflate(R.layout.fragment_home, container, false);
 		mainPager = (ViewPager) layout.findViewById(R.id.main_pager);
 
 		FragmentManager manager = getChildFragmentManager();
@@ -69,14 +68,15 @@ public class HomeFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		((MainActivity) getActivity()).setNavigationItem(Constants.NAVIGATION_HOME_INDEX);
+
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setTitle(R.string.app_name);
-		((MainActivity) getActivity()).setCurrentFragment(this);
+
 		ZeppaEventSingleton.getInstance().clearOldEvents();
 
 	}
 
-	// Created, now at show configuration changes:
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
@@ -107,10 +107,6 @@ public class HomeFragment extends Fragment {
 			startActivity(toNewEvent);
 			getActivity().overridePendingTransition(R.anim.slide_up_in,
 					R.anim.hold);
-			break;
-
-		case R.id.action_refresh:
-			zeppaPagerAdapter.startRefreshForCurrentPage();
 			break;
 
 		case R.id.action_settings:
@@ -145,9 +141,10 @@ public class HomeFragment extends Fragment {
 	 * --------------- PRIVATE CLASSES --------------------- NOTES:
 	 */
 
-	private class ZeppaViewPagerAdapter extends FragmentPagerAdapter {
+	private class ZeppaViewPagerAdapter extends FragmentPagerAdapter /*implements IconTabProvider*/{
 
 		private String[] tabOptions;
+//		private int[] iconOptions = { R.drawable.ic_tab_calendar, R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda };
 
 		private CalendarFragment calendarFragment;
 		private FeedFragment feedFragment;
@@ -161,20 +158,6 @@ public class HomeFragment extends Fragment {
 
 		}
 
-		public void startRefreshForCurrentPage() {
-			switch (mainPager.getCurrentItem()) {
-			case 0:
-
-				break;
-			case 1:
-
-				break;
-			case 2:
-
-				break;
-
-			}
-		}
 
 		public boolean didHandleDayView() {
 			if (calendarFragment != null) {
@@ -221,5 +204,10 @@ public class HomeFragment extends Fragment {
 			return tabOptions[position];
 		}
 
+//		@Override
+//		public int getPageIconResId(int position) {
+//			return iconOptions[position];
+//		}
+		
 	}
 }

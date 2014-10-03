@@ -125,7 +125,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 		if (createdUser != null) {
 
 			ProgressDialog progress = new ProgressDialog(this);
-			progress.setTitle("Creating User");
+			progress.setTitle("Creating Account");
 			progress.setIndeterminate(true);
 			progress.setMessage("One Moment Please");
 			progress.setCancelable(false);
@@ -229,7 +229,9 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 			Person currentPerson = Plus.PeopleApi
 					.getCurrentPerson(apiClient);
-			zeppaUser.setGoogleProfileId(currentPerson.getId());
+			String personId = currentPerson.getId();
+			Log.d(TAG, "Person ID: " + personId);
+			zeppaUser.setGoogleProfileId(personId);
 			
 			zeppaUser.setCreatedTimeStamp(Long.valueOf(System
 					.currentTimeMillis()));

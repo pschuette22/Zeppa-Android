@@ -34,6 +34,12 @@
         <item name="android:textSize">12sp</item>
         <item name="android:typeface">sans</item>
     </style>
+    
+    <style name="white_txt14sp">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:typeface">sans</item>
+    </style>
 
     <style name="white_txt18sp">
         <item name="android:textColor">@color/white</item>
@@ -100,6 +106,24 @@
     <style name="teal_txt20sp">
         <item name="android:textColor">@color/teal</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:typeface">sans</item>
+    </style>
+    
+    <style name="teal_txt16sp">
+        <item name="android:textColor">@color/teal</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:typeface">sans</item>
+    </style>
+    
+    <style name="teal_txt14sp">
+        <item name="android:textColor">@color/teal</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:typeface">sans</item>
+    </style>
+    
+    <style name="teal_txt12sp">
+        <item name="android:textColor">@color/teal</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:typeface">sans</item>
     </style>
     

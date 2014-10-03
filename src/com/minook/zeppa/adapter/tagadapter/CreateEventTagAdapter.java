@@ -6,22 +6,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
-import com.minook.zeppa.eventtagendpoint.model.EventTag;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.mediator.MyEventTagMediator;
-import com.minook.zeppa.singleton.EventTagSingleton;
 
 public class CreateEventTagAdapter extends MyTagAdapter implements
 		OnClickListener {
@@ -30,8 +25,9 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 	private Queue<Long> tagIdsQue;
 
 	public CreateEventTagAdapter(AuthenticatedFragmentActivity activity,
-			LinearLayout tagHolder, List<MyEventTagMediator> tagManagers) {
-		super(activity, tagHolder, tagManagers);
+			LinearLayout tagHolder) {
+		// Pass the activity context and the holder. tagIds is null so all are returned. 
+		super(activity, tagHolder, null);
 
 		tagIdsQue = new LinkedList<Long>();
 
@@ -42,7 +38,7 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 
 		// Get needed variables
 		if (convertView == null)
-			convertView = inflater.inflate(R.layout.view_tag_others, parent,
+			convertView = activity.getLayoutInflater().inflate(R.layout.view_tag_others, parent,
 					false);
 
 		MyEventTagMediator tagManager = getItem(position);
@@ -59,14 +55,18 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 			textView.setChecked(false);
 		}
 
-		convertView.setTag(tagId);
-		convertView.setOnClickListener(this);
+		textView.setTag(tagId);
+		textView.setOnClickListener(this);
 
 		return convertView;
 	}
 
 	private void addTagToQue(View view, Long tagId) {
 
+		if(view == null){
+			view = locateViewByTag(tagId);
+		}
+		
 		CheckedTextView textView = (CheckedTextView) view;
 
 		if (tagIdsQue.size() >= 6) {
@@ -119,87 +119,32 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 		return usedTags;
 	}
 
-	public boolean createdTagInAsync(EditText textView) {
+	
+	
 
-		String text = trimTag(textView.getText().toString());
-
-		for (AbstractEventTagMediator tagManager : tagManagers) {
-			if (text.equalsIgnoreCase(tagManager.getText())) {
-				if (!tagIdsQue.contains(tagManager.getTagId())) {
-					CheckedTextView checkText = locateViewByTag(tagManager
-							.getTagId());
-					addTagToQue(checkText, tagManager.getTagId());
-				}
-				return false;
-			}
+	@Override
+	protected AbstractEventTagMediator getMatchingMediator(String tagText) {
+		AbstractEventTagMediator mediator = super.getMatchingMediator(tagText);
+		
+		if(mediator != null){
+			addTagToQue(null, mediator.getTagId());
 		}
-
-		textView.setEnabled(false);
-
-		Object[] params = { text, textView };
-
-		new AsyncTask<Object, Void, MyEventTagMediator>() {
-
-			private EditText textView;
-
-			@Override
-			protected MyEventTagMediator doInBackground(Object... params) {
-				String tagText = (String) params[0];
-				textView = (EditText) params[1];
-				EventTagSingleton tagSingleton = EventTagSingleton
-						.getInstance();
-
-				EventTag tag = tagSingleton.newTagInstance();
-				tag.setTagText(tagText);
-
-				MyEventTagMediator tagManager = tagSingleton.insertEventTag(
-						tag, activity.getGoogleAccountCredential());
-
-				if (tagManager != null) {
-					if (tagIdsQue.size() >= 6) {
-						tagIdsQue.remove();
-					}
-					
-					tagIdsQue.add(tagManager.getTagId());
-				}
-
-				return tagManager;
-			}
-
-			@Override
-			protected void onPostExecute(MyEventTagMediator result) {
-				super.onPostExecute(result);
-
-				textView.setEnabled(true);
-
-				if (result != null) {
-					drawTags();
-					textView.setText("");
-
-				} else {
-					Toast.makeText(activity, "Error Creating Tag",
-							Toast.LENGTH_SHORT).show();
-				}
-
-			}
-
-		}.execute(params);
-
-		return true;
-
+		
+		return mediator;
 	}
 
-	private String trimTag(String originalText) {
-		StringBuilder newText = new StringBuilder();
+	@Override
+	protected void onTagCreated(MyEventTagMediator tagManager) {
 
-		for (int i = 0; i < originalText.length(); i++) {
-			char character = originalText.charAt(i);
-			if (!Character.isWhitespace(character)) {
-				newText.append(character);
+		if (tagManager != null) {
+			if (tagIdsQue.size() >= 6) {
+				tagIdsQue.remove();
 			}
-		}
 
-		return newText.toString();
+			tagIdsQue.add(tagManager.getTagId());
+		}
+		
+		super.onTagCreated(tagManager);
 	}
 
 	@Override

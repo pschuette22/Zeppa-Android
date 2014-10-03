@@ -16,6 +16,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIO
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.observer.OnLoadListener;
+import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint;
 import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint.GetNotificationList;
 import com.minook.zeppa.zeppanotificationendpoint.model.CollectionResponseZeppaNotification;
@@ -65,6 +66,22 @@ public class NotificationSingleton {
 	 * Setters
 	 */
 
+	/**
+	 * This method creates a new basic instance of a ZeppaNotification</p>
+	 * This instance is only to be sent to another user from this user.
+	 * 
+	 * @return instance - Basic ZeppaNotification Instance
+	 */
+	public ZeppaNotification newNotificationInstance() {
+		ZeppaNotification instance = new ZeppaNotification();
+
+		instance.setHasSeen(Boolean.FALSE);
+		instance.setSentDate(System.currentTimeMillis());
+		instance.setFromUserId(getUserId());
+
+		return instance;
+	}
+
 	public void registerOnLoadListener(OnLoadListener listener) {
 		if (!loadListeners.contains(listener)) {
 			this.loadListeners.add(listener);
@@ -75,12 +92,12 @@ public class NotificationSingleton {
 		notifications.add(notification);
 	}
 
-	public void addAllNotifcations(List<ZeppaNotification> notifications) {
+	public void addAllNotifications(List<ZeppaNotification> notifications) {
 
 		notifications.removeAll(notifications);
 		notifications.addAll(notifications);
 
-		Collections.sort(notifications, Constants.NOTIFICAITON_COMPARATOR);
+		Collections.sort(notifications, Utils.NOTIFICAITON_COMPARATOR);
 	}
 
 	/*

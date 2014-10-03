@@ -20,6 +20,7 @@
     <string name="calendar_title">Calendar</string>
     <string name="cancel"> Cancel</string>
     <string name="casual">Casual</string>
+    <string name="chime_in">Chime in&#8230;</string>
     <string name="contacts">Contacts</string>
     <string name="contacts_using">Friends Using Zeppa</string>
     <string name="couldntfind">Couldn\'t find this&#8230; awkward</string>
@@ -33,6 +34,7 @@
     <string name="delete">Delete</string>
     <string name="desciption_newevent">Description</string>
     <string name="directions">Directions</string>
+    <string name="discussion_board">Discussion Board:</string>
     <string name="dismiss">Dismiss</string>
     <string name="done"> Done</string>
 
@@ -52,12 +54,13 @@
 
     <!-- F -->
     <string name="feed_title">Feed</string>
+    <string name="feedback_messagefromzeppa">In Our Never Ending Process To Improve Zeppa, We Would Love To Hear From You! Provide Any Feedback, Comments, Or Suggestions Below And We Will Review It</string>
     <string name="find_friends_message">This takes a long time if you have a lot of friends(Phone Contacts)</string>
     <string name="find_time">Find a Time</string>
     <string name="friday_calendar_short">Fr</string>
     <string name="from">From</string>
-    <string name="feedback_title">Subject</string>
-    <string name="feedback_main">Comment, Errors, Improvements, etc.</string>
+    <string name="feedback_title">Subject:</string>
+    <string name="feedback_main">Comments:</string>
     <string name="follow_new">Following New Tags</string>
     <string name="followers">Followers</string>
 
@@ -96,11 +99,12 @@
     <string name="mass_text">Mass Text</string>
     <string name="monday_calendar_short">Mo</string>
     <string name="my_account">My Account</string>
+    <string name="my_profile">My Profile</string>
 
     <!-- N -->
     <string name="navigation_open">Nav Open</string>
     <string name="navigation_closed">Nav Closed</string>
-    <string name="newtag">New Tag</string>
+    <string name="newtag">Make New Tag</string>
     <string name="no">No</string>
     <string name="no_repost">No Repost</string>
     <string name="notifications">Notifications</string>
@@ -116,7 +120,6 @@
     <string name="pending_requests">Pending Friend Requests</string>
     <string name="phone:">Phone:</string>
     <string name="post">Post</string>
-    <string name="post_comment">Post a comment&#8230;</string>
     <string name="posting_event">Posting Event</string>
     <string name="private_">Private</string>
 	<string name="public_">Public</string>
@@ -131,6 +134,7 @@
     <string name="saturday_calendar_short">Sa</string>
     <string name="send">Send</string>
     <string name="send_feedback">Send Feedback</string>
+    <string name="settings">Settings</string>
     <string name="sign_in">Sign In</string>
     <string name="signing_in">Signing in&#8230;</string>
     <string name="slogan">Life is too short to watch people live it</string>
@@ -209,14 +213,13 @@
     <!-- Static Arrays -->
 
     <string-array name="navigation_options">
+        <item>@string/my_profile</item>
         <item>@string/home</item>
         <item>@string/contacts</item>
-<!--         <item>@string/notifications</item>
- -->        
- 		<item>@string/my_account</item>
         <item>@string/send_feedback</item>
-        <item>@string/invite_people</item>
+        <item>@string/settings</item>
     </string-array>
+    
     <string-array name="home_tab_options">
         <item>@string/calendar_title</item>
         <item>@string/feed_title</item>

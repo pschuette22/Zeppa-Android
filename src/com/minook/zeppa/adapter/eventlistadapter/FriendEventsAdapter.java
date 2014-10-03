@@ -1,31 +1,29 @@
 package com.minook.zeppa.adapter.eventlistadapter;
 
-import java.util.List;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.wearable.NodeApi.GetConnectedNodesResult;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
-import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
+import com.minook.zeppa.utils.Utils;
 
 public class FriendEventsAdapter extends AbstractEventLayoutAdapter {
 
-	private DefaultUserInfoMediator friendManager;
-	private List<DefaultZeppaEventMediator> eventManagers;
+	private DefaultUserInfoMediator friendMediator;
 
-	public FriendEventsAdapter(DefaultUserInfoMediator friendManager,
+	public FriendEventsAdapter(DefaultUserInfoMediator friendMediator,
 			AuthenticatedFragmentActivity activity, LinearLayout eventHolder) {
 		super(activity, eventHolder);
 
-		this.friendManager = friendManager;
-		this.eventManagers = ZeppaEventSingleton.getInstance()
-				.getEventManagersForFriend(
-						friendManager.getUserId().longValue());
+		this.friendMediator = friendMediator;
+		eventMediators = ZeppaEventSingleton.getInstance()
+				.getEventMediatorsForFriend(
+						friendMediator.getUserId().longValue());
 		this.initialDidLoad = false;
 
 		drawEvents();
@@ -62,16 +60,6 @@ public class FriendEventsAdapter extends AbstractEventLayoutAdapter {
 	}
 
 	@Override
-	protected View makeLoaderView() {
-		loaderView = super.makeLoaderView();
-		TextView text = (TextView) loaderView
-				.findViewById(R.id.loaderview_text);
-		text.setText("Finding some of " + friendManager.getGivenName()
-				+ "'s events");
-		return loaderView;
-	}
-
-	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		super.getView(position, convertView, parent);
 		if (convertView == null) {
@@ -91,7 +79,7 @@ public class FriendEventsAdapter extends AbstractEventLayoutAdapter {
 
 	public void loadEventsInAsync() {
 
-		eventHolder.addView(makeLoaderView(), 0);
+		eventHolder.addView(getLoaderView(), 0);
 
 		// new AsyncTask<Void, Void, Boolean>(){
 		//
@@ -119,10 +107,10 @@ public class FriendEventsAdapter extends AbstractEventLayoutAdapter {
 	}
 
 	@Override
-	protected void setEventManagers() {
-		eventManagers = ZeppaEventSingleton.getInstance()
-				.getEventManagersForFriend(
-						friendManager.getUserId().longValue());
+	protected void setEventMediators() {
+		eventMediators = ZeppaEventSingleton.getInstance()
+				.getEventMediatorsForFriend(
+						friendMediator.getUserId().longValue());
 	}
 
 }

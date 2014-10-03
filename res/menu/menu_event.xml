@@ -4,14 +4,14 @@
     <item
         android:id="@+id/menu_event_watch"
         android:checkable="true"
-        android:icon="@drawable/ic_watch"
+        android:icon="@drawable/ic_quickaction_watch"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
         android:title="@string/watch"/>
     <item
         android:id="@+id/menu_event_join"
         android:checkable="true"
-        android:icon="@drawable/ic_join"
+        android:icon="@drawable/ic_quickaction_join"
         android:orderInCategory="1"
         android:showAsAction="ifRoom"
         android:title="@string/join"/>

@@ -9,15 +9,24 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
+import com.minook.zeppa.adapter.tagadapter.AbstractTagAdapter;
+import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
+import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
+import com.minook.zeppa.singleton.ZeppaEventSingleton;
 
 public abstract class AbstractEventViewActivity extends AuthenticatedFragmentActivity implements
 		OnClickListener {
 
 	final private String TAG = getClass().getName();
 
+	protected AbstractZeppaEventMediator eventMediator;
+	protected AbstractZeppaUserMediator hostMediator;
+	protected AbstractTagAdapter tagAdapter;
+	
 	// UI Elements
 	protected TextView title;
 	protected ImageView conflictIndicator;
@@ -47,6 +56,13 @@ public abstract class AbstractEventViewActivity extends AuthenticatedFragmentAct
 
 		eventId = getIntent().getLongExtra(Constants.INTENT_ZEPPA_EVENT_ID, -1);
 
+		if(eventId < 0){
+			Toast.makeText(this, "Error Loading Event", Toast.LENGTH_SHORT).show();
+			onBackPressed();
+		}
+		
+		eventMediator = ZeppaEventSingleton.getInstance().getEventById(eventId);
+		
 		// UI Elements
 		final ActionBar actionBar = getActionBar();
 
@@ -59,7 +75,6 @@ public abstract class AbstractEventViewActivity extends AuthenticatedFragmentAct
 
 		hostImage = (ImageView) findViewById(R.id.eventactivity_hostimage);
 		hostName = (TextView) findViewById(R.id.eventactivity_hostname);
-		viaName = (TextView) findViewById(R.id.eventactivity_vianame);
 		description = (TextView) findViewById(R.id.eventactivity_description);
 
 		commentText = (EditText) findViewById(R.id.eventactivity_commenttext);
@@ -67,48 +82,28 @@ public abstract class AbstractEventViewActivity extends AuthenticatedFragmentAct
 		tagHolder = (LinearLayout) findViewById(R.id.eventactivity_tagholder);
 
 		postComment.setOnClickListener(this);
+		conflictIndicator.setOnClickListener(this);
+		hostName.setOnClickListener(this);
+		hostImage.setOnClickListener(this);
 		
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
-
+		
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		
+		eventMediator.setContext(this);
+		setEventInfo();
+		setHostInfo();
+		setEventTagAdapter();
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			onBackPressed();
-			return true;
-
-
-		case R.id.menu_event_refresh:
-			// TODO: call refresh method..
-			return true;
-
-
-		case R.id.menu_event_directions:
-//			String location = (zeppaEvent.getExactLocation() != null ? zeppaEvent
-//					.getExactLocation() : zeppaEvent.getShortLocation());
-//			Intent toDirections = new Intent(
-//					android.content.Intent.ACTION_VIEW,
-//					Uri.parse("http://maps.google.com/maps?f=d&daddr="
-//							+ location));
-//			startActivity(toDirections);
-			return true;
-
-
-		}
-
-		return true;
-
+	public boolean onOptionsItemSelected(MenuItem item){
+		return super.onOptionsItemSelected(item);
 	}
 
 
@@ -124,7 +119,7 @@ public abstract class AbstractEventViewActivity extends AuthenticatedFragmentAct
 		switch (v.getId()) {
 
 		case R.id.eventactivity_stateindicator:
-			// TODO: raise conflict dialog,
+			raiseCalendarDialog();
 			break;
 
 		}
@@ -136,11 +131,29 @@ public abstract class AbstractEventViewActivity extends AuthenticatedFragmentAct
 	 * -------------- My Methods -------------------
 	 */
 
-	protected abstract void setEventInfo();
+	protected void setEventInfo(){
+		title.setText(eventMediator.getTitle());
+		description.setText(eventMediator.getDescription());
+		time.setText(eventMediator.getTimeString());
+		location.setText(eventMediator.getDisplayLocation());
+		setConfliction();
+	}
 
-	protected abstract void setHostInfo();
+	protected abstract void setHostMediator();
+	protected abstract void setEventTagAdapter();
+	
+	protected void setHostInfo(){
+		setHostMediator();
+		hostMediator.setImageWhenReady(hostImage);
+		hostName.setText(hostMediator.getDisplayName());
+	}
+	
+	protected abstract void setAttendingText();
+	
+	private void raiseCalendarDialog(){
+		eventMediator.raiseCalendarDialog();
+	}
 
-	protected abstract void setTags();
-
-
+	protected abstract void setConfliction();
+	
 }

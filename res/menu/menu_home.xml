@@ -2,13 +2,13 @@
 
     <item
         android:id="@+id/action_newevent"
-        android:icon="@drawable/ic_addevent"
-        android:showAsAction="always"
+        android:icon="@drawable/ic_menu_add"
+        android:showAsAction="ifRoom"
         android:title="@string/menu_newevent"/>
     <item
         android:id="@+id/action_notifications"
         android:icon="@drawable/ic_notifications"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/menu_notifications"/>
     <item
         android:id="@+id/action_refresh"

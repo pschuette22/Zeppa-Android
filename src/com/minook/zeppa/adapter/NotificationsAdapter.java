@@ -27,6 +27,7 @@ import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.singleton.NotificationSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class NotificationsAdapter extends BaseAdapter implements
@@ -103,7 +104,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 			setImageInAsync(userImage, notification.getFromUserId());
 			text.setText(notification.getExtraMessage());
-			date.setText(Constants.getDisplayDateString(notification
+			date.setText(Utils.getDisplayDateString(notification
 					.getSentDate()));
 		}
 

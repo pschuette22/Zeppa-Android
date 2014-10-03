@@ -11,20 +11,25 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.R;
+import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.eventtagendpoint.model.EventTag;
 import com.minook.zeppa.eventtagfollowendpoint.Eventtagfollowendpoint;
 import com.minook.zeppa.eventtagfollowendpoint.model.EventTagFollow;
+import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 public class DefaultEventTagMediator extends AbstractEventTagMediator {
-
+	
 	// private boolean hasLoaded; // in follow is still being looked for
 	private EventTagFollow myFollow; // null if non existent.
-
-	public DefaultEventTagMediator(EventTag eventTag,
-			GoogleAccountCredential credential, EventTagFollow myFollow) {
-		super(eventTag, credential);
-		this.myFollow = myFollow;
+	
+	private boolean loading;
+	private View waitingView;
+	
+	public DefaultEventTagMediator(EventTag eventTag, GoogleAccountCredential credential) {
+		super(eventTag);
+		waitingView = null;
+		loadFollowInAsync(credential);
 
 	}
 
@@ -32,6 +37,7 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 	public void onClick(View v) {
 		if (v.getId() == R.id.tagview_tagtext) {
 			CheckedTextView tagView = (CheckedTextView) v;
+			v.setClickable(false);
 			if (myFollow == null) {
 				followTagInAsync(eventTag, tagView);
 				tagView.setChecked(true);
@@ -48,11 +54,74 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 	 * This method takes a view for a tag and sets
 	 */
 	@Override
-	public void convertView(View convertView) throws NullPointerException {
+	public void convertView(AuthenticatedFragmentActivity context,
+			View convertView) throws NullPointerException {
+		super.convertView(context, convertView);
+		
 		CheckedTextView textView = (CheckedTextView) convertView
 				.findViewById(R.id.tagview_tagtext);
 		textView.setText(eventTag.getTagText());
 
+		if(loading){ // currently loading, don't enable it
+			waitingView = convertView;
+			textView.setClickable(false);
+			textView.setChecked(false);
+			
+		} else { // loaded, set accordingly
+			enableTagView(convertView);
+		}
+
+	}
+	
+	/**
+	 * This method loads the user's follow instance for the 
+	 * @param credential
+	 */
+	private void loadFollowInAsync(GoogleAccountCredential credential){
+		loading = true;
+		Object[] params = {eventTag, credential};
+		
+		new AsyncTask<Object,Void,Boolean>(){
+
+			@Override
+			protected Boolean doInBackground(Object... params) {
+				Boolean success = Boolean.TRUE;
+				EventTag eventTag = (EventTag) params[0]; 
+				GoogleAccountCredential credential = (GoogleAccountCredential) params[1];
+				try {
+					myFollow = EventTagSingleton.getInstance().fetchEventTagFollow(eventTag, credential);
+				} catch (Exception ex){
+					ex.printStackTrace();
+					success = Boolean.FALSE;
+				}
+				
+				return success;
+			}
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				super.onPostExecute(result);
+				loading = false;
+
+				if(result && waitingView != null){
+					enableTagView(waitingView);
+				}
+				waitingView = null;
+			}
+			
+			
+			
+		}.execute(params);
+		
+		
+	}
+	
+	private void enableTagView(View convertView){
+		CheckedTextView textView = (CheckedTextView) convertView
+				.findViewById(R.id.tagview_tagtext);
+		
+		textView.setClickable(true);
+		
 		if (myFollow == null) {
 			textView.setChecked(false);
 		} else {
@@ -60,7 +129,6 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 		}
 
 		textView.setOnClickListener(this);
-
 	}
 
 	/**
@@ -70,7 +138,8 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 	 */
 	protected void followTagInAsync(EventTag tag, CheckedTextView view) {
 
-		Object[] params = { credential, tag, view };
+		Object[] params = { getContext().getGoogleAccountCredential(), tag,
+				view };
 
 		new AsyncTask<Object, Void, EventTagFollow>() {
 
@@ -96,6 +165,8 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 					view.setChecked(false);
 				}
 
+				view.setClickable(true);
+
 			}
 
 		}.execute(params);
@@ -108,9 +179,7 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 			return;
 		}
 
-		myFollow = null;
-
-		Object[] params = { credential, myFollow, view };
+		Object[] params = { getGoogleAccountCredential(), myFollow, view };
 
 		new AsyncTask<Object, Void, Boolean>() {
 
@@ -130,11 +199,12 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
 				if (result) {
-					// nothing to do here
+					myFollow = null;
 				} else {
 					myFollow = follow;
 					view.setChecked(true);
 				}
+				view.setClickable(true);
 
 			}
 
@@ -195,6 +265,7 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 				.build();
 
 		try {
+			
 			endpoint.removeEventTagFollow(myFollow.getKey().getId()).execute();
 			success = true;
 		} catch (IOException e) {

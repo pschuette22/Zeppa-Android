@@ -1,5 +1,7 @@
 package com.minook.zeppa.activity;
 
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,8 +12,10 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.minook.zeppa.R;
 import com.minook.zeppa.adapter.RepostsListAdapter;
 import com.minook.zeppa.adapter.tagadapter.MyTagAdapter;
+import com.minook.zeppa.mediator.MyEventTagMediator;
 import com.minook.zeppa.mediator.MyZeppaEventMediator;
-import com.minook.zeppa.singleton.ZeppaEventSingleton;
+import com.minook.zeppa.mediator.MyZeppaUserMediator;
+import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 
@@ -23,29 +27,38 @@ import com.minook.zeppa.singleton.ZeppaUserSingleton;
 public class MyEventViewActivity extends AbstractEventViewActivity {
 
 
-	private MyZeppaEventMediator eventManager;
-	private MyTagAdapter tagAdapter;
 	
+	
+	/*
+	 * Hold the originals just in case
+	 * 
+	 */
+//	private DefaultUserInfoMediator repostedFromUserInfoMediator;
+//	private DefaultZeppaEventMediator repostedFromEventMediator;
 	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		eventManager = (MyZeppaEventMediator) ZeppaEventSingleton.getInstance().getEventById(eventId);
-//		tagAdapter = new MyTagAdapter(this, tagHolder, eventManager.getTagManagers());
+	}
+	
+	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		ZeppaUserSingleton.getInstance().getUserMediator().setContext(this);
 		
 	}
 
-	@Override
-	protected void setTags() {
-//		tagAdapter.setTagManagers(eventManager.getTagManagers());
-		
-	}
+
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// super.onCreateOptionsMenu(menu);
+		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.menu_event_hosted, menu);
 
 		return true;
@@ -65,18 +78,18 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 			 */
 		case R.id.menu_event_cancel:
 			raiseCancelDialog();
-			break;
+			return true;
 		case R.id.menu_event_seereposts:
-			raiseRepostDialog();
-			break;
+			raiseViewRepostsDialog();
+			return true;
 
 		case R.id.menu_event_massemail:
 			massEmailJoined();
-			break;
+			return true;
 
 		case R.id.menu_event_masstext:
 			massTextJoined();
-			break;
+			return true;
 
 		case R.id.menu_event_directions:
 //			String location = (zeppaEvent.getExactLocation() != null ? zeppaEvent
@@ -93,19 +106,65 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 		return false;
 
 	}
+	
+
+
+	@Override
+	protected void setHostMediator() {
+		hostMediator = ZeppaUserSingleton.getInstance().getUserMediator();
+	}
+
+
+
+	@Override
+	protected void setEventTagAdapter() {
+		tagAdapter = new MyTagAdapter(this, tagHolder, eventMediator.getTagIds());
+		tagAdapter.drawTags();
+	}
+	
+	@Override
+	protected void setHostInfo() {
+		MyZeppaUserMediator myUserMediator = ZeppaUserSingleton.getInstance().getUserMediator();
+		hostName.setText(myUserMediator.getDisplayName());
+		myUserMediator.setImageWhenReady(hostImage);
+		
+	}
+	
+	@Override
+	protected void setEventInfo() {
+		time.setText(eventMediator.getTimeString());
+		location.setText(eventMediator.getDisplayLocation());
+		setAttendingText();
+		
+	}
+
+	
+
+	@Override
+	protected void setAttendingText() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	protected void setConfliction() {
+		conflictIndicator.setImageResource(R.drawable.conflict_blue);
+		
+	}
+
 
 
 	/*
 	 * Action Methods
 	 */
 	private void raiseCancelDialog() {
-		ZeppaUserSingleton userSingleton = ZeppaUserSingleton.getInstance();
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Cancel " + eventManager.getTitle() + "?");
+		builder.setTitle("Cancel " + eventMediator.getTitle() + "?");
 		StringBuilder messageBuilder = new StringBuilder();
 
 		messageBuilder.append("Are you sure you want to delete ");
-		messageBuilder.append(eventManager.getTitle());
+		messageBuilder.append(eventMediator.getTitle());
 		messageBuilder.append("? This cannot be undone..");
 
 //		if (zeppaEvent.getUsersGoingIds() != null) {
@@ -180,10 +239,10 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 		GoogleAccountCredential credential = getGoogleAccountCredential();
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(eventManager.getTitle() + " reposts");
+		builder.setTitle(eventMediator.getTitle() + " reposts");
 
 		RepostsListAdapter adapter = new RepostsListAdapter(this,
-				credential, eventManager);
+				credential, ((MyZeppaEventMediator) eventMediator));
 
 		builder.setAdapter(adapter, adapter);
 		builder.setNeutralButton(R.string.dismiss, adapter);
@@ -197,7 +256,7 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 		
 	}
 	
-	protected void raiseRepostDialog() {
+	protected void raiseViewRepostsDialog() {
 
 		
 
@@ -260,17 +319,6 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 //		}
 
 	}
-
-	@Override
-	protected void setEventInfo() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void setHostInfo() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }

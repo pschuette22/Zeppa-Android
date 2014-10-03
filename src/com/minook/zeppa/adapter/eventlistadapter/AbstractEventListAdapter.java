@@ -14,13 +14,13 @@ import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.observer.OnLoadListener;
-import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.utils.Utils;
 
 public abstract class AbstractEventListAdapter extends BaseAdapter implements OnLoadListener{
 
 	protected AuthenticatedFragmentActivity activity;
-	protected List<AbstractZeppaEventMediator> eventManagers;
+	protected List<AbstractZeppaEventMediator> eventMediators;
 	
 	protected boolean initialDidLoad;
 	protected View loaderView;
@@ -37,19 +37,21 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements On
 
 	public AbstractEventListAdapter(AuthenticatedFragmentActivity activity) {
 		this.activity = activity;
-		setEventManagers();
-		ZeppaEventSingleton.getInstance().registerObserver(this);
 	}
 
 	
 	@Override
 	public int getCount() {
-		return eventManagers.size();
+		if(eventMediators == null){
+			return 0; // check for some sort of error?
+		}
+		
+		return eventMediators.size();
 	}
 
 	@Override
 	public AbstractZeppaEventMediator getItem(int position) {
-		return eventManagers.get(position);
+		return eventMediators.get(position);
 	}
 
 	@Override
@@ -70,7 +72,7 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements On
 			convertView = activity.getLayoutInflater().inflate(R.layout.view_eventlist_item, parent, false);
 		} 
 		
-		manager.convertView(convertView);
+		manager.convertView(activity, convertView);
 		
 		return convertView;
 
@@ -78,7 +80,7 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements On
 
 	public abstract void verifyDatasetValid();
 	
-	protected abstract void setEventManagers();
+	protected abstract void setEventMediators();
 	
 	protected GoogleAccountCredential getCredential() throws IOException{
 		return activity.getGoogleAccountCredential();
@@ -88,15 +90,9 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements On
 		return ZeppaUserSingleton.getInstance().getUserId();
 	}
 
-	protected View makeLoaderView() {
-		View loaderView = activity.getLayoutInflater().inflate(
-				R.layout.view_loaderview, null, false);
-		((ProgressBar) loaderView.findViewById(R.id.loaderview_progressbar))
-				.setIndeterminate(true);
-		((TextView) loaderView.findViewById(R.id.loaderview_text))
-				.setText("Loading Zeppa Events...");
-
-		return loaderView;
+	
+	protected View getLoaderView(){
+		return Utils.makeLoaderView(activity, "Finding Activities");
 	}
 
 }

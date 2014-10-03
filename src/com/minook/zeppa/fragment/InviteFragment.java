@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.minook.zeppa.R;
-import com.minook.zeppa.activity.MainActivity;
 
 public class InviteFragment extends Fragment {
 
@@ -17,7 +16,7 @@ public class InviteFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		((MainActivity) getActivity()).setCurrentFragment(this);
+
 		layout = inflater.inflate(R.layout.fragment_feedback, container, false);
 
 		return layout;

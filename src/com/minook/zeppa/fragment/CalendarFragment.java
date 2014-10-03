@@ -169,9 +169,6 @@ public class CalendarFragment extends Fragment implements EventHandler {
 			return false;
 	}
 
-	private void setPhoneEvents() {
-
-	}
 
 	/*
 	 * ------------------- Private Class ----------------------- NOTES:

@@ -29,6 +29,7 @@ import com.minook.zeppa.Constants;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
 import com.minook.zeppa.observer.OnLoadListener;
+import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 import com.minook.zeppa.zeppauserinfoendpoint.Zeppauserinfoendpoint;
 import com.minook.zeppa.zeppauserinfoendpoint.model.CollectionResponseZeppaUserInfo;
@@ -79,7 +80,7 @@ public class ZeppaUserSingleton {
 	}
 
 	/**
-	 * Create a new defaultUserInfoManager at runtime and add it to the friends
+	 * Create a new defaultUserInfoMediator at runtime and add it to the friends
 	 * list
 	 * 
 	 * @param userInfo
@@ -127,10 +128,10 @@ public class ZeppaUserSingleton {
 				.iterator();
 
 		while (iterator.hasNext()) {
-			DefaultUserInfoMediator userInfoManager = iterator.next();
-			if (userInfoManager.isFriend()
-					&& list.contains(userInfoManager.getUserId())) {
-				friends.add(userInfoManager);
+			DefaultUserInfoMediator userInfoMediator = iterator.next();
+			if (userInfoMediator.isFriend()
+					&& list.contains(userInfoMediator.getUserId())) {
+				friends.add(userInfoMediator);
 			}
 
 		}
@@ -138,25 +139,71 @@ public class ZeppaUserSingleton {
 		return friends;
 	}
 
+	public List<Long> getAllFriendZeppaIds() {
+		List<Long> allFriendZeppaIds = new ArrayList<Long>();
+		Iterator<DefaultUserInfoMediator> iterator = getFriendInfoMediators()
+				.iterator();
+		while (iterator.hasNext()) {
+			allFriendZeppaIds.add(iterator.next().getUserId());
+		}
+		return allFriendZeppaIds;
+	}
+
 	/**
 	 * 
-	 * @return friendInfoManagers
+	 * @return friendInfoMediators
 	 */
-	public List<DefaultUserInfoMediator> getFriendInfoManagers() {
+	public List<DefaultUserInfoMediator> getFriendInfoMediators() {
 		List<DefaultUserInfoMediator> friendList = new ArrayList<DefaultUserInfoMediator>();
 
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
 				.iterator();
 
 		while (iterator.hasNext()) {
-			DefaultUserInfoMediator infoManager = iterator.next();
+			DefaultUserInfoMediator infoMediator = iterator.next();
 
-			if (infoManager.isFriend())
-				friendList.add(infoManager);
+			if (infoMediator.isFriend())
+				friendList.add(infoMediator);
 		}
 
 		return friendList;
 
+	}
+
+	public List<DefaultUserInfoMediator> getPossibleFriendInfoMediators() {
+		List<DefaultUserInfoMediator> potentialConnectionList = new ArrayList<DefaultUserInfoMediator>();
+
+		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
+				.iterator();
+
+		while (iterator.hasNext()) {
+			DefaultUserInfoMediator mediator = iterator.next();
+
+			if (!mediator.isFriend() && 
+					(!mediator.requestPending() || // No Pending Requests
+					(mediator.requestPending() && mediator.didSendRequest()))) { // Request Pending, Did send it
+				potentialConnectionList.add(mediator);
+			}
+		}
+
+		return potentialConnectionList;
+	}
+
+	public List<DefaultUserInfoMediator> getPendingFriendRequests() {
+		List<DefaultUserInfoMediator> pendingRequests = new ArrayList<DefaultUserInfoMediator>();
+
+		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
+				.iterator();
+
+		while (iterator.hasNext()) {
+			DefaultUserInfoMediator mediator = iterator.next();
+
+			if (!mediator.isFriend() && mediator.requestPending() && !mediator.didSendRequest()) {
+					pendingRequests.add(mediator);
+			}
+		}
+
+		return pendingRequests;
 	}
 
 	public DefaultUserInfoMediator getUserFor(Long userId) {
@@ -164,9 +211,9 @@ public class ZeppaUserSingleton {
 				.iterator();
 
 		while (iterator.hasNext()) {
-			DefaultUserInfoMediator userInfoManager = iterator.next();
-			if (userInfoManager.getUserId().longValue() == userId.longValue()) {
-				return userInfoManager;
+			DefaultUserInfoMediator userInfoMediator = iterator.next();
+			if (userInfoMediator.getUserId().longValue() == userId.longValue()) {
+				return userInfoMediator;
 			}
 		}
 
@@ -246,7 +293,7 @@ public class ZeppaUserSingleton {
 							keepGoing = false;
 						}
 
-					} catch (GoogleAuthIOException aEx){
+					} catch (GoogleAuthIOException aEx) {
 						Log.wtf(TAG, "AuthException");
 						keepGoing = false;
 					} catch (IOException e) {
@@ -314,15 +361,15 @@ public class ZeppaUserSingleton {
 		Zeppauserinfoendpoint endpoint = endpointBuilder.build();
 
 		try {
-			ZeppaUserInfo userInfo = endpoint.fetchZeppaUserInfoById(
+			ZeppaUserInfo userInfo = endpoint.fetchZeppaUserInfoByParentId(
 					otherUserId).execute();
 
 			heldUserMediators.add(new DefaultUserInfoMediator(userInfo,
 					relationship, credential));
 
-		} catch (GoogleAuthIOException aEx){
+		} catch (GoogleAuthIOException aEx) {
 			Log.wtf(TAG, "AuthException");
-		}  catch (IOException ioEx) {
+		} catch (IOException ioEx) {
 			ioEx.printStackTrace();
 		}
 
@@ -363,6 +410,10 @@ public class ZeppaUserSingleton {
 	private boolean userIsHeld(String email) {
 		boolean isHeld = false;
 
+		if(getUserMediator().getGmail().equalsIgnoreCase(email)){
+			return true;
+		}
+		
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
 				.iterator();
 
@@ -391,26 +442,28 @@ public class ZeppaUserSingleton {
 		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 		Zeppauserinfoendpoint endpoint = endpointBuilder.build();
 
-		String encodedEmails = Constants.encodeListString(emailList);
+		String encodedEmails = Utils.encodeListString(emailList);
 
 		try {
 			CollectionResponseZeppaUserInfo collectionResponse = endpoint
-					.findFriendsByEmailList(encodedEmails).execute();
+					.fetchFriendsByEmailList(encodedEmails).execute();
 			if (collectionResponse.getItems() != null
 					&& !collectionResponse.isEmpty()) {
 
 				Iterator<ZeppaUserInfo> iterator = collectionResponse
 						.getItems().iterator();
 				while (iterator.hasNext()) {
+					Log.d(TAG, "Fetched a potential contact from: "
+							+ encodedEmails);
 					ZeppaUserInfo userInfo = iterator.next();
 					heldUserMediators.add(new DefaultUserInfoMediator(userInfo,
 							null, credential));
 				}
 
 			}
-		} catch (GoogleAuthIOException aEx){
+		} catch (GoogleAuthIOException aEx) {
 			Log.wtf(TAG, "AuthException");
-		}  catch (IOException ioEx) {
+		} catch (IOException ioEx) {
 			ioEx.printStackTrace();
 		}
 

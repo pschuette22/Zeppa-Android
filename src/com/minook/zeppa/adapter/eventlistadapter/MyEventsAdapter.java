@@ -54,7 +54,7 @@ public class MyEventsAdapter extends AbstractEventLayoutAdapter {
 
 
 	@Override
-	protected void setEventManagers() {
+	protected void setEventMediators() {
 		// TODO Auto-generated method stub
 		
 	}

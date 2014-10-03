@@ -1,24 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/white_eggshell"
+    android:fillViewport="true" >
 
-    <LinearLayout
-        android:id="@+id/eventactivity_commentbox"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        android:orientation="vertical" >
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/teal" />
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/eventactivity_hostimage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/background_contact_picture"
+                    android:contentDescription="@string/contdesc_hostimage"
+                    android:padding="1dp"
+                    android:src="@drawable/default_user_image" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <ImageView
+                        android:id="@+id/eventactivity_stateindicator"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:contentDescription="@string/contdesc_conflictionimage" />
+
+                    <TextView
+                        android:id="@+id/eventactivity_eventtitle"
+                        style="@style/teal_txt20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_toLeftOf="@id/eventactivity_stateindicator"
+                        android:layout_toStartOf="@id/eventactivity_stateindicator" />
+
+                    <TextView
+                        android:id="@+id/eventactivity_hostname"
+                        style="@style/teal_txt16sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/eventactivity_eventtitle"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginStart="7dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toLeftOf="@id/eventactivity_stateindicator"
+                        android:layout_toStartOf="@id/eventactivity_stateindicator" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/eventactivity_time"
+                style="@style/gray_txt15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/background_listitem_default" />
+
+            <TextView
+                android:id="@+id/eventactivity_location"
+                style="@style/gray_txt15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/background_listitem_default" />
+
+            <TextView
+                android:id="@+id/eventactivity_attending"
+                style="@style/gray_txt15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/background_listitem_default" />
+
+            <TextView
+                android:id="@+id/eventactivity_description"
+                style="@style/black_txt14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp" />
+
+            <!-- Include a quick action bar and invites option -->
+
+            <LinearLayout
+                android:id="@+id/eventactivity_tagholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical" />
+
+            <TextView
+                style="@style/teal_txt16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/discussion_board" />
+
+            <LinearLayout
+                android:id="@+id/eventactivity_commentholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:animateLayoutChanges="true"
+                android:divider="@color/black"
+                android:dividerPadding="3dp"
+                android:orientation="vertical" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/eventactivity_writepost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="3dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/background_teal_outline"
             android:orientation="horizontal" >
 
             <EditText
@@ -27,183 +163,25 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="2"
-                android:hint="@string/post_comment"
+                android:gravity="top|start"
+                android:hint="@string/chime_in"
                 android:inputType="textCapSentences"
-                android:maxLines="5"
+                android:minLines="2"
                 android:padding="3dp" />
 
             <ImageView
                 android:id="@+id/eventactivity_postcomment"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
+                android:adjustViewBounds="true"
                 android:background="@drawable/background_imagebutton"
                 android:padding="2dp"
                 android:scaleType="fitCenter"
-                android:adjustViewBounds="true"
                 android:src="@drawable/ic_menu_send" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/eventactivity_commentbox"
-        android:layout_alignParentTop="true" >
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white_eggshell"
-            android:fillViewport="true" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical" >
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" >
-
-                        <ImageView
-                            android:id="@+id/eventactivity_stateindicator"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="10dp"
-                            android:contentDescription="@string/contdesc_conflictionimage" />
-
-                        <TextView
-                            android:id="@+id/eventactivity_eventtitle"
-                            style="@style/black_txt21sp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_toLeftOf="@id/eventactivity_stateindicator" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/eventactivity_time"
-                        style="@style/gray_txt15sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="2dp"
-                        android:background="@drawable/background_listitem_default" />
-
-                    <TextView
-                        android:id="@+id/eventactivity_location"
-                        style="@style/gray_txt15sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="2dp"
-                        android:background="@drawable/background_listitem_default" />
-
-                    <TextView
-                        android:id="@+id/eventactivity_attending"
-                        style="@style/gray_txt15sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="2dp"
-                        android:background="@drawable/background_listitem_default" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" >
-
-                        <ImageView
-                            android:id="@+id/eventactivity_hostimage"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/background_contact_picture"
-                            android:contentDescription="@string/contdesc_hostimage"
-                            android:padding="1dp"
-                            android:src="@drawable/default_user_image" />
-
-                        <TextView
-                            android:id="@+id/eventactivity_hostname"
-                            style="@style/black_txt16sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="7dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_toRightOf="@id/eventactivity_hostimage" />
-
-                        <TextView
-                            android:id="@+id/eventactivity_vianame"
-                            style="@style/blue_link_txt14sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/eventactivity_hostimage"
-                            android:layout_below="@id/eventactivity_hostname"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="2dp"
-                            android:background="@drawable/background_listitem_default"
-                            android:padding="3dp" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/eventactivity_description"
-                    style="@style/black_txt14sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
-
-                <LinearLayout
-                    android:id="@+id/eventactivity_tagholder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:orientation="vertical" >
-
-                    <include
-                        android:id="@+id/eventactivity_tagloaderview"
-                        layout="@layout/view_loaderview" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/eventactivity_commentholder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:animateLayoutChanges="true"
-                    android:divider="@color/black"
-                    android:dividerPadding="3dp"
-                    android:orientation="vertical" >
-
-                    <!--
-                <include
-                    android:id="@+id/eventactivity_commentloaderview"
-                    layout="@layout/view_loaderview" /> 
-                    -->
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-
-</RelativeLayout>
+</ScrollView>

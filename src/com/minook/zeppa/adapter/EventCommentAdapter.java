@@ -28,6 +28,7 @@ import com.minook.zeppa.eventcommentendpoint.Eventcommentendpoint.FetchCommentsF
 import com.minook.zeppa.eventcommentendpoint.model.CollectionResponseEventComment;
 import com.minook.zeppa.eventcommentendpoint.model.EventComment;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 
 public class EventCommentAdapter extends BaseAdapter {
@@ -94,7 +95,7 @@ public class EventCommentAdapter extends BaseAdapter {
 		loadCommenterInAsync(comment.getUserCommentedId(), commenterImage,
 				commenterName);
 
-		commentTime.setText(Constants.getDisplayDateString(comment
+		commentTime.setText(Utils.getDisplayDateString(comment
 				.getPostedDate()));
 		commentText.setText(comment.getText());
 

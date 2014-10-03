@@ -24,8 +24,8 @@ public class WatchListAdapter extends FeedListAdapter {
 	}
 
 	@Override
-	protected void setEventManagers() {
-		eventManagers = ZeppaEventSingleton.getInstance().getInterestingEventManagers();
+	protected void setEventMediators() {
+		eventMediators = ZeppaEventSingleton.getInstance().getInterestingEventMediators();
 	}
 
 

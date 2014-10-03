@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="15"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="20" />
 
     <permission
         android:name="com.minook.zeppa.permission.C2D_MESSAGE"

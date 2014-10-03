@@ -1,5 +1,6 @@
 package com.minook.zeppa.mediator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,24 +9,27 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
+import com.minook.zeppa.utils.Utils;
 
-public abstract class AbstractZeppaUserMediator {
+
+public abstract class AbstractZeppaUserMediator extends AbstractMediator{
 
 	protected long lastUpdateTimeInMillis;
 
+	
 	protected List<ImageView> setOnImageLoad;
 	protected Bitmap userImage;
 
-	
-	protected void init(){
+	public AbstractZeppaUserMediator() {
 		this.lastUpdateTimeInMillis = System.currentTimeMillis();
 		this.setOnImageLoad = new ArrayList<ImageView>();
-		
 	}
+
 
 	public abstract String getGivenName();
 	public abstract String getFamilyName();
 	public abstract String getDisplayName();
+	public abstract String getPrimaryPhoneNumber();
 	public abstract String getGmail();
 	public abstract Long getUserId();
 	
@@ -59,10 +63,14 @@ public abstract class AbstractZeppaUserMediator {
 			@Override
 			protected Bitmap doInBackground(Object... params) {
 				String url = (String) params[0];
-				Bitmap imageBitmap = null;
-
+				try {
+					return Utils.loadImageBitmapFromUrl(url);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null; // TODO: make it try to load again later
+				}
 				
-				return imageBitmap;
 			}
 
 			@Override

@@ -2,6 +2,7 @@ package com.minook.zeppa.mediator;
 
 import android.content.Context;
 
+import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 
 /**
@@ -25,8 +26,9 @@ public class MyZeppaUserMediator extends AbstractZeppaUserMediator{
 	 * @param zeppaUser object for user
 	 */
 	public MyZeppaUserMediator(ZeppaUser user) {
+		super();
 		this.user = user;
-		init();
+		loadImageInAsync(user.getUserInfo().getImageUrl());
 	}
 	
 	@Override
@@ -52,7 +54,6 @@ public class MyZeppaUserMediator extends AbstractZeppaUserMediator{
 		// TODO Auto-generated method stub
 		return user.getKey().getId();
 	}
-
 	
 	
 	@Override
@@ -60,10 +61,18 @@ public class MyZeppaUserMediator extends AbstractZeppaUserMediator{
 		return user.getUserInfo().getGoogleAccountEmail();
 	}
 
+	@Override
+	public String getPrimaryPhoneNumber() {
+		
+		return Utils.formatPhoneNumber(user.getUserInfo().getPrimaryUnformatedNumber());
+	}
+	
 	public void verifyDeviceRegistered(Context context){
 		
 		
 	}
+
+	
 	
 	
 }

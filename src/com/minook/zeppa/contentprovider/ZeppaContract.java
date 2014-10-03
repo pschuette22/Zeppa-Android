@@ -15,13 +15,17 @@ public class ZeppaContract {
 	public static interface CommonColumns extends BaseColumns {
 		public static final String ZEPPA_ID = "ZeppaDatabaseId";
 		public static final String LAST_UPDATE = "LastUpdateTime";
+		public static final String DEFAULT_SORT_ORDER = "createdAt DESC";
 		
 		public static final int INDEX_LOCAL_ID = 0;
 		public static final int INDEX_ZEPPA_ID = 1;
 		public static final int INDEX_LAST_UPDATE = 2;
+		
 	}
+	
 
 	public static final class UserInfoContract implements CommonColumns {
+		
 		public static final String GOOGLE_ACCOUNT = "GoogleAccount";
 		public static final String GIVEN_NAME = "GivenName";
 		public static final String FAMILY_NAME = "FamilyName";
@@ -31,7 +35,30 @@ public class ZeppaContract {
 		public static final String USER_RELATIONSHIP = "RelationshipToUser";
 		public static final String ZEPPA_RELATIONSHIP_ID = "ZeppaUserToUserRelationshipId";
 		
-		public static final String[] PROJECTION = {
+		public static final String TABLE_NAME = "user_info_table";
+		public static final String SQL_MAKE_TABLE = 
+				"CREATE TABLE " +
+				TABLE_NAME +
+				"( _ID INTEGER PRIMARY KEY, " +
+				ZEPPA_ID + " INTEGER, " +
+				LAST_UPDATE + " INTEGER, " +
+				GOOGLE_ACCOUNT + " TEXT, " +
+				GIVEN_NAME + " TEXT, " +
+				FAMILY_NAME + " TEXT, " +
+				IMAGE_URL + " TEXT, " +
+				PHONE_NUMBER + " TEXT, " +
+				CONTACTS_ID + " INTEGER, " +
+				USER_RELATIONSHIP + " INTEGER, " + 
+				ZEPPA_RELATIONSHIP_ID + " INTEGER )";
+		
+		
+		public static final String[] USER_SYNC_PROJECTION = {
+			_ID,
+			CONTACTS_ID,
+			USER_RELATIONSHIP
+		};
+		
+		public static final String[] USER_PROJECTION = {
 			_ID,
 			ZEPPA_ID,
 			LAST_UPDATE,

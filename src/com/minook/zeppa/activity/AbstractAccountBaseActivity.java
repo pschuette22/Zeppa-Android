@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.plus.model.people.Person;
 import com.google.api.services.calendar.model.Calendar;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
@@ -35,7 +34,7 @@ public abstract class AbstractAccountBaseActivity extends
 	protected TextView numberField;
 	protected ImageView userImage;
 	protected Drawable loadedImage;
-	protected Button createButton;
+	protected Button confirmButton;
 	protected Button cancelButton;
 
 	// Connection Progress
@@ -49,7 +48,6 @@ public abstract class AbstractAccountBaseActivity extends
 	protected String userGmail;
 	protected String userPhoneNumber;
 	protected Map<Calendar, Boolean> calendars;
-	protected Person person;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +63,8 @@ public abstract class AbstractAccountBaseActivity extends
 		connectionProgress.setIndeterminate(true);
 
 		// find all view elements
-		createButton = (Button) findViewById(R.id.newuseractivity_create);
-		createButton.setOnClickListener(this);
+		confirmButton = (Button) findViewById(R.id.newuseractivity_create);
+		confirmButton.setOnClickListener(this);
 		cancelButton = (Button) findViewById(R.id.newuseractivity_cancel);
 		cancelButton.setOnClickListener(this);
 
@@ -79,6 +77,7 @@ public abstract class AbstractAccountBaseActivity extends
 		numberField = (TextView) findViewById(R.id.newuseractivity_phone);
 
 	}
+
 
 	@Override
 	public void onClick(View v) {
@@ -96,7 +95,7 @@ public abstract class AbstractAccountBaseActivity extends
 			logout();
 		} else {
 			userGmail = accountEmail;
-			emailField.setText(accountEmail);
+			emailField.setText(userGmail);
 		}
 
 		TelephonyManager tMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -123,7 +122,7 @@ public abstract class AbstractAccountBaseActivity extends
 
 	protected void loadAndSetImageInAsync(String imageUrl) {
 		if (imageUrl.endsWith("?sz=50")) {
-			imageUrl.replace("?sz=50", "");
+			imageUrl.substring(0, (imageUrl.length() - 6));
 		}
 
 		Object[] params = { imageUrl };

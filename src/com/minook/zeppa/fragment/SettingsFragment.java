@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
+import com.minook.zeppa.activity.MainActivity;
 
 public class SettingsFragment extends Fragment {
 
@@ -21,5 +23,15 @@ public class SettingsFragment extends Fragment {
 
 		return layout;
 	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		((MainActivity) getActivity()).setNavigationItem(Constants.NAVIGATION_SETTINGS_INDEX);
+
+	}
+	
+	
+	
 
 }

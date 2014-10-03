@@ -154,7 +154,7 @@ public class ZeppaGCMReceiver extends WakefulBroadcastReceiver {
 
 							try {
 								NotificationSingleton.getInstance()
-										.addAllNotifcations(notifications);
+										.addAllNotifications(notifications);
 							} catch (NullPointerException ex) {
 								ex.printStackTrace();
 							}

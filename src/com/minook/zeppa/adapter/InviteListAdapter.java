@@ -25,7 +25,7 @@ public class InviteListAdapter extends BaseAdapter implements OnClickListener {
 		this.activity = activity;
 
 		friendInfoManagers = ZeppaUserSingleton.getInstance()
-				.getFriendInfoManagers();
+				.getFriendInfoMediators();
 		invitedUserIds = new ArrayList<Long>();
 
 	}
@@ -55,7 +55,7 @@ public class InviteListAdapter extends BaseAdapter implements OnClickListener {
 		}
 
 		DefaultUserInfoMediator infoManager = getItem(position);
-		infoManager.convertInviteListItemView(convertView);
+		infoManager.convertInviteListItemView(activity, convertView);
 
 		CheckBox checkBox = (CheckBox) convertView
 				.findViewById(R.id.inviteitem_checkbox);

@@ -11,6 +11,7 @@ import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.NewFriendsActivity;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class NotificationMediator implements OnClickListener{
@@ -32,7 +33,7 @@ public class NotificationMediator implements OnClickListener{
 		message.setText(notification.getExtraMessage());
 		
 		TextView date = (TextView) convertView.findViewById(R.id.notificationitem_date);
-		date.setText(Constants.getDisplayDateString(notification.getSentDate().longValue()));
+		date.setText(Utils.getDisplayDateString(notification.getSentDate().longValue()));
 				
 		convertView.setOnClickListener(this);
 		return convertView;

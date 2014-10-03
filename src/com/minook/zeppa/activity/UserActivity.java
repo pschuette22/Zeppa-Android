@@ -1,12 +1,13 @@
 package com.minook.zeppa.activity;
 
 import android.app.ActionBar;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,22 +17,29 @@ import com.minook.zeppa.R;
 import com.minook.zeppa.adapter.eventlistadapter.FriendEventsAdapter;
 import com.minook.zeppa.adapter.tagadapter.FriendTagAdapter;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
+import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 public class UserActivity extends AuthenticatedFragmentActivity implements
 		OnClickListener {
 
+	private static final String TAG = "UserActivity";
+
 	private ImageView userImage;
 	private TextView userName;
-	private Button mutualFriendsButton;
+	private TextView userPhoneNumber;
+	private TextView userGmail;
+	private TextView mutualFriends;
 
 	private LinearLayout eventHolder;
+	private View eventLoaderView;
 	private LinearLayout tagHolder;
+	private View tagLoaderView;
 
 	private FriendTagAdapter tagAdapter;
 	private FriendEventsAdapter friendEventsAdapter;
 
-	private DefaultUserInfoMediator userManager;
+	private DefaultUserInfoMediator userMediator;
 
 	/*
 	 * ------------- Override Methods --------------
@@ -46,17 +54,21 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 		long userId = getIntent().getExtras().getLong(
 				Constants.INTENT_ZEPPA_USER_ID);
 
-		userManager = ZeppaUserSingleton.getInstance().getUserFor(userId);
+		userMediator = ZeppaUserSingleton.getInstance().getUserFor(userId);
 
 		// find UI Elements and hold
 		userImage = (ImageView) findViewById(R.id.useractivity_image);
 		userName = (TextView) findViewById(R.id.useractivity_username);
-		mutualFriendsButton = (Button) findViewById(R.id.useractivity_mutualfriends);
+		userPhoneNumber = (TextView) findViewById(R.id.useractivity_phonenumber);
+		userGmail = (TextView) findViewById(R.id.useractivity_email);
+		mutualFriends = (TextView) findViewById(R.id.useractivity_mutualfriends);
 		eventHolder = (LinearLayout) findViewById(R.id.useractivity_eventholder);
 		tagHolder = (LinearLayout) findViewById(R.id.useractivity_tagholder);
-		
+
 		// set Listeners
-		mutualFriendsButton.setOnClickListener(this);
+		mutualFriends.setOnClickListener(this);
+		userPhoneNumber.setOnClickListener(this);
+		userGmail.setOnClickListener(this);
 
 		// action bar
 		ActionBar actionBar = getActionBar();
@@ -64,19 +76,27 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 
+		tagAdapter = new FriendTagAdapter(this, tagHolder,
+				userMediator.getUserId());
+		friendEventsAdapter = new FriendEventsAdapter(userMediator, this,
+				eventHolder);
+
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		updateEventTags();
+		
+		userMediator.setContext(this);
 		setUserInfo();
-		
-		tagAdapter = new FriendTagAdapter(this, tagHolder, userManager.getEventTagManagers());
-		tagAdapter.drawTags();
-		
-		friendEventsAdapter = new FriendEventsAdapter(userManager, this, eventHolder);
-		friendEventsAdapter.drawEvents();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		tagAdapter.drawTags();
+		friendEventsAdapter.drawEvents();
 	}
 
 	@Override
@@ -114,28 +134,53 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 
 	}
 
-	/*
-	 * ---------------- Private Methods ------------------
+	/**
+	 * populates fields with the most up to date info available
+	 * 
 	 */
-
 	private void setUserInfo() {
 
-		userName.setText(userManager.getDisplayName());
+		userName.setText(userMediator.getDisplayName());
+		userMediator.setImageWhenReady(userImage);
 
-		userManager.setImageWhenReady(userImage);
-		int mutualFriendCount = 0; // TODO: count relationships
-		
-		mutualFriendsButton.setText(mutualFriendCount + " Mutual Friends");
+		String phoneNumberText = userMediator.getPrimaryPhoneNumber();
+		if (phoneNumberText == null || phoneNumberText.isEmpty()) {
+			userPhoneNumber.setVisibility(View.GONE);
+		} else {
+			userPhoneNumber.setText(phoneNumberText);
+		}
+		userGmail.setText(userMediator.getGmail());
 
-		LinearLayout tagHolder = (LinearLayout) findViewById(R.id.useractivity_tagholder);
-		tagAdapter = new FriendTagAdapter(this, tagHolder, userManager.getEventTagManagers());
-		tagAdapter.drawTags();
+		mutualFriends.setText("XXX Mutual Minglers");
 	}
 
-	/*
-	 * Called on refresh and when opened Will show what info the
-	 * ((ZeppaApplication) getApplication()) is holding but still will check to
-	 * see if anything is missing.
-	 */
+	private void updateEventTags() {
+		
+
+		new AsyncTask<Object, Void, Boolean>() {
+			@Override
+			protected Boolean doInBackground(Object... params) {
+
+				return Boolean.valueOf(EventTagSingleton.getInstance()
+						.fetchEventTagsForUser(userMediator.getUserId(),
+								getGoogleAccountCredential()));
+			}
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				super.onPostExecute(result);
+
+				if (result) {
+					tagAdapter.notifyDataSetChanged();
+				}
+				
+				Log.d(TAG, "Did update all tags");
+
+
+			}
+
+		}.execute();
+
+	}
 
 }

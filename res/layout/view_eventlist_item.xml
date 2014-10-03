@@ -45,20 +45,40 @@
 
         <!-- Event Info -->
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_toRightOf="@id/eventview_hostinfo"
-            android:animateLayoutChanges="true" >
+            android:orientation="vertical" >
 
-            <ImageView
-                android:id="@+id/eventview_conflictionindicator"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentRight="true"
+            <!-- Title and conflict indicator -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:contentDescription="@string/contdesc_hostimage" />
+                android:animateLayoutChanges="true" >
+
+                <ImageView
+                    android:id="@+id/eventview_conflictionindicator"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:contentDescription="@string/contdesc_conflictionimage" />
+
+                <TextView
+                    android:id="@+id/eventview_eventtitle"
+                    style="@style/black_txt21sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toLeftOf="@id/eventview_conflictionindicator"
+                    android:maxLines="1" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/eventview_eventtime"
@@ -67,48 +87,35 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@id/eventview_conflictionindicator"
-                android:gravity="center_vertical|right"
-                android:minHeight="20dp" />
+                android:drawableLeft="@drawable/ic_eventtime"
+                android:maxLines="1" />
 
             <TextView
-                android:id="@+id/eventview_eventtitle"
-                style="@style/black_txt21sp"
+                android:id="@+id/eventview_eventlocation"
+                style="@style/gray_date_txt12sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/eventview_eventtime"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="3dp"
-                android:maxLines="2" />
-
-            <TextView
-                android:id="@+id/eventview_via"
-                style="@style/blue_link_txt12sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/eventview_eventtitle"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="1dp"
-                android:maxLines="1"
-                android:visibility="gone" />
+                android:drawableLeft="@drawable/ic_location"
+                android:maxLines="1" />
 
             <TextView
                 android:id="@+id/eventview_description"
                 style="@style/black_txt14sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/eventview_via"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="2dp" />
-        </RelativeLayout>
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:maxLines="2" />
+        </LinearLayout>
     </RelativeLayout>
 
     <!-- Button Bar -->
 
     <LinearLayout
+        android:id="@+id/eventview_buttonbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_eventitem_buttonsholder"
@@ -118,33 +125,36 @@
         android:paddingRight="1dp"
         android:paddingTop="1px" >
 
-        <Button
+        <CheckedTextView
             android:id="@+id/eventview_buttonleft"
-            style="@style/black_txt14sp"
+            style="@style/black_txt12sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="1px"
             android:layout_weight="1"
             android:background="@drawable/background_button_eventactionl"
+            android:drawableLeft="@drawable/ic_quickaction_watch"
             android:text="@string/watch" />
 
         <Button
             android:id="@+id/eventview_buttonmiddle"
-            style="@style/black_txt14sp"
+            style="@style/black_txt12sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="1px"
             android:layout_weight="1"
             android:background="@drawable/background_button_eventaction"
+            android:drawableLeft="@drawable/ic_quickaction_text"
             android:text="@string/repost" />
 
         <Button
             android:id="@+id/eventview_buttonright"
-            style="@style/black_txt14sp"
+            style="@style/black_txt12sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/background_button_eventactionr"
+            android:drawable="@drawable/ic_quickaction_join"
             android:text="@string/join" />
     </LinearLayout>
 

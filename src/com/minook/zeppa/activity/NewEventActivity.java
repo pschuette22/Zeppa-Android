@@ -37,7 +37,7 @@ import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.InviteListAdapter;
 import com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter;
-import com.minook.zeppa.singleton.EventTagSingleton;
+import com.minook.zeppa.mediator.MyZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
@@ -130,9 +130,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		endCalendar = new GregorianCalendar();
 
 		LinearLayout tagHolder = (LinearLayout) findViewById(R.id.neweventactivity_taglineholder);
-		tagAdapter = new CreateEventTagAdapter(this, tagHolder,
-				EventTagSingleton.getInstance().getTags());
-		tagAdapter.drawTags();
+		tagAdapter = new CreateEventTagAdapter(this, tagHolder);
 		invitesAdapter = new InviteListAdapter(this);
 
 		// Initial Settings
@@ -168,13 +166,12 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		addInvitesField.setOnClickListener(this);
 		addLocationField.setOnClickListener(this);
 
-		return;
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		tagAdapter.drawTags();
 	}
 
 	// This handles when a user types in the description field
@@ -188,7 +185,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 			break;
 
 		case R.id.neweventactivity_create:
-			startEventInAcync();
+			startEventInAsync();
 			break;
 
 		case R.id.neweventactivity_addinvites:
@@ -197,7 +194,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 		case R.id.neweventactivity_addnewtag:
 			if (newTagTextField.isEnabled()) {
-				tagAdapter.createdTagInAsync(newTagTextField);
+				tagAdapter.createTagInAsync(newTagTextField);
 			}
 			break;
 		case R.id.neweventactivity_exactlocation:
@@ -293,7 +290,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	 * -------------- Private Methods --------------------
 	 */
 
-	private void startEventInAcync() {
+	private void startEventInAsync() {
 
 		ZeppaUserSingleton userSingleton = ZeppaUserSingleton.getInstance();
 		ZeppaEventSingleton eventSingleton = ZeppaEventSingleton.getInstance();
@@ -335,6 +332,9 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 										getGoogleAccountCredential(), event,
 										getContentResolver());
 
+						MyZeppaEventMediator myMediator = new MyZeppaEventMediator(event);
+						ZeppaEventSingleton.getInstance().addMediator(myMediator);
+						
 					} catch (IOException e) {
 						e.printStackTrace();
 						event = null;
@@ -349,6 +349,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 				protected void onPostExecute(ZeppaEvent result) {
 					super.onPostExecute(result);
 
+					
 					if (result != null) {
 
 						onBackPressed();

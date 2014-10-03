@@ -1,11 +1,9 @@
 package com.minook.zeppa.activity;
 
 import android.app.ActionBar;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
 
@@ -18,6 +16,8 @@ public class NewFriendsActivity extends AuthenticatedFragmentActivity {
 	private final String TAG = getClass().getName();
 	ContactFinderAdapter adapter;
 
+	private ListView listView;
+	
 	/*
 	 * -------------- Override Methods ---------------------
 	 */
@@ -25,7 +25,7 @@ public class NewFriendsActivity extends AuthenticatedFragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ListView listView = new ListView(this);
+		listView = new ListView(this);
 		listView.setBackgroundResource(R.color.white);
 
 		setContentView(listView);
@@ -34,6 +34,7 @@ public class NewFriendsActivity extends AuthenticatedFragmentActivity {
 		listView.setAdapter(adapter);
 
 		loadPossibleContacts();
+		
 
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -76,69 +77,34 @@ public class NewFriendsActivity extends AuthenticatedFragmentActivity {
 	 * ---------------- Private Methods --------------------
 	 */
 
+	
+	// THIS IS A TEMPORARY METHOD THAT WILL BE REMOVED WHEN I INSERT DATA SYNC METHODS
 	private void loadPossibleContacts() {
 
-		ProgressDialog progressDialog = new ProgressDialog(this);
-		progressDialog.setTitle("Finding Friends");
-		progressDialog
-				.setMessage(getResources().getString(R.string.one_moment));
-		progressDialog.show();
 
-		Object[] params = { getApplicationContext(), progressDialog };
+		Object[] params = { getApplicationContext() };
 
-		new AsyncTask<Object, Void, ProgressDialog>() {
+		new AsyncTask<Object, Void, Void>() {
 
 			@Override
-			protected ProgressDialog doInBackground(Object... params){
-				
-				long callTime = System.currentTimeMillis();
-				Log.d(TAG, "call time: " + callTime);
+			protected Void doInBackground(Object... params){
 				
 				Context context = (Context) params[0];
 				ZeppaUserSingleton.getInstance().loadPossible(context, getGoogleAccountCredential());
 
-				long returnTime = System.currentTimeMillis();
-				Log.d(TAG, "Return time: " + returnTime);
-				return ((ProgressDialog) params[1]);
+				return null;
 			}
 
 			@Override
-			protected void onPostExecute(ProgressDialog dialog) {
-				super.onPostExecute(dialog);
-				if (dialog.isShowing())
-					dialog.dismiss();
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);
+
+				
 				adapter.notifyDataSetChanged();
 			}
 
 		}.execute(params);
 	}
-
-	// private String makeValidNumber(String phoneNumber) {
-	//
-	// String result = "";
-	//
-	// if (phoneNumber.startsWith("+")) {
-	// phoneNumber = phoneNumber.substring(1);
-	// }
-	// if (phoneNumber.startsWith("1")) {
-	// phoneNumber = phoneNumber.substring(1);
-	// }
-	//
-	// for (int i = 0; i < phoneNumber.length(); i++) {
-	// char c = phoneNumber.charAt(i);
-	// if (Character.isDigit(c)) {
-	// result += c;
-	// }
-	// }
-	//
-	// if (result.length() == 10) {
-	// result = "+1" + result;
-	// } else {
-	// result = null;
-	// }
-	//
-	// return result;
-	// }
 
 	/*
 	 * ---------------- Private Classes ----------------------

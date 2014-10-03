@@ -56,12 +56,11 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		((MainActivity) getActivity()).setCurrentFragment(this);
 
 		layout = inflater.inflate(R.layout.fragment_feedback, container, false);
 
 		ratingBar = (RatingBar) layout.findViewById(R.id.feedback_ratingbar);
-		ratingBar.setRating(3);
+		ratingBar.setRating(5);
 
 		feedbackSubjectField = (EditText) layout
 				.findViewById(R.id.feedback_edittext_subject);
@@ -97,6 +96,8 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onResume() {
 		super.onResume();
+		((MainActivity) getActivity()).setNavigationItem(Constants.NAVIGATION_FEEDBACK_INDEX);
+
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setTitle(R.string.feedback_title);
 	}
