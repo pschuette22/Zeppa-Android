@@ -1,6 +1,6 @@
 gen/
 endpoint-libs/
 libs/
-com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/
+.google_apis/
 bin/
 assets/
