@@ -4,3 +4,4 @@ libs/
 .google_apis/
 bin/
 assets/
+.settings/
