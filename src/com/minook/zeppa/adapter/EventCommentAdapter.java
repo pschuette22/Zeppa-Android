@@ -20,12 +20,9 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.CloudEndpointUtils;
-import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.eventcommentendpoint.Eventcommentendpoint;
-import com.minook.zeppa.eventcommentendpoint.Eventcommentendpoint.FetchCommentsForEvent;
-import com.minook.zeppa.eventcommentendpoint.model.CollectionResponseEventComment;
 import com.minook.zeppa.eventcommentendpoint.model.EventComment;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.utils.Utils;
@@ -45,8 +42,7 @@ public class EventCommentAdapter extends BaseAdapter {
 
 		@Override
 		public int compare(EventComment lhs, EventComment rhs) {
-			return (int) (((long) lhs.getPostedDate()) - ((long) rhs
-					.getPostedDate()));
+			return (int) ((lhs.getCreated().getValue()) - (rhs.getCreated().getValue()));
 		}
 
 	};
@@ -92,11 +88,11 @@ public class EventCommentAdapter extends BaseAdapter {
 		commentText = (TextView) convertView.findViewById(R.id.comment_text);
 		commentTime = (TextView) convertView.findViewById(R.id.comment_date);
 
-		loadCommenterInAsync(comment.getUserCommentedId(), commenterImage,
+		loadCommenterInAsync(comment.getCommenterId(), commenterImage,
 				commenterName);
 
 		commentTime.setText(Utils.getDisplayDateString(comment
-				.getPostedDate()));
+				.getCreated().getValue()));
 		commentText.setText(comment.getText());
 
 		return convertView;
@@ -149,7 +145,7 @@ public class EventCommentAdapter extends BaseAdapter {
 
 	}
 
-	private void loadCommenterInAsync(Long userId, ImageView userImage,
+	private void loadCommenterInAsync(Long commenterId, ImageView userImage,
 			TextView userName) {
 
 		// if(userId.longValue() ==
@@ -191,9 +187,11 @@ public class EventCommentAdapter extends BaseAdapter {
 
 	public void postCommentInAsync(final String text) {
 		EventComment comment = new EventComment();
-		comment.setEventId(zeppaEvent.getKey().getId());
-		comment.setUserId(ZeppaUserSingleton.getInstance().getUserId());
-		comment.setPostedDate(System.currentTimeMillis());
+		com.minook.zeppa.eventcommentendpoint.model.ZeppaEvent event = new com.minook.zeppa.eventcommentendpoint.model.ZeppaEvent();
+		event.setId(zeppaEvent.getKey().getId());
+		comment.setEvent(event);
+		
+		comment.setCommenterId(ZeppaUserSingleton.getInstance().getUserId());
 		comment.setText(text);
 
 		EventComment[] params = { comment };
@@ -244,53 +242,53 @@ public class EventCommentAdapter extends BaseAdapter {
 
 		// TODO: Put in Loader View
 		// TODO: Hold Comments, trim w/ memory issues
-		new AsyncTask<Void, Void, Boolean>() {
-
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				boolean success = false;
-				try {
-					Eventcommentendpoint.Builder builder = new Eventcommentendpoint.Builder(
-							AndroidHttp.newCompatibleTransport(),
-							AndroidJsonFactory.getDefaultInstance(),
-							activity.getGoogleAccountCredential());
-
-					builder = CloudEndpointUtils.updateBuilder(builder);
-					Eventcommentendpoint endpoint = builder.build();
-
-					FetchCommentsForEvent fetchCommentsTask = endpoint
-							.fetchCommentsForEvent(event.getKey().getId());
-
-					CollectionResponseEventComment collectionResponse = fetchCommentsTask
-							.execute();
-
-					if (collectionResponse.getItems() != null
-							&& !collectionResponse.isEmpty()) {
-						List<EventComment> comments = collectionResponse
-								.getItems();
-						addAllComments(comments);
-
-					}
-
-					success = true;
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				return success;
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result) {
-				super.onPostExecute(result);
-				if (result) {
-					redrawAll();
-				} else {
-				}
-
-			}
-
-		}.execute();
+//		new AsyncTask<Void, Void, Boolean>() {
+//
+//			@Override
+//			protected Boolean doInBackground(Void... params) {
+//				boolean success = false;
+//				try {
+//					Eventcommentendpoint.Builder builder = new Eventcommentendpoint.Builder(
+//							AndroidHttp.newCompatibleTransport(),
+//							AndroidJsonFactory.getDefaultInstance(),
+//							activity.getGoogleAccountCredential());
+//
+//					builder = CloudEndpointUtils.updateBuilder(builder);
+//					Eventcommentendpoint endpoint = builder.build();
+//
+//					FetchCommentsForEvent fetchCommentsTask = endpoint
+//							.fetchCommentsForEvent(event.getKey().getId());
+//
+//					CollectionResponseEventComment collectionResponse = fetchCommentsTask
+//							.execute();
+//
+//					if (collectionResponse.getItems() != null
+//							&& !collectionResponse.isEmpty()) {
+//						List<EventComment> comments = collectionResponse
+//								.getItems();
+//						addAllComments(comments);
+//
+//					}
+//
+//					success = true;
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//
+//				return success;
+//			}
+//
+//			@Override
+//			protected void onPostExecute(Boolean result) {
+//				super.onPostExecute(result);
+//				if (result) {
+//					redrawAll();
+//				} else {
+//				}
+//
+//			}
+//
+//		}.execute();
 	}
 
 }

@@ -57,18 +57,6 @@ public class CalendarFragment extends Fragment implements EventHandler {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-	}
-
-	@Override
 	public long getSupportedEventTypes() {
 		return EventType.GO_TO | EventType.VIEW_EVENT | EventType.CREATE_EVENT
 				| EventType.DELETE_EVENT;
@@ -137,7 +125,7 @@ public class CalendarFragment extends Fragment implements EventHandler {
 
 	@Override
 	public void eventsChanged() {
-
+	
 	}
 
 	/*
@@ -159,6 +147,10 @@ public class CalendarFragment extends Fragment implements EventHandler {
 		ft.replace(R.id.calfragment_calframe, monthFrag).commit();
 
 		dayView = false;
+	}
+	
+	private void setDayView(){
+
 	}
 
 	public boolean didHandleDayView() {

@@ -1,8 +1,5 @@
 package com.minook.zeppa.mediator;
 
-import android.content.Context;
-
-import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 
 /**
@@ -61,15 +58,21 @@ public class MyZeppaUserMediator extends AbstractZeppaUserMediator{
 		return user.getUserInfo().getGoogleAccountEmail();
 	}
 
-	@Override
-	public String getPrimaryPhoneNumber() {
-		
-		return Utils.formatPhoneNumber(user.getUserInfo().getPrimaryUnformatedNumber());
-	}
 	
-	public void verifyDeviceRegistered(Context context){
+	
+	@Override
+	public String getUnformattedPhoneNumber() throws NullPointerException{
 		
+		String phoneNumber = user.getUserInfo().getPrimaryUnformatedNumber();
+		if(phoneNumber == null || phoneNumber.isEmpty()){
+			throw new NullPointerException();
+		}
 		
+		return phoneNumber;
+	}
+
+	public String getZeppaCalendarId(){
+		return user.getZeppaCalendarId();
 	}
 
 	

@@ -207,6 +207,25 @@ public class Utils {
 	}
 	
 	
+	public static String getPrivacy(int position){
+		switch (position){
+		case 0:
+			return "CASUAL";
+			
+		case 1:
+			return "PUBLIC";
+			
+		case 2:
+			return "PRIVATE";
+			
+		case 3:
+			return "NO_REPOST";
+		default:
+			return "CASUAL";
+		}
+	}
+	
+	
 	/*
 	 * Comparators
 	 */
@@ -258,8 +277,7 @@ public class Utils {
 		@Override
 		public int compare(ZeppaNotification lhs, ZeppaNotification rhs) {
 
-			return ((int) ((lhs.getSentDate().longValue()) - (rhs.getSentDate()
-					.longValue())));
+			return ((int) ((lhs.getCreated().getValue()) - (rhs.getCreated().getValue())));
 
 		}
 
@@ -275,7 +293,6 @@ public class Utils {
 	 */
 	public static String formatPhoneNumber(String unformatedNumber) {
 
-		Log.d(TAG, "Unformatted number: " + unformatedNumber);
 		if (unformatedNumber == null || unformatedNumber.isEmpty()) {
 			return null;
 		}
@@ -289,7 +306,7 @@ public class Utils {
 		builder.append("-");
 		builder.append(unformatedNumber.substring(7)); // Last four
 
-		return builder.toString(); // Number in form: (123) 456-7890
+		return builder.toString(); // Number in form: (123)456-7890
 	}
 	
 	public static String make10DigitNumber(String contactPhoneNumber){

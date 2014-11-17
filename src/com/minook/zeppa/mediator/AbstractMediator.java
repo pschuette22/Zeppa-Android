@@ -52,8 +52,8 @@ public abstract class AbstractMediator {
 		return context;
 	}
 	
-	protected GoogleAccountCredential getGoogleAccountCredential(){
-		return context.getGoogleAccountCredential();
+	protected GoogleAccountCredential getGoogleAccountCredential() throws NullPointerException{
+		return getContext().getGoogleAccountCredential();
 	}
 
 }

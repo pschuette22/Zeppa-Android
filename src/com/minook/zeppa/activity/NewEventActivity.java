@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.api.client.util.DateTime;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
@@ -40,6 +41,7 @@ import com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter;
 import com.minook.zeppa.mediator.MyZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 
 public class NewEventActivity extends AuthenticatedFragmentActivity implements
@@ -292,21 +294,18 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 	private void startEventInAsync() {
 
-		ZeppaUserSingleton userSingleton = ZeppaUserSingleton.getInstance();
-		ZeppaEventSingleton eventSingleton = ZeppaEventSingleton.getInstance();
-		ZeppaEvent event = eventSingleton.newEventInstance();
+		ZeppaEvent event = new ZeppaEvent();
 
+		event.setHostId(ZeppaUserSingleton.getInstance().getUserId());
 		event.setTitle(titleField.getText().toString());
-		event.setHostId(userSingleton.getUserId());
-		event.setPrivacy(Integer.valueOf(eventPrivacyField
-				.getSelectedItemPosition()));
 		event.setDescription(descriptionField.getText().toString());
+		
+		event.setPrivacy(Utils.getPrivacy(eventPrivacyField.getSelectedItemPosition()));
 		event.setDisplayLocation(shortLocationField.getText().toString());
-		if (longLocation != null)
+		if (longLocation != null && !longLocation.isEmpty())
 			event.setMapsLocation(longLocation); // May be null
-		event.setStart(startCalendar.getTimeInMillis());
-		event.setEnd(endCalendar.getTimeInMillis());
-		event.setRepostedFromEventId(Long.valueOf(-1));
+		event.setStart(new DateTime(startCalendar.getTime()));
+		event.setEnd(new DateTime(endCalendar.getTime()));
 		event.setTagIds(tagAdapter.getSelectedTagIds());
 
 		if (isValidEvent(event)) {
@@ -526,7 +525,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 	private boolean isValidTime(long startMillis, long endMillis) {
 		long currentTime = System.currentTimeMillis();
-		if (startMillis > endMillis) // start after end
+		if (startMillis >= endMillis) // start after end
 			return false;
 		else if (endMillis < currentTime) // ended already
 			return false;
@@ -535,59 +534,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	}
 
 	private boolean isValidEvent(ZeppaEvent event) {
-		AlertDialog.Builder error;
-
-		if (event.getTitle().isEmpty()) { // Throw no title error
-			error = new AlertDialog.Builder(this);
-			error.setTitle(R.string.error_newevent);
-			error.setMessage(R.string.error_newevent_title);
-			error.setNeutralButton(R.string.dismiss,
-					new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					});
-			error.show();
-
-			return false;
-			// } else if (event.getShortLocation().isEmpty()
-			// && event.getExactLocation().isEmpty()) { // Throw no location
-			// // error
-			// error = new AlertDialog.Builder(this);
-			// error.setTitle(R.string.error_newevent);
-			// error.setMessage(R.string.error_newevent_location);
-			// error.setNeutralButton(R.string.dismiss,
-			// new DialogInterface.OnClickListener() {
-			//
-			// @Override
-			// public void onClick(DialogInterface dialog, int which) {
-			// dialog.dismiss();
-			// }
-			// });
-			// error.show();
-			//
-			// return false;
-		} else if (!isValidTime(event.getStart().longValue(), event.getEnd()
-				.longValue())) { // Throw bad time error
-
-			error = new AlertDialog.Builder(this);
-			error.setTitle(R.string.error_newevent);
-			error.setMessage(R.string.error_newevent_time);
-			error.setNeutralButton(R.string.dismiss,
-					new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					});
-			error.show();
-
-			return false;
-		}
-
+		// TODO: build a check in here to make sure fields are correct
 		return true;
 	}
 

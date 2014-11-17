@@ -39,9 +39,6 @@ public class MyZeppaEventMediator extends AbstractZeppaEventMediator{
 		return true;
 	}
 
-	
-	
-
 
 	@Override
 	protected void setHostInfo(View view) {
@@ -61,7 +58,7 @@ public class MyZeppaEventMediator extends AbstractZeppaEventMediator{
 
 
 	public List<MyEventTagMediator> getTagMediators(){
-		return EventTagSingleton.getInstance().getMyTagsFrom(event.getTagIds());
+		return EventTagSingleton.getInstance().getMyTagsFrom(getTagIds());
 	}
 	
 	public void deleteEvent(AuthenticatedFragmentActivity context){

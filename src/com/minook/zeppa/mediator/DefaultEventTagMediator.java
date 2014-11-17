@@ -223,12 +223,11 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 	private EventTagFollow createAndPersistFollowFor(EventTag tag,
 			GoogleAccountCredential credential) {
 		EventTagFollow tagFollow = new EventTagFollow();
-		tagFollow.setEventTagId(tag.getKey().getId());
-		tagFollow
-				.setTimeCreatedMillis(Long.valueOf(System.currentTimeMillis()));
-		tagFollow.setUserFollowingId(ZeppaUserSingleton.getInstance()
-				.getUserId());
-
+		com.minook.zeppa.eventtagfollowendpoint.model.EventTag tagToFollow = new com.minook.zeppa.eventtagfollowendpoint.model.EventTag();
+		tagToFollow.setId(tag.getKey().getId());
+		tagFollow.setEventTag(tagToFollow);
+		
+		tagFollow.setFollowerId(ZeppaUserSingleton.getInstance().getUserId());
 		Eventtagfollowendpoint.Builder endpointBuilder = new Eventtagfollowendpoint.Builder(
 				new NetHttpTransport(), new JacksonFactory(), credential);
 		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);

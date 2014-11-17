@@ -6,10 +6,9 @@ import java.util.List;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.mediator.MyZeppaEventMediator;
-import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEvent;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
-import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 /**
  * This class is a task to create relationships to a given event and notify
@@ -18,7 +17,7 @@ import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
  * @author DrunkWithFunk21
  * 
  */
-public class CreateEventRelsAndNotifsTask extends NotifyUserTask {
+public class CreateEventRelationshipsTask extends NotifyUserTask {
 
 	private static final List<Long> receivableUserIds = null;
 
@@ -34,7 +33,7 @@ public class CreateEventRelsAndNotifsTask extends NotifyUserTask {
 	private String inviteMessage;
 	private String recommendationMessage;
 
-	public CreateEventRelsAndNotifsTask(GoogleAccountCredential credential, MyZeppaEventMediator eventMediator, List<Long> excludedUsersIds,
+	public CreateEventRelationshipsTask(GoogleAccountCredential credential, MyZeppaEventMediator eventMediator, List<Long> excludedUsersIds,
 			List<Long> eventTagIds, List<Long> invitedUserIds) {
 		super(credential);
 		
@@ -52,7 +51,7 @@ public class CreateEventRelsAndNotifsTask extends NotifyUserTask {
 	}
 
 	@Override
-	protected Boolean doInBackground(Object... params) {
+	protected Boolean doInBackground(Void... params) {
 		List<Long> receivableUsersIds = new ArrayList<Long>();
 
 		// Create relationships
@@ -81,14 +80,14 @@ public class CreateEventRelsAndNotifsTask extends NotifyUserTask {
 	 * @param toUserId
 	 * @return
 	 */
-	private ZeppaEventToUserRelationship makeRelationshipInstance(Long toUserId){
+	private ZeppaEventToUserRelationship makeRelationshipInstance(Long eventId){
 		ZeppaEventToUserRelationship result = new ZeppaEventToUserRelationship();
-		result.setHasSeen(Boolean.FALSE);
-		Long currentTime = Long.valueOf(System.currentTimeMillis());
-		result.setTimeCreatedMillis(currentTime);
-		result.setTimeUpdatedMillis(currentTime);
-		result.setZeppaEventId(eventMediator.getEventId());
-		result.setZeppaUserId(toUserId);
+
+		ZeppaEvent event = new ZeppaEvent();
+		event.setId(eventId);
+		result.setEvent(event);
+		
+		result.setZeppaUserId(ZeppaUserSingleton.getInstance().getUserId());
 		
 		return result;
 	}

@@ -29,10 +29,15 @@ public abstract class AbstractZeppaUserMediator extends AbstractMediator{
 	public abstract String getGivenName();
 	public abstract String getFamilyName();
 	public abstract String getDisplayName();
-	public abstract String getPrimaryPhoneNumber();
+	public abstract String getUnformattedPhoneNumber();
 	public abstract String getGmail();
 	public abstract Long getUserId();
 	
+	
+	public String getPrimaryPhoneNumber() throws NullPointerException {
+		return Utils.formatPhoneNumber(getUnformattedPhoneNumber());
+	}
+
 	
 	/**
 	 * This method sets the user image if it is loaded and held</p> If image has

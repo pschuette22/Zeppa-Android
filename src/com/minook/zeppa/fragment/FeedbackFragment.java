@@ -20,24 +20,19 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.json.gson.GsonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
+import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.activity.MainActivity;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppafeedbackendpoint.Zeppafeedbackendpoint;
 import com.minook.zeppa.zeppafeedbackendpoint.model.ZeppaFeedback;
 
 public class FeedbackFragment extends Fragment implements OnClickListener {
-
-	/**
-	 * @author Peter W. Schuette First written 11/23/2013
-	 * 
-	 *         Purpose: Allow user to send feedback and improvements
-	 * 
-	 */
 
 	// private variables:
 	private View layout;
@@ -99,7 +94,7 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 		((MainActivity) getActivity()).setNavigationItem(Constants.NAVIGATION_FEEDBACK_INDEX);
 
 		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setTitle(R.string.feedback_title);
+		actionBar.setTitle(R.string.feedback);
 	}
 
 	private boolean fieldsAreOk() {
@@ -134,19 +129,19 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 		}
 	}
 
-	private class PostFeedbackInAsync extends AsyncTask<Object, Object, Object> {
+	private class PostFeedbackInAsync extends AsyncTask<Void, Void, Boolean> {
 
-		private boolean success;
 
 		@Override
-		protected Boolean doInBackground(Object... params) {
+		protected Boolean doInBackground(Void... params) {
 
+			GoogleAccountCredential credential = ((AuthenticatedFragmentActivity) getActivity()).getGoogleAccountCredential();
 			Zeppafeedbackendpoint.Builder endpointBuilder = new Zeppafeedbackendpoint.Builder(
-					new NetHttpTransport(), new JacksonFactory(), null);
+					AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential);
 			endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 
 			Zeppafeedbackendpoint feedbackEndpoint = endpointBuilder.build();
-			success = false;
+			boolean success = false;
 			try {
 				Log.d(TAG, "Executing insert Feedback Object operation");
 				double rating = ratingBar.getRating();
@@ -156,8 +151,8 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 				feedback.setSubject(feedbackSubjectString);
 				feedback.setFeedback(feedbackTextString);
 				feedback.setRating(rating);
-				feedback.setVersionCode(Constants.APP_VERSION);
-				feedback.setDeviceType(1);
+				feedback.setReleaseCode(Constants.APP_RELEASE_CODE);
+				feedback.setDeviceType("ANDROID");
 
 				feedbackEndpoint.insertZeppaFeedback(feedback).execute();
 
@@ -170,10 +165,10 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 		}
 
 		@Override
-		protected void onPostExecute(Object result) {
+		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 
-			if (success) {
+			if (result) {
 				Toast.makeText(getActivity(), "Thanks for the Feedback!",
 						Toast.LENGTH_SHORT).show();
 			} else {

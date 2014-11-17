@@ -5,10 +5,9 @@ package com.minook.zeppa.mediator;
 
 import java.util.List;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,7 +32,7 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 		super(event);
 		this.relationship = relationship;
 
-		determineConflictStatus();
+
 	}
 
 	@Override
@@ -71,21 +70,14 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 
 	@Override
 	public boolean isAgendaEvent() {
+		// User has a relationship to this event
 		return (relationship != null);
-	}
-
-	public boolean isWatching() {
-		if (relationship == null) {
-			Log.wtf("TAG", "Null Relationship for mediator");
-		}
-
-		return relationship.getRelationshipType() == 1;
 	}
 
 	@Override
 	protected void setHostInfo(View view) {
 		
-		DefaultUserInfoMediator hostMediator = ZeppaUserSingleton.getInstance().getUserFor(event.getHostId());
+		DefaultUserInfoMediator hostMediator = ZeppaUserSingleton.getInstance().getUserFor(event.getHost().getKey().getId());
 		
 		TextView hostName = (TextView) view
 				.findViewById(R.id.eventview_hostname);
@@ -100,7 +92,15 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 	}
 
 	public List<DefaultEventTagMediator> getUsedTagMediators(){
-		return EventTagSingleton.getInstance().getDefaultTagsFrom(event.getTagIds());
+		return EventTagSingleton.getInstance().getDefaultTagsFrom(getTagIds());
+	}
+	
+	public boolean isWatching() {
+		if (relationship == null) {
+			Log.wtf("TAG", "Null Relationship for mediator");
+		}
+
+		return relationship.getRelationshipType().equals("WATCHING");
 	}
 	
 	public boolean isAttending() {
@@ -108,7 +108,7 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 		if (relationship == null)
 			return false;
 
-		return relationship.getRelationshipType() == 0;
+		return relationship.getRelationshipType().equals("ATTENDING");
 	}
 
 	// public boolean didRepost(){
@@ -121,11 +121,28 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 	// public MyZeppaEventManager getMyRepostManager(){
 	// return myRepostManager;
 	// }
+	
+	
 
-	protected void determineConflictStatus() {
-		switch (relationship.getRelationshipType().intValue()) {
-
+	/**
+	 * NOT THREAD SAFE</p>
+	 * This method checks the time of the event vs other calendar events. It should be called when changes are made to the calendar
+	 * 
+	 * @param conflictIndicator optional ImageView to update upon determining conflict status.
+	 */
+	protected void determineConflictStatusWithBlocking(Context context, ImageView conflictIndicator) {
+		if(isAttending()){
+			conflictStatus = ConflictStatus.ATTENDING;
+		} else {
+			conflictStatus = ConflictStatus.UNKNOWN;
+			// TODO: check 
+			
 		}
+		
+		if(conflictIndicator != null){
+			// TODO: update conflict indicator
+		}
+		
 	}
 
 	@Override

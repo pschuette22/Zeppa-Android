@@ -21,7 +21,7 @@ import com.minook.zeppa.singleton.ZeppaEventSingleton;
 public abstract class AbstractEventViewActivity extends AuthenticatedFragmentActivity implements
 		OnClickListener {
 
-	final private String TAG = getClass().getName();
+//	final private String TAG = getClass().getName();
 
 	protected AbstractZeppaEventMediator eventMediator;
 	protected AbstractZeppaUserMediator hostMediator;

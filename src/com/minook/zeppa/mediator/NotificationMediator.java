@@ -1,15 +1,12 @@
 package com.minook.zeppa.mediator;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
-import com.minook.zeppa.activity.NewFriendsActivity;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
@@ -25,7 +22,7 @@ public class NotificationMediator implements OnClickListener{
 
 	public View convertView(Activity activity, View convertView) throws NullPointerException{
 		this.activity = activity;
-		AbstractZeppaUserMediator userMediator = ZeppaUserSingleton.getInstance().getUserFor(notification.getFromUserId());
+		AbstractZeppaUserMediator userMediator = ZeppaUserSingleton.getInstance().getUserFor(notification.getSender().getKey().getId());
 		ImageView image = (ImageView) convertView.findViewById(R.id.notificationitem_userimage);
 		userMediator.setImageWhenReady(image);
 		
@@ -33,7 +30,7 @@ public class NotificationMediator implements OnClickListener{
 		message.setText(notification.getExtraMessage());
 		
 		TextView date = (TextView) convertView.findViewById(R.id.notificationitem_date);
-		date.setText(Utils.getDisplayDateString(notification.getSentDate().longValue()));
+		date.setText(Utils.getDisplayDateString(notification.getCreated().getValue()));
 				
 		convertView.setOnClickListener(this);
 		return convertView;
@@ -41,16 +38,7 @@ public class NotificationMediator implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		switch(notification.getNotificationOrdinal().intValue()){
-		case 0:
-			Intent toRequests = new Intent(activity, NewFriendsActivity.class);
-			activity.startActivity(toRequests);
-			activity.overridePendingTransition(R.anim.slide_up_in, R.anim.hold);
-			
-			break;
-		
-		
-		}
+
 		
 	}
 	

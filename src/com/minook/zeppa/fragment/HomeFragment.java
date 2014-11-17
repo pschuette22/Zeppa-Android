@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,15 +21,15 @@ import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.MainActivity;
 import com.minook.zeppa.activity.NewEventActivity;
-import com.minook.zeppa.singleton.ZeppaEventSingleton;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements OnPageChangeListener{
 
 	private ViewPager mainPager;
 	private PagerSlidingTabStrip tabStrip;
 	private ZeppaViewPagerAdapter zeppaPagerAdapter;
 
 	private View layout;
+	private int currentPage;
 
 	// Constant
 	private final int NUM_PAGES = 3;
@@ -37,11 +38,13 @@ public class HomeFragment extends Fragment {
 	 * -------------- OVERRIDE METHODS ------------------- NOTES:
 	 */
 
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
+		
 		// initialize dynamic variables:
 		layout = inflater.inflate(R.layout.fragment_home, container, false);
 		mainPager = (ViewPager) layout.findViewById(R.id.main_pager);
@@ -49,6 +52,7 @@ public class HomeFragment extends Fragment {
 		FragmentManager manager = getChildFragmentManager();
 		zeppaPagerAdapter = new ZeppaViewPagerAdapter(manager);
 		mainPager.setAdapter(zeppaPagerAdapter);
+		mainPager.setOnPageChangeListener(this);
 		tabStrip = (PagerSlidingTabStrip) layout
 				.findViewById(R.id.home_pager_tabs);
 
@@ -56,9 +60,11 @@ public class HomeFragment extends Fragment {
 		tabStrip.setIndicatorColor(getResources().getColor(R.color.teal));
 		tabStrip.setViewPager(mainPager);
 		tabStrip.setShouldExpand(true);
+		mainPager.setCurrentItem(1);
 
 		if (savedInstanceState == null)
 			setHasOptionsMenu(true);
+		
 
 		Log.d("TAG", "onCreateView, HomeFragment");
 		return layout;
@@ -68,19 +74,13 @@ public class HomeFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		((MainActivity) getActivity()).setNavigationItem(Constants.NAVIGATION_HOME_INDEX);
+		((MainActivity) getActivity())
+				.setNavigationItem(Constants.NAVIGATION_HOME_INDEX);
 
 		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setTitle(R.string.app_name);
+		actionBar.setTitle(R.string.home);
 
-		ZeppaEventSingleton.getInstance().clearOldEvents();
 
-	}
-
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		mainPager.setCurrentItem(1);
 	}
 
 	@Override
@@ -101,26 +101,40 @@ public class HomeFragment extends Fragment {
 			Intent toNewEvent = new Intent(getActivity(),
 					NewEventActivity.class);
 
-			long nullLong = -1;
-			toNewEvent.putExtra(Constants.INTENT_EVENT_STARTTIME, nullLong);
-			toNewEvent.putExtra(Constants.INTENT_EVENT_ENDTIME, nullLong);
+			toNewEvent.putExtra(Constants.INTENT_EVENT_STARTTIME,
+					Long.valueOf(-1));
+			toNewEvent.putExtra(Constants.INTENT_EVENT_ENDTIME,
+					Long.valueOf(-1));
 			startActivity(toNewEvent);
+
 			getActivity().overridePendingTransition(R.anim.slide_up_in,
 					R.anim.hold);
 			break;
 
-		case R.id.action_settings:
-
-			break;
-
-		case R.id.action_signout:
-
-			break;
 		}
 
 		return true;
 	}
+	
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+		currentPage = position;
+		
+	}
+	
+	
 	/*
 	 * ----------------- MY METHODS ----------------------- NOTES:
 	 * 
@@ -141,10 +155,11 @@ public class HomeFragment extends Fragment {
 	 * --------------- PRIVATE CLASSES --------------------- NOTES:
 	 */
 
-	private class ZeppaViewPagerAdapter extends FragmentPagerAdapter /*implements IconTabProvider*/{
+	private class ZeppaViewPagerAdapter extends FragmentPagerAdapter /* implements IconTabProvider */{
 
 		private String[] tabOptions;
-//		private int[] iconOptions = { R.drawable.ic_tab_calendar, R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda };
+		// private int[] iconOptions = { R.drawable.ic_tab_calendar,
+		// R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda };
 
 		private CalendarFragment calendarFragment;
 		private FeedFragment feedFragment;
@@ -157,7 +172,6 @@ public class HomeFragment extends Fragment {
 					.getStringArray(R.array.home_tab_options);
 
 		}
-
 
 		public boolean didHandleDayView() {
 			if (calendarFragment != null) {
@@ -204,10 +218,12 @@ public class HomeFragment extends Fragment {
 			return tabOptions[position];
 		}
 
-//		@Override
-//		public int getPageIconResId(int position) {
-//			return iconOptions[position];
-//		}
 		
+
+		// @Override
+		// public int getPageIconResId(int position) {
+		// return iconOptions[position];
+		// }
+
 	}
 }

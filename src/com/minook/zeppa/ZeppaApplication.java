@@ -12,16 +12,14 @@ import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.NotificationSingleton;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.task.InsertDeviceTask;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 
 public class ZeppaApplication extends Application {
 
-	private final String TAG = getClass().getName();
+//	private final String TAG = getClass().getName();
 
 	private List<MemoryObserver> memoryObservers;
-
-	private String authToken;
-	private String refreshToken;
 
 	/*
 	 * ------------ Override Methods -------------
@@ -30,22 +28,18 @@ public class ZeppaApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
 		memoryObservers = new ArrayList<MemoryObserver>();
 
 	}
+
 
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();
 
 	}
+	
 
-	@Override
-	public void onTerminate() {
-		super.onTerminate();
-		onApplicationTerminate();
-	}
 
 	/*
 	 * --------- Private Methods ----------------
@@ -73,33 +67,19 @@ public class ZeppaApplication extends Application {
 		ZeppaUserSingleton userSingleton = ZeppaUserSingleton.getInstance();
 		userSingleton.setUser(user);
 		// Load Users this user has relationships with
-		userSingleton.loadConnectedUsers(credential);
+		userSingleton.loadConnectedUsers(this, credential, user.getId());
 		
 		// Load events to show in the feed
-		ZeppaEventSingleton.getInstance().loadInitialEvents(credential);
+		ZeppaEventSingleton.getInstance().loadInitialEvents(credential, user.getId());
 		// Load notifications for this user
 		NotificationSingleton.getInstance().loadInitialNotificationsInAsync(
-				credential);
+				credential, user.getId());
 		// Load this users event tags
-		EventTagSingleton.getInstance().loadTagsInAsync(credential);
+		EventTagSingleton.getInstance().loadMyTagsInAsync(credential, user.getId());
 
+		new InsertDeviceTask(this, user.getId(), credential).execute();
 	}
 
-	public String getAuthToken() {
-		return authToken;
-	}
-
-	public void setAuthToken(String authToken) {
-		this.authToken = authToken;
-	}
-
-	public String getRefreshToken() {
-		return refreshToken;
-	}
-
-	public void setRefreshToken(String refreshToken) {
-		this.refreshToken = refreshToken;
-	}
 
 	/*
 	 * ------------ Memory Management -------------

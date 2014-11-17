@@ -107,9 +107,9 @@ public class RepostDialogFragment extends DialogFragment implements
 			return inviteAdapter.getInvitedUserIds();
 		}
 
-		public List<Long> getTagIds() {
-			return tagAdapter.getSelectedTagIds();
-		}
+//		public List<Long> getTagIds() {
+//			return tagAdapter.getSelectedTagIds();
+//		}
 
 		@Override
 		public int getCount() {

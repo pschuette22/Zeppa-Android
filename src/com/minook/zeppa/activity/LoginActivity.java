@@ -16,8 +16,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -26,7 +24,6 @@ import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
-import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint.GetZeppaUser;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 
 public class LoginActivity extends AuthenticatedFragmentActivity implements
@@ -41,6 +38,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	};
 
 	private boolean signinClicked;
+	private boolean executingLaunch;
 	private final int resolveConnectionFail = 5;
 
 	/*
@@ -56,14 +54,18 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		setContentView(R.layout.activity_login);
 		findViewById(R.id.sign_in_button).setOnClickListener(this);
 
-
 	}
 
 	@Override
 	protected void onStart() {
 		signinClicked = false;
+		executingLaunch = false;
 		super.onStart();
-		
+
+		if (apiClient.isConnecting()) {
+			connectionProgress.show();
+		}
+
 	}
 
 	@Override
@@ -82,8 +84,8 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 								.isConnected())) {
 
 					if (getSharedPreferences(Constants.SHARED_PREFS,
-							MODE_PRIVATE).getString(Constants.GOOGLE_ACCOUNT,
-							null) == null) {
+							MODE_PRIVATE).getString(
+							Constants.LOGGED_IN_ACCOUNT, null) == null) {
 						Intent intent = AccountPicker.newChooseAccountIntent(
 								null, null, new String[] { "com.google" },
 								false, null, null, null, null);
@@ -101,11 +103,11 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 						}
 
 					}
-				} else if (apiClient.isConnected()) {
+				} else if (apiClient.isConnected() && !executingLaunch) {
 					loadAndLaunch();
 					// Login
 				} else if (apiClient.isConnecting()
-						&& !connectionProgress.isShowing()) {
+						&& !connectionProgress.isShowing() && executingLaunch) {
 					connectionProgress.show();
 				}
 			}
@@ -132,14 +134,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 	@Override
 	public void onConnected(Bundle arg0) {
-
-		if (connectionProgress.isShowing()) {
-			connectionProgress.dismiss();
-		}
-
-		if (signinClicked) {
-			loadAndLaunch();
-		}
+		loadAndLaunch(); // Once the API Client connects, try to launch.
 	}
 
 	/*
@@ -190,6 +185,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 	private void loadAndLaunch() {
 
+		executingLaunch = true;
 		new AsyncTask<Void, Void, ZeppaUser>() {
 
 			private UserResult resultCode;
@@ -200,50 +196,19 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 				resultCode = UserResult.UNKNOWN;
 				ZeppaUser zeppaUser = null;
 
+				// Build the authenticated user endpoint to interact with GAE
 				Zeppauserendpoint.Builder endpointBuilder = new Zeppauserendpoint.Builder(
 						AndroidHttp.newCompatibleTransport(),
 						AndroidJsonFactory.getDefaultInstance(),
 						getGoogleAccountCredential());
 				endpointBuilder = CloudEndpointUtils
 						.updateBuilder(endpointBuilder);
-
 				Zeppauserendpoint userEndpoint = endpointBuilder.build();
+
 				try {
+					zeppaUser = userEndpoint.fetchZeppaUser().execute();
 
-					long appEngineId = getSharedPreferences(
-							Constants.SHARED_PREFS, MODE_PRIVATE).getLong(
-							Constants.USER_ID, -1);
-
-					if (appEngineId > 0) {
-
-						GetZeppaUser fetchUserById = userEndpoint
-								.getZeppaUser(Long.valueOf(appEngineId));
-						zeppaUser = fetchUserById.execute();
-
-						if (zeppaUser != null) {
-							resultCode = UserResult.FETCH_SUCCESS;
-							return zeppaUser;
-						}
-
-					}
-					Person currentPerson = Plus.PeopleApi
-							.getCurrentPerson(apiClient);
-
-					if (currentPerson == null) {
-						// TODO: throw new unrecognized user error
-						Toast.makeText(getApplicationContext(),
-								"Unreccognized User", Toast.LENGTH_SHORT)
-								.show();
-						return null;
-					}
-
-					Log.d(TAG,
-							"Fetching object for G+ ID: "
-									+ currentPerson.getId());
-					zeppaUser = userEndpoint.fetchMatchingUser(
-							currentPerson.getId()).execute();
-
-					if (zeppaUser == null) {
+					if (zeppaUser == null) { // Should not get here
 						resultCode = UserResult.CREATE_NEW_USER;
 
 					} else {
@@ -254,13 +219,16 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 						editor.commit();
 
 						resultCode = UserResult.FETCH_SUCCESS;
-
 					}
 
 				} catch (GoogleJsonResponseException ex) {
-
-					// resultCode = UserResult.CREATE_NEW_USER;
 					ex.printStackTrace();
+					if (ex.getStatusCode() == 404) {
+						resultCode = UserResult.CREATE_NEW_USER;
+					} else {
+						resultCode = UserResult.UNKNOWN;
+					}
+
 					return null;
 				} catch (IOException ioEx) {
 
@@ -268,9 +236,9 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 					ioEx.printStackTrace();
 					resultCode = UserResult.NETWORK_FAIL;
 
-
 					return null;
 				} catch (Exception ex) {
+					resultCode = UserResult.UNKNOWN;
 					return null;
 				}
 
@@ -281,6 +249,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 			protected void onPostExecute(ZeppaUser result) {
 				super.onPostExecute(result);
 
+				// Dismiss signin dialog
 				if (connectionProgress.isShowing()) {
 					connectionProgress.dismiss();
 				}
@@ -296,8 +265,8 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 						break;
 
 					case 2: // UserResut.NETWORK_FAIL
-						Toast.makeText(LoginActivity.this,
-								"Connection Error", Toast.LENGTH_SHORT).show();
+						Toast.makeText(LoginActivity.this, "Connection Error",
+								Toast.LENGTH_SHORT).show();
 						break;
 
 					case 3: // UserResult.AUTHORIZATION_FAIL
@@ -316,8 +285,8 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 					case 5: // UserResult.UNKNOWN
 					default:
-						Toast.makeText(LoginActivity.this,
-								"Error Occured!!!", Toast.LENGTH_SHORT).show();
+						Toast.makeText(LoginActivity.this, "Error Occured!!!",
+								Toast.LENGTH_SHORT).show();
 
 					}
 
@@ -331,7 +300,8 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 					startActivity(launchMain);
 					finish();
 				}
-				
+				executingLaunch = false;
+
 			}
 
 		}.execute();

@@ -1,8 +1,21 @@
 package com.minook.zeppa;
 
+import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.plus.PlusScopes;
+
 
 public class Constants {
 
+	/*
+	 * Software versions. Update with release
+	 * Current release: 1.0.0
+	 * */
+	
+	public static final int VERSION_CODE = 1;
+	public static final int UPDATE_CODE = 0;
+	public static final int BUGFIX_CODE = 0;
+	public static final String APP_RELEASE_CODE = VERSION_CODE + "." + UPDATE_CODE +"." + BUGFIX_CODE;
+	
 	// Global Enumerators
 	public static enum EventScope {
 		PUBLIC, // Open to unlimited sharing
@@ -48,11 +61,6 @@ public class Constants {
 	}
 
 	/*
-	 * Application - Wide constants
-	 */
-	public static final double APP_VERSION = 1.0;
-
-	/*
 	 * Debug variables
 	 */
 	public static final boolean IS_CONNECTED = true; 
@@ -74,7 +82,7 @@ public class Constants {
 	public static final String PREFS_VERSION = "Preference Version Code";
 
 	// Account Preferences
-	public static final String GOOGLE_ACCOUNT = "Account Email Address";
+	public static final String LOGGED_IN_ACCOUNT = "Account Email Address";
 	public static final String USER_ID = "Zeppa User Id";
 	public static final String ZEPPA_INTERNAL_CALENDAR_ID = "Zeppa Internal Calendar Id";
 	public static final String ZEPPA_GOOGLE_CALENDAR_ID = "Zeppa Google Calendar Id";
@@ -94,6 +102,11 @@ public class Constants {
 	public static final String PN_SOUND_ON = "Ring When Received Notification";
 	public static final String PN_VIBRARTE_ON = "Vibrate When Received Notification";
 
+	
+	/*
+	 * This is the Zeppa Calendar ID so we can get the calendar easily. 
+	 */
+	public static final String SECRET_ZEPPA_CALENDAR_ID = "SecretZeppaCalendarID";
 	/*
 	 * App Engine constants Verify it is safe to hold them here/ considered best
 	 * practice
@@ -101,21 +114,11 @@ public class Constants {
 
 	public static final String PROJECT_NUMBER = "587859844920";
 	
+	public static final String APP_ENGINE_CLIENT_ID = "587859844920.project.googleusercontent.com";
 	public static final String WEB_CLIENT_ID = "587859844920-jiqoh8rn4j8d0941vunu4jfdcl2huv4l.apps.googleusercontent.com";
-	public static final String ANDROID_CLIENT_ID = "587859844920-nntv7duprkooi09urrsigsvia4kcu6s5.apps.googleusercontent.com";
 	public static final String ANDROID_AUDIENCE = "server:client_id:" + WEB_CLIENT_ID;
-	public static final String EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
-	public static final String API_CLIENT_SCOPES = "oauth2:server:client_id:" + WEB_CLIENT_ID + ":api_scope:" + EMAIL_SCOPE;
+	public static final String APP_ENGINE_SCOPES = CalendarScopes.CALENDAR + " " + PlusScopes.PLUS_LOGIN;
 	
-	
-	/*
-	 * Scopes
-	 * 
-	 * List of the scopes needed for the authentication client
-	 */
-
-	
-
 	
 	/*
 	 * Navigation items are for labeling back stack instances When back button
@@ -161,6 +164,8 @@ public class Constants {
 	public static final int QUERY_LIMIT_COMMENT = 10;
 	public static final int QUERY_LIMIT_NOTIFICATIONS = 10;
 	public static final int QUERY_LIMIT_RELATIONSHIP = 20;
+	
+	
 	
 	
 

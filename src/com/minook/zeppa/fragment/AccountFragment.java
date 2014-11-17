@@ -1,5 +1,6 @@
 package com.minook.zeppa.fragment;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -86,6 +87,8 @@ public class AccountFragment extends Fragment implements OnClickListener {
 		
 		((MainActivity) getActivity()).setNavigationItem(Constants.NAVIGATION_ACCOUNT_INDEX);
 	
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setTitle(R.string.my_profile);
 	}
 	
 

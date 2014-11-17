@@ -12,30 +12,31 @@ import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
-public class ContactFinderAdapter extends BaseAdapter {
+public class MinglerFinderAdapter extends BaseAdapter {
 
 	private AuthenticatedFragmentActivity context;
 
 	private List<DefaultUserInfoMediator> possibleConnectionMediators;
 	private List<DefaultUserInfoMediator> pendingRequestMediators;
 
-	public ContactFinderAdapter(AuthenticatedFragmentActivity context) {
+	public MinglerFinderAdapter(AuthenticatedFragmentActivity context) {
 		this.context = context;
 
 		possibleConnectionMediators = ZeppaUserSingleton.getInstance().getPossibleFriendInfoMediators();
 		pendingRequestMediators = ZeppaUserSingleton.getInstance().getPendingFriendRequests();
+		
 	}
 
 	@Override
 	public void notifyDataSetChanged() {
 		possibleConnectionMediators = ZeppaUserSingleton.getInstance().getPossibleFriendInfoMediators();
-		super.notifyDataSetChanged();
+		pendingRequestMediators = ZeppaUserSingleton.getInstance().getPendingFriendRequests();
 		
+		super.notifyDataSetChanged();
 	}
 
 	@Override
-	public int getCount() { // size is the addition between pending and
-		// possible connections
+	public int getCount() {
 		return possibleConnectionMediators.size() + pendingRequestMediators.size();
 	}
 
@@ -71,6 +72,8 @@ public class ContactFinderAdapter extends BaseAdapter {
 		
 		return convertView;
 	}
+	
+	
 
 	/*
 	 * Private methods
@@ -85,8 +88,5 @@ public class ContactFinderAdapter extends BaseAdapter {
 		}
 	}
 
-	/*
-	 * AsyncTasks
-	 */
 
 }

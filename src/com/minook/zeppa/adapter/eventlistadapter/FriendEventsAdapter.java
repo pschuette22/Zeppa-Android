@@ -3,14 +3,11 @@ package com.minook.zeppa.adapter.eventlistadapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.google.android.gms.wearable.NodeApi.GetConnectedNodesResult;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
-import com.minook.zeppa.utils.Utils;
 
 public class FriendEventsAdapter extends AbstractEventLayoutAdapter {
 

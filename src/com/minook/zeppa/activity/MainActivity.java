@@ -52,6 +52,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -70,9 +71,9 @@ import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.adapter.NotificationsAdapter;
 import com.minook.zeppa.fragment.AccountFragment;
-import com.minook.zeppa.fragment.ContactsFragment;
 import com.minook.zeppa.fragment.FeedbackFragment;
 import com.minook.zeppa.fragment.HomeFragment;
+import com.minook.zeppa.fragment.MinglersFragment;
 import com.minook.zeppa.fragment.SettingsFragment;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
@@ -94,7 +95,7 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 	// Navigation options:
 	private AccountFragment accountFragment;
 	private HomeFragment homeFragment;
-	private ContactsFragment contactsFragment;
+	private MinglersFragment contactsFragment;
 	private FeedbackFragment feedbackFragment;
 	private SettingsFragment settingsFragment;
 
@@ -105,7 +106,6 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_main);
 
 		ActionBar actionBar = getActionBar();
@@ -160,20 +160,19 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 		drawerLayout.setDrawerListener(drawerToggle);
 		selectItem(1, false);
 
-
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 
-//		if (navigationList.getCheckedItemCount() > 0) {
-//			// If an item is already selected, make sure that the correct
-//			// fragment is showing
-//			selectItem(navigationList.getSelectedItemPosition(), false);
-//		} else {
-//			// else default and show home
-//		}
+		// if (navigationList.getCheckedItemCount() > 0) {
+		// // If an item is already selected, make sure that the correct
+		// // fragment is showing
+		// selectItem(navigationList.getSelectedItemPosition(), false);
+		// } else {
+		// // else default and show home
+		// }
 
 	}
 
@@ -182,8 +181,6 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
-	
-	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -199,17 +196,17 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 			return true;
 		}
 
-		if (item.getItemId() == R.id.action_notifications) {
+		if (drawerLayout.isDrawerVisible(navigationCabinet)
+				|| drawerLayout.isDrawerVisible(activityList)) {
+
+			drawerLayout.closeDrawers();
+			return true;
+		}
+
+		if (item.getItemId() == R.id.action_activity) {
 
 			drawerLayout.openDrawer(activityList);
 
-		}
-
-		if (drawerLayout.isDrawerVisible(navigationCabinet)) {
-
-			// || drawerLayout.isDrawerVisible(activityList)) {
-			drawerLayout.closeDrawers();
-			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -240,31 +237,32 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 	 * ----------------- MY METHODS ----------------------- NOTES:
 	 */
 
-	public void setNavigationItem(int navigationIndex){
-		navigationList.setItemChecked(navigationIndex, true);
-	}
-	
 	private int currentPage() {
-		return navigationList.getSelectedItemPosition();
+		Fragment current = getSupportFragmentManager().findFragmentById(
+				R.id.content_frame);
+
+		if (current == null) {
+			return -1;
+		} else if (current instanceof AccountFragment) {
+			return 0;
+		} else if (current instanceof HomeFragment) {
+			return 1;
+		} else if (current instanceof MinglersFragment) {
+			return 2;
+		} else if (current instanceof FeedbackFragment) {
+			return 3;
+		} else if (current instanceof SettingsFragment) {
+			return 4;
+		} else {
+			Log.wtf(TAG, "Unrecognized fragment");
+			return -1;
+		}
+
 	}
 
-//	private int getFragmentNavigationIndex(Fragment fragment) {
-//		if (fragment instanceof AccountFragment) {
-//			return 0;
-//		} else if (fragment instanceof HomeFragment) {
-//			return 1;
-//		} else if (fragment instanceof ContactsFragment) {
-//			return 2;
-//		} else if (fragment instanceof FeedbackFragment) {
-//			return 3;
-//		} else if (fragment instanceof SettingsFragment) {
-//			return 4;
-//		} else {
-//			Log.wtf(TAG, "Unknown Fragment in BackStack");
-//			return -1;
-//		}
-//
-//	}
+	public void setNavigationItem(int navigationIndex) {
+		navigationList.setItemChecked(navigationIndex, true);
+	}
 
 	public void selectItem(int position, boolean addToBackStack) {
 
@@ -293,7 +291,7 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 
 			case 2:
 				if (contactsFragment == null)
-					contactsFragment = new ContactsFragment();
+					contactsFragment = new MinglersFragment();
 				transaction.replace(R.id.content_frame, contactsFragment);
 				transactionTitle = Constants.NAVIGATION_CONTACTS;
 				break;
@@ -377,30 +375,20 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 
 				case 1: // Home
 					iconResource = R.drawable.ic_home;
-					if (currentPage() == 1) {
-						convertView.setSelected(true);
-					}
+
 					break;
 
 				case 2: // Minglers
 					iconResource = R.drawable.ic_minglers;
-					if (currentPage() == 2) {
-						convertView.setSelected(true);
-					}
+
 					break;
 
 				case 3: // Feedback
 					iconResource = R.drawable.ic_feedback;
-					if (currentPage() == 4) {
-						convertView.setSelected(true);
-					}
 
 					break;
 				case 4: // Settings
 					iconResource = R.drawable.ic_settings;
-					if (currentPage() == 5) {
-						convertView.setSelected(true);
-					}
 					break;
 
 				default:
@@ -416,6 +404,11 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 						.findViewById(R.id.navlistItemText);
 				optionText.setText(navOptions[position]);
 
+			}
+
+			if (navigationList.getCheckedItemCount() > 0) {
+				convertView
+						.setSelected(navigationList.getCheckedItemPosition() == position);
 			}
 
 			return convertView;

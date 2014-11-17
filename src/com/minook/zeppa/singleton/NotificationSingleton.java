@@ -14,13 +14,13 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
 import com.minook.zeppa.CloudEndpointUtils;
-import com.minook.zeppa.Constants;
 import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint;
-import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint.GetNotificationList;
+import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint.ListZeppaNotification;
 import com.minook.zeppa.zeppanotificationendpoint.model.CollectionResponseZeppaNotification;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
+import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaUser;
 
 public class NotificationSingleton {
 	private static NotificationSingleton singleton;
@@ -67,8 +67,8 @@ public class NotificationSingleton {
 	 */
 
 	/**
-	 * This method creates a new basic instance of a ZeppaNotification</p>
-	 * This instance is only to be sent to another user from this user.
+	 * This method creates a new basic instance of a ZeppaNotification</p> This
+	 * instance is only to be sent to another user from this user.
 	 * 
 	 * @return instance - Basic ZeppaNotification Instance
 	 */
@@ -76,8 +76,9 @@ public class NotificationSingleton {
 		ZeppaNotification instance = new ZeppaNotification();
 
 		instance.setHasSeen(Boolean.FALSE);
-		instance.setSentDate(System.currentTimeMillis());
-		instance.setFromUserId(getUserId());
+		ZeppaUser sender = new ZeppaUser();
+		sender.setId(ZeppaUserSingleton.getInstance().getUserId());
+		instance.setSender(sender);
 
 		return instance;
 	}
@@ -122,7 +123,7 @@ public class NotificationSingleton {
 	 * Loaders
 	 */
 
-	public boolean markNotificationAsSeen(Long notificationId,
+	public boolean markNotificationAsSeen(ZeppaNotification notification,
 			GoogleAccountCredential credential) {
 		boolean success = false;
 
@@ -134,7 +135,8 @@ public class NotificationSingleton {
 				.build();
 
 		try {
-			notificationEndpoint.userHasSeen(notificationId).execute();
+			notificationEndpoint.updateZeppaNotification(notification)
+					.execute();
 			success = true;
 		} catch (GoogleAuthIOException aEx) {
 			Log.wtf(TAG, "AuthException");
@@ -146,16 +148,17 @@ public class NotificationSingleton {
 	}
 
 	public void loadInitialNotificationsInAsync(
-			GoogleAccountCredential credential) {
+			GoogleAccountCredential credential, Long userId) {
 
-		GoogleAccountCredential[] params = { credential };
+		Object[] params = { credential, userId };
 
-		new AsyncTask<GoogleAccountCredential, Void, Void>() {
+		new AsyncTask<Object, Void, Void>() {
 
 			@Override
-			protected Void doInBackground(GoogleAccountCredential... params) {
+			protected Void doInBackground(Object... params) {
 
-				GoogleAccountCredential credential = params[0];
+				GoogleAccountCredential credential = (GoogleAccountCredential) params[0];
+				Long userId = (Long) params[1];
 
 				Zeppanotificationendpoint.Builder endpointBuilder = new Zeppanotificationendpoint.Builder(
 						AndroidHttp.newCompatibleTransport(),
@@ -165,28 +168,42 @@ public class NotificationSingleton {
 				Zeppanotificationendpoint notificationEndpoint = endpointBuilder
 						.build();
 
-				try {
+				// TODO: list notifications for this user
 
-					int start = 0;
+				String cursor = null;
+				String filter = "recipientId == userIdParam";
+				String ordering = "created desc";
+				String parameterDeclaration = "Long userIdParam";
 
-					GetNotificationList getNotificationList = notificationEndpoint
-							.getNotificationList(getUserId(), start);
-					CollectionResponseZeppaNotification result = getNotificationList
-							.execute();
+				do {
+					try {
 
-					if (result == null || result.getItems() == null
-							|| result.getItems().isEmpty()) {
-					} else {
-						List<ZeppaNotification> resultList = result.getItems();
-						notifications.addAll(resultList);
+						ListZeppaNotification listNotificationsTask = notificationEndpoint
+								.listZeppaNotification();
 
+						listNotificationsTask.setCursor(cursor);
+						listNotificationsTask.setFilter(filter);
+						listNotificationsTask.setParameterDeclaration(parameterDeclaration);
+						listNotificationsTask.setOrdering(ordering);
+						listNotificationsTask.setLimit(40);
+						listNotificationsTask.setLongParam(userId);
+						
+						CollectionResponseZeppaNotification response = listNotificationsTask.execute();
+						
+						if(response == null || response.getItems() == null || response.getItems().isEmpty()){
+							cursor = null;
+							break;
+						} else {
+							addAllNotifications(response.getItems());
+							cursor = response.getNextPageToken();
+						}
+						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 
-				} catch (GoogleAuthIOException aEx) {
-					Log.wtf(TAG, "AuthException");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				} while (cursor != null);
 
 				return null;
 			}

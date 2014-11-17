@@ -17,12 +17,12 @@ import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
 
-public abstract class AbstractZeppaEventMediator extends AbstractMediator implements OnClickListener {
-
+public abstract class AbstractZeppaEventMediator extends AbstractMediator
+		implements OnClickListener {
 
 	/*
-	 * This is the last context the event mediator was called in.
-	 * Must call killContext() when moving to another activity 
+	 * This is the last context the event mediator was called in. Must call
+	 * killContext() when moving to another activity
 	 */
 
 	public enum ConflictStatus {
@@ -30,13 +30,13 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator implem
 	}
 
 	protected ZeppaEvent event;
-	
+
 	protected boolean hasLoadedRelationships;
 	protected List<ZeppaEventToUserRelationship> relationships;
-	
+
 	protected long lastUpdateTimeInMillis;
 	protected ConflictStatus conflictStatus;
-	
+
 	public AbstractZeppaEventMediator(ZeppaEvent event) {
 		this.event = event;
 		this.conflictStatus = ConflictStatus.UNKNOWN;
@@ -47,11 +47,12 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator implem
 
 	}
 
-
 	/**
-	 * Pass in a ConvertView for a ZeppaEvent and set elements of this view to reflect the given zeppa event
+	 * Pass in a ConvertView for a ZeppaEvent and set elements of this view to
+	 * reflect the given zeppa event
 	 */
-	public void convertView(AuthenticatedFragmentActivity context, View convertView) {
+	public void convertView(AuthenticatedFragmentActivity context,
+			View convertView) {
 		super.convertView(context);
 		TextView title = (TextView) convertView
 				.findViewById(R.id.eventview_eventtitle);
@@ -59,53 +60,59 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator implem
 				.findViewById(R.id.eventview_description);
 		TextView eventTime = (TextView) convertView
 				.findViewById(R.id.eventview_eventtime);
-		
+
 		TextView eventlocation = (TextView) convertView
 				.findViewById(R.id.eventview_eventlocation);
 
 		title.setText(event.getTitle());
 		eventTime.setText(Utils.getDisplayDatesString(event.getStart()
-				.longValue(), event.getEnd().longValue()));
-		
+				.getValue(), event.getEnd().getValue()));
+
 		String location = getDisplayLocation();
-		if(location == null ){
+		if (location == null) {
 			eventlocation.setVisibility(View.GONE);
 		} else {
 			eventlocation.setText(location);
 		}
-		
-		
+
 		description.setText(event.getDescription());
 
-		ImageView conflictIndicator = (ImageView) convertView.findViewById(R.id.eventview_conflictionindicator);
+		ImageView conflictIndicator = (ImageView) convertView
+				.findViewById(R.id.eventview_conflictionindicator);
 
 		setConflictIndicator(conflictIndicator);
-		
+
 		setHostInfo(convertView);
-		
+
 		convertView.setOnClickListener(this);
 
 	}
-	
 
 	public Long getEventId() {
 		return event.getKey().getId();
 	}
 
-	public Long getHostId(){
-		return event.getHostId();
+	public Long getHostId() {
+		return event.getHost().getId();
 	}
-	
-	public Long getRepostedFromEventId(){
-		return event.getRepostedFromEventId();
+
+	public Long getRepostedFromEventId() {
+		return event.getRepostedEventId();
 	}
-	
-	public Long getOriginalEventId(){
+
+	public Long getOriginalEventId() {
 		return event.getOriginalEventId();
+
 	}
-	
+
 	public List<Long> getTagIds(){
-		return event.getTagIds();
+		
+		if(event.getTagIds() == null){
+			return new ArrayList<Long>();
+		} else {
+			return event.getTagIds();
+		}
+		
 	}
 	
 	public abstract boolean isAgendaEvent();
@@ -120,17 +127,20 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator implem
 
 	public String getDisplayLocation() {
 
-		if (event.getDisplayLocation() != null && !event.getDisplayLocation().isEmpty()) {
+		if (event.getDisplayLocation() != null
+				&& !event.getDisplayLocation().isEmpty()) {
 			return event.getDisplayLocation();
-		} else if(event.getMapsLocation() != null && !event.getMapsLocation().isEmpty()){
+		} else if (event.getMapsLocation() != null
+				&& !event.getMapsLocation().isEmpty()) {
 			return event.getMapsLocation();
-		} else return null;
+		} else
+			return null;
 
 	}
 
 	public String getTimeString() {
-		return Utils.getDisplayDatesString(event.getStart().longValue(),
-				event.getEnd().longValue());
+		return Utils.getDisplayDatesString(event.getStart().getValue(), event
+				.getEnd().getValue());
 	}
 
 	public boolean doesMatchEventId(long eventId) {
@@ -138,7 +148,7 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator implem
 	}
 
 	public boolean hostIdDoesMatch(long hostId) {
-		return (event.getHostId().longValue() == hostId);
+		return (event.getHost().getId().longValue() == hostId);
 	}
 
 	public void update() {
@@ -146,16 +156,16 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator implem
 	}
 
 	public boolean isPublicEvent() {
-		return event.getPrivacy().intValue() == 1;
+		return event.getPrivacy().equals("PUBLIC");
 	}
 
 	public boolean isPrivateEvent() {
-		return event.getPrivacy().intValue() == 2;
+		return event.getPrivacy().equals("PRIVATE");
 	}
-	
+
 	public boolean eventIsOld() {
 		long currentTime = System.currentTimeMillis();
-		return (event.getEnd().longValue() <= currentTime);
+		return (event.getEnd().getValue() <= currentTime);
 	}
 
 	private void getNSetViaInAsync(TextView viaText, Long viaUserId) {
@@ -207,11 +217,10 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator implem
 
 	}
 
-
 	protected abstract void setHostInfo(View view);
-	
-	protected void setConflictIndicator(ImageView image){
-		switch(conflictStatus.ordinal()){
+
+	protected void setConflictIndicator(ImageView image) {
+		switch (conflictStatus.ordinal()) {
 		case 0:
 			image.setImageResource(R.drawable.conflict_blue);
 			break;
@@ -230,11 +239,8 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator implem
 		}
 	}
 
-
-
-
 	private void loadRelationshipsForEventInAsync() {
-		new AsyncTask<Void, Void, Boolean>(){
+		new AsyncTask<Void, Void, Boolean>() {
 
 			@Override
 			protected Boolean doInBackground(Void... params) {
@@ -244,30 +250,27 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator implem
 			@Override
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
-				
-				if(result){
-					
+
+				if (result) {
+
 				} else {
-					
+
 				}
 			}
-			
-			
-			
+
 		}.execute();
 	}
-	
+
 	private boolean loadRelationships() {
 		boolean success = false;
 
-		
-		
 		return success;
 	}
-	
-	public void raiseCalendarDialog(){
-		CalendarController controller = CalendarController.getInstance(getContext());
-		
+
+	public void raiseCalendarDialog() {
+		CalendarController controller = CalendarController
+				.getInstance(getContext());
+
 	}
 
 	protected class UpdateEventTask extends AsyncTask<Void, Void, Boolean> {
@@ -279,12 +282,9 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator implem
 		}
 
 	}
-	
 
-	
 	private class CalendarDialog extends DialogFragment {
 
-		
 	}
 
 }

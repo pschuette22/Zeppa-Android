@@ -24,10 +24,6 @@
     <color name="blue_eggshell">#CCF3FF</color>
     <color name="blue_lightish">#3D61FF</color>
     <color name="blue_link">#5CA8FF</color>
-    <color name="teal">#0AD2FF</color>
-    <color name="teal_dark">#1FA9FF</color>
-    <color name="teal_light">#A6DDFF</color>
-    <color name="teal_transparent">#500AD2FF</color>  
     
     <!-- Green -->
     <color name="green">#0F0</color>
@@ -39,6 +35,12 @@
     <color name="red_dark">#CF1313</color>
     <color name="red_notif">#FF1919</color>
     <color name="red_transparent">#8F00</color>
+    
+    <!-- Teal -->
+    <color name="teal">#0AD2FF</color>
+    <color name="teal_dark">#1FA9FF</color>
+    <color name="teal_light">#A6DDFF</color>
+    <color name="teal_transparent">#500AD2FF</color>  
     
     <!-- Yellow -->
     <color name="yellow">#252500</color>

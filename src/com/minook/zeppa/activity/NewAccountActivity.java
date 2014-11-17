@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,11 +20,12 @@ import com.google.android.gms.plus.model.people.Person;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.calendar.model.Calendar;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
-import com.minook.zeppa.gcm.ZeppaGCMReceiver;
+import com.minook.zeppa.utils.GCalUtils;
 import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUserInfo;
@@ -131,11 +131,10 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 			progress.setCancelable(false);
 			progress.show();
 
-			Object[] params = { createdUser, getBaseContext(), progress };
+			Object[] params = { createdUser, progress };
 
 			new AsyncTask<Object, Void, ZeppaUser>() {
 
-				private Context context;
 				private ProgressDialog progress;
 
 				@Override
@@ -143,14 +142,13 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 					try {
 						ZeppaUser createdUser = (ZeppaUser) params[0];
-						context = (Context) params[1];
-						progress = (ProgressDialog) params[2];
+						progress = (ProgressDialog) params[1];
 						GoogleAccountCredential credential = getGoogleAccountCredential();
-
-						// Register first device
-						ZeppaGCMReceiver.register(context);
-
-
+						
+						// Insert the Zeppa Calendar
+						Calendar zeppaCalendar = GCalUtils.insertZeppaCalendar(NewAccountActivity.this, getGoogleCalendarCredential());
+						createdUser.setZeppaCalendarId(zeppaCalendar.getId());
+						
 						Zeppauserendpoint.Builder endpointBuilder = new Zeppauserendpoint.Builder(
 								AndroidHttp.newCompatibleTransport(),
 								new JacksonFactory(), credential);
@@ -158,7 +156,12 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 								.updateBuilder(endpointBuilder);
 						Zeppauserendpoint endpoint = endpointBuilder.build();
 
-						return endpoint.insertZeppaUser(createdUser).execute();
+						
+						ZeppaUser result = endpoint.insertZeppaUser(createdUser).execute();
+									
+						
+						
+						return result; 
 					} catch (IOException e) {
 						e.printStackTrace();
 						return null;
@@ -188,7 +191,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 						finish();
 
 					} else {
-						Toast.makeText(context, "Error Occured",
+						Toast.makeText(NewAccountActivity.this, "Error Occured",
 								Toast.LENGTH_SHORT).show();
 					}
 
@@ -230,16 +233,9 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 			Person currentPerson = Plus.PeopleApi
 					.getCurrentPerson(apiClient);
 			String personId = currentPerson.getId();
-			Log.d(TAG, "Person ID: " + personId);
-			zeppaUser.setGoogleProfileId(personId);
 			
-			zeppaUser.setCreatedTimeStamp(Long.valueOf(System
-					.currentTimeMillis()));
-
+			zeppaUser.setGoogleProfileId(personId);
 			zeppaUser.setUserInfo(userInfo);
-
-			// TODO: change this to the generated calendar's id
-			zeppaUser.setZeppaCalendarId("Temp Zeppa Calendar Id");
 
 			return zeppaUser;
 
@@ -249,5 +245,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 		}
 
 	}
+	
+	
 
 }

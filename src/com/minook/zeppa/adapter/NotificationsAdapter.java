@@ -21,7 +21,7 @@ import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AbstractEventViewActivity;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
-import com.minook.zeppa.activity.NewFriendsActivity;
+import com.minook.zeppa.activity.StartMinglingActivity;
 import com.minook.zeppa.activity.UserActivity;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.observer.OnLoadListener;
@@ -102,13 +102,20 @@ public class NotificationsAdapter extends BaseAdapter implements
 			TextView date = (TextView) convertView
 					.findViewById(R.id.notificationitem_date);
 
-			setImageInAsync(userImage, notification.getFromUserId());
+			setImageInAsync(userImage, notification.getSender().getKey()
+					.getId());
 			text.setText(notification.getExtraMessage());
-			date.setText(Utils.getDisplayDateString(notification
-					.getSentDate()));
+			date.setText(Utils.getDisplayDateString(notification.getCreated()
+					.getValue()));
 		}
 
 		return convertView;
+	}
+
+	@Override
+	public void notifyDataSetChanged() {
+		notifications = NotificationSingleton.getInstance().getNotifications();
+		super.notifyDataSetChanged();
 	}
 
 	@Override
@@ -118,6 +125,10 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 	@Override
 	public void onFinishLoad() {
+
+		if (loaderView != null && loaderView.getVisibility() == View.VISIBLE) {
+			loaderView.setVisibility(View.GONE);
+		}
 
 		notifyDataSetChanged();
 
@@ -131,7 +142,11 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 		DefaultUserInfoMediator infoManager = ZeppaUserSingleton.getInstance()
 				.getUserFor(userId);
-
+		if (infoManager != null) {
+			infoManager.setImageWhenReady(imageView);
+		} else {
+			// TODO: load user and set image.
+		}
 	}
 
 	public void hasSeenUnseenNotifications() {
@@ -147,8 +162,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 						try {
 							NotificationSingleton.getInstance()
-									.markNotificationAsSeen(
-											notification.getKey().getId(),
+									.markNotificationAsSeen(notification,
 											getCredential());
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -168,19 +182,20 @@ public class NotificationsAdapter extends BaseAdapter implements
 			long arg3) {
 		// TODO Auto-generated method stub
 		ZeppaNotification notification = getItem(position);
-		int type = notification.getNotificationOrdinal();
+
+		String type = notification.getType();
 		Intent intent = null;
-		switch (type) {
+		switch (notificationTypeOrder(type)) {
 
 		case 0: // FriendRequest;
-			intent = new Intent(activity, NewFriendsActivity.class);
+			intent = new Intent(activity, StartMinglingActivity.class);
 			activity.overridePendingTransition(R.anim.slide_up_in, R.anim.hold);
 			activity.startActivity(intent);
 			break;
 		case 1: // FriendAccepted
 			intent = new Intent(activity, UserActivity.class);
-			intent.putExtra(Constants.INTENT_ZEPPA_USER_ID,
-					notification.getFromUserId());
+			intent.putExtra(Constants.INTENT_ZEPPA_USER_ID, notification
+					.getSender().getKey().getId());
 			activity.startActivity(intent);
 
 			activity.overridePendingTransition(R.anim.slide_left_in,
@@ -244,14 +259,14 @@ public class NotificationsAdapter extends BaseAdapter implements
 			activity.overridePendingTransition(R.anim.slide_left_in,
 					R.anim.slide_left_out);
 			break;
-		case 9: // Someone Wants to find a time, Implement Later
+		// case 9: // Someone Wants to find a time, Implement Later
+		//
+		// break;
+		// case 10: // Time was found
+		//
+		// break;
 
-			break;
-		case 10: // Time was found
-
-			break;
-
-		case 11: // Event Reposted
+		case 9: // Event Reposted
 			intent = new Intent(activity, AbstractEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
@@ -261,6 +276,32 @@ public class NotificationsAdapter extends BaseAdapter implements
 			break;
 		}
 
+	}
+
+	private int notificationTypeOrder(String type) {
+		if (type.equals("FRIEND_REQUEST")) {
+			return 0;
+		} else if (type.equals("FRIEND_ACCEPTED")) {
+			return 1;
+		} else if (type.equals("EVENT_RECCOMENDATION")) {
+			return 2;
+		} else if (type.equals("DIRECT_INVITE")) {
+			return 3;
+		} else if (type.equals("COMMENT_ON_POST")) {
+			return 4;
+		} else if (type.equals("EVENT_CANCELED")) {
+			return 5;
+		} else if (type.equals("EVENT_UPDATED")) {
+			return 6;
+		} else if (type.equals("USER_JOINED")) {
+			return 7;
+		} else if (type.equals("USER_LEAVING")) {
+			return 8;
+		} else if (type.equals("EVENT_REPOSTED")) {
+			return 9;
+		} else {
+			return -1;
+		}
 	}
 
 }

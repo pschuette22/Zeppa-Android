@@ -88,7 +88,7 @@ public abstract class AbstractAccountBaseActivity extends
 
 	protected void setInfo() {
 		String accountEmail = getSharedPreferences(Constants.SHARED_PREFS,
-				Context.MODE_PRIVATE).getString(Constants.GOOGLE_ACCOUNT, null);
+				Context.MODE_PRIVATE).getString(Constants.LOGGED_IN_ACCOUNT, null);
 
 		if (accountEmail == null || accountEmail.isEmpty()) {
 			Log.wtf("TAG", "In Account Activity without account specified");

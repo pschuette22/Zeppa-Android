@@ -15,7 +15,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIO
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.adapter.tagadapter.MyTagAdapter;
 import com.minook.zeppa.eventtagendpoint.Eventtagendpoint;
-import com.minook.zeppa.eventtagendpoint.Eventtagendpoint.GetUserTags;
+import com.minook.zeppa.eventtagendpoint.Eventtagendpoint.ListEventTag;
 import com.minook.zeppa.eventtagendpoint.model.CollectionResponseEventTag;
 import com.minook.zeppa.eventtagendpoint.model.EventTag;
 import com.minook.zeppa.eventtagfollowendpoint.Eventtagfollowendpoint;
@@ -64,7 +64,7 @@ public class EventTagSingleton {
 	 */
 	public EventTag newTagInstance() {
 		EventTag tag = new EventTag();
-		tag.setUserId(getUserId());
+		tag.setOwnerId(getUserId());
 		return tag;
 	}
 
@@ -232,17 +232,18 @@ public class EventTagSingleton {
 	 * 
 	 * @param credential
 	 */
-	public void loadTagsInAsync(GoogleAccountCredential credential) {
+	public void loadMyTagsInAsync(GoogleAccountCredential credential, Long userId) {
 
-		GoogleAccountCredential[] params = { credential };
+		Object[] params = { credential , userId };
 
-		new AsyncTask<GoogleAccountCredential, Void, Boolean>() {
+		new AsyncTask<Object, Void, Boolean>() {
 
 			@Override
-			protected Boolean doInBackground(GoogleAccountCredential... params) {
+			protected Boolean doInBackground(Object... params) {
 
 				Boolean success = Boolean.TRUE;
-				GoogleAccountCredential credential = params[0];
+				GoogleAccountCredential credential = (GoogleAccountCredential) params[0];
+				Long userId = (Long) params[1];
 				Eventtagendpoint.Builder endpointBuilder = new Eventtagendpoint.Builder(
 						AndroidHttp.newCompatibleTransport(),
 						AndroidJsonFactory.getDefaultInstance(), credential);
@@ -250,44 +251,45 @@ public class EventTagSingleton {
 						.updateBuilder(endpointBuilder);
 				Eventtagendpoint tagEndpoint = endpointBuilder.build();
 
-				int start = 0;
-				try {
-					while (true) {
+				// TODO: List Query for all of this users event tags
+				
+				String cursor = null;
+				String filter = "userId == userIdParam";
+				String paramsDeclaration = "Long userIdParam";
 
-						GetUserTags getUserTags = tagEndpoint.getUserTags(
-								getUserId(), start, 20);
+				do{
 
-						CollectionResponseEventTag response = getUserTags
-								.execute();
+					try {
+						ListEventTag listTagTask = tagEndpoint.listEventTag();
+						
+						listTagTask.setCursor(cursor);
+						listTagTask.setFilter(filter);
+						listTagTask.setLongParam(userId);
+						listTagTask.setParameterDeclaration(paramsDeclaration);
+						listTagTask.setLimit(30);
+						
+						CollectionResponseEventTag tagResponse = listTagTask.execute();
 
-						if (response == null || response.getItems() == null
-								|| response.getItems().isEmpty()) {
+						if(tagResponse == null || tagResponse.getItems() == null || tagResponse.getItems().isEmpty()){
+							cursor = null;
 							break;
-
 						} else {
-							Iterator<EventTag> iterator = response.getItems()
-									.iterator();
-
-							while (iterator.hasNext()) {
+							Iterator<EventTag> iterator = tagResponse.getItems().iterator();
+							while(iterator.hasNext()){
 								addMyEventTag(iterator.next());
 							}
-
-							if (response.getItems().size() < 20) {
-								break;
-							}
-
+							
+							cursor = tagResponse.getNextPageToken();
 						}
-
+						
+					} catch (IOException e) {
+						e.printStackTrace();
+						break;
 					}
-
-				} catch (GoogleAuthIOException aEx) {
-					Log.wtf(TAG, "AuthException");
-					success = Boolean.FALSE;
-				} catch (IOException e) {
-					e.printStackTrace();
-					success = Boolean.FALSE;
-
-				}
+					
+				} while (cursor != null);
+				
+				
 
 				return success;
 			}
@@ -295,8 +297,11 @@ public class EventTagSingleton {
 			@Override
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
-				// TODO: indicate an error here and/or try again
-
+				
+				if(!result){
+					// TODO: indicate an error here and/or try again
+				}
+					
 				hasLoadedTags = true;
 				if (waitingAdapter != null) {
 					waitingAdapter.notifyDataSetChanged();
@@ -363,55 +368,11 @@ public class EventTagSingleton {
 		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 		Eventtagendpoint endpoint = endpointBuilder.build();
 
-		int startIndex = 0;
-		List<EventTag> tagResults = new ArrayList<EventTag>();
-		boolean operationSuccess = true;
 		
-		while (true) {
-			try {
-				CollectionResponseEventTag collection = endpoint.getUserTags(
-						userId, startIndex, 20).execute();
-
-				if (collection != null) {
-					List<EventTag> tagList = collection.getItems();
-
-					if (tagList != null && !tagList.isEmpty()) {
-
-						tagResults.addAll(tagList);
-
-						if (tagList.size() < 20) {
-							break;
-						} else {
-							startIndex += 20;
-						}
-
-					} else {
-						break;
-					}
-
-				} else {
-					break;
-				}
-
-			} catch (GoogleAuthIOException aEx) {
-				Log.wtf(TAG, "AuthException");
-				operationSuccess = false;
-			} catch (IOException ioEx) {
-				ioEx.printStackTrace();
-				operationSuccess = false;
-			}
-
-		}
-
-		if (operationSuccess) {
-			didUpdate = removeOldEventTags(getTagMediatorsForUser(userId),
-					tagResults);
-
-			didUpdate = addNewMediators(getTagMediatorsForUser(userId),
-					tagResults, credential);
-		} else {
-			didUpdate = false;
-		}
+		
+		
+		
+		// TODO: fetch all the tags for given user
 
 		return didUpdate;
 	}
@@ -434,12 +395,7 @@ public class EventTagSingleton {
 		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 		Eventtagfollowendpoint endpoint = endpointBuilder.build();
 
-		try {
-			result = endpoint.fetchEventTagFollowForUser(tag.getKey().getId(),
-					getUserId()).execute();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		// TODO: fetch all the follow instances for a given tag
 
 		return result;
 	}

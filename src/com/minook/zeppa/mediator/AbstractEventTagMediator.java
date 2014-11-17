@@ -18,7 +18,7 @@ public abstract class AbstractEventTagMediator extends AbstractMediator implemen
 	
 
 	public Long getUserId(){
-		return eventTag.getUserId();
+		return eventTag.getOwnerId();
 	}
 	
 	public String getText(){
@@ -31,7 +31,7 @@ public abstract class AbstractEventTagMediator extends AbstractMediator implemen
 	
 	
 	public Long getTagId(){
-		return eventTag.getKey().getId();
+		return eventTag.getId();
 	}
 	
 	

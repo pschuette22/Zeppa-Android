@@ -1,6 +1,7 @@
 package com.minook.zeppa.activity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,8 +15,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.services.calendar.CalendarScopes;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.mediator.AbstractMediator;
 
@@ -39,21 +42,20 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 	protected final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
 	private List<AbstractMediator> mediatorsWithContext;
-	
 
 	protected enum Error {
 		CONNECTION_ERROR, LOGIN_ERROR, AUTHENTICATION_ERROR,
 
 	}
 
-
 	/*
 	 * --------------- Override Methods ----------------------
 	 */
 
 	@Override
-	protected void onCreate(Bundle arg0) {
-		super.onCreate(arg0);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
 		connectionProgress = new ProgressDialog(this);
 		connectionProgress.setTitle("Signing in");
 		connectionProgress.setMessage("One Moment Please");
@@ -65,14 +67,14 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 		super.onStart();
 
 		String heldAccountName = getSharedPreferences(Constants.SHARED_PREFS,
-				MODE_PRIVATE).getString(Constants.GOOGLE_ACCOUNT, null);
+				MODE_PRIVATE).getString(Constants.LOGGED_IN_ACCOUNT, null);
 
-		if (heldAccountName != null && !heldAccountName.isEmpty()) {
-
+		if(heldAccountName != null){
 			initializeApiClient(heldAccountName);
 			apiClient.connect();
-
 		}
+		
+		
 
 	}
 
@@ -84,10 +86,8 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 		}
 
 		super.onStop();
-		
-		
-	}
 
+	}
 
 	/**
 	 * Activity view is lost, kill held context
@@ -95,7 +95,7 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
+
 		if (!mediatorsWithContext.isEmpty()) {
 			Iterator<AbstractMediator> iterator = mediatorsWithContext
 					.iterator();
@@ -107,19 +107,21 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 
 	}
 
-
 	/**
 	 * This method builds an apiClient instance
+	 * 
 	 * @param accountName
 	 */
 	private void initializeApiClient(String accountName) {
-		
-		GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this,this,this);
+
+		GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this,
+				this, this);
 		builder.setAccountName(accountName);
 		builder.addApi(Plus.API);
 		builder.addScope(Plus.SCOPE_PLUS_LOGIN);
+		builder.addScope(new Scope(CalendarScopes.CALENDAR));
 		apiClient = builder.build();
-		
+
 	}
 
 	/**
@@ -147,20 +149,31 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 
 	/**
 	 * 
-	 * @return credential activity's google credential
-	 * @throws NullPointerException
-	 *             if google credential is null
+	 * @return credential used to access App Engine API
 	 */
-	public GoogleAccountCredential getGoogleAccountCredential()
-			throws NullPointerException {
-		String accountName = getSharedPreferences(Constants.SHARED_PREFS,
-				MODE_PRIVATE).getString(Constants.GOOGLE_ACCOUNT, null);
-		if (accountName == null) {
-			logout();
-		}
+	public GoogleAccountCredential getGoogleAccountCredential() {
+
 		GoogleAccountCredential credential = GoogleAccountCredential
 				.usingAudience(this, Constants.ANDROID_AUDIENCE);
-		credential.setSelectedAccountName(accountName);
+
+		credential.setSelectedAccountName(Plus.AccountApi
+				.getAccountName(apiClient));
+
+		return credential;
+	}
+
+	/**
+	 * 
+	 * @return Credential used for accessing Google Calendar API
+	 */
+	public GoogleAccountCredential getGoogleCalendarCredential() {
+
+		GoogleAccountCredential credential = GoogleAccountCredential
+				.usingOAuth2(this,
+						Collections.singleton(CalendarScopes.CALENDAR));
+
+		credential.setSelectedAccountName(Plus.AccountApi
+				.getAccountName(apiClient));
 
 		return credential;
 	}
@@ -172,11 +185,60 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 
 	public void logout() {
 		getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE).edit()
-				.remove(Constants.GOOGLE_ACCOUNT).commit();
+				.remove(Constants.LOGGED_IN_ACCOUNT).commit();
 		Intent toLogin = new Intent(this, LoginActivity.class);
 		startActivity(toLogin);
 		finish();
 	}
+
+	// public String getApiAuthToken() {
+	// String result = null;
+	// Bundle appActivities = new Bundle();
+	// appActivities.putString(GoogleAuthUtil.KEY_REQUEST_VISIBLE_ACTIVITIES,
+	// "AuthenticatedFragmentActivity");
+	// String scopes = "oauth2:server:client_id:"
+	// + Constants.APP_ENGINE_CLIENT_ID + ":api_scope:"
+	// + CalendarScopes.CALENDAR + " " + PlusScopes.USERINFO_PROFILE;
+	// try {
+	// result = GoogleAuthUtil.getToken(this, // Context context
+	// Plus.AccountApi.getAccountName(apiClient), // String
+	// // accountName
+	// scopes, // String scope
+	// appActivities // Bundle bundle
+	// );
+	//
+	// } catch (IOException transientEx) {
+	// // network or server error, the call is expected to succeed if you
+	// // try again later.
+	// // Don't attempt to call again immediately - the request is likely
+	// // to
+	// // fail, you'll hit quotas or back-off.
+	//
+	// return null;
+	// } catch (UserRecoverableAuthException e) {
+	// // Requesting an authorization code will always throw
+	// // UserRecoverableAuthException on the first call to
+	// // GoogleAuthUtil.getToken
+	// // because the user must consent to offline access to their data.
+	// // After
+	// // consent is granted control is returned to your activity in
+	// // onActivityResult
+	// // and the second call to GoogleAuthUtil.getToken will succeed.
+	// startActivityForResult(e.getIntent(), AUTH_CODE_REQUEST_CODE);
+	//
+	// return null;
+	// } catch (GoogleAuthException authEx) {
+	// // Failure. The call is not expected to ever succeed so it should
+	// // not be
+	// // retried.
+	//
+	// return null;
+	// } catch (Exception e) {
+	// throw new RuntimeException(e);
+	// }
+	//
+	// return result;
+	// }
 
 	/*
 	 * --------------- My Methods ----------------------
@@ -194,7 +256,7 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 						.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 				getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE)
 						.edit()
-						.putString(Constants.GOOGLE_ACCOUNT, accountName)
+						.putString(Constants.LOGGED_IN_ACCOUNT, accountName)
 						.commit();
 				initializeApiClient(accountName);
 

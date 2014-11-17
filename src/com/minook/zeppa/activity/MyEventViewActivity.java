@@ -1,21 +1,13 @@
 package com.minook.zeppa.activity;
 
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.R;
-import com.minook.zeppa.adapter.RepostsListAdapter;
 import com.minook.zeppa.adapter.tagadapter.MyTagAdapter;
-import com.minook.zeppa.mediator.MyEventTagMediator;
-import com.minook.zeppa.mediator.MyZeppaEventMediator;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
-import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 
@@ -233,28 +225,28 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 //		builder.show();
 	}
 
-	private void viewReposts(){
-
-		try {
-		GoogleAccountCredential credential = getGoogleAccountCredential();
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(eventMediator.getTitle() + " reposts");
-
-		RepostsListAdapter adapter = new RepostsListAdapter(this,
-				credential, ((MyZeppaEventMediator) eventMediator));
-
-		builder.setAdapter(adapter, adapter);
-		builder.setNeutralButton(R.string.dismiss, adapter);
-
-		builder.show();
-		} catch (NullPointerException e){
-			// Credential is null
-			Toast.makeText(this, "Error Occured", Toast.LENGTH_SHORT).show();
-		}
-		
-		
-	}
+//	private void viewReposts(){
+//
+//		try {
+//		GoogleAccountCredential credential = getGoogleAccountCredential();
+//		
+//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//		builder.setTitle(eventMediator.getTitle() + " reposts");
+//
+//		RepostsListAdapter adapter = new RepostsListAdapter(this,
+//				credential, ((MyZeppaEventMediator) eventMediator));
+//
+//		builder.setAdapter(adapter, adapter);
+//		builder.setNeutralButton(R.string.dismiss, adapter);
+//
+//		builder.show();
+//		} catch (NullPointerException e){
+//			// Credential is null
+//			Toast.makeText(this, "Error Occured", Toast.LENGTH_SHORT).show();
+//		}
+//		
+//		
+//	}
 	
 	protected void raiseViewRepostsDialog() {
 
