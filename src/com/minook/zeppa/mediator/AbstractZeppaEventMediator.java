@@ -51,7 +51,7 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 	 * Pass in a ConvertView for a ZeppaEvent and set elements of this view to
 	 * reflect the given zeppa event
 	 */
-	public void convertView(AuthenticatedFragmentActivity context,
+	public void convertEventListItemView(AuthenticatedFragmentActivity context,
 			View convertView) {
 		super.convertView(context);
 		TextView title = (TextView) convertView
@@ -66,7 +66,7 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 
 		title.setText(event.getTitle());
 		eventTime.setText(Utils.getDisplayDatesString(event.getStart()
-				.getValue(), event.getEnd().getValue()));
+				.longValue(), event.getEnd().longValue()));
 
 		String location = getDisplayLocation();
 		if (location == null) {
@@ -84,16 +84,22 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 
 		setHostInfo(convertView);
 
+		
+		View quickActionBar = (View) convertView.findViewById(R.id.eventview_quickactionbar);
+		convertQuickActionBar(quickActionBar);
+		
 		convertView.setOnClickListener(this);
 
 	}
+
+	public abstract void convertQuickActionBar(View barView);
 
 	public Long getEventId() {
 		return event.getKey().getId();
 	}
 
 	public Long getHostId() {
-		return event.getHost().getId();
+		return event.getHostId();
 	}
 
 	public Long getRepostedFromEventId() {
@@ -104,17 +110,21 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		return event.getOriginalEventId();
 
 	}
+	
+	public Long getEndInMillis() {
+		return event.getEnd();
+	}
 
-	public List<Long> getTagIds(){
-		
-		if(event.getTagIds() == null){
+	public List<Long> getTagIds() {
+
+		if (event.getTagIds() == null) {
 			return new ArrayList<Long>();
 		} else {
 			return event.getTagIds();
 		}
-		
+
 	}
-	
+
 	public abstract boolean isAgendaEvent();
 
 	public String getTitle() {
@@ -138,9 +148,17 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 
 	}
 
+	public String getMapsLocation() {
+		String mapsLocation = event.getMapsLocation();
+		if (mapsLocation == null) {
+			mapsLocation = event.getDisplayLocation();
+		}
+		return mapsLocation;
+	}
+
 	public String getTimeString() {
-		return Utils.getDisplayDatesString(event.getStart().getValue(), event
-				.getEnd().getValue());
+		return Utils.getDisplayDatesString(event.getStart().longValue(), event
+				.getEnd().longValue());
 	}
 
 	public boolean doesMatchEventId(long eventId) {
@@ -148,7 +166,7 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 	}
 
 	public boolean hostIdDoesMatch(long hostId) {
-		return (event.getHost().getId().longValue() == hostId);
+		return (event.getHostId().longValue() == hostId);
 	}
 
 	public void update() {
@@ -165,7 +183,7 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 
 	public boolean eventIsOld() {
 		long currentTime = System.currentTimeMillis();
-		return (event.getEnd().getValue() <= currentTime);
+		return (event.getEnd().longValue() <= currentTime);
 	}
 
 	private void getNSetViaInAsync(TextView viaText, Long viaUserId) {

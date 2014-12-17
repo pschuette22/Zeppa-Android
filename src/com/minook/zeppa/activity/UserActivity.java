@@ -86,8 +86,7 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
-		updateEventTags();
-		
+
 		userMediator.setContext(this);
 		setUserInfo();
 	}
@@ -97,6 +96,13 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 		super.onResume();
 		tagAdapter.drawTags();
 		friendEventsAdapter.drawEvents();
+	}
+	
+	
+	@Override
+	public void onConnected(Bundle connectionHint) {
+		super.onConnected(connectionHint);
+		updateEventTags();
 	}
 
 	@Override
@@ -134,6 +140,8 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 
 	}
 
+	
+
 	/**
 	 * populates fields with the most up to date info available
 	 * 
@@ -143,26 +151,29 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 		userName.setText(userMediator.getDisplayName());
 		userMediator.setImageWhenReady(userImage);
 
-		String phoneNumberText = userMediator.getPrimaryPhoneNumber();
-		if (phoneNumberText == null || phoneNumberText.isEmpty()) {
-			userPhoneNumber.setVisibility(View.GONE);
-		} else {
+		try {
+			String phoneNumberText = userMediator.getPrimaryPhoneNumber();
 			userPhoneNumber.setText(phoneNumberText);
+
+		} catch (NullPointerException e) {
+			userPhoneNumber.setVisibility(View.GONE);
+
 		}
+
 		userGmail.setText(userMediator.getGmail());
 
+		// TODO: figure out mutual minglers
 		mutualFriends.setText("XXX Mutual Minglers");
 	}
 
 	private void updateEventTags() {
-		
 
 		new AsyncTask<Object, Void, Boolean>() {
 			@Override
 			protected Boolean doInBackground(Object... params) {
 
 				return Boolean.valueOf(EventTagSingleton.getInstance()
-						.fetchEventTagsForUser(userMediator.getUserId(),
+						.fetchEventTagsForUserWithBlocking(userMediator.getUserId(),
 								getGoogleAccountCredential()));
 			}
 
@@ -173,9 +184,8 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 				if (result) {
 					tagAdapter.notifyDataSetChanged();
 				}
-				
-				Log.d(TAG, "Did update all tags");
 
+				Log.d(TAG, "Did update all tags");
 
 			}
 

@@ -188,8 +188,8 @@ public class GCalUtils {
 		 */
 		EventDateTime endTime = new EventDateTime();
 		EventDateTime startTime = new EventDateTime();
-		endTime.setDateTime(zeppaEvent.getEnd());
-		startTime.setDateTime(zeppaEvent.getStart());
+		endTime.setDateTime(new DateTime(zeppaEvent.getEnd()));
+		startTime.setDateTime(new DateTime(zeppaEvent.getStart()));
 
 		// Event details
 		calendarEvent.setEnd(endTime);

@@ -5,148 +5,154 @@
     android:background="@color/white_eggshell"
     android:fillViewport="true" >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:orientation="vertical" >
+            android:orientation="horizontal"
+            android:background="@color/white">
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/eventactivity_hostimage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_contact_picture"
+                android:contentDescription="@string/contdesc_hostimage"
+                android:padding="1dp"
+                android:src="@drawable/default_user_image" />
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:layout_height="wrap_content" >
 
                 <ImageView
-                    android:id="@+id/eventactivity_hostimage"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
+                    android:id="@+id/eventactivity_stateindicator"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="@string/contdesc_conflictionimage"
+                    android:src="@drawable/conflict_green" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/background_contact_picture"
-                    android:contentDescription="@string/contdesc_hostimage"
-                    android:padding="1dp"
-                    android:src="@drawable/default_user_image" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-
-                    <ImageView
-                        android:id="@+id/eventactivity_stateindicator"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:contentDescription="@string/contdesc_conflictionimage" />
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/eventactivity_stateindicator"
+                    android:layout_toStartOf="@id/eventactivity_stateindicator"
+                    android:orientation="vertical" >
 
                     <TextView
                         android:id="@+id/eventactivity_eventtitle"
                         style="@style/teal_txt20sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_toLeftOf="@id/eventactivity_stateindicator"
-                        android:layout_toStartOf="@id/eventactivity_stateindicator" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:id="@+id/eventactivity_hostname"
                         style="@style/teal_txt16sp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/eventactivity_eventtitle"
-                        android:layout_marginLeft="7dp"
-                        android:layout_marginStart="7dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_toLeftOf="@id/eventactivity_stateindicator"
-                        android:layout_toStartOf="@id/eventactivity_stateindicator" />
-                </RelativeLayout>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/eventactivity_time"
-                style="@style/gray_txt15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/background_listitem_default" />
-
-            <TextView
-                android:id="@+id/eventactivity_location"
-                style="@style/gray_txt15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/background_listitem_default" />
-
-            <TextView
-                android:id="@+id/eventactivity_attending"
-                style="@style/gray_txt15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/background_listitem_default" />
-
-            <TextView
-                android:id="@+id/eventactivity_description"
-                style="@style/black_txt14sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp" />
-
-            <!-- Include a quick action bar and invites option -->
-
-            <LinearLayout
-                android:id="@+id/eventactivity_tagholder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:orientation="vertical" />
-
-            <TextView
-                style="@style/teal_txt16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:text="@string/discussion_board" />
-
-            <LinearLayout
-                android:id="@+id/eventactivity_commentholder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:animateLayoutChanges="true"
-                android:divider="@color/black"
-                android:dividerPadding="3dp"
-                android:orientation="vertical" />
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                
+            </RelativeLayout>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/eventactivity_time"
+            style="@style/gray_txt15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/background_listitem_default"
+            android:drawableLeft="@drawable/ic_time"
+            android:drawableStart="@drawable/ic_time" />
+
+        <TextView
+            android:id="@+id/eventactivity_location"
+            style="@style/gray_txt15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/background_listitem_default"
+            android:drawableLeft="@drawable/ic_location"
+            android:drawableStart="@drawable/ic_location" />
+
+        <TextView
+            android:id="@+id/eventactivity_attending"
+            style="@style/gray_txt15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/background_listitem_default" />
+
+        <TextView
+            android:id="@+id/eventactivity_description"
+            style="@style/black_txt14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp" />
+
+        <!-- Include a quick action bar and invites option -->
+        
+        <include layout="@layout/view_eventactionbar"
+            android:id="@+id/eventactivity_quickactionbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"/>
+        
+
+        <LinearLayout
+            android:id="@+id/eventactivity_tagholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="vertical" />
+
+        <TextView
+            style="@style/teal_txt16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/discussion_board" />
+
+        <LinearLayout
+            android:id="@+id/eventactivity_commentholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:animateLayoutChanges="true"
+            android:divider="@color/black"
+            android:dividerPadding="3dp"
+            android:orientation="vertical" />
 
         <LinearLayout
             android:id="@+id/eventactivity_writepost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:layout_marginBottom="3dp"
             android:layout_marginEnd="10dp"
@@ -169,19 +175,19 @@
                 android:minLines="2"
                 android:padding="3dp" />
 
-            <ImageView
+            <Button
                 android:id="@+id/eventactivity_postcomment"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:background="@drawable/background_imagebutton"
+                android:background="@drawable/background_button_default"
                 android:padding="2dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_menu_send" />
+                android:text="@string/post"
+                android:scaleType="fitCenter"/>
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 </ScrollView>

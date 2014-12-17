@@ -19,6 +19,8 @@ import com.minook.zeppa.eventtagendpoint.Eventtagendpoint.ListEventTag;
 import com.minook.zeppa.eventtagendpoint.model.CollectionResponseEventTag;
 import com.minook.zeppa.eventtagendpoint.model.EventTag;
 import com.minook.zeppa.eventtagfollowendpoint.Eventtagfollowendpoint;
+import com.minook.zeppa.eventtagfollowendpoint.Eventtagfollowendpoint.ListEventTagFollow;
+import com.minook.zeppa.eventtagfollowendpoint.model.CollectionResponseEventTagFollow;
 import com.minook.zeppa.eventtagfollowendpoint.model.EventTagFollow;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.mediator.DefaultEventTagMediator;
@@ -33,8 +35,9 @@ import com.minook.zeppa.mediator.MyEventTagMediator;
  * 
  */
 public class EventTagSingleton {
+	
 	private static EventTagSingleton singleton;
-
+	
 	private final String TAG = "EventTagSingleton";
 	private List<AbstractEventTagMediator> tagMediators;
 	private MyTagAdapter waitingAdapter;
@@ -195,7 +198,7 @@ public class EventTagSingleton {
 		return result;
 	}
 
-	public boolean hasLoadedTags() {
+	public boolean didLoadInitialTags() {
 		return hasLoadedTags;
 	}
 
@@ -254,8 +257,7 @@ public class EventTagSingleton {
 				// TODO: List Query for all of this users event tags
 				
 				String cursor = null;
-				String filter = "userId == userIdParam";
-				String paramsDeclaration = "Long userIdParam";
+				String filter = "userId == " + userId.longValue();
 
 				do{
 
@@ -264,8 +266,6 @@ public class EventTagSingleton {
 						
 						listTagTask.setCursor(cursor);
 						listTagTask.setFilter(filter);
-						listTagTask.setLongParam(userId);
-						listTagTask.setParameterDeclaration(paramsDeclaration);
 						listTagTask.setLimit(30);
 						
 						CollectionResponseEventTag tagResponse = listTagTask.execute();
@@ -304,7 +304,7 @@ public class EventTagSingleton {
 					
 				hasLoadedTags = true;
 				if (waitingAdapter != null) {
-					waitingAdapter.notifyDataSetChanged();
+					waitingAdapter.onFinishLoad();
 					waitingAdapter = null;
 				}
 			}
@@ -358,7 +358,7 @@ public class EventTagSingleton {
 	 * @param userId
 	 * @return true if changes were made to held tagMediators
 	 */
-	public boolean fetchEventTagsForUser(Long userId,
+	public boolean fetchEventTagsForUserWithBlocking(Long userId,
 			GoogleAccountCredential credential) {
 		boolean didUpdate = false;
 
@@ -368,12 +368,47 @@ public class EventTagSingleton {
 		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 		Eventtagendpoint endpoint = endpointBuilder.build();
 
+		String filter = "userId == " + userId.longValue();
+		String cursor = null;
+		
+		List<EventTag> loadedTags = new ArrayList<EventTag>();
+		
+		try {
+			ListEventTag listTask = endpoint.listEventTag();
+			
+			do {
+				listTask.setFilter(filter);
+				listTask.setCursor(cursor);
+				
+				CollectionResponseEventTag response = listTask.execute();
+				
+				if(response == null || response.getItems() == null || response.getItems().isEmpty()){
+					cursor = null;
+				} else {
+					loadedTags.addAll(response.getItems());
+					cursor = response.getNextPageToken();
+				}
+				
+			} while(cursor != null);
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			// tell the user but dont try to load again unless refreshed
+			return false;
+		}
 		
 		
+		List<AbstractEventTagMediator> heldMediatorsForUser = getTagMediatorsForUser(userId);
+		didUpdate = removeOldEventTags(heldMediatorsForUser, loadedTags);
 		
-		
-		// TODO: fetch all the tags for given user
-
+		if(!loadedTags.isEmpty()){
+			Iterator<EventTag> iterator = loadedTags.iterator();
+			while(iterator.hasNext()){
+				addDefaultTagMediator(iterator.next(), credential);
+			}
+			return true;
+		}
 		return didUpdate;
 	}
 
@@ -395,11 +430,36 @@ public class EventTagSingleton {
 		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 		Eventtagfollowendpoint endpoint = endpointBuilder.build();
 
-		// TODO: fetch all the follow instances for a given tag
+		String filter = "tagId == " + tag.getId().longValue() + " && followerId == " + getUserId().longValue();
+		String order = "created asc";
+		Integer limit = Integer.valueOf(1); // should only be one instance
+		
+		try {
+			ListEventTagFollow listEventTagFollowTask = endpoint.listEventTagFollow();
+			listEventTagFollowTask.setFilter(filter);
+			listEventTagFollowTask.setCursor(null);
+			listEventTagFollowTask.setOrdering(order);
+			listEventTagFollowTask.setLimit(limit);
+			
+			CollectionResponseEventTagFollow response = listEventTagFollowTask.execute();
+			
+			
+			if(response != null  && response.getItems() != null && !response.getItems().isEmpty()) {
+				if(response.getItems().size() > 1){
+					Log.v("TAG", "Backend contains multiple instances of follow");
+				}
+				
+				result = response.getItems().get(0);
+			}
+			
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 
 		return result;
 	}
 
+		
 	/**
 	 * This method determines what tags the application is not already holding
 	 * and adds them. It also determines if the user is following this event tag
@@ -440,8 +500,7 @@ public class EventTagSingleton {
 	}
 
 	/**
-	 * This method takes an updated list of event tags and removes the ones not
-	 * present which the
+	 * This method takes an updated list of event tags and removes the old ones
 	 * 
 	 * @param heldMediators
 	 * @param eventTags
@@ -449,21 +508,37 @@ public class EventTagSingleton {
 	 */
 	private boolean removeOldEventTags(
 			List<AbstractEventTagMediator> heldMediators,
-			List<EventTag> eventTags) {
+			List<EventTag> loadedEventTags) {
+		
+		if(heldMediators.isEmpty()){
+			return false;
+		}
+		
 		boolean didUpdate = false;
+		
 		Iterator<AbstractEventTagMediator> mediatorIterator = heldMediators
 				.iterator();
 
 		while (mediatorIterator.hasNext()) {
 			AbstractEventTagMediator mediator = mediatorIterator.next();
-			Iterator<EventTag> tagIterator = eventTags.iterator();
+			Iterator<EventTag> tagIterator = loadedEventTags.iterator();
+			
+			boolean remove = true;
+			
 			while (tagIterator.hasNext()) {
-				if (tagIterator.next().getKey().getId().longValue() == 
+				EventTag tag = tagIterator.next();
+				if (tag.getId().longValue() == 
 						mediator.getTagId().longValue()) {
-					tagMediators.remove(mediator);
-					didUpdate = true;
+					
+					loadedEventTags.remove(tag);
+					remove = false;
 					break;
 				}
+			}
+			
+			if(remove) {
+				tagMediators.remove(mediator);
+				didUpdate = true;
 			}
 
 		}

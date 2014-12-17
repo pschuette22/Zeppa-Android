@@ -64,7 +64,6 @@ public class Utils {
 
 		// most events
 		result.append(getDayString(startMillis));
-		result.append(" ");
 		result.append(getDisplayTimeString(startMillis));
 		result.append(" - ");
 
@@ -277,7 +276,7 @@ public class Utils {
 		@Override
 		public int compare(ZeppaNotification lhs, ZeppaNotification rhs) {
 
-			return ((int) ((lhs.getCreated().getValue()) - (rhs.getCreated().getValue())));
+			return ((int) ((lhs.getCreated().longValue()) - (rhs.getCreated().longValue())));
 
 		}
 

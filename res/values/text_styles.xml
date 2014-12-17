@@ -6,8 +6,9 @@
     
     	- Name style: (text color)_(outline_color, optional)_txt(size)sp
     	- Always use typeface sans
-    	- Pete has been commenting more
     -->
+
+
 
 
     <!-- White w/ black outline -->
@@ -147,4 +148,5 @@
         <item name="android:typeface">sans</item>
     </style>
     
+   
       </resources>

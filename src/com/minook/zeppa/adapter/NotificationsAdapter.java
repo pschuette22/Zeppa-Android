@@ -102,11 +102,10 @@ public class NotificationsAdapter extends BaseAdapter implements
 			TextView date = (TextView) convertView
 					.findViewById(R.id.notificationitem_date);
 
-			setImageInAsync(userImage, notification.getSender().getKey()
-					.getId());
+			setImageInAsync(userImage, notification.getSenderId());
 			text.setText(notification.getExtraMessage());
 			date.setText(Utils.getDisplayDateString(notification.getCreated()
-					.getValue()));
+					.longValue()));
 		}
 
 		return convertView;
@@ -194,8 +193,8 @@ public class NotificationsAdapter extends BaseAdapter implements
 			break;
 		case 1: // FriendAccepted
 			intent = new Intent(activity, UserActivity.class);
-			intent.putExtra(Constants.INTENT_ZEPPA_USER_ID, notification
-					.getSender().getKey().getId());
+			intent.putExtra(Constants.INTENT_ZEPPA_USER_ID,
+					notification.getSenderId());
 			activity.startActivity(intent);
 
 			activity.overridePendingTransition(R.anim.slide_left_in,

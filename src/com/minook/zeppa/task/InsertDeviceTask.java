@@ -49,21 +49,22 @@ public class InsertDeviceTask extends AsyncTask<Void, Void, Void> {
 
 		DeviceInfo info = ZeppaGCMReceiver.getRegisteredDeviceInstance(context,
 				userId);
+		
+		if(info == null || info.getRegistrationId() == null){
+			return null;
+		}
 
 		List<DeviceInfo> userDevices = new ArrayList<DeviceInfo>();
 
 		try {
-			String filter = "ownerId == ownerIdParam";
-			String paramDeclaration = "Long ownerIdParam";
+			String filter = "ownerId == " + userId.longValue();
 			String cursor = null;
 
 			do {
 				ListDeviceInfo listInfoTask = endpoint.listDeviceInfo();
 
 				listInfoTask.setFilter(filter);
-				listInfoTask.setCursor(cursor);
-				listInfoTask.setParameterDeclaration(paramDeclaration);
-				listInfoTask.setLongParam(userId);				
+				listInfoTask.setCursor(cursor);		
 				listInfoTask.setLimit(25);
 
 				CollectionResponseDeviceInfo response = listInfoTask.execute();

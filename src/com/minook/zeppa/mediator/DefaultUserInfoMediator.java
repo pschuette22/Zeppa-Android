@@ -127,7 +127,7 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 				// Remove the pending request to a given user
 				try {
 					GoogleAccountCredential credential = getGoogleAccountCredential();
-					removeRequestInAsync(credential);
+					removeRelationshipInAsync(credential);
 				} catch (NullPointerException e) {
 					e.printStackTrace();
 				}
@@ -143,7 +143,7 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 
 		case R.id.newcontact_deny_button:
 			try {
-				removeRequestInAsync(getGoogleAccountCredential());
+				removeRelationshipInAsync(getGoogleAccountCredential());
 			} catch (NullPointerException e) {
 				e.printStackTrace();
 			}
@@ -349,7 +349,11 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 
 	}
 
-	private void removeRequestInAsync(GoogleAccountCredential credential) {
+	/**
+	 * This method starts an AsyncTask to remove the UserToUserRelationship
+	 * @param credential
+	 */
+	private void removeRelationshipInAsync(GoogleAccountCredential credential) {
 
 		Object params[] = { credential };
 		new AsyncTask<Object, Void, Boolean>() {

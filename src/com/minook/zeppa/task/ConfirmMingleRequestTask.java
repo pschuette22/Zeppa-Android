@@ -7,7 +7,6 @@ import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
-import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaUser;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
 
@@ -39,6 +38,10 @@ public class ConfirmMingleRequestTask extends NotifyUserTask {
 		try {
 			relationship = endpoint.updateZeppaUserToUserRelationship(
 					relationship).execute();
+			if(relationship == null){
+				return Boolean.FALSE;
+			}
+			
 			dMediator.setUserRelationship(relationship);
 			success = Boolean.TRUE;
 
@@ -74,9 +77,7 @@ public class ConfirmMingleRequestTask extends NotifyUserTask {
 		notification.setHasSeen(Boolean.FALSE);
 		notification.setRecipientId(dMediator.getUserId());
 
-		ZeppaUser sender = new ZeppaUser();
-		sender.setId(ZeppaUserSingleton.getInstance().getUserId());
-		notification.setSender(sender);
+		notification.setSenderId(ZeppaUserSingleton.getInstance().getUserId());
 
 		return notification;
 	}

@@ -39,7 +39,7 @@ public class AccountFragment extends Fragment implements OnClickListener {
 	/*
 	 * ----------- Override Methods -----------------
 	 */
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -60,7 +60,12 @@ public class AccountFragment extends Fragment implements OnClickListener {
 
 		userMediator.setImageWhenReady(userImage);
 		displayName.setText(userMediator.getDisplayName());
-		phoneNumber.setText(userMediator.getPrimaryPhoneNumber());
+		
+		try {
+			phoneNumber.setText(userMediator.getPrimaryPhoneNumber());
+		} catch (NullPointerException e) {
+			phoneNumber.setVisibility(View.GONE);
+		}
 		emailAddress.setText(userMediator.getGmail());
 
 		// Handle tag stuff
@@ -69,33 +74,30 @@ public class AccountFragment extends Fragment implements OnClickListener {
 		tagAdapter = new MyTagAdapter(
 				(AuthenticatedFragmentActivity) getActivity(), tagHolder, null);
 		tagAdapter.drawTags();
-		
+
 		// Events list
-		
-		eventAdapter = new MyEventsAdapter((AuthenticatedFragmentActivity) getActivity(), eventHolder);
+
+		eventAdapter = new MyEventsAdapter(
+				(AuthenticatedFragmentActivity) getActivity(), eventHolder);
 		eventAdapter.drawEvents();
 
 		return layout;
 	}
-	
-	
-	
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		
-		((MainActivity) getActivity()).setNavigationItem(Constants.NAVIGATION_ACCOUNT_INDEX);
-	
+
+		((MainActivity) getActivity())
+				.setNavigationItem(Constants.NAVIGATION_ACCOUNT_INDEX);
+
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setTitle(R.string.my_profile);
 	}
-	
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-	
 
 		}
 

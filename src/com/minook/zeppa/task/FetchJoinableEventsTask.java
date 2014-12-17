@@ -14,10 +14,10 @@ import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrel
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.CollectionResponseZeppaEventToUserRelationship;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
 
-public class FetchJoinableEventsTask extends FetchEventsTask{
+public class FetchJoinableEventsTask extends FetchEventsTask {
 
 	private String relationshipCursor;
-	
+
 	public FetchJoinableEventsTask(GoogleAccountCredential credential,
 			Long userId, String relationshipCursor) {
 		super(credential, userId);
@@ -27,68 +27,88 @@ public class FetchJoinableEventsTask extends FetchEventsTask{
 
 	@Override
 	protected Void doInBackground(Void... params) {
-		
-		Zeppaeventtouserrelationshipendpoint.Builder builder = new Zeppaeventtouserrelationshipendpoint.Builder(transport, factory, credential);
+
+		Zeppaeventtouserrelationshipendpoint.Builder builder = new Zeppaeventtouserrelationshipendpoint.Builder(
+				transport, factory, credential);
 		builder = CloudEndpointUtils.updateBuilder(builder);
 		Zeppaeventtouserrelationshipendpoint endpoint = builder.build();
-		
+
+		String filter = "userId == " + userId + " && expires > " + System.currentTimeMillis();
+		String cursor = relationshipCursor;
+		String order = "expires asc";
+		Integer limit = Integer.valueOf(25);
+
 		try {
-			ListZeppaEventToUserRelationship listRelationshipTask = endpoint.listZeppaEventToUserRelationship();
-			if(relationshipCursor == null){
-				String filter = "zeppaUserId == '" + userId + "' order by created asc";
-				listRelationshipTask.setFilter(filter);
-			} else {
-				listRelationshipTask.setCursor(relationshipCursor);
-			}
-			listRelationshipTask.setLimit(25);
-			
-			CollectionResponseZeppaEventToUserRelationship response = listRelationshipTask.execute();
-			
-			if(response != null && response.getItems() != null && !response.getItems().isEmpty()){
-				Iterator<ZeppaEventToUserRelationship> iterator = response.getItems().iterator();
-				
-				while(iterator.hasNext()){
-					DefaultZeppaEventMediator mediator = fetchEventForRelationship(iterator.next());
-					
-					if(mediator != null){
-						ZeppaEventSingleton.getInstance().addMediator(mediator);
+			ListZeppaEventToUserRelationship listRelationshipTask = endpoint
+					.listZeppaEventToUserRelationship();
+
+			listRelationshipTask.setFilter(filter);
+			listRelationshipTask.setCursor(cursor);
+			listRelationshipTask.setOrdering(order);
+			listRelationshipTask.setLimit(limit);
+
+			CollectionResponseZeppaEventToUserRelationship response = listRelationshipTask
+					.execute();
+
+			if (response != null && response.getItems() != null
+					&& !response.getItems().isEmpty()) {
+				Iterator<ZeppaEventToUserRelationship> iterator = response
+						.getItems().iterator();
+
+				while (iterator.hasNext()) {
+					ZeppaEventToUserRelationship relationship = iterator.next();
+
+					if (ZeppaEventSingleton.getInstance()
+							.relationshipAlreadyHeld(relationship)) {
+						continue;
+					} else {
+
+						DefaultZeppaEventMediator mediator = fetchEventForRelationship(relationship);
+
+						if (mediator != null) {
+							ZeppaEventSingleton.getInstance().addMediator(
+									mediator);
+						}
 					}
 				}
-				
-				// TODO: save the cursor
+
+				ZeppaEventSingleton.getInstance().setNextRelationshipPageToken(
+						response.getNextPageToken());
 			}
-		
+
+			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 
 		}
-		
+
 		return null;
 	}
-	
-	
+
 	/**
-	 * This is a non-thread safe method of fetching an event for a given relationship
+	 * This is a non-thread safe method of fetching an event for a given
+	 * relationship
+	 * 
 	 * @param relationship
 	 * @return
 	 */
-	private DefaultZeppaEventMediator fetchEventForRelationship(ZeppaEventToUserRelationship relationship){
+	private DefaultZeppaEventMediator fetchEventForRelationship(
+			ZeppaEventToUserRelationship relationship) {
 		DefaultZeppaEventMediator mediator = null;
-		
+
 		try {
 			Zeppaeventendpoint endpoint = buildZeppaEventEndpoint();
-			ZeppaEvent event = endpoint.getZeppaEvent(relationship.getEventId()).execute();
+			ZeppaEvent event = endpoint
+					.getZeppaEvent(relationship.getEventId()).execute();
 			mediator = new DefaultZeppaEventMediator(event, relationship);
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
-			// TODO: handle network errors
+			return null;
 		}
-		
-		
-		
+
 		return mediator;
 	}
-	
 
 }

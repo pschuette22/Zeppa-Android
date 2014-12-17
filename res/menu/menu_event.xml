@@ -17,9 +17,8 @@
         android:title="@string/join"/>
     <item
         android:id="@+id/menu_event_repost"
-        android:icon="@drawable/ic_repost"
         android:orderInCategory="2"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:title="@string/repost"/>
     <item
         android:id="@+id/menu_event_directions"

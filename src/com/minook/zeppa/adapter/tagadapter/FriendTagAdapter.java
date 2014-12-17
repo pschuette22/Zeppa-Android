@@ -3,6 +3,7 @@ package com.minook.zeppa.adapter.tagadapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.provider.SyncStateContract.Helpers;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -54,7 +55,7 @@ public class FriendTagAdapter extends AbstractTagAdapter {
 
 		if (convertView == null)
 			convertView = activity.getLayoutInflater().inflate(
-					R.layout.view_tag_others, null, false);
+					R.layout.view_tag_others, parent, false);
 
 		tagMediator.convertView(activity, convertView);
 
@@ -71,6 +72,18 @@ public class FriendTagAdapter extends AbstractTagAdapter {
 	public void notifyDataSetChanged() {
 		updateTagMediatorList();
 		super.notifyDataSetChanged();
+	}
+	
+	@Override
+	public boolean didLoadInitial() {
+		
+		return true;
+	}
+
+	@Override
+	public void onFinishLoad() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public boolean doUpdateAdapter(List<DefaultEventTagMediator> currentMediatorList){
@@ -97,5 +110,7 @@ public class FriendTagAdapter extends AbstractTagAdapter {
 			tagMediators = new ArrayList<AbstractEventTagMediator>();
 		}
 	}
+
+	
 	
 }

@@ -70,7 +70,7 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements On
 			convertView = activity.getLayoutInflater().inflate(R.layout.view_eventlist_item, parent, false);
 		} 
 		
-		manager.convertView(activity, convertView);
+		manager.convertEventListItemView(activity, convertView);
 		
 		return convertView;
 

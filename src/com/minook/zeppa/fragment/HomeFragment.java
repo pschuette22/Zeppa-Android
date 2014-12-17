@@ -62,8 +62,7 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 		tabStrip.setShouldExpand(true);
 		mainPager.setCurrentItem(1);
 
-		if (savedInstanceState == null)
-			setHasOptionsMenu(true);
+			
 		
 
 		Log.d("TAG", "onCreateView, HomeFragment");
@@ -80,7 +79,7 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setTitle(R.string.home);
 
-
+		setHasOptionsMenu(true);
 	}
 
 	@Override

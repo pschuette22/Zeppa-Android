@@ -32,7 +32,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.api.client.util.DateTime;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
@@ -299,13 +298,14 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		event.setHostId(ZeppaUserSingleton.getInstance().getUserId());
 		event.setTitle(titleField.getText().toString());
 		event.setDescription(descriptionField.getText().toString());
-		
-		event.setPrivacy(Utils.getPrivacy(eventPrivacyField.getSelectedItemPosition()));
+
+		event.setPrivacy(Utils.getPrivacy(eventPrivacyField
+				.getSelectedItemPosition()));
 		event.setDisplayLocation(shortLocationField.getText().toString());
 		if (longLocation != null && !longLocation.isEmpty())
 			event.setMapsLocation(longLocation); // May be null
-		event.setStart(new DateTime(startCalendar.getTime()));
-		event.setEnd(new DateTime(endCalendar.getTime()));
+		event.setStart(startCalendar.getTimeInMillis());
+		event.setEnd(endCalendar.getTimeInMillis());
 		event.setTagIds(tagAdapter.getSelectedTagIds());
 
 		if (isValidEvent(event)) {
@@ -326,14 +326,18 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 					ZeppaEvent event = (ZeppaEvent) params[0];
 					ProgressDialog dialog = (ProgressDialog) params[1];
 					try {
+						// TODO: update this so user specifies if invites are available
+						event.setGuestsMayInvite(Boolean.TRUE);
 						event = ZeppaEventSingleton.getInstance()
-								.createZeppaEvent(getApplicationContext(),
-										getGoogleAccountCredential(), event,
-										getContentResolver());
+								.createZeppaEventWithBlocking(
+										getGoogleAccountCredential(), event);
 
-						MyZeppaEventMediator myMediator = new MyZeppaEventMediator(event);
-						ZeppaEventSingleton.getInstance().addMediator(myMediator);
+						MyZeppaEventMediator myMediator = new MyZeppaEventMediator(
+								event);
 						
+						ZeppaEventSingleton.getInstance().addMediator(
+								myMediator);
+
 					} catch (IOException e) {
 						e.printStackTrace();
 						event = null;
@@ -348,9 +352,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 				protected void onPostExecute(ZeppaEvent result) {
 					super.onPostExecute(result);
 
-					
 					if (result != null) {
-
 						onBackPressed();
 					} else {
 						Toast.makeText(((ZeppaApplication) getApplication()),
@@ -361,7 +363,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 				}
 
 			}.execute(params);
-		}
+		} 
 
 	}
 
@@ -599,6 +601,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 			int year = getArguments().getInt(PICKER_YEAR);
 			int month = getArguments().getInt(PICKER_MONTH);
 			int day = getArguments().getInt(PICKER_DAY);
+			
 
 			return new DatePickerDialog(getActivity(),
 					(NewEventActivity) getActivity(), year, month, day);

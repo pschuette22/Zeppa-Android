@@ -21,6 +21,7 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:orientation="vertical" >
 
@@ -49,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/eventview_hostinfo"
+            android:layout_toEndOf="@id/eventview_hostinfo"
             android:orientation="vertical" >
 
             <!-- Title and conflict indicator -->
@@ -56,7 +58,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:animateLayoutChanges="true" >
 
                 <ImageView
@@ -64,6 +65,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:contentDescription="@string/contdesc_conflictionimage" />
 
@@ -77,6 +79,7 @@
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="3dp"
                     android:layout_toLeftOf="@id/eventview_conflictionindicator"
+                    android:layout_toStartOf="@id/eventview_conflictionindicator"
                     android:maxLines="1" />
             </RelativeLayout>
 
@@ -85,9 +88,13 @@
                 style="@style/gray_date_txt12sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginStart="10dp"
                 android:drawableLeft="@drawable/ic_eventtime"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_eventtime"
                 android:maxLines="1" />
 
             <TextView
@@ -95,9 +102,13 @@
                 style="@style/gray_date_txt12sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginStart="10dp"
                 android:drawableLeft="@drawable/ic_location"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_location"
                 android:maxLines="1" />
 
             <TextView
@@ -114,48 +125,10 @@
 
     <!-- Button Bar -->
 
-    <LinearLayout
-        android:id="@+id/eventview_buttonbar"
+    <include
+        android:id="@+id/eventview_quickactionbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_eventitem_buttonsholder"
-        android:orientation="horizontal"
-        android:paddingBottom="1dp"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp"
-        android:paddingTop="1px" >
-
-        <CheckedTextView
-            android:id="@+id/eventview_buttonleft"
-            style="@style/black_txt12sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1px"
-            android:layout_weight="1"
-            android:background="@drawable/background_button_eventactionl"
-            android:drawableLeft="@drawable/ic_quickaction_watch"
-            android:text="@string/watch" />
-
-        <Button
-            android:id="@+id/eventview_buttonmiddle"
-            style="@style/black_txt12sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="1px"
-            android:layout_weight="1"
-            android:background="@drawable/background_button_eventaction"
-            android:drawableLeft="@drawable/ic_quickaction_text"
-            android:text="@string/repost" />
-
-        <Button
-            android:id="@+id/eventview_buttonright"
-            style="@style/black_txt12sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/background_button_eventactionr"
-            android:drawable="@drawable/ic_quickaction_join"
-            android:text="@string/join" />
-    </LinearLayout>
+        layout="@layout/view_eventactionbar" />
 
 </LinearLayout>

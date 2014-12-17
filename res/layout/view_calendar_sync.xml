@@ -2,36 +2,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingTop="3dp"
+    android:paddingBottom="1dp"
+    android:paddingEnd="3dp"
     android:paddingLeft="5dp"
     android:paddingRight="3dp"
-    android:paddingBottom="1dp">
-    
-    <ImageView 
+    android:paddingStart="5dp"
+    android:paddingTop="3dp" >
+
+    <ImageView
         android:id="@+id/calendarsync_colorbox"
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginRight="3dp"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        />
-    
-    <Switch 
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp" />
+
+    <Switch
         android:id="@+id/calendarsync_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="3dp"
-        />
-    
-    <TextView 
+        android:layout_marginStart="3dp" />
+
+    <TextView
         android:id="@+id/calendarsync_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/calendarsync_colorbox"
         android:layout_toLeftOf="@id/calendarsync_switch"
-        />
+        android:layout_toRightOf="@id/calendarsync_colorbox" />
 
 </RelativeLayout>

@@ -1,10 +1,13 @@
 package com.minook.zeppa.activity;
 
 import android.app.ActionBar;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,20 +16,22 @@ import android.widget.Toast;
 
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
+import com.minook.zeppa.adapter.EventCommentAdapter;
 import com.minook.zeppa.adapter.tagadapter.AbstractTagAdapter;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 
-public abstract class AbstractEventViewActivity extends AuthenticatedFragmentActivity implements
-		OnClickListener {
+public abstract class AbstractEventViewActivity extends
+		AuthenticatedFragmentActivity implements OnClickListener {
 
-//	final private String TAG = getClass().getName();
+	final private String TAG = getClass().getName();
 
 	protected AbstractZeppaEventMediator eventMediator;
 	protected AbstractZeppaUserMediator hostMediator;
 	protected AbstractTagAdapter tagAdapter;
-	
+	protected EventCommentAdapter commentAdapter;
+
 	// UI Elements
 	protected TextView title;
 	protected ImageView conflictIndicator;
@@ -41,12 +46,10 @@ public abstract class AbstractEventViewActivity extends AuthenticatedFragmentAct
 	protected TextView description;
 
 	protected EditText commentText;
-	protected ImageView postComment;
+	protected Button postComment;
 	protected LinearLayout tagHolder;
 
 	// Held Entities
-	protected Long eventId;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +57,17 @@ public abstract class AbstractEventViewActivity extends AuthenticatedFragmentAct
 
 		setContentView(R.layout.activity_eventview);
 
-		eventId = getIntent().getLongExtra(Constants.INTENT_ZEPPA_EVENT_ID, -1);
+		Long eventId = getIntent().getLongExtra(
+				Constants.INTENT_ZEPPA_EVENT_ID, -1);
 
-		if(eventId < 0){
-			Toast.makeText(this, "Error Loading Event", Toast.LENGTH_SHORT).show();
+		if (eventId < 0) {
+			Toast.makeText(this, "Event Not Specified", Toast.LENGTH_SHORT)
+					.show();
 			onBackPressed();
 		}
-		
+
 		eventMediator = ZeppaEventSingleton.getInstance().getEventById(eventId);
-		
+
 		// UI Elements
 		final ActionBar actionBar = getActionBar();
 
@@ -78,23 +83,23 @@ public abstract class AbstractEventViewActivity extends AuthenticatedFragmentAct
 		description = (TextView) findViewById(R.id.eventactivity_description);
 
 		commentText = (EditText) findViewById(R.id.eventactivity_commenttext);
-		postComment = (ImageView) findViewById(R.id.eventactivity_postcomment);
+		postComment = (Button) findViewById(R.id.eventactivity_postcomment);
 		tagHolder = (LinearLayout) findViewById(R.id.eventactivity_tagholder);
 
 		postComment.setOnClickListener(this);
 		conflictIndicator.setOnClickListener(this);
 		hostName.setOnClickListener(this);
 		hostImage.setOnClickListener(this);
-		
+
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
-		
+
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-		
+	protected void onStart() {
+		super.onStart();
+
 		eventMediator.setContext(this);
 		setEventInfo();
 		setHostInfo();
@@ -102,10 +107,25 @@ public abstract class AbstractEventViewActivity extends AuthenticatedFragmentAct
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-		return super.onOptionsItemSelected(item);
-	}
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
 
+		switch (item.getItemId()) {
+		
+		case R.id.menu_event_directions:
+			String location = eventMediator.getMapsLocation();
+			Intent toDirections = new Intent(
+					android.content.Intent.ACTION_VIEW,
+					Uri.parse("http://maps.google.com/maps?f=d&daddr="
+							+ location));
+			startActivity(toDirections);
+			return true;
+
+		}
+		
+		
+		return false;
+	}
 
 	@Override
 	public void onBackPressed() {
@@ -126,34 +146,37 @@ public abstract class AbstractEventViewActivity extends AuthenticatedFragmentAct
 
 	}
 
-
 	/*
 	 * -------------- My Methods -------------------
 	 */
 
-	protected void setEventInfo(){
+	protected void setEventInfo() {
 		title.setText(eventMediator.getTitle());
 		description.setText(eventMediator.getDescription());
 		time.setText(eventMediator.getTimeString());
 		location.setText(eventMediator.getDisplayLocation());
 		setConfliction();
+		setEventTagAdapter();
 	}
 
 	protected abstract void setHostMediator();
+
 	protected abstract void setEventTagAdapter();
-	
-	protected void setHostInfo(){
+
+	protected void setHostInfo() {
 		setHostMediator();
 		hostMediator.setImageWhenReady(hostImage);
 		hostName.setText(hostMediator.getDisplayName());
 	}
-	
+
 	protected abstract void setAttendingText();
-	
-	private void raiseCalendarDialog(){
+
+	private void raiseCalendarDialog() {
 		eventMediator.raiseCalendarDialog();
 	}
 
 	protected abstract void setConfliction();
-	
+
+	// Load event relationships
+
 }

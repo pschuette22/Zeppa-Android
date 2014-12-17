@@ -1,7 +1,5 @@
 package com.minook.zeppa.adapter.eventlistadapter;
 
-import java.io.IOException;
-
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import android.os.AsyncTask;
 import android.view.View;
@@ -91,13 +89,13 @@ public class FeedListAdapter extends AbstractEventListAdapter {
 
 			@Override
 			protected Boolean doInBackground(Object... params) {
-				try {
-					refreshLayout = (PullToRefreshLayout) params[0];
-					return ZeppaEventSingleton.getInstance().loadNewEvents(
-							getCredential());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+//				try {
+//					refreshLayout = (PullToRefreshLayout) params[0];
+//					return ZeppaEventSingleton.getInstance().loadNewEvents(
+//							getCredential());
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
 
 				return Boolean.FALSE;
 			}
@@ -131,15 +129,17 @@ public class FeedListAdapter extends AbstractEventListAdapter {
 			@Override
 			protected Boolean doInBackground(Object... params) {
 
-				list = (ListView) params[0];
-				loaderView = (View) params[1];
-
-				try {
-					return ZeppaEventSingleton.getInstance().loadNewEvents(
-							getCredential());
-				} catch (IOException e) {
-					return Boolean.FALSE;
-				}
+//				list = (ListView) params[0];
+//				loaderView = (View) params[1];
+//
+//				try {
+//					return ZeppaEventSingleton.getInstance().loadNewEvents(
+//							getCredential());
+//				} catch (IOException e) {
+//					return Boolean.FALSE;
+//				}
+				
+				return Boolean.FALSE;
 			}
 
 			@Override

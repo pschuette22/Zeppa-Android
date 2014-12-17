@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    
 
     <item
         android:id="@+id/menu_event_leave"
@@ -11,9 +10,8 @@
         android:title="@string/join"/>
     <item
         android:id="@+id/menu_event_repost"
-        android:icon="@drawable/ic_repost"
         android:orderInCategory="1"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:title="@string/repost"/>
     <item
         android:id="@+id/menu_event_directions"
@@ -21,18 +19,6 @@
         android:orderInCategory="2"
         android:showAsAction="never"
         android:title="@string/directions"/>
-    <item
-        android:id="@+id/menu_event_refresh"
-        android:orderInCategory="3"
-        android:showAsAction="never"
-        android:title="@string/menu_refresh"/>
-    
-     <item
-        android:id="@+id/menu_event_invite"
-        android:orderInCategory="4"
-        android:showAsAction="never"
-        android:title="@string/invite"/>
-    
     <item
         android:id="@+id/menu_event_texthost"
         android:orderInCategory="5"
@@ -43,5 +29,5 @@
         android:orderInCategory="6"
         android:showAsAction="never"
         android:title="@string/email_host"/>
-    
+
 </menu>

@@ -20,7 +20,6 @@ import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint;
 import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint.ListZeppaNotification;
 import com.minook.zeppa.zeppanotificationendpoint.model.CollectionResponseZeppaNotification;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
-import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaUser;
 
 public class NotificationSingleton {
 	private static NotificationSingleton singleton;
@@ -76,9 +75,7 @@ public class NotificationSingleton {
 		ZeppaNotification instance = new ZeppaNotification();
 
 		instance.setHasSeen(Boolean.FALSE);
-		ZeppaUser sender = new ZeppaUser();
-		sender.setId(ZeppaUserSingleton.getInstance().getUserId());
-		instance.setSender(sender);
+		instance.setSenderId(ZeppaUserSingleton.getInstance().getUserId());
 
 		return instance;
 	}
@@ -171,9 +168,8 @@ public class NotificationSingleton {
 				// TODO: list notifications for this user
 
 				String cursor = null;
-				String filter = "recipientId == userIdParam";
+				String filter = "recipientId == " + ZeppaUserSingleton.getInstance().getUserId().longValue();
 				String ordering = "created desc";
-				String parameterDeclaration = "Long userIdParam";
 
 				do {
 					try {
@@ -183,10 +179,8 @@ public class NotificationSingleton {
 
 						listNotificationsTask.setCursor(cursor);
 						listNotificationsTask.setFilter(filter);
-						listNotificationsTask.setParameterDeclaration(parameterDeclaration);
 						listNotificationsTask.setOrdering(ordering);
 						listNotificationsTask.setLimit(40);
-						listNotificationsTask.setLongParam(userId);
 						
 						CollectionResponseZeppaNotification response = listNotificationsTask.execute();
 						

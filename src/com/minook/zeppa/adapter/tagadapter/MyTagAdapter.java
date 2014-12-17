@@ -18,26 +18,29 @@ import com.minook.zeppa.singleton.EventTagSingleton;
 
 public class MyTagAdapter extends AbstractTagAdapter {
 
-
+	private List<Long> tagIds;
+	
 	public MyTagAdapter(AuthenticatedFragmentActivity activity,
 			LinearLayout tagHolder, List<Long> tagIds) {
 		super(activity, tagHolder);
-
-		if(tagIds == null){
-			tagMediators = EventTagSingleton.getInstance().getMyTags();
+		this.tagIds = tagIds;
+		
+		if (didLoadInitial()) {
+			setTags();
 		} else {
-			tagMediators = EventTagSingleton.getInstance().getTagsFrom(tagIds);
+			EventTagSingleton.getInstance().setWaitingAdapter(this);
 		}
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		MyEventTagMediator tagMediator = (MyEventTagMediator) tagMediators.get(position);
+		MyEventTagMediator tagMediator = (MyEventTagMediator) tagMediators
+				.get(position);
 
 		if (convertView == null)
-			convertView = activity.getLayoutInflater()
-					.inflate(R.layout.view_tag_owned, null, false);
+			convertView = activity.getLayoutInflater().inflate(
+					R.layout.view_tag_owned, parent, false);
 
 		tagMediator.convertView(activity, convertView);
 
@@ -60,15 +63,37 @@ public class MyTagAdapter extends AbstractTagAdapter {
 		return tagMediators.size();
 	}
 
+	@Override
+	public boolean didLoadInitial() {
+		// TODO Auto-generated method stub
+		return EventTagSingleton.getInstance().didLoadInitialTags();
+	}
+
+	@Override
+	public void onFinishLoad() {
+		setTags();
+		notifyDataSetChanged();
+	}
+
+	private void setTags(){
+		if (tagIds == null) {
+			tagMediators = EventTagSingleton.getInstance().getMyTags();
+		} else {
+			tagMediators = EventTagSingleton.getInstance().getTagsFrom(
+					tagIds);
+		}
+	}
+	
 	public boolean createTagInAsync(EditText textView) {
 
 		String text = trimTag(textView.getText().toString());
 
-		if(getMatchingMediator(text) != null){
-			Toast.makeText(activity, "Already Made!", Toast.LENGTH_SHORT).show();
+		if (getMatchingMediator(text) != null) {
+			Toast.makeText(activity, "Already Made!", Toast.LENGTH_SHORT)
+					.show();
 			return false;
 		}
-		
+
 		textView.setEnabled(false);
 
 		Object[] params = { text, textView };
@@ -90,7 +115,6 @@ public class MyTagAdapter extends AbstractTagAdapter {
 				MyEventTagMediator tagMediator = tagSingleton.insertEventTag(
 						tag, activity.getGoogleAccountCredential());
 
-
 				return tagMediator;
 			}
 
@@ -101,7 +125,7 @@ public class MyTagAdapter extends AbstractTagAdapter {
 				textView.setEnabled(true);
 
 				if (result != null) {
-					
+
 					onTagCreated(result);
 					textView.setText("");
 
@@ -117,23 +141,24 @@ public class MyTagAdapter extends AbstractTagAdapter {
 		return true;
 
 	}
-	
-	protected AbstractEventTagMediator getMatchingMediator(String tagText){
-		
+
+	protected AbstractEventTagMediator getMatchingMediator(String tagText) {
+
 		for (AbstractEventTagMediator tagMediator : tagMediators) {
 			if (tagText.equalsIgnoreCase(tagMediator.getText())) {
 				return tagMediator;
 			}
 		}
-		
+
 		return null;
 	}
-	
-	protected void onTagCreated(MyEventTagMediator tagMediator){
+
+	protected void onTagCreated(MyEventTagMediator tagMediator) {
 		tagMediators.add(tagMediator);
-		drawTags(); // TODO: just add a single view instead of redrawing the whole thing
+		drawTags(); // TODO: just add a single view instead of redrawing the
+					// whole thing
 	}
-	
+
 	protected String trimTag(String originalText) {
 		StringBuilder newText = new StringBuilder();
 

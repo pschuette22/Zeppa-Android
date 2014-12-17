@@ -42,7 +42,7 @@ public class EventCommentAdapter extends BaseAdapter {
 
 		@Override
 		public int compare(EventComment lhs, EventComment rhs) {
-			return (int) ((lhs.getCreated().getValue()) - (rhs.getCreated().getValue()));
+			return (int) ((lhs.getCreated().longValue()) - (rhs.getCreated().longValue()));
 		}
 
 	};
@@ -92,7 +92,7 @@ public class EventCommentAdapter extends BaseAdapter {
 				commenterName);
 
 		commentTime.setText(Utils.getDisplayDateString(comment
-				.getCreated().getValue()));
+				.getCreated().longValue()));
 		commentText.setText(comment.getText());
 
 		return convertView;
@@ -187,12 +187,10 @@ public class EventCommentAdapter extends BaseAdapter {
 
 	public void postCommentInAsync(final String text) {
 		EventComment comment = new EventComment();
-		com.minook.zeppa.eventcommentendpoint.model.ZeppaEvent event = new com.minook.zeppa.eventcommentendpoint.model.ZeppaEvent();
-		event.setId(zeppaEvent.getKey().getId());
-		comment.setEvent(event);
 		
 		comment.setCommenterId(ZeppaUserSingleton.getInstance().getUserId());
 		comment.setText(text);
+		comment.setEventId(zeppaEvent.getId());
 
 		EventComment[] params = { comment };
 		new AsyncTask<EventComment, Void, Boolean>() {

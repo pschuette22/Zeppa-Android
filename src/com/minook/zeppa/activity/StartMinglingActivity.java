@@ -2,19 +2,24 @@ package com.minook.zeppa.activity;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.minook.zeppa.R;
 import com.minook.zeppa.adapter.MinglerFinderAdapter;
+import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
-public class StartMinglingActivity extends AuthenticatedFragmentActivity {
+public class StartMinglingActivity extends AuthenticatedFragmentActivity implements OnLoadListener{
 
-//	private final String TAG = getClass().getName();
+	private final String TAG = getClass().getName();
 	MinglerFinderAdapter adapter;
 
 	private ListView listView;
+	private View loaderView;
 
 	/*
 	 * -------------- Override Methods ---------------------
@@ -28,6 +33,9 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity {
 
 		setContentView(listView);
 
+		loaderView = getLayoutInflater().inflate(R.layout.view_loaderview, listView, false);
+		((TextView) loaderView.findViewById(R.id.loaderview_text)).setText("Finding friends, one moment");
+		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
@@ -39,6 +47,7 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity {
 	protected void onStart() {
 		super.onStart();
 
+		Log.d(TAG, "On Start, Registering new adapter");
 		adapter = new MinglerFinderAdapter(this);
 		listView.setAdapter(adapter);
 		ZeppaUserSingleton.getInstance().registerWaitingFinderAdapter(adapter);
@@ -50,15 +59,9 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		
+		Log.d(TAG, "On Stop, unregistering adapter");
+
 		ZeppaUserSingleton.getInstance().unregisterWaitingFinderAdapter(adapter);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		adapter.notifyDataSetChanged();
-
 	}
 
 	@Override
@@ -85,11 +88,29 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity {
 	public void onConnected(Bundle connectionHint) {
 		super.onConnected(connectionHint);
 		
-		if(ZeppaUserSingleton.getInstance().getLastMinglerFinderTaskExecutionDate() != null){
-			ZeppaUserSingleton.getInstance().executeFindMinglerTask(this, getGoogleAccountCredential());
+		if(didLoadInitial() && ZeppaUserSingleton.getInstance().getLastMinglerFinderTaskExecutionDate() == null){
+			findMinglers();
 		}
 	}
 	
+	@Override
+	public boolean didLoadInitial() {
+		return ZeppaUserSingleton.getInstance().hasLoadedInitial();
+	}
+
+	@Override
+	public void onFinishLoad() {
+		if(listView.removeHeaderView(loaderView)){
+			Log.d(TAG, "Removed header View");
+		}
+		
+		adapter.notifyDataSetChanged();
+		
+	}
 	
+	private void findMinglers(){
+		listView.addHeaderView(loaderView);
+		ZeppaUserSingleton.getInstance().executeFindMinglerTask(this, getGoogleAccountCredential(), this);
+	}
 
 }

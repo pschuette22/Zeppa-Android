@@ -8,8 +8,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
+import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
-import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaUser;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
 
@@ -49,9 +49,10 @@ public class RequestMingleTask extends NotifyUserTask {
 			dMediator.setUserRelationship(relationship);
 			success = Boolean.TRUE;
 
-			// Just in case there was concurrent requests, make sure the relationship type is pending
-			if (relationship.getRelationshipType().equalsIgnoreCase(
-					"PENDING_REQUST")) {
+			// Just in case there was concurrent requests, make sure the
+			// relationship type is pending
+			if (relationship.getRelationshipType().toString()
+					.equals("PENDING_REQUEST")) {
 				// create and send notification
 				ZeppaNotification notification = createNotification(relationship);
 				insertNotificationObject(notification);
@@ -93,18 +94,15 @@ public class RequestMingleTask extends NotifyUserTask {
 	private ZeppaNotification createNotification(
 			ZeppaUserToUserRelationship relationship) {
 		ZeppaNotification notification = new ZeppaNotification();
-		notification.setExpires(null);
 		StringBuilder message = new StringBuilder();
 		message.append(mMediator.getDisplayName());
 		message.append(" would like to mingle!");
 
-		notification.setExtraMessage(message.toString());
 		notification.setRecipientId(dMediator.getUserId());
-
-		ZeppaUser sender = new ZeppaUser();
-		sender.setId(mMediator.getUserId());
-		notification.setSender(sender);
-
+		notification.setSenderId(ZeppaUserSingleton.getInstance().getUserId());
+		notification.setExtraMessage(message.toString());
+		notification.setExpires(null);
+		notification.setHasSeen(Boolean.FALSE);
 		notification.setType("MINGLE_REQUEST");
 
 		return notification;

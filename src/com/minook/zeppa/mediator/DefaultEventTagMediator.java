@@ -103,7 +103,11 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 				super.onPostExecute(result);
 				loading = false;
 
-				if(result && waitingView != null){
+				if(!result){
+					// TODO: notify user there was an error loading
+				}
+				
+				if(waitingView != null){
 					enableTagView(waitingView);
 				}
 				waitingView = null;
@@ -223,11 +227,11 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 	private EventTagFollow createAndPersistFollowFor(EventTag tag,
 			GoogleAccountCredential credential) {
 		EventTagFollow tagFollow = new EventTagFollow();
-		com.minook.zeppa.eventtagfollowendpoint.model.EventTag tagToFollow = new com.minook.zeppa.eventtagfollowendpoint.model.EventTag();
-		tagToFollow.setId(tag.getKey().getId());
-		tagFollow.setEventTag(tagToFollow);
+		
+		tagFollow.setTagId(tag.getId());
 		
 		tagFollow.setFollowerId(ZeppaUserSingleton.getInstance().getUserId());
+		
 		Eventtagfollowendpoint.Builder endpointBuilder = new Eventtagfollowendpoint.Builder(
 				new NetHttpTransport(), new JacksonFactory(), credential);
 		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);

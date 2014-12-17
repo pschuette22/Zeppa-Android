@@ -62,7 +62,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		executingLaunch = false;
 		super.onStart();
 
-		if (apiClient.isConnecting()) {
+		if (apiClient != null && apiClient.isConnecting()) {
 			connectionProgress.show();
 		}
 
@@ -206,16 +206,16 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 				Zeppauserendpoint userEndpoint = endpointBuilder.build();
 
 				try {
-					zeppaUser = userEndpoint.fetchZeppaUser().execute();
+					zeppaUser = userEndpoint.fetchCurrentZeppaUser().execute();
 
-					if (zeppaUser == null) { // Should not get here
+					if (zeppaUser == null) {
+						 // This should not happen, but just in case
 						resultCode = UserResult.CREATE_NEW_USER;
 
 					} else {
 						SharedPreferences.Editor editor = getSharedPreferences(
 								Constants.SHARED_PREFS, MODE_PRIVATE).edit();
-						editor.putLong(Constants.USER_ID, zeppaUser.getKey()
-								.getId());
+						editor.putLong(Constants.USER_ID, zeppaUser.getId());
 						editor.commit();
 
 						resultCode = UserResult.FETCH_SUCCESS;

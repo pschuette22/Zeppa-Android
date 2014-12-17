@@ -65,6 +65,7 @@ public class ZeppaUserSingleton {
 		userMediator = null;
 		hasLoadedInitial = false;
 		hasLoadedPossible = false;
+		lastFindMinglersTaskExecutionDate = null;
 		heldUserMediators = new ArrayList<DefaultUserInfoMediator>();
 		loadListeners = new ArrayList<OnLoadListener>();
 
@@ -108,9 +109,9 @@ public class ZeppaUserSingleton {
 	}
 
 	public void executeFindMinglerTask(Context context,
-			GoogleAccountCredential credential) {
+			GoogleAccountCredential credential, OnLoadListener listener) {
 		lastFindMinglersTaskExecutionDate = new Date();
-		new FindMinglersTask(context, credential).execute();
+		new FindMinglersTask(context, credential, listener).execute();
 	}
 
 	/**
@@ -127,19 +128,20 @@ public class ZeppaUserSingleton {
 		heldUserMediators.add(new DefaultUserInfoMediator(userInfo,
 				relationship));
 
-		try {
-			// If there are waiting adapters, make sure they are
-			if (relationship.getRelationshipType().equals("PENDING_REQUEST")
-					&& this.finderAdapter != null) {
-				finderAdapter.notifyDataSetChanged();
-			} else if (relationship.getRelationshipType().equals("MINGLING")
-					&& this.minglerListAdapter != null) {
-				minglerListAdapter.notifyDataSetChanged();
-			}
-
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
+// TODO: implement this so as things are loaded in, we can reflect this in the waiting views.
+//		try {
+//			// If there are waiting adapters, make sure they are
+//			if ((relationship == null || relationship.getRelationshipType().equals("PENDING_REQUEST"))
+//					&& this.finderAdapter != null) {
+//				finderAdapter.notifyDataSetChanged();
+//			} else if (relationship.getRelationshipType().equals("MINGLING")
+//					&& this.minglerListAdapter != null) {
+//				minglerListAdapter.notifyDataSetChanged();
+//			}
+//
+//		} catch (NullPointerException e) {
+//			e.printStackTrace();
+//		}
 
 	}
 
@@ -330,6 +332,8 @@ public class ZeppaUserSingleton {
 				String filter = "creatorId == " + userId.longValue();
 				String cursor = null;
 				ListZeppaUserToUserRelationship listInfotask = null;
+								
+				
 				do {
 
 					try {
@@ -341,6 +345,7 @@ public class ZeppaUserSingleton {
 						listInfotask.setFilter(filter);
 						listInfotask.setCursor(cursor);
 						listInfotask.setLimit(25);
+						
 						CollectionResponseZeppaUserToUserRelationship response = listInfotask
 								.execute();
 
@@ -452,7 +457,7 @@ public class ZeppaUserSingleton {
 
 				if (relationship.getCreatorId().equals(userId)
 						&& !relationship.getSubjectId().equals(userId)) {
-					// TODO: fetch subject
+					
 					info = endpoint.fetchZeppaUserInfoByParentId(
 							relationship.getSubjectId()).execute();
 
@@ -523,7 +528,7 @@ public class ZeppaUserSingleton {
 				return true;
 			}
 		} catch (NullPointerException e) {
-			e.printStackTrace();
+			// This user does not have a phone number attached to their account
 			return false;
 		}
 
@@ -538,7 +543,6 @@ public class ZeppaUserSingleton {
 				if (primaryNumber != null && primaryNumber.equals(number))
 					return true;
 			} catch (NullPointerException e) {
-				e.printStackTrace();
 				// User may not have a phone number attached to their account
 			}
 		}

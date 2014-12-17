@@ -7,18 +7,22 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
+import com.minook.zeppa.observer.OnLoadListener;
 
-public abstract class AbstractTagAdapter extends BaseAdapter {
+public abstract class AbstractTagAdapter extends BaseAdapter implements
+		OnLoadListener {
 
 	protected AuthenticatedFragmentActivity activity;
 	protected LinearLayout tagHolder;
 	protected boolean hasLoadedTags;
 	protected List<AbstractEventTagMediator> tagMediators;
-	
+
 	public AbstractTagAdapter(AuthenticatedFragmentActivity activity,
 			LinearLayout tagHolder) {
 
@@ -33,60 +37,68 @@ public abstract class AbstractTagAdapter extends BaseAdapter {
 		super.notifyDataSetChanged();
 		drawTags();
 	}
-	
-	
-		
+
 	@Override
 	public AbstractEventTagMediator getItem(int position) {
-		if(tagMediators.isEmpty())
+		if (tagMediators.isEmpty())
 			return null;
-		
+
 		return tagMediators.get(position);
 	}
-	
-	
 
 	@Override
 	public int getCount() {
-		if(tagMediators == null)
+		if (tagMediators == null)
 			return 0;
-		
+
 		return tagMediators.size();
 	}
 
 	public void drawTags() {
-		tagHolder.removeAllViews();
 
-		if (getCount() > 0) {
+		if (didLoadInitial()) {
 
-			LayoutInflater inflater = activity.getLayoutInflater();
-			LinearLayout currentLine = (LinearLayout) inflater.inflate(
-					R.layout.view_tag_line, null, false);
+			tagHolder.removeAllViews();
 
-			tagHolder.addView(currentLine);
-			currentLine.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.EXACTLY);
-			int lineWidth = activity.getResources().getDisplayMetrics().widthPixels;
-			int tagsWidth = 0;
+			if (getCount() > 0) {
 
-			for (int i = 0; i < getCount(); i++) {
-				View tagView = getView(i, null, null);
-				tagView.measure(MeasureSpec.UNSPECIFIED,
-						MeasureSpec.UNSPECIFIED);
-				int tagWidth = tagView.getMeasuredWidth();
+				LayoutInflater inflater = activity.getLayoutInflater();
+				LinearLayout currentLine = (LinearLayout) inflater.inflate(
+						R.layout.view_tag_line, null, false);
 
-				if ((lineWidth - tagsWidth) < tagWidth) {
-					currentLine = (LinearLayout) inflater.inflate(
-							R.layout.view_tag_line, null, false);
-					tagHolder.addView(currentLine);
-					tagsWidth = 0;
+				tagHolder.addView(currentLine);
+				currentLine.measure(MeasureSpec.UNSPECIFIED,
+						MeasureSpec.EXACTLY);
+				int lineWidth = activity.getResources().getDisplayMetrics().widthPixels;
+				int tagsWidth = 0;
+
+				for (int i = 0; i < getCount(); i++) {
+					View tagView = getView(i, null, null);
+					tagView.measure(MeasureSpec.UNSPECIFIED,
+							MeasureSpec.UNSPECIFIED);
+					int tagWidth = tagView.getMeasuredWidth();
+
+					if ((lineWidth - tagsWidth) < tagWidth) {
+						currentLine = (LinearLayout) inflater.inflate(
+								R.layout.view_tag_line, null, false);
+						tagHolder.addView(currentLine);
+						tagsWidth = 0;
+					}
+
+					currentLine.addView(tagView);
+
+					tagsWidth += tagWidth;
+
 				}
 
-				currentLine.addView(tagView);
-
-				tagsWidth += tagWidth;
-
 			}
-
+		} else {
+			LayoutInflater inflater = activity.getLayoutInflater();
+			View loaderView = inflater.inflate(R.layout.view_loaderview, tagHolder, false);
+			((ProgressBar) loaderView.findViewById(R.id.loaderview_progressbar)).setIndeterminate(true);
+			((TextView) loaderView.findViewById(R.id.loaderview_text)).setText("Loading...");
+			tagHolder.addView(loaderView);
+		
 		}
 
 	}

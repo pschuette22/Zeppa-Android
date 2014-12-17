@@ -14,6 +14,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppauserinfoendpoint.Zeppauserinfoendpoint;
@@ -26,13 +27,14 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 	private final String TAG = getClass().getName();
 	private Context context;
 	private GoogleAccountCredential credential;
+	private OnLoadListener listener;
 
 	// private final int finderThreadCount = 5;
 
-	public FindMinglersTask(Context context, GoogleAccountCredential credential) {
+	public FindMinglersTask(Context context, GoogleAccountCredential credential, OnLoadListener listener) {
 		this.context = context;
 		this.credential = credential;
-
+		this.listener = listener;
 	}
 
 	@Override
@@ -155,6 +157,7 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 	protected void onPostExecute(Void result) {
 		Log.d(TAG, "Executed Find Minglers Task");
 		super.onPostExecute(result);
+		listener.onFinishLoad();
 	}
 
 	@Override

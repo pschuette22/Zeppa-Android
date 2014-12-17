@@ -22,7 +22,7 @@ public class NotificationMediator implements OnClickListener{
 
 	public View convertView(Activity activity, View convertView) throws NullPointerException{
 		this.activity = activity;
-		AbstractZeppaUserMediator userMediator = ZeppaUserSingleton.getInstance().getUserFor(notification.getSender().getKey().getId());
+		AbstractZeppaUserMediator userMediator = ZeppaUserSingleton.getInstance().getUserFor(notification.getSenderId());
 		ImageView image = (ImageView) convertView.findViewById(R.id.notificationitem_userimage);
 		userMediator.setImageWhenReady(image);
 		
@@ -30,7 +30,7 @@ public class NotificationMediator implements OnClickListener{
 		message.setText(notification.getExtraMessage());
 		
 		TextView date = (TextView) convertView.findViewById(R.id.notificationitem_date);
-		date.setText(Utils.getDisplayDateString(notification.getCreated().getValue()));
+		date.setText(Utils.getDisplayDateString(notification.getCreated().longValue()));
 				
 		convertView.setOnClickListener(this);
 		return convertView;
