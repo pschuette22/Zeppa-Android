@@ -60,6 +60,33 @@ public class NotificationSingleton {
 	public boolean hasLoadedInitial() {
 		return hasLoadedInitial;
 	}
+	
+	public int getNotificationTypeOrder(ZeppaNotification notification) {
+		String type = notification.getType();
+		if (type.equals("FRIEND_REQUEST")) {
+			return 0;
+		} else if (type.equals("FRIEND_ACCEPTED")) {
+			return 1;
+		} else if (type.equals("EVENT_RECOMMENDATION")) {
+			return 2;
+		} else if (type.equals("DIRECT_INVITE")) {
+			return 3;
+		} else if (type.equals("COMMENT_ON_POST")) {
+			return 4;
+		} else if (type.equals("EVENT_CANCELED")) {
+			return 5;
+		} else if (type.equals("EVENT_UPDATED")) {
+			return 6;
+		} else if (type.equals("USER_JOINED")) {
+			return 7;
+		} else if (type.equals("USER_LEAVING")) {
+			return 8;
+		} else if (type.equals("EVENT_REPOSTED")) {
+			return 9;
+		} else {
+			return -1;
+		}
+	}
 
 	/*
 	 * Setters
@@ -168,8 +195,7 @@ public class NotificationSingleton {
 				// TODO: list notifications for this user
 
 				String cursor = null;
-				String filter = "recipientId == " + ZeppaUserSingleton.getInstance().getUserId().longValue();
-				String ordering = "created desc";
+				String filter = "recipientId == " + userId.longValue() + " && expires > " + System.currentTimeMillis();
 
 				do {
 					try {
@@ -179,8 +205,7 @@ public class NotificationSingleton {
 
 						listNotificationsTask.setCursor(cursor);
 						listNotificationsTask.setFilter(filter);
-						listNotificationsTask.setOrdering(ordering);
-						listNotificationsTask.setLimit(40);
+						listNotificationsTask.setLimit(Integer.valueOf(50));
 						
 						CollectionResponseZeppaNotification response = listNotificationsTask.execute();
 						
@@ -188,13 +213,27 @@ public class NotificationSingleton {
 							cursor = null;
 							break;
 						} else {
-							addAllNotifications(response.getItems());
+							Iterator<ZeppaNotification> iterator = response.getItems().iterator();
+							
+							while(iterator.hasNext()){
+								ZeppaNotification notification = iterator.next();
+								
+								if(notification.getEventId() != null && !ZeppaEventSingleton.getInstance().loadEventAndRelationshipIfNotHeldWithBlocking(notification.getEventId(), credential)){
+									continue;
+								} else {
+									addNotification(notification);
+								}
+								
+							}
+							
+							
 							cursor = response.getNextPageToken();
 						}
 						
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						cursor = null;
 					}
 
 				} while (cursor != null);

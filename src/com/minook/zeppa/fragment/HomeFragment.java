@@ -162,7 +162,7 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 
 		private CalendarFragment calendarFragment;
 		private FeedFragment feedFragment;
-		private WatchingFragment watchingFragment;
+		private AgendaFragment watchingFragment;
 
 		public ZeppaViewPagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -200,7 +200,7 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 				return feedFragment;
 			case 2:
 				if (watchingFragment == null)
-					watchingFragment = new WatchingFragment();
+					watchingFragment = new AgendaFragment();
 				return watchingFragment;
 			}
 

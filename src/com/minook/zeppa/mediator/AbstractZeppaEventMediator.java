@@ -1,6 +1,8 @@
 package com.minook.zeppa.mediator;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -11,10 +13,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facade.calendar.CalendarController;
+import com.facade.calendar.CalendarController.ViewType;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.json.gson.GsonFactory;
+import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
+import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
+import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint;
+import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint.ListZeppaEventToUserRelationship;
+import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.CollectionResponseZeppaEventToUserRelationship;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
 
 public abstract class AbstractZeppaEventMediator extends AbstractMediator
@@ -32,7 +43,7 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 	protected ZeppaEvent event;
 
 	protected boolean hasLoadedRelationships;
-	protected List<ZeppaEventToUserRelationship> relationships;
+	protected List<ZeppaEventToUserRelationship> attendingRelationships;
 
 	protected long lastUpdateTimeInMillis;
 	protected ConflictStatus conflictStatus;
@@ -41,9 +52,8 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		this.event = event;
 		this.conflictStatus = ConflictStatus.UNKNOWN;
 		this.lastUpdateTimeInMillis = System.currentTimeMillis();
-		this.relationships = new ArrayList<ZeppaEventToUserRelationship>();
+		this.attendingRelationships = new ArrayList<ZeppaEventToUserRelationship>();
 		this.hasLoadedRelationships = false;
-		loadRelationshipsForEventInAsync();
 
 	}
 
@@ -84,11 +94,12 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 
 		setHostInfo(convertView);
 
-		
-		View quickActionBar = (View) convertView.findViewById(R.id.eventview_quickactionbar);
+		View quickActionBar = (View) convertView
+				.findViewById(R.id.eventview_quickactionbar);
 		convertQuickActionBar(quickActionBar);
-		
-		convertView.setOnClickListener(this);
+
+		View container = convertView.findViewById(R.id.eventview);
+		container.setOnClickListener(this);
 
 	}
 
@@ -110,9 +121,13 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		return event.getOriginalEventId();
 
 	}
-	
+
 	public Long getEndInMillis() {
 		return event.getEnd();
+	}
+
+	public boolean getHasLoadedAttendingRelationship() {
+		return hasLoadedRelationships;
 	}
 
 	public List<Long> getTagIds() {
@@ -122,6 +137,25 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		} else {
 			return event.getTagIds();
 		}
+
+	}
+
+	/**
+	 * This Method Returns an array List of ID values for users attending this event
+	 * @return
+	 */
+	public List<Long> getAttendingUserIds() {
+
+		List<Long> attendingUserIds = new ArrayList<Long>();
+		if (!attendingRelationships.isEmpty()) {
+			Iterator<ZeppaEventToUserRelationship> iterator = attendingRelationships
+					.iterator();
+			while(iterator.hasNext()){
+				attendingUserIds.add(iterator.next().getUserId());
+			}
+		}
+
+		return attendingUserIds;
 
 	}
 
@@ -181,58 +215,13 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		return event.getPrivacy().equals("PRIVATE");
 	}
 
+	public boolean guestsMayInvite() {
+		return event.getGuestsMayInvite();
+	}
+
 	public boolean eventIsOld() {
 		long currentTime = System.currentTimeMillis();
 		return (event.getEnd().longValue() <= currentTime);
-	}
-
-	private void getNSetViaInAsync(TextView viaText, Long viaUserId) {
-		// if (viaUserId == null || viaUserId < 1) {
-		// viaText.setVisibility(View.GONE);
-		//
-		// } else if (viaUserId.longValue() == ZeppaUserSingleton.getInstance()
-		// .getUserId().longValue()) {
-		//
-		// } else {
-		// viaText.setVisibility(View.VISIBLE);
-		// viaText.setText("Loading...");
-		// Object params = new Object[] { viaText, viaUserId };
-		// new AsyncTask<Object, Void, ZeppaUser>() {
-		// private TextView viaText;
-		//
-		// @Override
-		// protected ZeppaUser doInBackground(Object... params) {
-		// viaText = (TextView) params[0];
-		// Long userId = (Long) params[1];
-		// return ZeppaUserSingleton.getInstance().getUserById(userId);
-		// }
-		//
-		// @Override
-		// protected void onPostExecute(ZeppaUser result) {
-		// super.onPostExecute(result);
-		// // viaUser = result;
-		// // if (result != null) {
-		// // viaText.setText("via " + result.getGivenName() + " "
-		// // + result.getFamilyName());
-		// //
-		// // viaText.setOnClickListener(new OnClickListener() {
-		// //
-		// // @Override
-		// // public void onClick(View v) {
-		// // Intent toViaIntent = new Intent(activity,
-		// // UserActivity.class);
-		// // toViaIntent.putExtra(
-		// // Constants.INTENT_ZEPPA_USER_ID, viaUser
-		// // .getKey().getId());
-		// // }
-		// // });
-		// //
-		// // }
-		// }
-		//
-		// }.execute(params);
-		// }
-
 	}
 
 	protected abstract void setHostInfo(View view);
@@ -251,43 +240,82 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		case 3:
 			image.setImageResource(R.drawable.conflict_red);
 			break;
-		case 4:
-			image.setImageResource(R.drawable.conflict_red);
-			break;
+		default:
+			image.setVisibility(View.GONE);
+			return;
 		}
+
+		image.setVisibility(View.VISIBLE);
+
 	}
 
-	private void loadRelationshipsForEventInAsync() {
-		new AsyncTask<Void, Void, Boolean>() {
+	/**
+	 * This Method loads
+	 * 
+	 * @param credentail
+	 * @return
+	 */
+	public boolean loadAttendingRelationshipsWithBlocking(
+			GoogleAccountCredential credentail) {
+		boolean success = true;
+		Zeppaeventtouserrelationshipendpoint.Builder builder = new Zeppaeventtouserrelationshipendpoint.Builder(
+				AndroidHttp.newCompatibleTransport(),
+				GsonFactory.getDefaultInstance(), credentail);
+		CloudEndpointUtils.updateBuilder(builder);
+		Zeppaeventtouserrelationshipendpoint endpoint = builder.build();
 
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				return Boolean.valueOf(loadRelationships());
-			}
+		String filter = "eventId == " + event.getId().longValue()
+				+ " && isAttending == " + true + " && userId != "
+				+ ZeppaUserSingleton.getInstance().getUserId().longValue();
+		String cursor = null;
+		Integer limit = Integer.valueOf(30);
 
-			@Override
-			protected void onPostExecute(Boolean result) {
-				super.onPostExecute(result);
+		List<ZeppaEventToUserRelationship> loadedRelationships = new ArrayList<ZeppaEventToUserRelationship>();
+		do {
+			try {
+				ListZeppaEventToUserRelationship listRelationshipsTask = endpoint
+						.listZeppaEventToUserRelationship();
+				listRelationshipsTask.setFilter(filter);
+				listRelationshipsTask.setCursor(cursor);
+				listRelationshipsTask.setLimit(limit);
 
-				if (result) {
+				CollectionResponseZeppaEventToUserRelationship response = listRelationshipsTask
+						.execute();
+
+				if (response != null && response.getItems() != null
+						&& !response.getItems().isEmpty()) {
+					loadedRelationships.addAll(response.getItems());
+					cursor = response.getNextPageToken();
 
 				} else {
-
+					cursor = null;
+					break;
 				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+				cursor = null;
+				break;
 			}
 
-		}.execute();
-	}
+		} while (cursor != null);
 
-	private boolean loadRelationships() {
-		boolean success = false;
+		if ((success || attendingRelationships.isEmpty())) {
+			attendingRelationships = loadedRelationships;
+		}
 
+		hasLoadedRelationships = true;
 		return success;
 	}
 
+	/**
+	 * This raises a dialog showing a calendar day focued on this event
+	 */
 	public void raiseCalendarDialog() {
 		CalendarController controller = CalendarController
 				.getInstance(getContext());
+		controller.setTime(event.getStart());
+		controller.setViewType(ViewType.DAY);
 
 	}
 

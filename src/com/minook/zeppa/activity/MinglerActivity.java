@@ -5,13 +5,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.adapter.eventlistadapter.FriendEventsAdapter;
@@ -20,7 +23,7 @@ import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
-public class UserActivity extends AuthenticatedFragmentActivity implements
+public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		OnClickListener {
 
 	private static final String TAG = "UserActivity";
@@ -32,9 +35,7 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 	private TextView mutualFriends;
 
 	private LinearLayout eventHolder;
-	private View eventLoaderView;
 	private LinearLayout tagHolder;
-	private View tagLoaderView;
 
 	private FriendTagAdapter tagAdapter;
 	private FriendEventsAdapter friendEventsAdapter;
@@ -54,7 +55,7 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 		long userId = getIntent().getExtras().getLong(
 				Constants.INTENT_ZEPPA_USER_ID);
 
-		userMediator = ZeppaUserSingleton.getInstance().getUserFor(userId);
+		userMediator = ZeppaUserSingleton.getInstance().getDefaultUserMediatorById(userId);
 
 		// find UI Elements and hold
 		userImage = (ImageView) findViewById(R.id.useractivity_image);
@@ -72,6 +73,7 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 
 		// action bar
 		ActionBar actionBar = getActionBar();
+		actionBar.setTitle(userMediator.getGivenName() + "'s Profile");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
@@ -97,18 +99,23 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 		tagAdapter.drawTags();
 		friendEventsAdapter.drawEvents();
 	}
-	
-	
+
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		super.onConnected(connectionHint);
 		updateEventTags();
+		// TODO: update UI
+		userMediator.updateMinglerIds();
+		// This loads new events and should update page if new ones are found
+		friendEventsAdapter.loadEventsInAsync();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
-		return super.onCreateOptionsMenu(menu);
+		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_minglerpage, menu);
+		return true;
 	}
 
 	@Override
@@ -118,6 +125,17 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			onBackPressed();
+			return true;
+
+		case R.id.action_unmingle:
+			GoogleAccountCredential credential = getGoogleAccountCredential();
+			if (credential != null) {
+				userMediator.unmingle(credential);
+				onBackPressed();
+			} else {
+				Toast.makeText(this, "Still Connecting", Toast.LENGTH_SHORT)
+						.show();
+			}
 			return true;
 
 		}
@@ -139,8 +157,6 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 		}
 
 	}
-
-	
 
 	/**
 	 * populates fields with the most up to date info available
@@ -168,13 +184,18 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 
 	private void updateEventTags() {
 
+		Object[] params = {getGoogleAccountCredential(), userMediator.getUserId()};
+		
 		new AsyncTask<Object, Void, Boolean>() {
 			@Override
 			protected Boolean doInBackground(Object... params) {
 
+				GoogleAccountCredential credentail = (GoogleAccountCredential) params[0];
+				Long userId = (Long) params[1];
 				return Boolean.valueOf(EventTagSingleton.getInstance()
-						.fetchEventTagsForUserWithBlocking(userMediator.getUserId(),
-								getGoogleAccountCredential()));
+						.fetchEventTagsForUserWithBlocking(
+								userId,
+								credentail));
 			}
 
 			@Override
@@ -185,11 +206,9 @@ public class UserActivity extends AuthenticatedFragmentActivity implements
 					tagAdapter.notifyDataSetChanged();
 				}
 
-				Log.d(TAG, "Did update all tags");
-
 			}
 
-		}.execute();
+		}.execute(params);
 
 	}
 

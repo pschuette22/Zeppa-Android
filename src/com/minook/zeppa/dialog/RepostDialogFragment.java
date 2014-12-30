@@ -1,4 +1,4 @@
-package com.minook.zeppa.fragmentdialog;
+package com.minook.zeppa.dialog;
 
 import java.util.List;
 

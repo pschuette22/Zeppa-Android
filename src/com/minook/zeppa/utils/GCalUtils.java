@@ -7,8 +7,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
@@ -34,7 +32,6 @@ import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 public class GCalUtils {
 
 	private static final String TAG = "GCalUtils";
-	private static final String TESTCALENDARID = "TestCalendarID";
 
 	private static final HttpTransport HTTP_TRANSPORT = AndroidHttp
 			.newCompatibleTransport();
@@ -62,6 +59,7 @@ public class GCalUtils {
 
 	/**
 	 * This gets the zeppa CalendarListEntry if it exists
+	 * 
 	 * @param credential
 	 *            - authentication credential
 	 * @return zeppaCalendarListEntry - CalendarListEntry for Zeppa Calendar
@@ -69,12 +67,14 @@ public class GCalUtils {
 	 *             - thrown if object does not exist for this ID
 	 */
 	public static Calendar fetchZeppaCalendar(
-			GoogleAccountCredential credential, String calendarId) throws IOException {
-		
+			GoogleAccountCredential credential, String calendarId)
+			throws IOException {
+
 		try {
-		return getCalendarClient(credential).calendars().get(calendarId).execute();
-		
-		} catch (IOException e){
+			return getCalendarClient(credential).calendars().get(calendarId)
+					.execute();
+
+		} catch (IOException e) {
 			handleGoogleException(e);
 			throw e;
 		}
@@ -85,10 +85,10 @@ public class GCalUtils {
 	 * 
 	 * @param context
 	 * @param credential
-	 * @return
+	 * @return created Calendar's ID
 	 * @throws IOException
 	 */
-	public static Calendar insertZeppaCalendar(Context context,
+	public static String insertZeppaCalendar(Context context,
 			GoogleAccountCredential credential) throws IOException {
 		com.google.api.services.calendar.Calendar client = getCalendarClient(credential);
 
@@ -98,36 +98,11 @@ public class GCalUtils {
 				R.string.zeppacalendar_description));
 		zeppaCalendar.setSummary(context.getResources().getString(
 				R.string.zeppacalendar_summary));
-		
-		return client.calendars().insert(zeppaCalendar).execute();
+
+		zeppaCalendar = client.calendars().insert(zeppaCalendar).execute();
+
+		return zeppaCalendar.getId();
 	}
-	
-	
-//	/**
-//	 * 
-//	 * @param context
-//	 * @param credentail
-//	 * @param summary
-//	 * @param description
-//	 * @return
-//	 */
-//	private static CalendarListEntry insertZeppaCalendarListEntry(
-//			Context context, GoogleAccountCredential credentail, String summary, String description,String calendarId) {
-//		
-//		CalendarListEntry instance = new CalendarListEntry();
-//
-//		instance.setId(calendarId);
-//		instance.setAccessRole("owner");
-//		instance.setBackgroundColor("#0AD2FF");
-//		instance.setForegroundColor("#FFFFFF");
-//		instance.setSummary(summary);
-//		instance.setDescription(description);
-//		instance.setSelected(true);
-//		instance.setPrimary(false);
-//		instance.setDeleted(false);
-//		
-//		return instance;
-//	}
 
 	/**
 	 * @return creator object for current user
@@ -172,7 +147,7 @@ public class GCalUtils {
 	 *            of ZeppaEvents Calendar
 	 * @return updated event with ids and tokens or null if error occurs
 	 */
-	public static ZeppaEvent putZeppaEventInCal(Context context,
+	public static ZeppaEvent putZeppaEventInCalendar(Context context,
 			ZeppaEvent zeppaEvent, GoogleAccountCredential credential)
 			throws IOException {
 
@@ -182,10 +157,6 @@ public class GCalUtils {
 		calendarEvent.setSummary(zeppaEvent.getTitle());
 		calendarEvent.setDescription(zeppaEvent.getDescription());
 
-		/*
-		 * This id for constructing start and end time. Seems like a lot for
-		 * such a simple task
-		 */
 		EventDateTime endTime = new EventDateTime();
 		EventDateTime startTime = new EventDateTime();
 		endTime.setDateTime(new DateTime(zeppaEvent.getEnd()));
@@ -197,12 +168,17 @@ public class GCalUtils {
 		calendarEvent.setAnyoneCanAddSelf(true); // so others may join
 		calendarEvent.setGuestsCanModify(false); // but cannot edit
 
-		calendarEvent.setGuestsCanInviteOthers(guestsCanInviteOthers(zeppaEvent.getPrivacy()));
+		calendarEvent.setGuestsCanInviteOthers(zeppaEvent.getGuestsMayInvite());
 		calendarEvent.setCreated(new DateTime(System.currentTimeMillis()));
-
+		calendarEvent.setVisibility("public");
+		
+		
+		zeppaEvent.setGoogleCalendarId(ZeppaUserSingleton.getInstance()
+				.getGoogleCalendarId());
 
 		Event result = getCalendarClient(credential).events()
-				.insert(zeppaEvent.getGoogleCalendarId(), calendarEvent).execute();
+				.insert(zeppaEvent.getGoogleCalendarId(), calendarEvent)
+				.execute();
 
 		zeppaEvent.setGoogleCalendarEventId(result.getId());
 		zeppaEvent.setICalUID(result.getICalUID());
@@ -217,17 +193,15 @@ public class GCalUtils {
 	 * @return true if the calendar event was deleted
 	 */
 
-	public static boolean didDeleteZeppaEventInCal(String calendarId,
-			ZeppaEvent event, GoogleCredential credential) throws IOException {
+	public static void deleteZeppaEventInCal(ZeppaEvent event,
+			GoogleAccountCredential credential) throws IOException {
 
-		com.google.api.services.calendar.Calendar client = new com.google.api.services.calendar.Calendar.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				AndroidJsonFactory.getDefaultInstance(), credential).build();
+		com.google.api.services.calendar.Calendar client = getCalendarClient(credential);
 
-		client.events().delete(calendarId, event.getGoogleCalendarEventId())
-				.execute();
+		client.events()
+				.delete(event.getGoogleCalendarId(),
+						event.getGoogleCalendarEventId()).execute();
 
-		return true;
 	}
 
 	/**
@@ -239,10 +213,9 @@ public class GCalUtils {
 	 * @throws IOException
 	 */
 	public static void joinZeppaEvent(ZeppaEvent zeppaEvent,
-			GoogleCredential credential) throws IOException {
+			GoogleAccountCredential credential) throws IOException {
 
-		com.google.api.services.calendar.Calendar client = new com.google.api.services.calendar.Calendar.Builder(
-				HTTP_TRANSPORT, JSON_FACTORY, credential).build();
+		com.google.api.services.calendar.Calendar client = getCalendarClient(credential);
 		Event currentEvent = client
 				.events()
 				.get(zeppaEvent.getGoogleCalendarId(),
@@ -268,10 +241,10 @@ public class GCalUtils {
 	 * @throws IOException
 	 */
 	public static boolean didLeaveZeppaEvent(ZeppaEvent zeppaEvent,
-			GoogleCredential credential) throws IOException {
+			GoogleAccountCredential calCredential) throws IOException {
 
-		com.google.api.services.calendar.Calendar client = new com.google.api.services.calendar.Calendar.Builder(
-				HTTP_TRANSPORT, JSON_FACTORY, credential).build();
+		com.google.api.services.calendar.Calendar client = getCalendarClient(calCredential);
+
 		Event currentEvent = client
 				.events()
 				.get(zeppaEvent.getGoogleCalendarId(),
@@ -301,7 +274,6 @@ public class GCalUtils {
 	// return success;
 	// }
 
-
 	/**
 	 * Taken from Google example. This is not needed for now but will remain in
 	 * case I find a use for it.
@@ -318,10 +290,6 @@ public class GCalUtils {
 			}
 		}
 		Log.e(TAG, e.getMessage(), e);
-	}
-	
-	private static boolean guestsCanInviteOthers(String zeppaEventPrivacy){
-		return (zeppaEventPrivacy.equals("CASUAL") || zeppaEventPrivacy.equals("PUBLIC"));
 	}
 
 }

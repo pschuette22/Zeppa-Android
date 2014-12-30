@@ -78,7 +78,7 @@ public class MinglersFragment extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.menu_contacts, menu);
+		inflater.inflate(R.menu.menu_minglers, menu);
 	}
 
 	@Override
@@ -93,19 +93,12 @@ public class MinglersFragment extends Fragment {
 			getActivity().overridePendingTransition(R.anim.slide_up_in,
 					R.anim.hold);
 
-			break;
+			return true;
 
-		case R.id.action_refresh:
-
-			break;
-
-		case R.id.action_help:
-
-			break;
 
 		}
 
-		return true;
+		return false;
 	}
 
 	/*

@@ -4,7 +4,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
@@ -22,7 +21,7 @@ public class FriendEventsAdapter extends AbstractEventLayoutAdapter {
 				.getEventMediatorsForFriend(
 						friendMediator.getUserId().longValue());
 		this.initialDidLoad = false;
-
+		setEventMediators();
 		drawEvents();
 		loadEventsInAsync();
 
@@ -58,13 +57,7 @@ public class FriendEventsAdapter extends AbstractEventLayoutAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		super.getView(position, convertView, parent);
-		if (convertView == null) {
-			convertView = activity.getLayoutInflater().inflate(
-					R.layout.view_eventlist_item, parent, false);
-		}
-
-		return convertView;
+		return super.getView(position, convertView, parent);
 	}
 
 	@Override
@@ -76,30 +69,24 @@ public class FriendEventsAdapter extends AbstractEventLayoutAdapter {
 
 	public void loadEventsInAsync() {
 
-		eventHolder.addView(getLoaderView(), 0);
-
-		// new AsyncTask<Void, Void, Boolean>(){
-		//
-		//
-		// @Override
-		// protected Boolean doInBackground(Void... params) {
-		// return ZeppaEventSingleton.getInstance().fetchEventsFor(activity,
-		// friend.getKey().getId(), getCredential());
-		// }
-		//
-		// @Override
-		// protected void onPostExecute(Boolean result) {
-		// super.onPostExecute(result);
-		//
-		// if(!result){
-		// Toast.makeText(activity, "Error On Load", Toast.LENGTH_SHORT).show();
-		// }
-		//
-		// }
-		//
-		//
-		//
-		// }.execute();
+//		eventHolder.addView(getLoaderView(), 0);
+//
+//		new AsyncTask<Void, Void, Boolean>() {
+//
+//			@Override
+//			protected Boolean doInBackground(Void... params) {
+//				return ZeppaEventSingleton.getInstance().fetchEventsFor(
+//						activity, friendMediator.getUserId(), getCredential());
+//			}
+//
+//			@Override
+//			protected void onPostExecute(Boolean result) {
+//				super.onPostExecute(result);
+//
+//			}
+//
+//		}.execute();
+		onFinishLoad();
 
 	}
 

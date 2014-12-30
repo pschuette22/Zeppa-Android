@@ -10,7 +10,7 @@ import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
 
-public class ConfirmMingleRequestTask extends NotifyUserTask {
+public class ConfirmMingleRequestTask extends ZeppaEndpointTask {
 
 	protected DefaultUserInfoMediator dMediator;
 
@@ -44,9 +44,7 @@ public class ConfirmMingleRequestTask extends NotifyUserTask {
 			
 			dMediator.setUserRelationship(relationship);
 			success = Boolean.TRUE;
-
-			ZeppaNotification notification = buildNotification();
-			insertNotificationObject(notification);
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -65,21 +63,5 @@ public class ConfirmMingleRequestTask extends NotifyUserTask {
 
 	}
 
-	private ZeppaNotification buildNotification() {
-		ZeppaNotification notification = new ZeppaNotification();
-
-		notification.setExtraMessage("You're mingling with "
-				+ ZeppaUserSingleton.getInstance().getUserMediator()
-						.getDisplayName());
-
-		notification.setType("MINGLE_ACCEPTED");
-		
-		notification.setHasSeen(Boolean.FALSE);
-		notification.setRecipientId(dMediator.getUserId());
-
-		notification.setSenderId(ZeppaUserSingleton.getInstance().getUserId());
-
-		return notification;
-	}
 
 }

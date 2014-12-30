@@ -65,7 +65,8 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements On
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		AbstractZeppaEventMediator manager = getItem(position);
-
+		manager.setContext(activity);
+		
 		if (convertView == null) {
 			convertView = activity.getLayoutInflater().inflate(R.layout.view_eventlist_item, parent, false);
 		} 
@@ -80,7 +81,7 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements On
 	
 	protected abstract void setEventMediators();
 	
-	protected GoogleAccountCredential getCredential() throws IOException{
+	protected GoogleAccountCredential getCredential() throws IOException {
 		return activity.getGoogleAccountCredential();
 	}
 

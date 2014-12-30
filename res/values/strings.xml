@@ -150,6 +150,7 @@
     <string name="thursday_calendar_short">Th</string>
 
     <!-- U -->
+    <string name="unmingle">Unmingle</string>
     <string name="usage">Usage</string>
 
     <!-- V -->
@@ -200,6 +201,9 @@
     <string name="menu_search">Search</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_signout">Sign Out</string>
+    
+    <!-- Activity Titles -->
+    <string name="title_details">Details</string>
 
     <!-- Error Description -->
     <string name="error_newevent_title">You need to add a title!</string>
@@ -228,7 +232,6 @@
         <item>@string/casual</item>
         <item>@string/public_</item>
         <item>@string/private_</item>
-        <item>@string/no_repost</item>
     </string-array>
     <string-array name="mytag_options">
         <item>@string/followers</item>

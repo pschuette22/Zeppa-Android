@@ -146,8 +146,8 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 						GoogleAccountCredential credential = getGoogleAccountCredential();
 						
 						// Insert the Zeppa Calendar
-						Calendar zeppaCalendar = GCalUtils.insertZeppaCalendar(NewAccountActivity.this, getGoogleCalendarCredential());
-						createdUser.setZeppaCalendarId(zeppaCalendar.getId());
+						String calendarId =  GCalUtils.insertZeppaCalendar(NewAccountActivity.this, getGoogleCalendarCredential());
+						createdUser.setZeppaCalendarId(calendarId);
 						
 						Zeppauserendpoint.Builder endpointBuilder = new Zeppauserendpoint.Builder(
 								AndroidHttp.newCompatibleTransport(),

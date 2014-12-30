@@ -4,6 +4,9 @@ import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -60,7 +63,7 @@ public class AccountFragment extends Fragment implements OnClickListener {
 
 		userMediator.setImageWhenReady(userImage);
 		displayName.setText(userMediator.getDisplayName());
-		
+
 		try {
 			phoneNumber.setText(userMediator.getPrimaryPhoneNumber());
 		} catch (NullPointerException e) {
@@ -71,6 +74,7 @@ public class AccountFragment extends Fragment implements OnClickListener {
 		// Handle tag stuff
 		LinearLayout tagHolder = (LinearLayout) layout
 				.findViewById(R.id.accountfragment_tagholder);
+		
 		tagAdapter = new MyTagAdapter(
 				(AuthenticatedFragmentActivity) getActivity(), tagHolder, null);
 		tagAdapter.drawTags();
@@ -93,6 +97,21 @@ public class AccountFragment extends Fragment implements OnClickListener {
 
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setTitle(R.string.my_profile);
+
+		setHasOptionsMenu(true);
+
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.menu_account, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

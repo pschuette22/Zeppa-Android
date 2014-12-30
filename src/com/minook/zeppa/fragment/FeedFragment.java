@@ -36,18 +36,16 @@ public class FeedFragment extends Fragment implements OnRefreshListener {
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		layout = inflater.inflate(R.layout.fragment_feed, null, false);
+		layout = inflater.inflate(R.layout.fragment_feed, container, false);
 
 		feedList = (ListView) layout.findViewById(R.id.feedListView);
 		pullToRefreshLayout = (PullToRefreshLayout) layout
 				.findViewById(R.id.feedfragment_ptr);
 
-		if (flAdapter == null) {
-			flAdapter = new FeedListAdapter(
-					(AuthenticatedFragmentActivity) getActivity(), feedList);
-			feedList.setAdapter(flAdapter);
+		flAdapter = new FeedListAdapter(
+				(AuthenticatedFragmentActivity) getActivity(), feedList);
 
-		}
+		feedList.setAdapter(flAdapter);
 
 		ActionBarPullToRefresh.from(getActivity())
 				.options(Options.create().scrollDistance(.4f).build())
@@ -66,7 +64,7 @@ public class FeedFragment extends Fragment implements OnRefreshListener {
 	public void onResume() {
 		super.onResume();
 		flAdapter.notifyDataSetChanged();
-		
+
 	}
 
 	/*

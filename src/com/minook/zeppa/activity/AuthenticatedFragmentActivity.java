@@ -55,7 +55,7 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		connectionProgress = new ProgressDialog(this);
 		connectionProgress.setTitle("Signing in");
 		connectionProgress.setMessage("One Moment Please");
@@ -69,12 +69,10 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 		String heldAccountName = getSharedPreferences(Constants.SHARED_PREFS,
 				MODE_PRIVATE).getString(Constants.LOGGED_IN_ACCOUNT, null);
 
-		if(heldAccountName != null){
+		if (heldAccountName != null) {
 			initializeApiClient(heldAccountName);
 			apiClient.connect();
 		}
-		
-		
 
 	}
 
@@ -145,6 +143,14 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 
 	public boolean removeHeldContext(AbstractMediator mediator) {
 		return mediatorsWithContext.remove(mediator);
+	}
+
+	public boolean isConnected() {
+		if (apiClient == null || !apiClient.isConnected()) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**

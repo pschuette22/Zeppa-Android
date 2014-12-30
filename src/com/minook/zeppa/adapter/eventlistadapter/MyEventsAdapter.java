@@ -1,20 +1,27 @@
 package com.minook.zeppa.adapter.eventlistadapter;
 
+import java.util.List;
+
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
+import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
+import com.minook.zeppa.singleton.ZeppaEventSingleton;
 
 public class MyEventsAdapter extends AbstractEventLayoutAdapter {
 
+	protected View loaderView;
+	
 	public MyEventsAdapter(AuthenticatedFragmentActivity activity,
 			LinearLayout eventHolder) {
 		super(activity, eventHolder);
 
-//		events = ZeppaEventSingleton.getInstance().getHostedEvents();
-//		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial()) {
-//			drawEvents();
-//		}
-		
+		if(didLoadInitial()){
+			setEventMediators();
+		} else {
+			ZeppaEventSingleton.getInstance().registerObserver(this);
+		}
 		
 	}
 
@@ -22,40 +29,39 @@ public class MyEventsAdapter extends AbstractEventLayoutAdapter {
 
 	@Override
 	public boolean didLoadInitial() {
-		// TODO Auto-generated method stub
-		return false;
+		return ZeppaEventSingleton.getInstance().hasLoadedInitial();
 	}
 
 
 
 	@Override
 	public void onFinishLoad() {
-		// TODO Auto-generated method stub
-		
+		notifyDataSetChanged();
 	}
 
 	
 	@Override
 	public void verifyDatasetValid() {
-//		List<ZeppaEvent> hostedEvents = ZeppaEventSingleton.getInstance().getHostedEvents();
-//		
-//		if(!hostedEvents.containsAll(events) || !events.containsAll(hostedEvents)){
-//			notifyDataSetChanged();
-//		}
+		List<AbstractZeppaEventMediator> hostedEvents = ZeppaEventSingleton.getInstance().getHostedEventMediators();
+		
+		if(!hostedEvents.containsAll(eventMediators) || !eventMediators.containsAll(hostedEvents)){
+			notifyDataSetChanged();
+		}
 		
 	}
 
 	
 	@Override
 	public void notifyDataSetChanged() {
-//		events = ZeppaEventSingleton.getInstance().getHostedEvents();
-//		super.notifyDataSetChanged();
+		setEventMediators();
+		super.notifyDataSetChanged();
+		
 	}
 
 
 	@Override
 	protected void setEventMediators() {
-		// TODO Auto-generated method stub
+		eventMediators = ZeppaEventSingleton.getInstance().getHostedEventMediators();
 		
 	}
 

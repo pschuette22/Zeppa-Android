@@ -184,6 +184,10 @@ public class ZeppaUserSingleton {
 	public Long getUserId() {
 		return userMediator.getUserId();
 	}
+	
+	public String getGoogleCalendarId(){
+		return userMediator.getZeppaCalendarId();
+	}
 
 	public ArrayList<DefaultUserInfoMediator> getFriendsFrom(List<Long> list) {
 		ArrayList<DefaultUserInfoMediator> friends = new ArrayList<DefaultUserInfoMediator>();
@@ -271,7 +275,7 @@ public class ZeppaUserSingleton {
 		return pendingRequests;
 	}
 
-	public DefaultUserInfoMediator getUserFor(Long userId) {
+	public DefaultUserInfoMediator getDefaultUserMediatorById(Long userId) {
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
 				.iterator();
 
@@ -415,6 +419,10 @@ public class ZeppaUserSingleton {
 				hasLoadedInitial = true;
 				onFinishLoad();
 
+				// Once Connected Users are loaded, load notifications
+				NotificationSingleton.getInstance().loadInitialNotificationsInAsync(
+						credential, getUserId());
+				
 				// new FindMinglersTask(context, credential).execute();
 
 			}

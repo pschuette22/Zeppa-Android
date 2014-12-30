@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_addcontact"
+        android:icon="@drawable/ic_menu_add"
+        android:showAsAction="always"
+        android:title="@string/menu_addcontact"/>
+    <item
+        android:id="@+id/action_activity"
+        android:icon="@drawable/ic_menu_activity"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_activity"/>
+
+</menu>

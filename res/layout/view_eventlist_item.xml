@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/eventview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
@@ -12,13 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="3dp" >
+        android:padding="2dp" >
 
         <!-- Host Info -->
 
         <LinearLayout
+            android:padding="2dp"
             android:id="@+id/eventview_hostinfo"
-            android:layout_width="60dp"
+            android:background="@drawable/background_attribute_clickable"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -40,8 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:gravity="center_horizontal"
-                android:maxLines="2" />
+                android:gravity="center_horizontal"/>
         </LinearLayout>
 
         <!-- Event Info -->

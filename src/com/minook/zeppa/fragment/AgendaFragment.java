@@ -14,37 +14,33 @@ import android.widget.ListView;
 
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
-import com.minook.zeppa.adapter.eventlistadapter.WatchListAdapter;
+import com.minook.zeppa.adapter.eventlistadapter.AgendaListAdapter;
 
-public class WatchingFragment extends Fragment implements OnRefreshListener {
+public class AgendaFragment extends Fragment implements OnRefreshListener {
 
 	// Private
 	View layout;
-	ListView watchingList;
+	ListView agendaList;
 	PullToRefreshLayout pullToRefreshLayout;
-	WatchListAdapter wlAdapter;
+	AgendaListAdapter alAdapter;
 
 	// Constants
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.d("TAG", "CreateView called on watching fragment");
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		layout = inflater.inflate(R.layout.fragment_watching, null, false);
+		layout = inflater.inflate(R.layout.fragment_watching, container, false);
 
-		watchingList = (ListView) layout.findViewById(R.id.watchingListView);
+		agendaList = (ListView) layout.findViewById(R.id.watchingListView);
 		pullToRefreshLayout = (PullToRefreshLayout) layout
 				.findViewById(R.id.watchingfragment_ptr);
 
-		if (wlAdapter == null) {
-			wlAdapter = new WatchListAdapter(
-					(AuthenticatedFragmentActivity) getActivity(), watchingList);
-		}
+		alAdapter = new AgendaListAdapter(
+				(AuthenticatedFragmentActivity) getActivity(), agendaList);
 
-		wlAdapter.verifyDatasetValid();
-		watchingList.setAdapter(wlAdapter);
+		agendaList.setAdapter(alAdapter);
 
 		ActionBarPullToRefresh.from(getActivity())
 				.options(Options.create().scrollDistance(.4f).build())
@@ -56,14 +52,14 @@ public class WatchingFragment extends Fragment implements OnRefreshListener {
 
 	@Override
 	public void onRefreshStarted(View view) {
-		wlAdapter.fetchNewEventsInAsync(pullToRefreshLayout);
+		alAdapter.fetchNewEventsInAsync(pullToRefreshLayout);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		
-		wlAdapter.notifyDataSetChanged();
+
+		alAdapter.notifyDataSetChanged();
 
 	}
 

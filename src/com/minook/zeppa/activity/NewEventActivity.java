@@ -10,18 +10,19 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
@@ -40,6 +42,7 @@ import com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter;
 import com.minook.zeppa.mediator.MyZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.utils.GCalUtils;
 import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 
@@ -71,6 +74,8 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	private EditText shortLocationField;
 
 	private Spinner eventPrivacyField;
+	private CheckBox guestsCanInviteField;
+
 	private TextView startDateField;
 	private TextView startTimeField;
 	private TextView endDateField;
@@ -102,7 +107,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(TAG, "Activity created");
+
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		getActionBar().hide();
 
@@ -307,6 +312,8 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		event.setStart(startCalendar.getTimeInMillis());
 		event.setEnd(endCalendar.getTimeInMillis());
 		event.setTagIds(tagAdapter.getSelectedTagIds());
+		event.setInvitedUserIds(invitesAdapter.getInvitedUserIds());
+		event.setGuestsMayInvite(Boolean.TRUE);
 
 		if (isValidEvent(event)) {
 
@@ -326,20 +333,37 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 					ZeppaEvent event = (ZeppaEvent) params[0];
 					ProgressDialog dialog = (ProgressDialog) params[1];
 					try {
-						// TODO: update this so user specifies if invites are available
-						event.setGuestsMayInvite(Boolean.TRUE);
+						// TODO: update this so user specifies if invites are
+						// available
+						
+						Context context = getBaseContext();
+						GoogleAccountCredential credential = getGoogleCalendarCredential();
+						
+						event = GCalUtils.putZeppaEventInCalendar(
+								context, event,
+								credential);
+
 						event = ZeppaEventSingleton.getInstance()
 								.createZeppaEventWithBlocking(
 										getGoogleAccountCredential(), event);
 
 						MyZeppaEventMediator myMediator = new MyZeppaEventMediator(
 								event);
-						
+
 						ZeppaEventSingleton.getInstance().addMediator(
 								myMediator);
 
 					} catch (IOException e) {
 						e.printStackTrace();
+						
+						if(event.getGoogleCalendarEventId() != null){
+							try {
+								GCalUtils.deleteZeppaEventInCal(event, getGoogleCalendarCredential());
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+						}
+						
 						event = null;
 					}
 
@@ -356,14 +380,14 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 						onBackPressed();
 					} else {
 						Toast.makeText(((ZeppaApplication) getApplication()),
-								"Error Posting Event", Toast.LENGTH_LONG)
+								"Error Posting", Toast.LENGTH_LONG)
 								.show();
 					}
 
 				}
 
 			}.execute(params);
-		} 
+		}
 
 	}
 
@@ -601,10 +625,11 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 			int year = getArguments().getInt(PICKER_YEAR);
 			int month = getArguments().getInt(PICKER_MONTH);
 			int day = getArguments().getInt(PICKER_DAY);
-			
 
-			return new DatePickerDialog(getActivity(),
+			DatePickerDialog picker = new DatePickerDialog(getActivity(),
 					(NewEventActivity) getActivity(), year, month, day);
+
+			return picker;
 		}
 
 	}

@@ -3,6 +3,7 @@ package com.minook.zeppa.activity;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.adapter.EventCommentAdapter;
@@ -70,6 +72,9 @@ public abstract class AbstractEventViewActivity extends
 
 		// UI Elements
 		final ActionBar actionBar = getActionBar();
+		actionBar.setTitle(R.string.title_details);
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
 
 		title = (TextView) findViewById(R.id.eventactivity_eventtitle);
 		conflictIndicator = (ImageView) findViewById(R.id.eventactivity_stateindicator);
@@ -77,7 +82,7 @@ public abstract class AbstractEventViewActivity extends
 		time = (TextView) findViewById(R.id.eventactivity_time);
 		location = (TextView) findViewById(R.id.eventactivity_location);
 		attending = (TextView) findViewById(R.id.eventactivity_attending);
-
+		
 		hostImage = (ImageView) findViewById(R.id.eventactivity_hostimage);
 		hostName = (TextView) findViewById(R.id.eventactivity_hostname);
 		description = (TextView) findViewById(R.id.eventactivity_description);
@@ -88,11 +93,9 @@ public abstract class AbstractEventViewActivity extends
 
 		postComment.setOnClickListener(this);
 		conflictIndicator.setOnClickListener(this);
-		hostName.setOnClickListener(this);
-		hostImage.setOnClickListener(this);
-
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
+		
+		View barView = findViewById(R.id.eventactivity_quickactionbar);
+		eventMediator.convertQuickActionBar(barView);
 
 	}
 
@@ -104,6 +107,15 @@ public abstract class AbstractEventViewActivity extends
 		setEventInfo();
 		setHostInfo();
 		setEventTagAdapter();
+		setAttendingText();
+	}
+	
+	
+	@Override
+	public void onConnected(Bundle connectionHint) {
+		super.onConnected(connectionHint);
+		fetchAttendingUserRelationshipsInAsync();
+
 	}
 
 	@Override
@@ -112,13 +124,8 @@ public abstract class AbstractEventViewActivity extends
 
 		switch (item.getItemId()) {
 		
-		case R.id.menu_event_directions:
-			String location = eventMediator.getMapsLocation();
-			Intent toDirections = new Intent(
-					android.content.Intent.ACTION_VIEW,
-					Uri.parse("http://maps.google.com/maps?f=d&daddr="
-							+ location));
-			startActivity(toDirections);
+		case android.R.id.home:
+			onBackPressed();
 			return true;
 
 		}
@@ -141,6 +148,14 @@ public abstract class AbstractEventViewActivity extends
 		case R.id.eventactivity_stateindicator:
 			raiseCalendarDialog();
 			break;
+			
+		case R.id.eventactivity_location:
+			startNavigation();
+			break;
+			
+		case R.id.eventactivity_time:
+			raiseCalendarDialog();
+			break;
 
 		}
 
@@ -157,6 +172,20 @@ public abstract class AbstractEventViewActivity extends
 		location.setText(eventMediator.getDisplayLocation());
 		setConfliction();
 		setEventTagAdapter();
+	}
+	
+	protected void startNavigation() {
+		String location = eventMediator.getMapsLocation();
+		
+		if(location == null){
+			Toast.makeText(this, "Address Not Set", Toast.LENGTH_SHORT).show();
+		}
+		
+		Intent toDirections = new Intent(
+				android.content.Intent.ACTION_VIEW,
+				Uri.parse("http://maps.google.com/maps?f=d&daddr="
+						+ location));
+		startActivity(toDirections);
 	}
 
 	protected abstract void setHostMediator();
@@ -177,6 +206,33 @@ public abstract class AbstractEventViewActivity extends
 
 	protected abstract void setConfliction();
 
-	// Load event relationships
+	protected void fetchAttendingUserRelationshipsInAsync(){
+		
+		Object[] params = {getGoogleAccountCredential(), eventMediator};
+		
+		new AsyncTask<Object, Void, Boolean>(){
+
+			@Override
+			protected Boolean doInBackground(Object... params) {
+				GoogleAccountCredential credentail = (GoogleAccountCredential) params[0];
+				AbstractZeppaEventMediator mediator = (AbstractZeppaEventMediator) params[1];
+				return mediator.loadAttendingRelationshipsWithBlocking(credentail);
+			}
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				super.onPostExecute(result);
+				if(result){
+					setAttendingText();
+				} else {
+					attending.setText("Load Error");
+				}
+			}
+			
+			
+			
+		}.execute(params);
+		
+	}
 
 }

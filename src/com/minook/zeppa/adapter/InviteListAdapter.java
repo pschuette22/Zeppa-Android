@@ -51,7 +51,7 @@ public class InviteListAdapter extends BaseAdapter implements OnClickListener {
 
 		if (convertView == null) {
 			convertView = activity.getLayoutInflater().inflate(
-					R.layout.view_invitelist_item, null, false);
+					R.layout.view_invitelist_item, parent, false);
 		}
 
 		DefaultUserInfoMediator infoManager = getItem(position);
@@ -60,11 +60,7 @@ public class InviteListAdapter extends BaseAdapter implements OnClickListener {
 		CheckBox checkBox = (CheckBox) convertView
 				.findViewById(R.id.inviteitem_checkbox);
 
-		if (invitedUserIds.contains(infoManager.getUserId())) {
-			checkBox.setChecked(true);
-		} else {
-			checkBox.setChecked(false);
-		}
+		checkBox.setChecked(invitedUserIds.contains(infoManager.getUserId()));
 
 		convertView.setTag(infoManager.getUserId());
 

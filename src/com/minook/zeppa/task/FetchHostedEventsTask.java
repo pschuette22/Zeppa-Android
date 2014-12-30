@@ -21,8 +21,9 @@ public class FetchHostedEventsTask extends FetchEventsTask {
 	}
 
 	@Override
-	protected Void doInBackground(Void... params) {
+	protected Boolean doInBackground(Void... params) {
 
+		Boolean success = Boolean.FALSE;
 		Zeppaeventendpoint endpoint = buildZeppaEventEndpoint();
 
 		
@@ -62,6 +63,7 @@ public class FetchHostedEventsTask extends FetchEventsTask {
 					
 				} else {
 					cursor = null;
+					success = Boolean.TRUE;
 				}
 				
 			} catch (IOException e) {
@@ -76,9 +78,15 @@ public class FetchHostedEventsTask extends FetchEventsTask {
 			}
 		} while (cursor != null);
 
-		return null;
+		return success;
 	}
 	
+	@Override
+	protected void onPostExecute(Boolean result) {
+		super.onPostExecute(result);
+		
+		ZeppaEventSingleton.getInstance().setHasLoadedInitialHostedEvents();
+	}
 	
 	
 

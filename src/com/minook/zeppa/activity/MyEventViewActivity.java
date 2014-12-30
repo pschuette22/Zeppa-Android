@@ -1,5 +1,7 @@
 package com.minook.zeppa.activity;
 
+import java.util.List;
+
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -92,7 +94,17 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 
 	@Override
 	protected void setAttendingText() {
-		// TODO Auto-generated method stub
+		if(eventMediator.getHasLoadedAttendingRelationship()){
+			List<Long> attendingUserIds = eventMediator.getAttendingUserIds();
+			if(attendingUserIds.isEmpty()){
+				attending.setText("Nobody has joined yet");
+			} else {
+				attending.setText(attendingUserIds.size() + " people joined");
+			}
+			
+		} else {
+			attending.setText("Loading...");
+		}
 
 	}
 

@@ -90,6 +90,7 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 	private ListView activityList;
 	private String[] navigationOptions;
 	private ActionBarDrawerToggle drawerToggle;
+	private NavigationItemAdapter navListAdapter;
 	private NotificationsAdapter notifictionsAdapter;
 
 	// Navigation options:
@@ -148,31 +149,27 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 
 		navigationOptions = getResources().getStringArray(
 				R.array.navigation_options);
-		NavigationItemAdapter navListAdapter = new NavigationItemAdapter(this,
-				R.layout.view_navlist_item, navigationOptions);
+		if(navListAdapter == null)
+			navListAdapter = new NavigationItemAdapter(this,
+					R.layout.view_navlist_item, navigationOptions);
+		
 		navigationList.setAdapter(navListAdapter);
 		navigationList.setOnItemClickListener(navListAdapter);
 		navigationList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-		notifictionsAdapter = new NotificationsAdapter(this, activityList);
+		if(notifictionsAdapter == null)
+			notifictionsAdapter = new NotificationsAdapter(this, activityList);
+		
 		activityList.setAdapter(notifictionsAdapter);
 
 		drawerLayout.setDrawerListener(drawerToggle);
-		selectItem(1, false);
-
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		// if (navigationList.getCheckedItemCount() > 0) {
-		// // If an item is already selected, make sure that the correct
-		// // fragment is showing
-		// selectItem(navigationList.getSelectedItemPosition(), false);
-		// } else {
-		// // else default and show home
-		// }
+		
+		int currentPage = currentPage();
+		if (currentPage < 0) {
+			selectItem(1, false);
+		} else {
+			selectItem(currentPage, false);
+		}
 
 	}
 
@@ -181,12 +178,7 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
-		return super.onCreateOptionsMenu(menu);
-	}
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,11 +22,15 @@ import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AbstractEventViewActivity;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
+import com.minook.zeppa.activity.DefaultEventViewActivity;
+import com.minook.zeppa.activity.MinglerActivity;
+import com.minook.zeppa.activity.MyEventViewActivity;
 import com.minook.zeppa.activity.StartMinglingActivity;
-import com.minook.zeppa.activity.UserActivity;
+import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.singleton.NotificationSingleton;
+import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
@@ -43,13 +48,14 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 		this.activity = activity;
 		this.notificationList = notificationList;
+		
 		if (didLoadInitial()) {
 			notifications = NotificationSingleton.getInstance()
 					.getNotifications();
 		} else {
 			NotificationSingleton.getInstance().registerOnLoadListener(this);
 			loaderView = (View) activity.getLayoutInflater().inflate(
-					R.layout.view_loaderview, null, false);
+					R.layout.view_loaderview, notificationList, false);
 
 			ProgressBar progress = (ProgressBar) loaderView
 					.findViewById(R.id.loaderview_progressbar);
@@ -91,22 +97,30 @@ public class NotificationsAdapter extends BaseAdapter implements
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ZeppaNotification notification = getItem(position);
 
-		if (convertView != null) {
+		DefaultUserInfoMediator senderMediator = ZeppaUserSingleton.getInstance()
+				.getDefaultUserMediatorById(notification.getSenderId());
+		
+		if(senderMediator == null){
+			Log.wtf("TAG", "No User Found for received Notification");
+		}
+		
+		if (convertView == null) {
 			convertView = activity.getLayoutInflater().inflate(
 					R.layout.view_notification_item, parent, false);
-
-			ImageView userImage = (ImageView) convertView
-					.findViewById(R.id.notificationitem_userimage);
-			TextView text = (TextView) convertView
-					.findViewById(R.id.notificationitem_text);
-			TextView date = (TextView) convertView
-					.findViewById(R.id.notificationitem_date);
-
-			setImageInAsync(userImage, notification.getSenderId());
-			text.setText(notification.getExtraMessage());
-			date.setText(Utils.getDisplayDateString(notification.getCreated()
-					.longValue()));
 		}
+		
+		
+		ImageView userImage = (ImageView) convertView
+				.findViewById(R.id.notificationitem_userimage);
+		TextView text = (TextView) convertView
+				.findViewById(R.id.notificationitem_text);
+		TextView date = (TextView) convertView
+				.findViewById(R.id.notificationitem_date);
+
+		senderMediator.setImageWhenReady(userImage);
+		text.setText(getMessage(notification, senderMediator));
+		date.setText(Utils.getDisplayDateString(notification.getCreated()
+				.longValue()));
 
 		return convertView;
 	}
@@ -127,6 +141,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 		if (loaderView != null && loaderView.getVisibility() == View.VISIBLE) {
 			loaderView.setVisibility(View.GONE);
+			notificationList.removeHeaderView(loaderView);
 		}
 
 		notifyDataSetChanged();
@@ -137,16 +152,6 @@ public class NotificationsAdapter extends BaseAdapter implements
 		return activity.getGoogleAccountCredential();
 	}
 
-	private void setImageInAsync(ImageView imageView, Long userId) {
-
-		DefaultUserInfoMediator infoManager = ZeppaUserSingleton.getInstance()
-				.getUserFor(userId);
-		if (infoManager != null) {
-			infoManager.setImageWhenReady(imageView);
-		} else {
-			// TODO: load user and set image.
-		}
-	}
 
 	public void hasSeenUnseenNotifications() {
 
@@ -182,9 +187,8 @@ public class NotificationsAdapter extends BaseAdapter implements
 		// TODO Auto-generated method stub
 		ZeppaNotification notification = getItem(position);
 
-		String type = notification.getType();
 		Intent intent = null;
-		switch (notificationTypeOrder(type)) {
+		switch (NotificationSingleton.getInstance().getNotificationTypeOrder(notification)) {
 
 		case 0: // FriendRequest;
 			intent = new Intent(activity, StartMinglingActivity.class);
@@ -192,7 +196,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 			activity.startActivity(intent);
 			break;
 		case 1: // FriendAccepted
-			intent = new Intent(activity, UserActivity.class);
+			intent = new Intent(activity, MinglerActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_USER_ID,
 					notification.getSenderId());
 			activity.startActivity(intent);
@@ -201,7 +205,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 					R.anim.slide_left_out);
 			break;
 		case 2: // Event Reccomendation
-			intent = new Intent(activity, AbstractEventViewActivity.class);
+			intent = new Intent(activity, DefaultEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			activity.startActivity(intent);
@@ -209,7 +213,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 					R.anim.slide_left_out);
 			break;
 		case 3: // Direct Invite, Implement Later
-			intent = new Intent(activity, AbstractEventViewActivity.class);
+			intent = new Intent(activity, DefaultEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			activity.startActivity(intent);
@@ -218,6 +222,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 			break;
 		case 4: // Post Comment
+			//TODO: Determine if this is my event or another
 			intent = new Intent(activity, AbstractEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
@@ -234,7 +239,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 			break;
 
 		case 6: // Event Updated
-			intent = new Intent(activity, AbstractEventViewActivity.class);
+			intent = new Intent(activity, DefaultEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			activity.startActivity(intent);
@@ -242,8 +247,8 @@ public class NotificationsAdapter extends BaseAdapter implements
 			activity.overridePendingTransition(R.anim.slide_left_in,
 					R.anim.slide_left_out);
 			break;
-		case 7: // Friend Joined Event
-			intent = new Intent(activity, AbstractEventViewActivity.class);
+		case 7: // Friend Joined My Event
+			intent = new Intent(activity, MyEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			activity.startActivity(intent);
@@ -251,22 +256,16 @@ public class NotificationsAdapter extends BaseAdapter implements
 					R.anim.slide_left_out);
 			break;
 		case 8: // User Left Your Event
-			intent = new Intent(activity, AbstractEventViewActivity.class);
+			intent = new Intent(activity, MyEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			activity.startActivity(intent);
 			activity.overridePendingTransition(R.anim.slide_left_in,
 					R.anim.slide_left_out);
 			break;
-		// case 9: // Someone Wants to find a time, Implement Later
-		//
-		// break;
-		// case 10: // Time was found
-		//
-		// break;
 
 		case 9: // Event Reposted
-			intent = new Intent(activity, AbstractEventViewActivity.class);
+			intent = new Intent(activity, MyEventViewActivity.class);
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			activity.startActivity(intent);
@@ -277,30 +276,94 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 	}
 
-	private int notificationTypeOrder(String type) {
-		if (type.equals("FRIEND_REQUEST")) {
-			return 0;
-		} else if (type.equals("FRIEND_ACCEPTED")) {
-			return 1;
-		} else if (type.equals("EVENT_RECCOMENDATION")) {
-			return 2;
-		} else if (type.equals("DIRECT_INVITE")) {
-			return 3;
-		} else if (type.equals("COMMENT_ON_POST")) {
-			return 4;
-		} else if (type.equals("EVENT_CANCELED")) {
-			return 5;
-		} else if (type.equals("EVENT_UPDATED")) {
-			return 6;
-		} else if (type.equals("USER_JOINED")) {
-			return 7;
-		} else if (type.equals("USER_LEAVING")) {
-			return 8;
-		} else if (type.equals("EVENT_REPOSTED")) {
-			return 9;
-		} else {
-			return -1;
+
+	/**
+	 * This Returns the appropriate message to display with the given notification
+	 * 
+	 * @param notification
+	 * @param senderMediator
+	 * @return notificationMessage
+	 */
+	private String getMessage(ZeppaNotification notification,
+			DefaultUserInfoMediator senderMediator) {
+		StringBuilder builder = new StringBuilder();
+
+		
+		AbstractZeppaEventMediator eventMediator = null;
+		switch (NotificationSingleton.getInstance().getNotificationTypeOrder(notification)) {
+		case 0:
+			builder.append(senderMediator.getDisplayName());
+			builder.append(" would like to mingle");
+			break;
+			
+		case 1:
+			builder.append(senderMediator.getDisplayName());
+			builder.append(" is now mingling with you");
+			break;
+			
+		case 2:
+			eventMediator = ZeppaEventSingleton.getInstance().getEventById(notification.getEventId().longValue());
+			builder.append("Recommended: '");
+			builder.append(eventMediator.getTitle());
+			builder.append("' started by ");
+			builder.append(senderMediator.getDisplayName());
+			break;
+			
+		case 3:
+			eventMediator = ZeppaEventSingleton.getInstance().getEventById(notification.getEventId().longValue());
+			builder.append(senderMediator.getDisplayName());
+			builder.append(" invited you to '");
+			builder.append(eventMediator.getTitle());
+			builder.append("'");
+			break;
+		case 4:
+			eventMediator = ZeppaEventSingleton.getInstance().getEventById(notification.getEventId().longValue());
+			builder.append(senderMediator.getDisplayName());
+			builder.append(" commended on '");
+			builder.append(eventMediator.getTitle());
+			builder.append("'");
+			break;
+			
+		case 5:
+			// Consider Making the 'Extra Message the Event Title
+			builder.append(notification.getExtraMessage());
+			break;
+			
+		case 6:
+			eventMediator = ZeppaEventSingleton.getInstance().getEventById(notification.getEventId().longValue());
+			builder.append(senderMediator.getDisplayName());
+			builder.append(" updated '");
+			builder.append(eventMediator.getTitle());
+			builder.append("'");
+			break;
+			
+		case 7:
+			eventMediator = ZeppaEventSingleton.getInstance().getEventById(notification.getEventId().longValue());
+			builder.append(senderMediator.getDisplayName());
+			builder.append(" joined '");
+			builder.append(eventMediator.getTitle());
+			builder.append("'");
+			break;
+			
+		case 8:
+			eventMediator = ZeppaEventSingleton.getInstance().getEventById(notification.getEventId().longValue());
+			builder.append(senderMediator.getDisplayName());
+			builder.append(" left '");
+			builder.append(eventMediator.getTitle());
+			builder.append("'");
+			break;
+			
+		case 9:
+			eventMediator = ZeppaEventSingleton.getInstance().getEventById(notification.getEventId().longValue());
+			builder.append(senderMediator.getDisplayName());
+			builder.append(" reposted '");
+			builder.append(eventMediator.getTitle());
+			builder.append("'");
+			break;
+			
 		}
+
+		return builder.toString();
 	}
 
 }

@@ -26,15 +26,15 @@ public class FetchJoinableEventsTask extends FetchEventsTask {
 	}
 
 	@Override
-	protected Void doInBackground(Void... params) {
+	protected Boolean doInBackground(Void... params) {
 
+		Boolean success = Boolean.FALSE;
 		Zeppaeventtouserrelationshipendpoint.Builder builder = new Zeppaeventtouserrelationshipendpoint.Builder(
 				transport, factory, credential);
 		builder = CloudEndpointUtils.updateBuilder(builder);
 		Zeppaeventtouserrelationshipendpoint endpoint = builder.build();
 
 		String filter = "userId == " + userId + " && expires > " + System.currentTimeMillis();
-		String cursor = relationshipCursor;
 		String order = "expires asc";
 		Integer limit = Integer.valueOf(25);
 
@@ -43,7 +43,7 @@ public class FetchJoinableEventsTask extends FetchEventsTask {
 					.listZeppaEventToUserRelationship();
 
 			listRelationshipTask.setFilter(filter);
-			listRelationshipTask.setCursor(cursor);
+			listRelationshipTask.setCursor(relationshipCursor);
 			listRelationshipTask.setOrdering(order);
 			listRelationshipTask.setLimit(limit);
 
@@ -74,6 +74,7 @@ public class FetchJoinableEventsTask extends FetchEventsTask {
 
 				ZeppaEventSingleton.getInstance().setNextRelationshipPageToken(
 						response.getNextPageToken());
+				success = Boolean.TRUE;
 			}
 
 			
@@ -83,7 +84,18 @@ public class FetchJoinableEventsTask extends FetchEventsTask {
 
 		}
 
-		return null;
+		return success;
+	} 
+	
+	
+	
+	
+
+	@Override
+	protected void onPostExecute(Boolean result) {
+		super.onPostExecute(result);
+		
+		ZeppaEventSingleton.getInstance().setHasLoadedInitialFeedEvents();
 	}
 
 	/**

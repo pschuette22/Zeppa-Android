@@ -64,6 +64,7 @@ public class Utils {
 
 		// most events
 		result.append(getDayString(startMillis));
+		result.append(" ");
 		result.append(getDisplayTimeString(startMillis));
 		result.append(" - ");
 
@@ -216,9 +217,7 @@ public class Utils {
 			
 		case 2:
 			return "PRIVATE";
-			
-		case 3:
-			return "NO_REPOST";
+
 		default:
 			return "CASUAL";
 		}

@@ -57,12 +57,12 @@ public class MyZeppaEventMediator extends AbstractZeppaEventMediator {
 		return EventTagSingleton.getInstance().getMyTagsFrom(getTagIds());
 	}
 
-	public void deleteEvent(AuthenticatedFragmentActivity context) {
+	public void deleteEvent() {
 		deletingEvent = true;
 		// TODO: raise deleting dialog
 		// then change params to object and pass dialog
 		// or set them as global params
-		new DeleteEventTask(context).execute();
+		new DeleteEventTask(getContext()).execute();
 
 	}
 
@@ -121,7 +121,7 @@ public class MyZeppaEventMediator extends AbstractZeppaEventMediator {
 			}
 			break;
 			
-		default:
+		case R.id.eventview:
 			Intent toEventDetails = new Intent(getContext(),
 					MyEventViewActivity.class);
 			toEventDetails.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
@@ -129,6 +129,8 @@ public class MyZeppaEventMediator extends AbstractZeppaEventMediator {
 			getContext().startActivity(toEventDetails);
 			getContext().overridePendingTransition(R.anim.slide_left_in,
 					R.anim.slide_left_out);
+			
+			break;
 		}
 
 	}

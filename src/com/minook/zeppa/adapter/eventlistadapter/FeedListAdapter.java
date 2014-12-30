@@ -89,21 +89,28 @@ public class FeedListAdapter extends AbstractEventListAdapter {
 
 			@Override
 			protected Boolean doInBackground(Object... params) {
-//				try {
-//					refreshLayout = (PullToRefreshLayout) params[0];
-//					return ZeppaEventSingleton.getInstance().loadNewEvents(
-//							getCredential());
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-
-				return Boolean.FALSE;
+				// try {
+				refreshLayout = (PullToRefreshLayout) params[0];
+				// TODO: add method to load in newly created events
+				return Boolean.TRUE;
+				// } catch (IOException e) {
+				// e.printStackTrace();
+				// }
+				//
+				// return Boolean.FALSE;
 			}
 
 			@Override
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
 				refreshLayout.setRefreshComplete();
+
+				if (result) {
+					// Notify Dataset Changed
+				} else {
+					// Notify user error occured
+				}
+
 			}
 
 		}.execute(params);
@@ -129,16 +136,16 @@ public class FeedListAdapter extends AbstractEventListAdapter {
 			@Override
 			protected Boolean doInBackground(Object... params) {
 
-//				list = (ListView) params[0];
-//				loaderView = (View) params[1];
-//
-//				try {
-//					return ZeppaEventSingleton.getInstance().loadNewEvents(
-//							getCredential());
-//				} catch (IOException e) {
-//					return Boolean.FALSE;
-//				}
-				
+				// list = (ListView) params[0];
+				// loaderView = (View) params[1];
+				//
+				// try {
+				// return ZeppaEventSingleton.getInstance().loadNewEvents(
+				// getCredential());
+				// } catch (IOException e) {
+				// return Boolean.FALSE;
+				// }
+
 				return Boolean.FALSE;
 			}
 

@@ -72,8 +72,7 @@ public class ZeppaApplication extends Application {
 		// Load events to show in the feed
 		ZeppaEventSingleton.getInstance().loadInitialEvents(credential, user.getId());
 		// Load notifications for this user
-		NotificationSingleton.getInstance().loadInitialNotificationsInAsync(
-				credential, user.getId());
+		
 		// Load this users event tags
 		EventTagSingleton.getInstance().loadMyTagsInAsync(credential, user.getId());
 
