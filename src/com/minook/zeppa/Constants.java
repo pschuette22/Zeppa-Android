@@ -1,7 +1,5 @@
 package com.minook.zeppa;
 
-import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.plus.PlusScopes;
 
 
 public class Constants {
@@ -104,10 +102,6 @@ public class Constants {
 
 	
 	/*
-	 * This is the Zeppa Calendar ID so we can get the calendar easily. 
-	 */
-	public static final String SECRET_ZEPPA_CALENDAR_ID = "SecretZeppaCalendarID";
-	/*
 	 * App Engine constants Verify it is safe to hold them here/ considered best
 	 * practice
 	 */
@@ -117,7 +111,7 @@ public class Constants {
 	public static final String APP_ENGINE_CLIENT_ID = "587859844920.project.googleusercontent.com";
 	public static final String WEB_CLIENT_ID = "587859844920-jiqoh8rn4j8d0941vunu4jfdcl2huv4l.apps.googleusercontent.com";
 	public static final String ANDROID_AUDIENCE = "server:client_id:" + WEB_CLIENT_ID;
-	public static final String APP_ENGINE_SCOPES = CalendarScopes.CALENDAR + " " + PlusScopes.PLUS_LOGIN;
+//	public static final String APP_ENGINE_SCOPES = CalendarScopes.CALENDAR + " " + PlusScopes.PLUS_LOGIN;
 	
 	
 	/*

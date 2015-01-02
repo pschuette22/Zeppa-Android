@@ -336,12 +336,10 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 						// TODO: update this so user specifies if invites are
 						// available
 						
-						Context context = getBaseContext();
-						GoogleAccountCredential credential = getGoogleCalendarCredential();
-						
-						event = GCalUtils.putZeppaEventInCalendar(
-								context, event,
-								credential);
+//						GoogleAccountCredential credential = getGoogleCalendarCredential();
+//						
+//						event = GCalUtils.putZeppaEventInCalendar(event,
+//								credential);
 
 						event = ZeppaEventSingleton.getInstance()
 								.createZeppaEventWithBlocking(
@@ -356,13 +354,13 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 					} catch (IOException e) {
 						e.printStackTrace();
 						
-						if(event.getGoogleCalendarEventId() != null){
-							try {
-								GCalUtils.deleteZeppaEventInCal(event, getGoogleCalendarCredential());
-							} catch (IOException e1) {
-								e1.printStackTrace();
-							}
-						}
+//						if(event.getGoogleCalendarEventId() != null){
+//							try {
+//								GCalUtils.deleteZeppaEventInCal(event, getGoogleCalendarCredential());
+//							} catch (IOException e1) {
+//								e1.printStackTrace();
+//							}
+//						}
 						
 						event = null;
 					}

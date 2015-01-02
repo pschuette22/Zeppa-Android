@@ -20,12 +20,10 @@ import com.google.android.gms.plus.model.people.Person;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.calendar.model.Calendar;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
-import com.minook.zeppa.utils.GCalUtils;
 import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUserInfo;
@@ -145,9 +143,6 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 						progress = (ProgressDialog) params[1];
 						GoogleAccountCredential credential = getGoogleAccountCredential();
 						
-						// Insert the Zeppa Calendar
-						String calendarId =  GCalUtils.insertZeppaCalendar(NewAccountActivity.this, getGoogleCalendarCredential());
-						createdUser.setZeppaCalendarId(calendarId);
 						
 						Zeppauserendpoint.Builder endpointBuilder = new Zeppauserendpoint.Builder(
 								AndroidHttp.newCompatibleTransport(),
@@ -236,6 +231,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 			
 			zeppaUser.setGoogleProfileId(personId);
 			zeppaUser.setUserInfo(userInfo);
+			zeppaUser.setZeppaCalendarId("Temporary Value");
 
 			return zeppaUser;
 

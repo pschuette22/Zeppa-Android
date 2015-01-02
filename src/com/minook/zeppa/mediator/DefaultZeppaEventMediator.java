@@ -4,10 +4,7 @@
 package com.minook.zeppa.mediator;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,12 +20,6 @@ import android.widget.TextView;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.model.FreeBusyCalendar;
-import com.google.api.services.calendar.model.FreeBusyRequest;
-import com.google.api.services.calendar.model.FreeBusyResponse;
-import com.google.api.services.calendar.model.TimePeriod;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
@@ -36,9 +27,7 @@ import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.activity.DefaultEventViewActivity;
 import com.minook.zeppa.activity.MinglerActivity;
 import com.minook.zeppa.singleton.EventTagSingleton;
-import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.utils.GCalUtils;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
@@ -186,40 +175,40 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 		if (isAttending()) {
 			conflictStatus = ConflictStatus.ATTENDING;
 		} else {
-			conflictStatus = ConflictStatus.UNKNOWN;
-			Calendar calendarClient = new Calendar(
-					AndroidHttp.newCompatibleTransport(),
-					GsonFactory.getDefaultInstance(), calendarCredentail);
-			FreeBusyRequest request = new FreeBusyRequest();
-			request.setTimeMax(new DateTime(event.getEnd()));
-			request.setTimeMin(new DateTime(event.getStart()));
-
-			try {
-				FreeBusyResponse response = calendarClient.freebusy()
-						.query(request).execute();
-				Map<String, FreeBusyCalendar> calendars = response
-						.getCalendars();
-
-				if (calendars.isEmpty()) {
-					conflictStatus = ConflictStatus.NONE;
-				} else {
-					Iterator<FreeBusyCalendar> calIterator = calendars.values()
-							.iterator();
-					List<TimePeriod> busyTimes = new ArrayList<TimePeriod>();
-					while (calIterator.hasNext()) {
-						busyTimes.addAll(calIterator.next().getBusy());
-					}
-
-					Iterator<TimePeriod> timeIterator = busyTimes.iterator();
-					while (timeIterator.hasNext()) {
-
-					}
-
-				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			conflictStatus = ConflictStatus.UNKNOWN;
+//			Calendar calendarClient = new Calendar(
+//					AndroidHttp.newCompatibleTransport(),
+//					GsonFactory.getDefaultInstance(), calendarCredentail);
+//			FreeBusyRequest request = new FreeBusyRequest();
+//			request.setTimeMax(new DateTime(event.getEnd()));
+//			request.setTimeMin(new DateTime(event.getStart()));
+//
+//			try {
+//				FreeBusyResponse response = calendarClient.freebusy()
+//						.query(request).execute();
+//				Map<String, FreeBusyCalendar> calendars = response
+//						.getCalendars();
+//
+//				if (calendars.isEmpty()) {
+//					conflictStatus = ConflictStatus.NONE;
+//				} else {
+//					Iterator<FreeBusyCalendar> calIterator = calendars.values()
+//							.iterator();
+//					List<TimePeriod> busyTimes = new ArrayList<TimePeriod>();
+//					while (calIterator.hasNext()) {
+//						busyTimes.addAll(calIterator.next().getBusy());
+//					}
+//
+//					Iterator<TimePeriod> timeIterator = busyTimes.iterator();
+//					while (timeIterator.hasNext()) {
+//
+//					}
+//
+//				}
+//
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 		}
 
 	}
@@ -280,7 +269,7 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 		if (getContext().isConnected()) {
 
 			Object[] params = { getGoogleAccountCredential(), relationship,
-					originalState, getContext().getGoogleCalendarCredential() };
+					originalState};
 
 			new AsyncTask<Object, Void, ZeppaEventToUserRelationship>() {
 
@@ -290,21 +279,10 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 				protected ZeppaEventToUserRelationship doInBackground(
 						Object... params) {
 					GoogleAccountCredential credential = (GoogleAccountCredential) params[0];
-					GoogleAccountCredential calCredential =  (GoogleAccountCredential) params[3];
 					ZeppaEventToUserRelationship relationship = (ZeppaEventToUserRelationship) params[1];
 					this.originalState = (ZeppaEventToUserRelationship) params[2];
 
 					try {
-
-						if (originalState.getIsAttending()
-								&& !relationship.getIsAttending()) {
-							// User Left
-							GCalUtils.didLeaveZeppaEvent(event, calCredential);
-						} else if (!originalState.getIsAttending()
-								&& relationship.getIsAttending()) {
-							// User Joined
-							GCalUtils.joinZeppaEvent(event, calCredential);
-						}
 
 						Zeppaeventtouserrelationshipendpoint.Builder builder = new Zeppaeventtouserrelationshipendpoint.Builder(
 								AndroidHttp.newCompatibleTransport(),

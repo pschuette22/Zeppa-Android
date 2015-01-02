@@ -8,6 +8,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
+import com.minook.zeppa.utils.GCalUtils;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
 
@@ -17,7 +18,7 @@ public class RequestMingleTask extends ZeppaEndpointTask {
 	protected DefaultUserInfoMediator dMediator;
 	protected CheckBox callbackListener;
 
-	public RequestMingleTask(GoogleAccountCredential credential,
+	public RequestMingleTask(GoogleAccountCredential credential, 
 			CheckBox callbackListener, MyZeppaUserMediator mMediator,
 			DefaultUserInfoMediator dMediator) {
 		super(credential);

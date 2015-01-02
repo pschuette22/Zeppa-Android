@@ -19,7 +19,6 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.gson.GsonBuilder;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
@@ -197,7 +196,7 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 		removeRelationshipInAsync(credential);
 		relationship = null;
 	}
-	
+
 	/**
 	 * Converts a view to display info of a connected friend
 	 * 
@@ -336,7 +335,7 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 				String order = "creatorId asc";
 				Integer limit = Integer.valueOf(30);
 
-				// Run for relationships created then relationships accepted 
+				// Run for relationships created then relationships accepted
 				for (int i = 0; i < 2; i++) {
 					try {
 						ListZeppaUserToUserRelationship task = endpoint
@@ -349,24 +348,30 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 							task.setOrdering(order);
 							task.setLimit(limit);
 
-							CollectionResponseZeppaUserToUserRelationship result = task.execute();
-							if(result == null)
+							CollectionResponseZeppaUserToUserRelationship result = task
+									.execute();
+							if (result == null)
 								break;
-							
-							List<ZeppaUserToUserRelationship> relationships = result.getItems();
-							if(relationships != null && !relationships.isEmpty()){
-								Iterator<ZeppaUserToUserRelationship> iterator = relationships.iterator();
-								while(iterator.hasNext()){
-									ZeppaUserToUserRelationship r = iterator.next();
-									Long l = (i == 0? r.getCreatorId() : r.getSubjectId());
+
+							List<ZeppaUserToUserRelationship> relationships = result
+									.getItems();
+							if (relationships != null
+									&& !relationships.isEmpty()) {
+								Iterator<ZeppaUserToUserRelationship> iterator = relationships
+										.iterator();
+								while (iterator.hasNext()) {
+									ZeppaUserToUserRelationship r = iterator
+											.next();
+									Long l = (i == 0 ? r.getCreatorId() : r
+											.getSubjectId());
 									minglingWithIds.add(l);
-									
+
 								}
 							} else {
 								cursor = null;
 								break;
 							}
-							
+
 						} while (cursor != null);
 
 					} catch (IOException e) {
@@ -379,7 +384,6 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 							+ " && relationshipType == 'MINGLING'";
 					order = "subjectId asc";
 
-
 				}
 
 				return success;
@@ -388,7 +392,7 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 			@Override
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
-				
+
 				// TODO: update the ui if necessary
 			}
 
@@ -397,9 +401,8 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 
 	private void sendConnectRequestInAsync(CheckBox callback) {
 
-		new RequestMingleTask(getGoogleAccountCredential(), callback,
-				ZeppaUserSingleton.getInstance().getUserMediator(), this)
-				.execute();
+		new RequestMingleTask(getGoogleAccountCredential(), callback, ZeppaUserSingleton
+				.getInstance().getUserMediator(), this).execute();
 
 	}
 
@@ -456,8 +459,7 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 
 	private void confirmRequestInAsync() {
 
-		new ConfirmMingleRequestTask(getGoogleAccountCredential(), this)
-				.execute();
+		new ConfirmMingleRequestTask(getGoogleAccountCredential(), this).execute();
 
 	}
 
@@ -499,6 +501,5 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 		intent.putExtra(Constants.INTENT_ZEPPA_USER_ID, getUserId().longValue());
 		return intent;
 	}
-	
 
 }

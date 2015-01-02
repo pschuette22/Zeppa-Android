@@ -5,15 +5,13 @@ import java.io.IOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
-import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
 
 public class ConfirmMingleRequestTask extends ZeppaEndpointTask {
 
 	protected DefaultUserInfoMediator dMediator;
-
+	
 	public ConfirmMingleRequestTask(GoogleAccountCredential credential,
 			DefaultUserInfoMediator dMediator) {
 		super(credential);

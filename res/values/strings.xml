@@ -167,7 +167,7 @@
     <!-- Z -->
     <string name="zeppa">Zeppa</string>
     <string name="zeppacalendar_summary">@string/zeppa</string>
-    <string name="zeppacalendar_description">Calendar for all your activities</string>
+    <string name="zeppacalendar_description">Calendar for all your activities started through Zeppa</string>
 
     <!-- Content Description -->
     <string name="contdesc_addexactlocation">Add Exact Location</string>

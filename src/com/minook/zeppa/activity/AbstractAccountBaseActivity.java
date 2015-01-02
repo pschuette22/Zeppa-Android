@@ -1,7 +1,6 @@
 package com.minook.zeppa.activity;
 
 import java.io.IOException;
-import java.util.Map;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -19,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.api.services.calendar.model.Calendar;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.utils.Utils;
@@ -47,7 +45,6 @@ public abstract class AbstractAccountBaseActivity extends
 	protected String imageUrl;
 	protected String userGmail;
 	protected String userPhoneNumber;
-	protected Map<Calendar, Boolean> calendars;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

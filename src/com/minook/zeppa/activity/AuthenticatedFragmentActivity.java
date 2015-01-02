@@ -1,7 +1,6 @@
 package com.minook.zeppa.activity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,10 +14,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.services.calendar.CalendarScopes;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.mediator.AbstractMediator;
 
@@ -117,7 +114,7 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 		builder.setAccountName(accountName);
 		builder.addApi(Plus.API);
 		builder.addScope(Plus.SCOPE_PLUS_LOGIN);
-		builder.addScope(new Scope(CalendarScopes.CALENDAR));
+//		builder.addScope(new Scope(CalendarScopes.CALENDAR));
 		apiClient = builder.build();
 
 	}
@@ -164,25 +161,26 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 
 		credential.setSelectedAccountName(Plus.AccountApi
 				.getAccountName(apiClient));
-
+		
 		return credential;
 	}
 
-	/**
-	 * 
-	 * @return Credential used for accessing Google Calendar API
-	 */
-	public GoogleAccountCredential getGoogleCalendarCredential() {
-
-		GoogleAccountCredential credential = GoogleAccountCredential
-				.usingOAuth2(this,
-						Collections.singleton(CalendarScopes.CALENDAR));
-
-		credential.setSelectedAccountName(Plus.AccountApi
-				.getAccountName(apiClient));
-
-		return credential;
-	}
+//	/**
+//	 * 
+//	 * @return Credential used for accessing Google Calendar API
+//	 */
+//	public GoogleAccountCredential getGoogleCalendarCredential() {
+//
+//		GoogleAccountCredential credential = GoogleAccountCredential
+//				.usingOAuth2(this,
+//						Collections.singleton(CalendarScopes.CALENDAR));
+//
+//		
+//		credential.setSelectedAccountName(Plus.AccountApi
+//				.getAccountName(apiClient));
+//
+//		return credential;
+//	}
 
 	/**
 	 * This method clears the current account address and launches Login
