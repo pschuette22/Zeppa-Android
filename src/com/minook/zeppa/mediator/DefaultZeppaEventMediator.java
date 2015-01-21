@@ -88,8 +88,8 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 	@Override
 	protected void setHostInfo(View view) {
 
-		DefaultUserInfoMediator hostMediator = ZeppaUserSingleton.getInstance()
-				.getDefaultUserMediatorById(event.getHostId());
+		AbstractZeppaUserMediator hostMediator = ZeppaUserSingleton
+				.getInstance().getAbstractUserMediatorById(event.getHostId());
 
 		TextView hostName = (TextView) view
 				.findViewById(R.id.eventview_hostname);
@@ -161,6 +161,11 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 	// return myRepostManager;
 	// }
 
+	@Override
+	public boolean isHostedByCurrentUser() {
+		return false;
+	}
+
 	/**
 	 * NOT THREAD SAFE</p> This method checks the time of the event vs other
 	 * calendar events. It should be called when changes are made to the
@@ -175,40 +180,7 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 		if (isAttending()) {
 			conflictStatus = ConflictStatus.ATTENDING;
 		} else {
-//			conflictStatus = ConflictStatus.UNKNOWN;
-//			Calendar calendarClient = new Calendar(
-//					AndroidHttp.newCompatibleTransport(),
-//					GsonFactory.getDefaultInstance(), calendarCredentail);
-//			FreeBusyRequest request = new FreeBusyRequest();
-//			request.setTimeMax(new DateTime(event.getEnd()));
-//			request.setTimeMin(new DateTime(event.getStart()));
-//
-//			try {
-//				FreeBusyResponse response = calendarClient.freebusy()
-//						.query(request).execute();
-//				Map<String, FreeBusyCalendar> calendars = response
-//						.getCalendars();
-//
-//				if (calendars.isEmpty()) {
-//					conflictStatus = ConflictStatus.NONE;
-//				} else {
-//					Iterator<FreeBusyCalendar> calIterator = calendars.values()
-//							.iterator();
-//					List<TimePeriod> busyTimes = new ArrayList<TimePeriod>();
-//					while (calIterator.hasNext()) {
-//						busyTimes.addAll(calIterator.next().getBusy());
-//					}
-//
-//					Iterator<TimePeriod> timeIterator = busyTimes.iterator();
-//					while (timeIterator.hasNext()) {
-//
-//					}
-//
-//				}
-//
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
+
 		}
 
 	}
@@ -218,12 +190,11 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 		switch (v.getId()) {
 
 		case R.id.quickaction_watch: // Watch/ Unwatch
-
 			onWatchButtonClicked(v);
-
 			break;
-		case R.id.quickaction_text: // Text host
 
+		case R.id.quickaction_text: // Text host
+			onTextButtonClicked(v);
 			break;
 
 		case R.id.quickaction_join: // Join/ Leave
@@ -269,7 +240,7 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 		if (getContext().isConnected()) {
 
 			Object[] params = { getGoogleAccountCredential(), relationship,
-					originalState};
+					originalState };
 
 			new AsyncTask<Object, Void, ZeppaEventToUserRelationship>() {
 

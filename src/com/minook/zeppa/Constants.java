@@ -107,11 +107,11 @@ public class Constants {
 	 */
 
 	public static final String PROJECT_NUMBER = "587859844920";
+	public static final String PROJECT_ID = "zeppa-cloud-1821";
 	
 	public static final String APP_ENGINE_CLIENT_ID = "587859844920.project.googleusercontent.com";
 	public static final String WEB_CLIENT_ID = "587859844920-jiqoh8rn4j8d0941vunu4jfdcl2huv4l.apps.googleusercontent.com";
 	public static final String ANDROID_AUDIENCE = "server:client_id:" + WEB_CLIENT_ID;
-//	public static final String APP_ENGINE_SCOPES = CalendarScopes.CALENDAR + " " + PlusScopes.PLUS_LOGIN;
 	
 	
 	/*

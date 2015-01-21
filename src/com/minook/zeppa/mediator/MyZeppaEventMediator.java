@@ -140,5 +140,10 @@ public class MyZeppaEventMediator extends AbstractZeppaEventMediator {
 		barView.setVisibility(View.GONE);
 
 	}
+	
+	@Override
+	public boolean isHostedByCurrentUser() {
+		return true;
+	}
 
 }

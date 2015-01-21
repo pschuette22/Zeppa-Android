@@ -61,22 +61,22 @@ public class ZeppaApplication extends Application {
 	 * -------------- Setters --------------------
 	 */
 
-	public void initialize(ZeppaUser user, GoogleAccountCredential credential) {
+	public void initialize(GoogleAccountCredential credential) {
 
 		// Set the User singleton to hold the current user object
 		ZeppaUserSingleton userSingleton = ZeppaUserSingleton.getInstance();
-		userSingleton.setUser(user);
+		Long userId = userSingleton.getUserId();
 		// Load Users this user has relationships with
-		userSingleton.loadConnectedUsers(this, credential, user.getId());
+		userSingleton.loadConnectedUsers(this, credential, userId);
 		
 		// Load events to show in the feed
-		ZeppaEventSingleton.getInstance().loadInitialEvents(credential, user.getId());
+		ZeppaEventSingleton.getInstance().loadInitialEvents(credential, userId);
 		// Load notifications for this user
 		
 		// Load this users event tags
-		EventTagSingleton.getInstance().loadMyTagsInAsync(credential, user.getId());
+		EventTagSingleton.getInstance().loadMyTagsInAsync(credential, userId);
 
-		new InsertDeviceTask(this, user.getId(), credential).execute();
+		new InsertDeviceTask(this, userId, credential).execute();
 	}
 
 

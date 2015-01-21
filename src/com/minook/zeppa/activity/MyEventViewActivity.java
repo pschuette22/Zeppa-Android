@@ -53,10 +53,14 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 			/*
 			 * Host Controls
 			 */
+			
+		case R.id.menu_event_edit:
+			return true;
+			
 		case R.id.menu_event_cancel:
 			return true;
 			
-		case R.id.menu_event_seereposts:
+		case R.id.menu_event_reposts:
 			return true;
 
 		}

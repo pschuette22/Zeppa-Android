@@ -7,8 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.minook.zeppa.R;
+import com.minook.zeppa.Utils;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class NotificationMediator implements OnClickListener{
@@ -22,7 +22,7 @@ public class NotificationMediator implements OnClickListener{
 
 	public View convertView(Activity activity, View convertView) throws NullPointerException{
 		this.activity = activity;
-		AbstractZeppaUserMediator userMediator = ZeppaUserSingleton.getInstance().getDefaultUserMediatorById(notification.getSenderId());
+		AbstractZeppaUserMediator userMediator = ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(notification.getSenderId());
 		ImageView image = (ImageView) convertView.findViewById(R.id.notificationitem_userimage);
 		userMediator.setImageWhenReady(image);
 		

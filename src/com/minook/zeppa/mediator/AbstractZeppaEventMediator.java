@@ -12,16 +12,15 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facade.calendar.CalendarController;
-import com.facade.calendar.CalendarController.ViewType;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.R;
+import com.minook.zeppa.Utils;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
+import com.minook.zeppa.eventcommentendpoint.model.EventComment;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint.ListZeppaEventToUserRelationship;
@@ -29,7 +28,7 @@ import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.CollectionRes
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
 
 public abstract class AbstractZeppaEventMediator extends AbstractMediator
-		implements OnClickListener {
+		implements OnClickListener, Comparable<AbstractZeppaEventMediator> {
 
 	/*
 	 * This is the last context the event mediator was called in. Must call
@@ -40,20 +39,30 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		ATTENDING, NONE, PARTIAL, COMPLETE, UNKNOWN
 	}
 
+	// Event Object in question
 	protected ZeppaEvent event;
 
+	// Users' with attending relationships
 	protected boolean hasLoadedRelationships;
 	protected List<ZeppaEventToUserRelationship> attendingRelationships;
 
+
+	private String commentCursor;
+	protected List<EventComment> comments;
+	
 	protected long lastUpdateTimeInMillis;
 	protected ConflictStatus conflictStatus;
+
 
 	public AbstractZeppaEventMediator(ZeppaEvent event) {
 		this.event = event;
 		this.conflictStatus = ConflictStatus.UNKNOWN;
 		this.lastUpdateTimeInMillis = System.currentTimeMillis();
+		
 		this.attendingRelationships = new ArrayList<ZeppaEventToUserRelationship>();
 		this.hasLoadedRelationships = false;
+		this.comments = new ArrayList<EventComment>();
+		this.commentCursor = null;
 
 	}
 
@@ -129,6 +138,8 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 	public boolean getHasLoadedAttendingRelationship() {
 		return hasLoadedRelationships;
 	}
+	
+	public abstract boolean isHostedByCurrentUser();
 
 	public List<Long> getTagIds() {
 
@@ -139,7 +150,33 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		}
 
 	}
-
+	
+	/*
+	 * Getters and setters for comment objects
+	 * 
+	 */
+	public String getCommentCursor(){
+		return this.commentCursor;
+	}
+	
+	public void setCommentCursor(String commentCursor){
+		this.commentCursor = commentCursor;
+	}
+	
+	public List<EventComment> getEventComments(){
+		return this.comments;
+	}
+	
+	public void addAllComments(List<EventComment> comments){
+		this.comments.addAll(comments);
+	}
+	
+	public void setEventComments(List<EventComment> comments){
+		this.comments = comments;
+	}
+	
+	
+	
 	/**
 	 * This Method Returns an array List of ID values for users attending this event
 	 * @return
@@ -158,6 +195,7 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		return attendingUserIds;
 
 	}
+	
 
 	public abstract boolean isAgendaEvent();
 
@@ -248,7 +286,7 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		image.setVisibility(View.VISIBLE);
 
 	}
-
+	
 	/**
 	 * This Method loads
 	 * 
@@ -307,18 +345,8 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		hasLoadedRelationships = true;
 		return success;
 	}
-
-	/**
-	 * This raises a dialog showing a calendar day focued on this event
-	 */
-	public void raiseCalendarDialog() {
-		CalendarController controller = CalendarController
-				.getInstance(getContext());
-		controller.setTime(event.getStart());
-		controller.setViewType(ViewType.DAY);
-
-	}
-
+	
+	
 	protected class UpdateEventTask extends AsyncTask<Void, Void, Boolean> {
 
 		@Override
@@ -328,9 +356,35 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		}
 
 	}
+	
+
+	/*
+	 * The Following section handles displaying the users calendar day as a fragment showing this event
+	 */
+	
+	public void raiseCalendarDialog() {
+//		CalendarController controller = CalendarController
+//				.getInstance(getContext());
+//		controller.setTime(event.getStart());
+//		controller.setViewType(ViewType.DAY);
+
+	}
 
 	private class CalendarDialog extends DialogFragment {
 
 	}
+
+
+	@Override
+	public int compareTo(AbstractZeppaEventMediator another) {
+
+		long compare = getEndInMillis().longValue() - another.getEndInMillis().longValue();
+		
+		return (int) compare;
+	}
+	
+
+	
+	
 
 }

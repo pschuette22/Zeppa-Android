@@ -11,7 +11,7 @@ public class DefaultEventViewActivity extends AbstractEventViewActivity {
 	
 	@Override
 	protected void setHostMediator() {
-		hostMediator = ZeppaUserSingleton.getInstance().getDefaultUserMediatorById(eventMediator.getHostId());
+		hostMediator = ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(eventMediator.getHostId());
 		
 	}
 

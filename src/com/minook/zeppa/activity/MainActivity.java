@@ -149,21 +149,21 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 
 		navigationOptions = getResources().getStringArray(
 				R.array.navigation_options);
-		if(navListAdapter == null)
+		if (navListAdapter == null)
 			navListAdapter = new NavigationItemAdapter(this,
 					R.layout.view_navlist_item, navigationOptions);
-		
+
 		navigationList.setAdapter(navListAdapter);
 		navigationList.setOnItemClickListener(navListAdapter);
 		navigationList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-		if(notifictionsAdapter == null)
+		if (notifictionsAdapter == null)
 			notifictionsAdapter = new NotificationsAdapter(this, activityList);
-		
+
 		activityList.setAdapter(notifictionsAdapter);
 
 		drawerLayout.setDrawerListener(drawerToggle);
-		
+
 		int currentPage = currentPage();
 		if (currentPage < 0) {
 			selectItem(1, false);
@@ -178,7 +178,6 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
-	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -216,8 +215,6 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 		if (drawerLayout.isDrawerVisible(navigationCabinet)
 				|| drawerLayout.isDrawerVisible(activityList)) {
 			drawerLayout.closeDrawers();
-			return;
-		} else if (currentPage() == 1 && homeFragment.didHandleDayView()) {
 			return;
 		}
 
@@ -355,8 +352,14 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 
 				MyZeppaUserMediator mediator = ZeppaUserSingleton.getInstance()
 						.getUserMediator();
-				mediator.setImageWhenReady(profileImage);
-				profileName.setText(mediator.getDisplayName());
+
+				if (mediator != null) {
+					mediator.setImageWhenReady(profileImage);
+					profileName.setText(mediator.getDisplayName());
+				} else {
+					profileName.setText("Error Occured!");
+				}
+				
 			} else {
 
 				convertView = getLayoutInflater().inflate(layoutRes, parent,

@@ -6,7 +6,6 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import android.widget.ListView;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.adapter.eventlistadapter.AgendaListAdapter;
+import com.minook.zeppa.singleton.ZeppaEventSingleton;
 
 public class AgendaFragment extends Fragment implements OnRefreshListener {
 
@@ -59,9 +59,16 @@ public class AgendaFragment extends Fragment implements OnRefreshListener {
 	public void onResume() {
 		super.onResume();
 
-		alAdapter.notifyDataSetChanged();
-
 	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		
+		ZeppaEventSingleton.getInstance().unregisterObserver(alAdapter);
+	}
+	
+	
 
 	/*
 	 * --------------- Private Methods ---------------------

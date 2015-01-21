@@ -16,7 +16,7 @@ import com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint;
 import com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint.ListDeviceInfo;
 import com.minook.zeppa.deviceinfoendpoint.model.CollectionResponseDeviceInfo;
 import com.minook.zeppa.deviceinfoendpoint.model.DeviceInfo;
-import com.minook.zeppa.gcm.ZeppaGCMReceiver;
+import com.minook.zeppa.gcm.ZeppaGCMUtils;
 
 /**
  * Task to insert the current device into the backend
@@ -47,7 +47,7 @@ public class InsertDeviceTask extends AsyncTask<Void, Void, Void> {
 		CloudEndpointUtils.updateBuilder(builder);
 		Deviceinfoendpoint endpoint = builder.build();
 
-		DeviceInfo info = ZeppaGCMReceiver.getRegisteredDeviceInstance(context,
+		DeviceInfo info = ZeppaGCMUtils.getRegisteredDeviceInstance(context,
 				userId);
 		
 		if(info == null || info.getRegistrationId() == null){

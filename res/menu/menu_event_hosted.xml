@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    
+
+    <item
+        android:id="@+id/menu_event_edit"
+        android:icon="@drawable/ic_menu_edit"
+        android:orderInCategory="0"
+        android:showAsAction="ifRoom"
+        android:title="@string/edit"/>
     <item
         android:id="@+id/menu_event_cancel"
         android:icon="@drawable/ic_leave"
-        android:orderInCategory="0"
-        android:showAsAction="never"
-        android:title="@string/join"/>
-    <item
-        android:id="@+id/menu_event_seereposts"
         android:orderInCategory="1"
         android:showAsAction="never"
-        android:title="@string/repost"/>
+        android:title="@string/cancel"/>
     <item
-        android:id="@+id/menu_event_directions"
-        android:icon="@drawable/ic_location"
+        android:id="@+id/menu_event_reposts"
         android:orderInCategory="2"
         android:showAsAction="never"
-        android:title="@string/directions"/>
+        android:title="@string/reposts"/>
 
 </menu>

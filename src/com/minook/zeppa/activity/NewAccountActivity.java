@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -23,7 +26,9 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
+import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
+import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUserInfo;
@@ -31,14 +36,13 @@ import com.minook.zeppa.zeppauserendpoint.model.ZeppaUserInfo;
 public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 	private final String TAG = "NewAccountActivity";
-	private boolean setInfoOnConnect;
+	private boolean setInfoOnConnect = false;
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 
 		if (apiClient.isConnected()) {
-			setInfoOnConnect = false;
 			setInfo();
 		} else {
 			setInfoOnConnect = true;
@@ -60,11 +64,11 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 		super.onClick(v);
 
 		switch (v.getId()) {
-		case R.id.newuseractivity_cancel:
+		case R.id.accountactivity_cancel:
 			logout();
 			break;
 
-		case R.id.newuseractivity_create:
+		case R.id.accountactivity_confirm:
 			createUserAndLaunchIntoMain();
 			break;
 
@@ -74,7 +78,31 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 	@Override
 	protected void setInfo() {
-		super.setInfo();
+		
+		String accountEmail = getSharedPreferences(Constants.SHARED_PREFS,
+				Context.MODE_PRIVATE).getString(Constants.LOGGED_IN_ACCOUNT,
+				null);
+
+		if (accountEmail == null || accountEmail.isEmpty()) {
+			Log.wtf("TAG", "In Account Activity without account specified");
+			logout();
+		} else {
+			userGmail = accountEmail;
+			emailField.setText(userGmail);
+		}
+
+		TelephonyManager tMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+		String numberString = tMgr.getLine1Number();
+
+		if (numberString == null) {
+			numberField.setVisibility(View.GONE);
+		} else {
+			Log.d("TAG", "Number: " + numberString);
+			userPhoneNumber = numberString;
+			numberField.setText(Utils.formatPhoneNumber(userPhoneNumber));
+		}
+		
 		Person currentPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
 		if (currentPerson == null) {
 			Log.wtf(TAG, "current person is null, something failed");
@@ -83,14 +111,11 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 			givenNameField.setText(givenName);
 			familyName = currentPerson.getName().getFamilyName();
 			familyNameField.setText(familyName);
-			
+
 			if (currentPerson.getImage().isDataValid()) {
 				imageUrl = currentPerson.getImage().getUrl();
 				loadAndSetImageInAsync(imageUrl);
 			}
-
-			// CalendarList calendars = GCalU
-
 		}
 
 	}
@@ -142,8 +167,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 						ZeppaUser createdUser = (ZeppaUser) params[0];
 						progress = (ProgressDialog) params[1];
 						GoogleAccountCredential credential = getGoogleAccountCredential();
-						
-						
+
 						Zeppauserendpoint.Builder endpointBuilder = new Zeppauserendpoint.Builder(
 								AndroidHttp.newCompatibleTransport(),
 								new JacksonFactory(), credential);
@@ -151,12 +175,10 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 								.updateBuilder(endpointBuilder);
 						Zeppauserendpoint endpoint = endpointBuilder.build();
 
-						
-						ZeppaUser result = endpoint.insertZeppaUser(createdUser).execute();
-									
-						
-						
-						return result; 
+						ZeppaUser result = endpoint
+								.insertZeppaUser(createdUser).execute();
+
+						return result;
 					} catch (IOException e) {
 						e.printStackTrace();
 						return null;
@@ -169,8 +191,9 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 					progress.dismiss();
 					if (result != null) {
 
-						((ZeppaApplication) getApplication()).initialize(
-								result, getGoogleAccountCredential());
+						ZeppaUserSingleton.getInstance().setUser(result);
+						((ZeppaApplication) getApplication())
+								.initialize(getGoogleAccountCredential());
 
 						SharedPreferences.Editor editor = getSharedPreferences(
 								Constants.SHARED_PREFS, MODE_PRIVATE).edit();
@@ -186,8 +209,8 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 						finish();
 
 					} else {
-						Toast.makeText(NewAccountActivity.this, "Error Occured",
-								Toast.LENGTH_SHORT).show();
+						Toast.makeText(NewAccountActivity.this,
+								"Error Occured", Toast.LENGTH_SHORT).show();
 					}
 
 				}
@@ -218,17 +241,19 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 			userInfo.setFamilyName(familyName);
 		}
 
+		userInfo.setImageUrl(imageUrl);
+		
+		
 		if (errorsList.isEmpty()) {
 
-			userInfo.setImageUrl(imageUrl);
+			
 
 			userInfo.setGoogleAccountEmail(userGmail);
 			userInfo.setPrimaryUnformatedNumber(userPhoneNumber);
 
-			Person currentPerson = Plus.PeopleApi
-					.getCurrentPerson(apiClient);
+			Person currentPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
 			String personId = currentPerson.getId();
-			
+
 			zeppaUser.setGoogleProfileId(personId);
 			zeppaUser.setUserInfo(userInfo);
 			zeppaUser.setZeppaCalendarId("Temporary Value");
@@ -242,6 +267,34 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 	}
 	
-	
+	private void loadAndSetImageInAsync(String imageUrl){
+		Object[] params = {imageUrl};
+		new AsyncTask<Object, Void, Bitmap>(){
+
+			@Override
+			protected Bitmap doInBackground(Object... params) {
+				String imageUrl = (String) params[0];
+				try {
+					return Utils.loadImageBitmapFromUrl(imageUrl);
+				} catch (IOException e) {
+					e.printStackTrace();
+					return null;
+				}
+			}
+
+			@Override
+			protected void onPostExecute(Bitmap result) {
+				super.onPostExecute(result);
+				
+				if(result != null){
+					userImage.setImageBitmap(result);
+				}
+				
+			}
+			
+			
+			
+		}.execute(params);
+	}
 
 }

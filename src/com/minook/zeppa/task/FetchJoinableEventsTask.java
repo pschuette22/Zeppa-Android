@@ -55,6 +55,7 @@ public class FetchJoinableEventsTask extends FetchEventsTask {
 				Iterator<ZeppaEventToUserRelationship> iterator = response
 						.getItems().iterator();
 
+				boolean notify = false;
 				while (iterator.hasNext()) {
 					ZeppaEventToUserRelationship relationship = iterator.next();
 
@@ -67,11 +68,16 @@ public class FetchJoinableEventsTask extends FetchEventsTask {
 
 						if (mediator != null) {
 							ZeppaEventSingleton.getInstance().addMediator(
-									mediator);
+									mediator, false);
+							notify = true;
 						}
 					}
 				}
 
+				if(notify){
+					ZeppaEventSingleton.getInstance().notifyObservers();
+				}
+				
 				ZeppaEventSingleton.getInstance().setNextRelationshipPageToken(
 						response.getNextPageToken());
 				success = Boolean.TRUE;
@@ -96,6 +102,7 @@ public class FetchJoinableEventsTask extends FetchEventsTask {
 		super.onPostExecute(result);
 		
 		ZeppaEventSingleton.getInstance().setHasLoadedInitialFeedEvents();
+		
 	}
 
 	/**

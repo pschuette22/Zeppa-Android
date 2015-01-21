@@ -63,7 +63,6 @@ public class FeedFragment extends Fragment implements OnRefreshListener {
 	@Override
 	public void onResume() {
 		super.onResume();
-		flAdapter.notifyDataSetChanged();
 
 	}
 

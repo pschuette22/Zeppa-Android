@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
+import com.astuetz.viewpager.extensions.PagerSlidingTabStrip.IconTabProvider;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.MainActivity;
@@ -29,7 +29,7 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 	private ZeppaViewPagerAdapter zeppaPagerAdapter;
 
 	private View layout;
-	private int currentPage;
+//	private int currentPage;
 
 	// Constant
 	private final int NUM_PAGES = 3;
@@ -52,20 +52,18 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 		FragmentManager manager = getChildFragmentManager();
 		zeppaPagerAdapter = new ZeppaViewPagerAdapter(manager);
 		mainPager.setAdapter(zeppaPagerAdapter);
-		mainPager.setOnPageChangeListener(this);
 		tabStrip = (PagerSlidingTabStrip) layout
 				.findViewById(R.id.home_pager_tabs);
 
 		tabStrip.setBackgroundColor(getResources().getColor(R.color.white));
 		tabStrip.setIndicatorColor(getResources().getColor(R.color.teal));
+		tabStrip.setIndicatorHeight(5);
 		tabStrip.setViewPager(mainPager);
 		tabStrip.setShouldExpand(true);
+		tabStrip.setOnPageChangeListener(this);
 		mainPager.setCurrentItem(1);
 
-			
 		
-
-		Log.d("TAG", "onCreateView, HomeFragment");
 		return layout;
 
 	}
@@ -77,7 +75,8 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 				.setNavigationItem(Constants.NAVIGATION_HOME_INDEX);
 
 		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setTitle(R.string.home);
+		CharSequence titleSequence = zeppaPagerAdapter.getPageTitle(mainPager.getCurrentItem());
+		actionBar.setTitle(titleSequence);
 
 		setHasOptionsMenu(true);
 	}
@@ -116,8 +115,8 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 	}
 	
 	@Override
-	public void onPageScrollStateChanged(int arg0) {
-		// TODO Auto-generated method stub
+	public void onPageScrollStateChanged(int position) {
+
 		
 	}
 
@@ -129,8 +128,9 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 
 	@Override
 	public void onPageSelected(int position) {
-		currentPage = position;
-		
+		ActionBar bar = getActivity().getActionBar();
+		CharSequence titleSequence = zeppaPagerAdapter.getPageTitle(position);
+		bar.setTitle(titleSequence);
 	}
 	
 	
@@ -141,24 +141,16 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 	 * social
 	 */
 
-	public boolean didHandleDayView() {
-
-		if (mainPager.getCurrentItem() == 0) {
-			// Currently on the calendar view
-			return zeppaPagerAdapter.didHandleDayView();
-		} else
-			return false;
-	}
 
 	/*
 	 * --------------- PRIVATE CLASSES --------------------- NOTES:
 	 */
 
-	private class ZeppaViewPagerAdapter extends FragmentPagerAdapter /* implements IconTabProvider */{
+	private class ZeppaViewPagerAdapter extends FragmentPagerAdapter  implements IconTabProvider {
 
 		private String[] tabOptions;
-		// private int[] iconOptions = { R.drawable.ic_tab_calendar,
-		// R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda };
+		 private int[] iconOptions = { R.drawable.ic_tab_calendar,
+		 R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda };
 
 		private CalendarFragment calendarFragment;
 		private FeedFragment feedFragment;
@@ -171,18 +163,11 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 					.getStringArray(R.array.home_tab_options);
 
 		}
-
-		public boolean didHandleDayView() {
-			if (calendarFragment != null) {
-				return calendarFragment.didHandleDayView();
-			} else {
-				return false;
-			}
-		}
+		
+		
 
 		@Override
 		public void destroyItem(ViewGroup container, int position, Object object) {
-			Log.d("TAG", "Destroying item at position: " + position);
 			super.destroyItem(container, position, object);
 		}
 
@@ -217,12 +202,14 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 			return tabOptions[position];
 		}
 
+		@Override
+		public int getPageIconResId(int position) {
+			return iconOptions[position];
+		}
+		
 		
 
-		// @Override
-		// public int getPageIconResId(int position) {
-		// return iconOptions[position];
-		// }
+		
 
 	}
 }

@@ -21,7 +21,7 @@
             android:padding="2dp"
             android:id="@+id/eventview_hostinfo"
             android:background="@drawable/background_attribute_clickable"
-            android:layout_width="64dp"
+            android:layout_width="66dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"

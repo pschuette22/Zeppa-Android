@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
+import com.minook.zeppa.Utils;
 import com.minook.zeppa.activity.AbstractEventViewActivity;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.activity.DefaultEventViewActivity;
@@ -27,12 +28,11 @@ import com.minook.zeppa.activity.MinglerActivity;
 import com.minook.zeppa.activity.MyEventViewActivity;
 import com.minook.zeppa.activity.StartMinglingActivity;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
-import com.minook.zeppa.mediator.DefaultUserInfoMediator;
+import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.singleton.NotificationSingleton;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class NotificationsAdapter extends BaseAdapter implements
@@ -97,8 +97,8 @@ public class NotificationsAdapter extends BaseAdapter implements
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ZeppaNotification notification = getItem(position);
 
-		DefaultUserInfoMediator senderMediator = ZeppaUserSingleton.getInstance()
-				.getDefaultUserMediatorById(notification.getSenderId());
+		AbstractZeppaUserMediator senderMediator = ZeppaUserSingleton.getInstance()
+				.getAbstractUserMediatorById(notification.getSenderId());
 		
 		if(senderMediator == null){
 			Log.wtf("TAG", "No User Found for received Notification");
@@ -285,7 +285,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 	 * @return notificationMessage
 	 */
 	private String getMessage(ZeppaNotification notification,
-			DefaultUserInfoMediator senderMediator) {
+			AbstractZeppaUserMediator senderMediator) {
 		StringBuilder builder = new StringBuilder();
 
 		

@@ -10,7 +10,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.SharedPreferences;
@@ -33,17 +32,15 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
+import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.InviteListAdapter;
 import com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter;
 import com.minook.zeppa.mediator.MyZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.utils.GCalUtils;
-import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 
 public class NewEventActivity extends AuthenticatedFragmentActivity implements
@@ -124,7 +121,8 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		doneButton = (Button) findViewById(R.id.neweventactivity_create);
 		cancelButton = (Button) findViewById(R.id.neweventactivity_cancel);
 		invitesHolder = (LinearLayout) findViewById(R.id.neweventactivity_invitesholder);
-
+		guestsCanInviteField = (CheckBox) findViewById(R.id.neweventactivity_guestmayinvite);
+		
 		newTagTextField = (EditText) findViewById(R.id.neweventactivity_tagtext);
 		addNewTagField = (ImageView) findViewById(R.id.neweventactivity_addnewtag);
 		addInvitesField = (TextView) findViewById(R.id.neweventactivity_addinvites);
@@ -313,7 +311,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		event.setEnd(endCalendar.getTimeInMillis());
 		event.setTagIds(tagAdapter.getSelectedTagIds());
 		event.setInvitedUserIds(invitesAdapter.getInvitedUserIds());
-		event.setGuestsMayInvite(Boolean.TRUE);
+		event.setGuestsMayInvite(guestsCanInviteField.isChecked());
 
 		if (isValidEvent(event)) {
 
@@ -336,10 +334,6 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 						// TODO: update this so user specifies if invites are
 						// available
 						
-//						GoogleAccountCredential credential = getGoogleCalendarCredential();
-//						
-//						event = GCalUtils.putZeppaEventInCalendar(event,
-//								credential);
 
 						event = ZeppaEventSingleton.getInstance()
 								.createZeppaEventWithBlocking(
@@ -349,18 +343,10 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 								event);
 
 						ZeppaEventSingleton.getInstance().addMediator(
-								myMediator);
+								myMediator, true);
 
 					} catch (IOException e) {
 						e.printStackTrace();
-						
-//						if(event.getGoogleCalendarEventId() != null){
-//							try {
-//								GCalUtils.deleteZeppaEventInCal(event, getGoogleCalendarCredential());
-//							} catch (IOException e1) {
-//								e1.printStackTrace();
-//							}
-//						}
 						
 						event = null;
 					}
@@ -375,6 +361,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 					super.onPostExecute(result);
 
 					if (result != null) {
+						ZeppaEventSingleton.getInstance().notifyObservers();
 						onBackPressed();
 					} else {
 						Toast.makeText(((ZeppaApplication) getApplication()),

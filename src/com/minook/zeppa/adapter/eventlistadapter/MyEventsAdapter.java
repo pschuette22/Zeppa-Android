@@ -11,51 +11,11 @@ import com.minook.zeppa.singleton.ZeppaEventSingleton;
 
 public class MyEventsAdapter extends AbstractEventLayoutAdapter {
 
-	protected View loaderView;
 	
 	public MyEventsAdapter(AuthenticatedFragmentActivity activity,
 			LinearLayout eventHolder) {
 		super(activity, eventHolder);
 
-		if(didLoadInitial()){
-			setEventMediators();
-		} else {
-			ZeppaEventSingleton.getInstance().registerObserver(this);
-		}
-		
-	}
-
-	
-
-	@Override
-	public boolean didLoadInitial() {
-		return ZeppaEventSingleton.getInstance().hasLoadedInitial();
-	}
-
-
-
-	@Override
-	public void onFinishLoad() {
-		notifyDataSetChanged();
-	}
-
-	
-	@Override
-	public void verifyDatasetValid() {
-		List<AbstractZeppaEventMediator> hostedEvents = ZeppaEventSingleton.getInstance().getHostedEventMediators();
-		
-		if(!hostedEvents.containsAll(eventMediators) || !eventMediators.containsAll(hostedEvents)){
-			notifyDataSetChanged();
-		}
-		
-	}
-
-	
-	@Override
-	public void notifyDataSetChanged() {
-		setEventMediators();
-		super.notifyDataSetChanged();
-		
 	}
 
 
@@ -63,6 +23,15 @@ public class MyEventsAdapter extends AbstractEventLayoutAdapter {
 	protected void setEventMediators() {
 		eventMediators = ZeppaEventSingleton.getInstance().getHostedEventMediators();
 		
+	}
+
+
+
+
+	@Override
+	protected List<AbstractZeppaEventMediator> getCurrentEventMediators() {
+		// TODO Auto-generated method stub
+		return ZeppaEventSingleton.getInstance().getHostedEventMediators();
 	}
 
 

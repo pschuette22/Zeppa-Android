@@ -14,8 +14,7 @@ import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 
 public class FetchHostedEventsTask extends FetchEventsTask {
 
-	public FetchHostedEventsTask(GoogleAccountCredential credential,
-			Long userId) {
+	public FetchHostedEventsTask(GoogleAccountCredential credential, Long userId) {
 		super(credential, userId);
 		// TODO Auto-generated constructor stub
 	}
@@ -23,71 +22,74 @@ public class FetchHostedEventsTask extends FetchEventsTask {
 	@Override
 	protected Boolean doInBackground(Void... params) {
 
-		Boolean success = Boolean.FALSE;
+		Boolean doUpdate = Boolean.FALSE;
 		Zeppaeventendpoint endpoint = buildZeppaEventEndpoint();
 
-		
 		String cursor = null;
-		String filter = "hostId == " + ZeppaUserSingleton.getInstance().getUserId().longValue() + " && end > " + System.currentTimeMillis();
+		String filter = "hostId == "
+				+ ZeppaUserSingleton.getInstance().getUserId().longValue()
+				+ " && end > " + System.currentTimeMillis();
 		String ordering = "end asc";
 
-		
 		int exceptionCount = 0;
 		do {
 
 			try {
 				ListZeppaEvent listEventsTask = endpoint.listZeppaEvent();
-				
-				
+
 				listEventsTask.setFilter(filter);
 				listEventsTask.setCursor(cursor);
 				listEventsTask.setOrdering(ordering);
 				listEventsTask.setLimit(25);
 
-				
 				CollectionResponseZeppaEvent response = listEventsTask
 						.execute();
 				exceptionCount = 0;
-				
-				if(response != null && response.getItems() != null && !response.getItems().isEmpty()){
-					
-					Iterator<ZeppaEvent> iterator = response.getItems().iterator();
-					while (iterator.hasNext()){
+
+				if (response != null && response.getItems() != null
+						&& !response.getItems().isEmpty()) {
+					Iterator<ZeppaEvent> iterator = response.getItems()
+							.iterator();
+					while (iterator.hasNext()) {
 						ZeppaEvent event = iterator.next();
-						MyZeppaEventMediator mediator = new MyZeppaEventMediator(event);
-						ZeppaEventSingleton.getInstance().addMediator(mediator);
-						
+						if (ZeppaEventSingleton.getInstance().getEventById(
+								event.getId()) == null) {
+							MyZeppaEventMediator mediator = new MyZeppaEventMediator(
+									event);
+							ZeppaEventSingleton.getInstance().addMediator(
+									mediator, false);
+							doUpdate = true;
+						}
+
 					}
-					
+
 					cursor = response.getNextPageToken();
-					
+
 				} else {
 					cursor = null;
-					success = Boolean.TRUE;
 				}
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
-				
-				if(exceptionCount >= 5){
+
+				if (exceptionCount >= 5) {
 					break;
 				} else {
 					exceptionCount++;
 				}
-				
+
 			}
 		} while (cursor != null);
 
-		return success;
+		return doUpdate;
 	}
-	
+
 	@Override
 	protected void onPostExecute(Boolean result) {
 		super.onPostExecute(result);
-		
+
 		ZeppaEventSingleton.getInstance().setHasLoadedInitialHostedEvents();
+
 	}
-	
-	
 
 }

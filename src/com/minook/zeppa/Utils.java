@@ -1,4 +1,4 @@
-package com.minook.zeppa.utils;
+package com.minook.zeppa;
 
 import java.io.IOException;
 import java.io.InputStream;

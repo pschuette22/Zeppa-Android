@@ -70,6 +70,12 @@ public class MyZeppaUserMediator extends AbstractZeppaUserMediator{
 		
 		return phoneNumber;
 	}
+	
+	@Override
+	protected String getImageUrl() {
+		// TODO Auto-generated method stub
+		return user.getUserInfo().getImageUrl();
+	}
 
 	public String getZeppaCalendarId(){
 		return user.getZeppaCalendarId();

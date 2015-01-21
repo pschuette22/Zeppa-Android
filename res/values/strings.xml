@@ -66,9 +66,12 @@
     <string name="getting_details">Getting Account Details</string>
     <string name="going">Going</string>
     <string name="got_it">Got It</string>
+    <string name="guests_can_invite">Guests Can Send Invites</string>
 
     <!-- H -->
     <string name="hall_of_fame">Hall of Fame</string>
+    <string name="hint_givenname">First Name</string>
+    <string name="hint_familyname">Last Name</string>
     <string name="home">Home</string>
 
     <!-- I -->
@@ -189,7 +192,7 @@
     <string name="contdesc_slogan">Zeppa Slogan, "Life is too short to watch people live it"</string>
     <string name="contdesc_titletext">Title Text</string>
     <string name="contdesc_userimage">User Image</string>
-
+    
     <!-- Action Menu Options -->
     <string name="menu_aboutus">About Us</string>
     <string name="menu_activity">Activity</string>

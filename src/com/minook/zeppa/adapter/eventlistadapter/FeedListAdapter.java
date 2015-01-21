@@ -1,5 +1,7 @@
 package com.minook.zeppa.adapter.eventlistadapter;
 
+import java.util.List;
+
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import android.os.AsyncTask;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
+import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 
 public class FeedListAdapter extends AbstractEventListAdapter {
@@ -20,46 +23,18 @@ public class FeedListAdapter extends AbstractEventListAdapter {
 		this.listView = list;
 
 		if (ZeppaEventSingleton.getInstance().hasLoadedInitial()) {
-			initialDidLoad = true;
 			setEventMediators();
 		} else {
-			initialDidLoad = false;
 			loaderView = getLoaderView();
 			listView.addHeaderView(loaderView);
-			ZeppaEventSingleton.getInstance().registerObserver(this);
-
 		}
 
 	}
 
 	@Override
-	public boolean didLoadInitial() {
-		return initialDidLoad;
-	}
-
-	@Override
-	public void onFinishLoad() {
-		if (!initialDidLoad) {
-			initialDidLoad = true;
-			listView.removeHeaderView(loaderView);
-			loaderView = null; // deallocate loader view
-		}
-
-		notifyDataSetChanged();
-
-	}
-
-	@Override
-	public void verifyDatasetValid() {
-
-		// List<ZeppaEvent> heldEventList =
-		// ZeppaEventSingleton.getInstance().getZeppaEvents();
-		//
-		// if(!heldEventList.containsAll(events) ||
-		// !events.containsAll(heldEventList)){
-		// notifyDataSetChanged();
-		// }
-
+	protected List<AbstractZeppaEventMediator> getCurrentEventMediators() {
+		// TODO Auto-generated method stub
+		return ZeppaEventSingleton.getInstance().getEventMediators();
 	}
 
 	@Override
@@ -68,14 +43,10 @@ public class FeedListAdapter extends AbstractEventListAdapter {
 	}
 
 	@Override
-	public void notifyDataSetChanged() {
-
-		setEventMediators();
-		super.notifyDataSetChanged();
-
-		if (loaderView != null) {
-			// try to remove header. Ndb if it isnt there.
+	protected void removeLoaderViewIfVisible() {
+		if (loaderView != null && loaderView.getVisibility() == View.VISIBLE) {
 			listView.removeHeaderView(loaderView);
+			loaderView = null;
 		}
 
 	}

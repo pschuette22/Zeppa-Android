@@ -21,29 +21,31 @@ public class MinglerFinderAdapter extends BaseAdapter {
 
 	public MinglerFinderAdapter(AuthenticatedFragmentActivity context) {
 		this.context = context;
+		setMediators();
 
-		possibleConnectionMediators = ZeppaUserSingleton.getInstance().getPossibleFriendInfoMediators();
-		pendingRequestMediators = ZeppaUserSingleton.getInstance().getPendingFriendRequests();
-		
 	}
 
 	@Override
 	public void notifyDataSetChanged() {
-		possibleConnectionMediators = ZeppaUserSingleton.getInstance().getPossibleFriendInfoMediators();
-		pendingRequestMediators = ZeppaUserSingleton.getInstance().getPendingFriendRequests();
-		
-		super.notifyDataSetChanged();
+
+		if (!verifyDatasetValid()) {
+			setMediators();
+			super.notifyDataSetChanged();
+
+		}
+
 	}
 
 	@Override
 	public int getCount() {
-		return possibleConnectionMediators.size() + pendingRequestMediators.size();
+		return possibleConnectionMediators.size()
+				+ pendingRequestMediators.size();
 	}
 
 	@Override
 	public DefaultUserInfoMediator getItem(int position) {
 		int pending = pendingRequestMediators.size();
-		if(position >= pending){
+		if (position >= pending) {
 			return possibleConnectionMediators.get(position - pending);
 		} else {
 			return pendingRequestMediators.get(position);
@@ -61,23 +63,44 @@ public class MinglerFinderAdapter extends BaseAdapter {
 
 		DefaultUserInfoMediator mediator = getItem(position);
 
-		if(position < pendingRequestMediators.size()){
-			convertView = context.getLayoutInflater().inflate(R.layout.view_addcontact_itemrespond, parent, false);
+		if (position < pendingRequestMediators.size()) {
+			convertView = context.getLayoutInflater().inflate(
+					R.layout.view_addcontact_itemrespond, parent, false);
 			mediator.convertRespondConnectListItemView(context, convertView);
 		} else {
-			convertView = context.getLayoutInflater().inflate(R.layout.view_addcontact_itemsend, parent, false);
+			convertView = context.getLayoutInflater().inflate(
+					R.layout.view_addcontact_itemsend, parent, false);
 			mediator.convertRequestConnectListItemView(context, convertView);
-
 		}
-		
+
 		return convertView;
 	}
-	
-	
+
+	public boolean verifyDatasetValid() {
+
+		List<DefaultUserInfoMediator> currentPossibleMediators = ZeppaUserSingleton
+				.getInstance().getPossibleFriendInfoMediators();
+		List<DefaultUserInfoMediator> currentPendingMediators = ZeppaUserSingleton
+				.getInstance().getPendingFriendRequests();
+
+		return (possibleConnectionMediators.contains(currentPossibleMediators)
+				&& pendingRequestMediators.containsAll(currentPendingMediators)
+				&& currentPossibleMediators
+						.containsAll(possibleConnectionMediators) && currentPendingMediators
+					.containsAll(pendingRequestMediators));
+	}
 
 	/*
 	 * Private methods
 	 */
+
+	private void setMediators() {
+		possibleConnectionMediators = ZeppaUserSingleton.getInstance()
+				.getPossibleFriendInfoMediators();
+		pendingRequestMediators = ZeppaUserSingleton.getInstance()
+				.getPendingFriendRequests();
+
+	}
 
 	private String getHeader(int position) {
 		Resources res = context.getResources();
@@ -87,6 +110,5 @@ public class MinglerFinderAdapter extends BaseAdapter {
 			return res.getString(R.string.contacts_using);
 		}
 	}
-
 
 }

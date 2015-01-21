@@ -8,6 +8,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,6 +39,7 @@ import com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUse
 public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 		implements OnClickListener {
 
+	private final static String TAG = DefaultUserInfoMediator.class.getName();
 	private ZeppaUserInfo userInfo;
 	private ZeppaUserToUserRelationship relationship;
 	private List<Long> minglingWithIds;
@@ -46,13 +48,12 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 	private boolean loadingTags;
 	private boolean loadedTags;
 	private FriendTagAdapter waitingAdapter;
-
 	private boolean loadedMutualFriendRelationships;
-
+	
 	/**
 	 * Constructs a new DefaultUserInfoMediator, the class which manages a held
 	 * userInfo Object
-	 * 
+	 *  
 	 * @param userInfo
 	 *            , object to be managed
 	 * @param relationship
@@ -109,6 +110,14 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 			throw new NullPointerException();
 		}
 		return phoneNumber;
+	}
+	
+	
+
+	@Override
+	protected String getImageUrl() {
+		// TODO Auto-generated method stub
+		return userInfo.getImageUrl();
 	}
 
 	public ZeppaUserToUserRelationship getUserRelationship() {
@@ -413,14 +422,18 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 	 */
 	private void removeRelationshipInAsync(GoogleAccountCredential credential) {
 
-		Object params[] = { credential };
+		Object params[] = { credential, relationship.clone()};
 		new AsyncTask<Object, Void, Boolean>() {
 
+			private ZeppaUserToUserRelationship relationshipCopy;
+			
 			@Override
 			protected Boolean doInBackground(Object... params) {
 				Boolean success = Boolean.FALSE;
 
 				GoogleAccountCredential credential = (GoogleAccountCredential) params[0];
+				relationshipCopy = (ZeppaUserToUserRelationship) params[1];
+				
 				Zeppausertouserrelationshipendpoint.Builder builder = new Zeppausertouserrelationshipendpoint.Builder(
 						AndroidHttp.newCompatibleTransport(),
 						AndroidJsonFactory.getDefaultInstance(), credential);
@@ -430,7 +443,7 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 				try {
 
 					endpoint.removeZeppaUserToUserRelationship(
-							relationship.getId()).execute();
+							relationshipCopy.getId()).execute();
 
 					success = Boolean.TRUE;
 				} catch (IOException ex) {
@@ -445,9 +458,10 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator
 				super.onPostExecute(result);
 
 				if (result) {
-					relationship = null;
+					Log.d(TAG, "Relationship successfully removed");
 				} else {
-
+					relationship = relationshipCopy;
+					
 					// TODO: let them know the transaction failed
 				}
 

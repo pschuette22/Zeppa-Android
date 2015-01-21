@@ -23,6 +23,8 @@ import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
+import com.minook.zeppa.mediator.MyZeppaUserMediator;
+import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 
@@ -186,38 +188,23 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	private void loadAndLaunch() {
 
 		executingLaunch = true;
-		new AsyncTask<Void, Void, ZeppaUser>() {
+		new AsyncTask<Void, Void, UserResult>() {
 
-			private UserResult resultCode;
 
 			@Override
-			protected ZeppaUser doInBackground(Void... params) {
+			protected UserResult doInBackground(Void... params) {
 
-				resultCode = UserResult.UNKNOWN;
-				ZeppaUser zeppaUser = null;
+				UserResult resultCode = UserResult.UNKNOWN;
 
-				// Build the authenticated user endpoint to interact with GAE
-				Zeppauserendpoint.Builder endpointBuilder = new Zeppauserendpoint.Builder(
-						AndroidHttp.newCompatibleTransport(),
-						AndroidJsonFactory.getDefaultInstance(),
-						getGoogleAccountCredential());
-				endpointBuilder = CloudEndpointUtils
-						.updateBuilder(endpointBuilder);
-				Zeppauserendpoint userEndpoint = endpointBuilder.build();
 
 				try {
-					zeppaUser = userEndpoint.fetchCurrentZeppaUser().execute();
+					MyZeppaUserMediator mediator = ZeppaUserSingleton.getInstance().fetchLoggedInUserWithBlocking(getGoogleAccountCredential());
 
-					if (zeppaUser == null) {
+					if (mediator == null) {
 						 // This should not happen, but just in case
 						resultCode = UserResult.CREATE_NEW_USER;
 
 					} else {
-						SharedPreferences.Editor editor = getSharedPreferences(
-								Constants.SHARED_PREFS, MODE_PRIVATE).edit();
-						editor.putLong(Constants.USER_ID, zeppaUser.getId());
-						editor.commit();
-
 						resultCode = UserResult.FETCH_SUCCESS;
 					}
 
@@ -229,34 +216,40 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 						resultCode = UserResult.UNKNOWN;
 					}
 
-					return null;
 				} catch (IOException ioEx) {
 
 					Log.d(TAG, "IOException caught");
 					ioEx.printStackTrace();
 					resultCode = UserResult.NETWORK_FAIL;
 
-					return null;
 				} catch (Exception ex) {
 					resultCode = UserResult.UNKNOWN;
-					return null;
 				}
 
-				return zeppaUser;
+				return resultCode;
 			}
 
+			
+			
 			@Override
-			protected void onPostExecute(ZeppaUser result) {
+			protected void onPostExecute(UserResult result) {
 				super.onPostExecute(result);
 
-				// Dismiss signin dialog
-				if (connectionProgress.isShowing()) {
-					connectionProgress.dismiss();
-				}
 
-				if (result == null) {
+				if (result != null) {
 
-					switch (resultCode.ordinal()) {
+					switch (result.ordinal()) {
+					case 0: // Fetch success, launch into app
+						((ZeppaApplication) getApplication()).initialize(
+								getGoogleAccountCredential());
+
+						Intent launchMain = new Intent(getApplicationContext(),
+								MainActivity.class);
+						launchMain.putExtra(Constants.INTENT_NOTIFICATIONS, false);
+						startActivity(launchMain);
+						finish();
+						break;
+					
 					case 1: // UserResult.CREATE_NEW_USER
 						Intent launchNewUser = new Intent(
 								getApplicationContext(),
@@ -290,16 +283,15 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 					}
 
-				} else { // Launch Main
-					((ZeppaApplication) getApplication()).initialize(result,
-							getGoogleAccountCredential());
-
-					Intent launchMain = new Intent(getApplicationContext(),
-							MainActivity.class);
-					launchMain.putExtra(Constants.INTENT_NOTIFICATIONS, false);
-					startActivity(launchMain);
-					finish();
+				} else {
+					Log.wtf(TAG, "Shouldnt have got here. Error occured in startup protocol");
 				}
+				
+				// Dismiss signin dialog
+				if (connectionProgress.isShowing()) {
+					connectionProgress.dismiss();
+				}
+				
 				executingLaunch = false;
 
 			}

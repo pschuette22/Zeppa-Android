@@ -1,6 +1,7 @@
 package com.minook.zeppa.fragment;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
+import com.minook.zeppa.activity.EditAccountActivity;
 import com.minook.zeppa.activity.MainActivity;
 import com.minook.zeppa.adapter.eventlistadapter.MyEventsAdapter;
 import com.minook.zeppa.adapter.tagadapter.MyTagAdapter;
@@ -74,7 +76,7 @@ public class AccountFragment extends Fragment implements OnClickListener {
 		// Handle tag stuff
 		LinearLayout tagHolder = (LinearLayout) layout
 				.findViewById(R.id.accountfragment_tagholder);
-		
+
 		tagAdapter = new MyTagAdapter(
 				(AuthenticatedFragmentActivity) getActivity(), tagHolder, null);
 		tagAdapter.drawTags();
@@ -83,8 +85,13 @@ public class AccountFragment extends Fragment implements OnClickListener {
 
 		eventAdapter = new MyEventsAdapter(
 				(AuthenticatedFragmentActivity) getActivity(), eventHolder);
-		eventAdapter.drawEvents();
 
+		try {
+			eventAdapter.drawEvents();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return layout;
 	}
 
@@ -110,8 +117,21 @@ public class AccountFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		return super.onOptionsItemSelected(item);
+		super.onOptionsItemSelected(item);
+
+		switch (item.getItemId()) {
+
+		case R.id.menu_account_edit:
+			Intent editAccount = new Intent(getActivity(),
+					EditAccountActivity.class);
+			startActivity(editAccount);
+			getActivity().overridePendingTransition(R.anim.slide_up_in,
+					R.anim.hold);
+			break;
+
+		}
+
+		return false;
 	}
 
 	@Override

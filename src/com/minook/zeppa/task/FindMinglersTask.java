@@ -14,15 +14,15 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.Utils;
 import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.utils.Utils;
 import com.minook.zeppa.zeppauserinfoendpoint.Zeppauserinfoendpoint;
 import com.minook.zeppa.zeppauserinfoendpoint.Zeppauserinfoendpoint.ListZeppaUserInfo;
 import com.minook.zeppa.zeppauserinfoendpoint.model.CollectionResponseZeppaUserInfo;
 import com.minook.zeppa.zeppauserinfoendpoint.model.ZeppaUserInfo;
 
-public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
+public class FindMinglersTask extends AsyncTask<Void, Void, Boolean> {
 
 	private final String TAG = getClass().getName();
 	private Context context;
@@ -31,15 +31,17 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 
 	// private final int finderThreadCount = 5;
 
-	public FindMinglersTask(Context context, GoogleAccountCredential credential, OnLoadListener listener) {
+	public FindMinglersTask(Context context,
+			GoogleAccountCredential credential, OnLoadListener listener) {
 		this.context = context;
 		this.credential = credential;
 		this.listener = listener;
 	}
 
 	@Override
-	protected Void doInBackground(Void... params) {
+	protected Boolean doInBackground(Void... params) {
 
+		Boolean valuesDidChange = Boolean.FALSE;
 		// Initialize reused objects
 		ContentResolver resolver = context.getContentResolver();
 		StringBuilder builder = new StringBuilder();
@@ -67,13 +69,16 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 						builder.append("'");
 					} else {
 
-						if (builder.length() + number.length() > 1960 || cursor.isLast()) {
+						if (builder.length() + number.length() > 1960
+								|| cursor.isLast()) {
 							cursor.moveToPrevious();
 							builder.append(")");
 
 							String query = builder.toString();
 							Log.d(TAG, "Number Query: " + query);
-							executeQuery(query);
+							if (executeQuery(query)) {
+								valuesDidChange = true;
+							}
 
 							builder = new StringBuilder();
 
@@ -90,14 +95,10 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 				}
 			} while (!cursor.isLast() && cursor.moveToNext());
 
-//			if (builder.length() > 0) {
-//				executeQuery(builder.toString());
-//			}
-
 		}
 
 		builder = new StringBuilder(); // make sure it is reset
-		
+
 		/*
 		 * Iterate through all GMail addresses saved to phone and check if they
 		 * exist in zeppa.
@@ -118,13 +119,16 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 						builder.append("'");
 					} else {
 
-						if (builder.length() + email.length() > 1960 || cursor.isLast()) {
+						if (builder.length() + email.length() > 1960
+								|| cursor.isLast()) {
 							cursor.moveToPrevious();
 							builder.append(")");
 
 							String query = builder.toString();
 							Log.d(TAG, "Email Query: " + query);
-							executeQuery(query);
+							if (executeQuery(query)) {
+								valuesDidChange = true;
+							}
 
 							builder = new StringBuilder();
 
@@ -142,22 +146,19 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 
 			} while (!cursor.isLast() && cursor.moveToNext());
 
-//			if (builder.length() > 0) {
-//				executeQuery(builder.toString());
-//			}
-
 		}
 
 		cursor.close();
 
-		return null;
+		return valuesDidChange;
 	}
 
 	@Override
-	protected void onPostExecute(Void result) {
+	protected void onPostExecute(Boolean result) {
 		Log.d(TAG, "Executed Find Minglers Task");
 		super.onPostExecute(result);
 		listener.onFinishLoad();
+
 	}
 
 	@Override
@@ -166,8 +167,9 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 		super.onProgressUpdate(values);
 	}
 
-	private void executeQuery(String filter) {
+	private boolean executeQuery(String filter) {
 
+		boolean valuesDidChange = false;
 		Zeppauserinfoendpoint.Builder endpointBuilder = new Zeppauserinfoendpoint.Builder(
 				AndroidHttp.newCompatibleTransport(),
 				AndroidJsonFactory.getDefaultInstance(), credential);
@@ -188,6 +190,7 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 				if (result != null && result.getItems() != null
 						&& !result.getItems().isEmpty()) {
 					addUserInfo(result.getItems());
+					valuesDidChange = true;
 				}
 
 				cursor = result.getNextPageToken();
@@ -199,6 +202,8 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 			}
 
 		} while (cursor != null && exceptionCount < 3);
+
+		return valuesDidChange;
 	}
 
 	private String getFormattedNumber(Cursor cursor) {
@@ -240,15 +245,10 @@ public class FindMinglersTask extends AsyncTask<Void, Void, Void> {
 	 * @param userInfo
 	 */
 	private synchronized void addUserInfo(List<ZeppaUserInfo> userInfoList) {
-		for (int i = 0; i < userInfoList.size(); i++) {
-			ZeppaUserInfo userInfo = userInfoList.get(i);
-			if (!numberIsRecognized(userInfo.getPrimaryUnformatedNumber())
-					&& !emailIsRecognized(userInfo.getGoogleAccountEmail())) {
-				ZeppaUserSingleton.getInstance().addDefaultZeppaUserMediator(
-						userInfo, null);
-			}
 
-		}
+		ZeppaUserSingleton.getInstance().addAllPotentialMinglers(credential,
+				userInfoList, false);
+
 	}
 
 }

@@ -3,7 +3,6 @@ package com.minook.zeppa.activity;
 import android.app.ActionBar;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,7 +54,7 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		long userId = getIntent().getExtras().getLong(
 				Constants.INTENT_ZEPPA_USER_ID);
 
-		userMediator = ZeppaUserSingleton.getInstance().getDefaultUserMediatorById(userId);
+		userMediator = (DefaultUserInfoMediator) ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(userId);
 
 		// find UI Elements and hold
 		userImage = (ImageView) findViewById(R.id.useractivity_image);
@@ -76,7 +75,8 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		actionBar.setTitle(userMediator.getGivenName() + "'s Profile");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setDisplayShowHomeEnabled(false);
 
 		tagAdapter = new FriendTagAdapter(this, tagHolder,
 				userMediator.getUserId());
@@ -97,7 +97,11 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 	protected void onResume() {
 		super.onResume();
 		tagAdapter.drawTags();
+		try {
 		friendEventsAdapter.drawEvents();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	@Override
