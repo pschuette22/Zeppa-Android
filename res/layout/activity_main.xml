@@ -34,13 +34,5 @@
             android:background="@color/white_eggshell" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/activity_drawer_list"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:background="@color/white_eggshell"
-        android:dividerHeight="1dp"
-        android:minWidth="300dp" />
 
 </android.support.v4.widget.DrawerLayout>

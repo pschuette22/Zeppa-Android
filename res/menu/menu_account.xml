@@ -7,10 +7,5 @@
         android:showAsAction="ifRoom"
         android:title="@string/edit">
     </item>
-    <item
-        android:id="@+id/action_activity"
-        android:icon="@drawable/ic_menu_activity"
-        android:showAsAction="ifRoom"
-        android:title="@string/menu_activity"/>
 
 </menu>

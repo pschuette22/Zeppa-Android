@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,17 +15,14 @@ import android.widget.Toast;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.android.gms.common.SignInButton;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
+import com.minook.zeppa.PrefsManager;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
-import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
 
 public class LoginActivity extends AuthenticatedFragmentActivity implements
 		OnClickListener {
@@ -42,6 +38,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	private boolean signinClicked;
 	private boolean executingLaunch;
 	private final int resolveConnectionFail = 5;
+	private boolean launchIntoNotifications;
 
 	/*
 	 * ------------------- Override methods ----------------------- NOTES:
@@ -54,12 +51,22 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		getActionBar().hide();
 
 		setContentView(R.layout.activity_login);
-		findViewById(R.id.sign_in_button).setOnClickListener(this);
+		SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+		signInButton.setStyle(SignInButton.SIZE_WIDE, SignInButton.COLOR_DARK);
+		signInButton.setOnClickListener(this);
+
+		try {
+			launchIntoNotifications = getIntent().getExtras().getBoolean(
+					Constants.INTENT_NOTIFICATIONS);
+		} catch (NullPointerException e) {
+			launchIntoNotifications = false;
+		}
 
 	}
 
 	@Override
 	protected void onStart() {
+
 		signinClicked = false;
 		executingLaunch = false;
 		super.onStart();
@@ -190,18 +197,18 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		executingLaunch = true;
 		new AsyncTask<Void, Void, UserResult>() {
 
-
 			@Override
 			protected UserResult doInBackground(Void... params) {
 
 				UserResult resultCode = UserResult.UNKNOWN;
 
-
 				try {
-					MyZeppaUserMediator mediator = ZeppaUserSingleton.getInstance().fetchLoggedInUserWithBlocking(getGoogleAccountCredential());
+					MyZeppaUserMediator mediator = ZeppaUserSingleton
+							.getInstance().fetchLoggedInUserWithBlocking(
+									getGoogleAccountCredential());
 
 					if (mediator == null) {
-						 // This should not happen, but just in case
+						// This should not happen, but just in case
 						resultCode = UserResult.CREATE_NEW_USER;
 
 					} else {
@@ -229,28 +236,33 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 				return resultCode;
 			}
 
-			
-			
 			@Override
 			protected void onPostExecute(UserResult result) {
 				super.onPostExecute(result);
-
 
 				if (result != null) {
 
 					switch (result.ordinal()) {
 					case 0: // Fetch success, launch into app
-						((ZeppaApplication) getApplication()).initialize(
-								getGoogleAccountCredential());
+						PrefsManager.setLoggedInAccountEmail(getApplication(),
+								getGoogleAccountCredential()
+										.getSelectedAccountName());
+						((ZeppaApplication) getApplication())
+								.initialize(getGoogleAccountCredential());
 
 						Intent launchMain = new Intent(getApplicationContext(),
 								MainActivity.class);
-						launchMain.putExtra(Constants.INTENT_NOTIFICATIONS, false);
+						launchMain.putExtra(Constants.INTENT_NOTIFICATIONS,
+								launchIntoNotifications);
 						startActivity(launchMain);
 						finish();
 						break;
-					
+
 					case 1: // UserResult.CREATE_NEW_USER
+						PrefsManager.setLoggedInAccountEmail(getApplication(),
+								getGoogleAccountCredential()
+										.getSelectedAccountName());
+
 						Intent launchNewUser = new Intent(
 								getApplicationContext(),
 								NewAccountActivity.class);
@@ -284,14 +296,15 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 					}
 
 				} else {
-					Log.wtf(TAG, "Shouldnt have got here. Error occured in startup protocol");
+					Log.wtf(TAG,
+							"Shouldnt have got here. Error occured in startup protocol");
 				}
-				
+
 				// Dismiss signin dialog
 				if (connectionProgress.isShowing()) {
 					connectionProgress.dismiss();
 				}
-				
+
 				executingLaunch = false;
 
 			}
@@ -299,4 +312,5 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		}.execute();
 
 	}
+
 }

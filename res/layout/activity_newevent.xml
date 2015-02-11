@@ -220,15 +220,19 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp" >
 
-                <ImageView
+                <TextView
                     android:id="@+id/neweventactivity_addnewtag"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/background_imagebutton"
-                    android:contentDescription="@string/contdesc_addtag"
-                    android:src="@drawable/ic_cab_done_holo_light" />
+                    android:background="@drawable/background_button"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="7dp"
+                    android:paddingTop="4dp"
+                    android:text="@string/add" />
 
                 <EditText
                     android:id="@+id/neweventactivity_tagtext"
@@ -236,6 +240,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_toLeftOf="@id/neweventactivity_addnewtag"
+                    android:layout_toStartOf="@id/neweventactivity_addnewtag"
                     android:hint="@string/newtag"
                     android:inputType="textCapWords"
                     android:lines="1"

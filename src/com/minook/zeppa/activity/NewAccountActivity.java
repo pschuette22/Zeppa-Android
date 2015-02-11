@@ -6,10 +6,8 @@ import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -25,6 +23,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Constants;
+import com.minook.zeppa.PrefsManager;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
@@ -35,7 +34,7 @@ import com.minook.zeppa.zeppauserendpoint.model.ZeppaUserInfo;
 
 public class NewAccountActivity extends AbstractAccountBaseActivity {
 
-	private final String TAG = "NewAccountActivity";
+	private final String TAG = NewAccountActivity.class.getName();
 	private boolean setInfoOnConnect = false;
 
 	@Override
@@ -47,15 +46,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 		} else {
 			setInfoOnConnect = true;
 			connectionProgress.show();
-			connectionProgress
-					.setOnCancelListener(new ProgressDialog.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							dialog.dismiss();
-							logout();
-						}
-					});
+			connectionProgress.setCancelable(false);
 		}
 	}
 
@@ -78,10 +69,8 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 	@Override
 	protected void setInfo() {
-		
-		String accountEmail = getSharedPreferences(Constants.SHARED_PREFS,
-				Context.MODE_PRIVATE).getString(Constants.LOGGED_IN_ACCOUNT,
-				null);
+
+		String accountEmail = PrefsManager.getLoggedInEmail(getApplication());
 
 		if (accountEmail == null || accountEmail.isEmpty()) {
 			Log.wtf("TAG", "In Account Activity without account specified");
@@ -102,7 +91,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 			userPhoneNumber = numberString;
 			numberField.setText(Utils.formatPhoneNumber(userPhoneNumber));
 		}
-		
+
 		Person currentPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
 		if (currentPerson == null) {
 			Log.wtf(TAG, "current person is null, something failed");
@@ -197,8 +186,8 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 						SharedPreferences.Editor editor = getSharedPreferences(
 								Constants.SHARED_PREFS, MODE_PRIVATE).edit();
-						editor.putLong(Constants.USER_ID, result.getKey()
-								.getId());
+						editor.putLong(Constants.LOGGED_IN_USER_ID, result
+								.getKey().getId());
 						editor.commit();
 
 						Intent launchMain = new Intent(getApplicationContext(),
@@ -242,14 +231,11 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 		}
 
 		userInfo.setImageUrl(imageUrl);
-		
-		
+
 		if (errorsList.isEmpty()) {
 
-			
-
 			userInfo.setGoogleAccountEmail(userGmail);
-			userInfo.setPrimaryUnformatedNumber(userPhoneNumber);
+			userInfo.setPrimaryUnformattedNumber(userPhoneNumber);
 
 			Person currentPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
 			String personId = currentPerson.getId();
@@ -265,36 +251,6 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 			return null;
 		}
 
-	}
-	
-	private void loadAndSetImageInAsync(String imageUrl){
-		Object[] params = {imageUrl};
-		new AsyncTask<Object, Void, Bitmap>(){
-
-			@Override
-			protected Bitmap doInBackground(Object... params) {
-				String imageUrl = (String) params[0];
-				try {
-					return Utils.loadImageBitmapFromUrl(imageUrl);
-				} catch (IOException e) {
-					e.printStackTrace();
-					return null;
-				}
-			}
-
-			@Override
-			protected void onPostExecute(Bitmap result) {
-				super.onPostExecute(result);
-				
-				if(result != null){
-					userImage.setImageBitmap(result);
-				}
-				
-			}
-			
-			
-			
-		}.execute(params);
 	}
 
 }

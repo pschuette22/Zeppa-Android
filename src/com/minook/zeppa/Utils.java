@@ -19,12 +19,12 @@ import android.widget.TextView;
 
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
+import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class Utils {
 	private static final String TAG = "ZeppaUtils";
-	
-	
+
 	/*
 	 * encoding methods
 	 */
@@ -95,7 +95,7 @@ public class Utils {
 		long timeBetween = (System.currentTimeMillis() - dateMillis);
 		if (timeBetween >= 0) {
 			if (timeBetween < (1000 * 60)) {
-				builder.append("Just now");
+				builder.append("Right Now");
 			} else if (timeBetween < (3000 * 60)) { // less than 3 minute ago
 				builder.append("A few moments ago");
 			} else if (timeBetween < (30 * 1000 * 60)) {
@@ -108,7 +108,7 @@ public class Utils {
 			if (timeBetween < (3 * 1000 * 60)) { // in within 3 minutes
 				builder.append("Right Now");
 			} else if (timeBetween < (30 * 1000 * 60)) {
-				builder.append((timeBetween / (1000 * 60)) + " minutes");
+				builder.append((timeBetween / (1000 * 60)) + " minutes from now");
 			} else {
 				builder.append(getTimeAsString(dateMillis));
 			}
@@ -155,10 +155,10 @@ public class Utils {
 		cal.setTimeInMillis(dateMillis);
 		long currentTime = System.currentTimeMillis();
 		Calendar today = Calendar.getInstance();
-		
+
 		if (cal.get(Calendar.DATE) == today.get(Calendar.DATE)) {
 			builder.append("");
-		
+
 		} else if (currentTime > dateMillis) {
 			// Date is in the past
 			if ((currentTime - dateMillis) < (1000 * 60 * 60 * 2)) {
@@ -205,40 +205,35 @@ public class Utils {
 
 		return builder.toString();
 	}
-	
-	
-	public static String getPrivacy(int position){
-		switch (position){
+
+	public static String getPrivacy(int position) {
+		switch (position) {
 		case 0:
 			return "CASUAL";
-			
+
 		case 1:
-			return "PUBLIC";
-			
-		case 2:
 			return "PRIVATE";
 
 		default:
 			return "CASUAL";
 		}
 	}
-	
-	
+
 	/*
 	 * Comparators
 	 */
 
-//	public static final Comparator<ZeppaUser> USER_COMPARATOR = new Comparator<ZeppaUser>() {
-//
-//		@Override
-//		public int compare(ZeppaUser lhs, ZeppaUser rhs) {
-//			// TODO Auto-generated method stub
-//			return (lhs.getGivenName() + " " + lhs.getFamilyName()).compareToIgnoreCase(
-//					rhs.getGivenName() + " " + rhs.getFamilyName());
-//		}
-//
-//	};
-//
+	public static final Comparator<AbstractZeppaUserMediator> USER_COMPARATOR = new Comparator<AbstractZeppaUserMediator>() {
+
+		@Override
+		public int compare(AbstractZeppaUserMediator lhs, AbstractZeppaUserMediator rhs) {
+			// TODO Auto-generated method stub
+			return (lhs.getDisplayName())
+					.compareToIgnoreCase(rhs.getDisplayName());
+		}
+
+	};
+
 //	public static final Comparator<ZeppaUser> USER_FINDER_COMPARATOR = new Comparator<ZeppaUser>() {
 //
 //		@Override
@@ -252,8 +247,9 @@ public class Utils {
 //			} else if (!lRequested && rRequested) {
 //				return -1;
 //			} else {
-//				return (lhs.getGivenName() + " " + lhs.getFamilyName()).compareToIgnoreCase(
-//						rhs.getGivenName() + " " + rhs.getFamilyName());
+//				return (lhs.getGivenName() + " " + lhs.getFamilyName())
+//						.compareToIgnoreCase(rhs.getGivenName() + " "
+//								+ rhs.getFamilyName());
 //			}
 //		}
 //
@@ -275,19 +271,20 @@ public class Utils {
 		@Override
 		public int compare(ZeppaNotification lhs, ZeppaNotification rhs) {
 
-			return ((int) ((lhs.getCreated().longValue()) - (rhs.getCreated().longValue())));
+			return ((int) ((rhs.getCreated().longValue()) - (lhs.getCreated()
+					.longValue())));
 
 		}
 
 	};
-	
-	
+
 	/**
-	 * This method takes an unformatted 10-digit string for a US phone number</p>
-	 * and returns it in expected format.
+	 * This method takes an unformatted 10-digit string for a US phone
+	 * number</p> and returns it in expected format.
 	 * 
-	 * @param unformatedNumber	10 digit unformated phone number
-	 * @return formatedString 	number formatted like (123) 456-7890
+	 * @param unformatedNumber
+	 *            10 digit unformated phone number
+	 * @return formatedString number formatted like (123) 456-7890
 	 */
 	public static String formatPhoneNumber(String unformatedNumber) {
 
@@ -306,36 +303,38 @@ public class Utils {
 
 		return builder.toString(); // Number in form: (123)456-7890
 	}
-	
-	public static String make10DigitNumber(String contactPhoneNumber){
+
+	public static String make10DigitNumber(String contactPhoneNumber) {
 		StringBuilder builder = new StringBuilder();
-		
-		if(contactPhoneNumber.charAt(0) == '1'){
-			if(contactPhoneNumber.length() == 10){
+
+		if (contactPhoneNumber.charAt(0) == '1') {
+			if (contactPhoneNumber.length() == 10) {
 				Log.d(TAG, "Aleady correctForm: " + contactPhoneNumber);
 				return contactPhoneNumber;
 			} else {
 				contactPhoneNumber = contactPhoneNumber.substring(1);
 			}
 		}
-		
+
 		builder.append("1");
-		for(int i = 0; i < contactPhoneNumber.length(); i++){
+		for (int i = 0; i < contactPhoneNumber.length(); i++) {
 			char c = contactPhoneNumber.charAt(i);
-			if(Character.isDigit(c)){
+			if (Character.isDigit(c)) {
 				builder.append(c);
 			}
 		}
-		
+
 		return builder.toString();
 	}
 
 	/**
 	 * This method loads the bitmap of an image from its URL
 	 * 
-	 * @param url				URL of the image
-	 * @return	bitmap			image as a bitmap
-	 * @throws IOException		connection error
+	 * @param url
+	 *            URL of the image
+	 * @return bitmap image as a bitmap
+	 * @throws IOException
+	 *             connection error
 	 */
 	public static Bitmap loadImageBitmapFromUrl(String url) throws IOException {
 
@@ -347,8 +346,9 @@ public class Utils {
 		return BitmapFactory.decodeStream(input);
 
 	}
-	
-	public static View makeLoaderView(AuthenticatedFragmentActivity context, String text) {
+
+	public static View makeLoaderView(AuthenticatedFragmentActivity context,
+			String text) {
 		View loaderView = context.getLayoutInflater().inflate(
 				R.layout.view_loaderview, null, false);
 		((ProgressBar) loaderView.findViewById(R.id.loaderview_progressbar))

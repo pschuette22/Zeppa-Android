@@ -38,7 +38,7 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 
 		// Get needed variables
 		if (convertView == null)
-			convertView = activity.getLayoutInflater().inflate(R.layout.view_tag_others, parent,
+			convertView = activity.getLayoutInflater().inflate(R.layout.view_tag_checkable, parent,
 					false);
 
 		MyEventTagMediator tagManager = getItem(position);

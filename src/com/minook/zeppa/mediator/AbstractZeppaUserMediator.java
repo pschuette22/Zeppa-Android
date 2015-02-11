@@ -11,10 +11,8 @@ import android.widget.ImageView;
 
 import com.minook.zeppa.Utils;
 
-public abstract class AbstractZeppaUserMediator extends AbstractMediator implements Comparable<AbstractZeppaUserMediator>{
-
-	protected long lastUpdateTimeInMillis;
-
+public abstract class AbstractZeppaUserMediator  implements Comparable<AbstractZeppaUserMediator>{
+	
 	protected List<ImageView> setOnImageLoad;
 	protected Bitmap userImage;
 
@@ -22,7 +20,6 @@ public abstract class AbstractZeppaUserMediator extends AbstractMediator impleme
 	private boolean didLoadImage = false;
 
 	public AbstractZeppaUserMediator() {
-		this.lastUpdateTimeInMillis = System.currentTimeMillis();
 		this.setOnImageLoad = new ArrayList<ImageView>();
 	}
 
@@ -42,6 +39,11 @@ public abstract class AbstractZeppaUserMediator extends AbstractMediator impleme
 
 	public String getPrimaryPhoneNumber() throws NullPointerException {
 		return Utils.formatPhoneNumber(getUnformattedPhoneNumber());
+	}
+	
+	public void imageUpdated(){
+		loadingImage = true;
+		loadImageInAsync(getImageUrl());
 	}
 
 	/**

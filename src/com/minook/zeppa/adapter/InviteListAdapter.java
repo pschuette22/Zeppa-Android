@@ -55,7 +55,7 @@ public class InviteListAdapter extends BaseAdapter implements OnClickListener {
 		}
 
 		DefaultUserInfoMediator infoManager = getItem(position);
-		infoManager.convertInviteListItemView(activity, convertView);
+		convertView = infoManager.convertInviteListItemView(convertView);
 
 		CheckBox checkBox = (CheckBox) convertView
 				.findViewById(R.id.inviteitem_checkbox);

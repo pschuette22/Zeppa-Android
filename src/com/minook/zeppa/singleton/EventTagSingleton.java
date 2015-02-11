@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -15,13 +14,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIO
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.adapter.tagadapter.MyTagAdapter;
 import com.minook.zeppa.eventtagendpoint.Eventtagendpoint;
-import com.minook.zeppa.eventtagendpoint.Eventtagendpoint.ListEventTag;
-import com.minook.zeppa.eventtagendpoint.model.CollectionResponseEventTag;
 import com.minook.zeppa.eventtagendpoint.model.EventTag;
-import com.minook.zeppa.eventtagfollowendpoint.Eventtagfollowendpoint;
-import com.minook.zeppa.eventtagfollowendpoint.Eventtagfollowendpoint.ListEventTagFollow;
-import com.minook.zeppa.eventtagfollowendpoint.model.CollectionResponseEventTagFollow;
-import com.minook.zeppa.eventtagfollowendpoint.model.EventTagFollow;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.mediator.DefaultEventTagMediator;
 import com.minook.zeppa.mediator.MyEventTagMediator;
@@ -35,9 +28,14 @@ import com.minook.zeppa.mediator.MyEventTagMediator;
  * 
  */
 public class EventTagSingleton {
+
+	public interface OnTagLoadListener {
+		public void onTagsLoaded();
+		public void onErrorLoadingTags();
+	}
 	
 	private static EventTagSingleton singleton;
-	
+
 	private final String TAG = "EventTagSingleton";
 	private List<AbstractEventTagMediator> tagMediators;
 	private MyTagAdapter waitingAdapter;
@@ -61,6 +59,10 @@ public class EventTagSingleton {
 			singleton = new EventTagSingleton();
 		return singleton; // return instance
 	}
+	
+	public void restore(){
+		singleton = new EventTagSingleton();
+	}
 
 	/*
 	 * Create new tag instance
@@ -70,6 +72,12 @@ public class EventTagSingleton {
 		tag.setOwnerId(getUserId());
 		return tag;
 	}
+	
+	public void clear(){
+		tagMediators.clear();
+	}
+	
+	
 
 	/**
 	 * This method sets an adapter that is waiting for this users tags to load.
@@ -116,11 +124,20 @@ public class EventTagSingleton {
 
 		for (AbstractEventTagMediator mediator : tagMediators) {
 			if (mediator.getTagId().equals(tagId)) {
-				return ((MyEventTagMediator) mediator);
+				return mediator;
 			}
 		}
 
 		return null;
+	}
+	
+	public void updateEventTagsForUser(long userId, List<DefaultEventTagMediator> mediators){
+		
+		List<AbstractEventTagMediator> remove = getTagMediatorsForUser(userId);
+		tagMediators.removeAll(remove);
+		tagMediators.addAll(mediators);
+		
+		
 	}
 
 	/**
@@ -147,28 +164,15 @@ public class EventTagSingleton {
 		return result;
 	}
 
-	/**
-	 * get a list of users event tag mediators from list
-	 * 
-	 * @param tagIds
-	 *            - list of tags in question
-	 * @return List<MyEventTagMediator> - list of mediators for given list
-	 */
-	public List<MyEventTagMediator> getMyTagsFrom(List<Long> tagIds) {
-		List<AbstractEventTagMediator> abstractMediators = getTagsFrom(tagIds);
-		List<MyEventTagMediator> result = new ArrayList<MyEventTagMediator>();
 
-		for (AbstractEventTagMediator mediator : abstractMediators) {
-			try {
-				result.add((MyEventTagMediator) mediator);
-			} catch (ClassCastException ex) {
-				Log.wtf(TAG,
-						"tried to get MyEventTagMediator for other users tag");
-			}
+
+	public void onMyTagsLoaded(){
+		this.hasLoadedTags = true;
+		if(waitingAdapter != null){
+			waitingAdapter.notifyDataSetChanged();
 		}
-
-		return result;
 	}
+	
 
 	public List<DefaultEventTagMediator> getDefaultTagsFrom(List<Long> tagIds) {
 		List<AbstractEventTagMediator> abstractMediators = getTagsFrom(tagIds);
@@ -186,11 +190,11 @@ public class EventTagSingleton {
 		return result;
 	}
 
-	public List<AbstractEventTagMediator> getTagMediatorsForUser(Long userId) {
+	public List<AbstractEventTagMediator> getTagMediatorsForUser(long userId) {
 		List<AbstractEventTagMediator> result = new ArrayList<AbstractEventTagMediator>();
 
 		for (AbstractEventTagMediator mediator : tagMediators) {
-			if (mediator.getUserId().longValue() == userId.longValue()) {
+			if (mediator.getUserId().longValue() == userId) {
 				result.add(mediator);
 			}
 		}
@@ -206,22 +210,28 @@ public class EventTagSingleton {
 	 * Setters
 	 */
 
-	private AbstractEventTagMediator addMyEventTag(EventTag tag) {
-
-		AbstractEventTagMediator myTagMediator = new MyEventTagMediator(tag);
-		tagMediators.add(myTagMediator);
-		return myTagMediator;
+	public boolean removeEventTagMediator(AbstractEventTagMediator mediator){
+		return tagMediators.remove(mediator);
 	}
-
-	private AbstractEventTagMediator addDefaultTagMediator(EventTag tag,
-			GoogleAccountCredential credential) {
-
-		AbstractEventTagMediator tagMediator = new DefaultEventTagMediator(tag,
-				credential);
-		tagMediators.add(tagMediator);
-		return tagMediator;
+	
+	public void addEventTags(List<AbstractEventTagMediator> tagMediators){
+		this.tagMediators.addAll(tagMediators);
 	}
-
+	
+	public void removeEventTagsForUser(long userId){
+		
+		Iterator<AbstractEventTagMediator> iterator = tagMediators.iterator();
+		List<AbstractEventTagMediator> removalList = new ArrayList<AbstractEventTagMediator>();
+		while(iterator.hasNext()){
+			AbstractEventTagMediator mediator = iterator.next();
+			if(mediator.getUserId().longValue() == userId){
+				removalList.add(mediator);
+			}
+		}
+		
+		tagMediators.removeAll(removalList);
+	}
+	
 	/*
 	 * Private
 	 */
@@ -230,88 +240,6 @@ public class EventTagSingleton {
 	 * Loader Methods
 	 */
 
-	/**
-	 * This method loads the current users Event Tags in a new thread
-	 * 
-	 * @param credential
-	 */
-	public void loadMyTagsInAsync(GoogleAccountCredential credential, Long userId) {
-
-		Object[] params = { credential , userId };
-
-		new AsyncTask<Object, Void, Boolean>() {
-
-			@Override
-			protected Boolean doInBackground(Object... params) {
-
-				Boolean success = Boolean.TRUE;
-				GoogleAccountCredential credential = (GoogleAccountCredential) params[0];
-				Long userId = (Long) params[1];
-				Eventtagendpoint.Builder endpointBuilder = new Eventtagendpoint.Builder(
-						AndroidHttp.newCompatibleTransport(),
-						AndroidJsonFactory.getDefaultInstance(), credential);
-				endpointBuilder = CloudEndpointUtils
-						.updateBuilder(endpointBuilder);
-				Eventtagendpoint tagEndpoint = endpointBuilder.build();
-
-				// TODO: List Query for all of this users event tags
-				
-				String cursor = null;
-				String filter = "userId == " + userId.longValue();
-
-				do{
-
-					try {
-						ListEventTag listTagTask = tagEndpoint.listEventTag();
-						
-						listTagTask.setCursor(cursor);
-						listTagTask.setFilter(filter);
-						listTagTask.setLimit(30);
-						
-						CollectionResponseEventTag tagResponse = listTagTask.execute();
-
-						if(tagResponse == null || tagResponse.getItems() == null || tagResponse.getItems().isEmpty()){
-							cursor = null;
-							break;
-						} else {
-							Iterator<EventTag> iterator = tagResponse.getItems().iterator();
-							while(iterator.hasNext()){
-								addMyEventTag(iterator.next());
-							}
-							
-							cursor = tagResponse.getNextPageToken();
-						}
-						
-					} catch (IOException e) {
-						e.printStackTrace();
-						break;
-					}
-					
-				} while (cursor != null);
-				
-				
-
-				return success;
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result) {
-				super.onPostExecute(result);
-				
-				if(!result){
-					// TODO: indicate an error here and/or try again
-				}
-					
-				hasLoadedTags = true;
-				if (waitingAdapter != null) {
-					waitingAdapter.onFinishLoad();
-					waitingAdapter = null;
-				}
-			}
-
-		}.execute(params);
-
-	}
 
 	/**
 	 * This is a blocking call which creates a new event tag in the backedn and
@@ -333,7 +261,6 @@ public class EventTagSingleton {
 		try {
 
 			tag = endpoint.insertEventTag(tag).execute();
-			addMyEventTag(tag);
 
 		} catch (GoogleAuthIOException aEx) {
 			Log.wtf(TAG, "AuthException");
@@ -348,202 +275,6 @@ public class EventTagSingleton {
 			return null;
 		}
 
-	}
-
-	/**
-	 * This loads all tags for a given user ID and adds them to the list of held
-	 * tags. It will not add duplicates, and it will remove deleted tags Cannot
-	 * be called from the main thread
-	 * 
-	 * @param userId
-	 * @return true if changes were made to held tagMediators
-	 */
-	public boolean fetchEventTagsForUserWithBlocking(Long userId,
-			GoogleAccountCredential credential) {
-		boolean didUpdate = false;
-
-		Eventtagendpoint.Builder endpointBuilder = new Eventtagendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				AndroidJsonFactory.getDefaultInstance(), credential);
-		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-		Eventtagendpoint endpoint = endpointBuilder.build();
-
-		String filter = "userId == " + userId.longValue();
-		String cursor = null;
-		
-		List<EventTag> loadedTags = new ArrayList<EventTag>();
-		
-		try {
-			ListEventTag listTask = endpoint.listEventTag();
-			
-			do {
-				listTask.setFilter(filter);
-				listTask.setCursor(cursor);
-				
-				CollectionResponseEventTag response = listTask.execute();
-				
-				if(response == null || response.getItems() == null || response.getItems().isEmpty()){
-					cursor = null;
-				} else {
-					loadedTags.addAll(response.getItems());
-					cursor = response.getNextPageToken();
-				}
-				
-			} while(cursor != null);
-			
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-			// tell the user but dont try to load again unless refreshed
-			return false;
-		}
-		
-		
-		List<AbstractEventTagMediator> heldMediatorsForUser = getTagMediatorsForUser(userId);
-		didUpdate = removeOldEventTags(heldMediatorsForUser, loadedTags);
-		
-		if(!loadedTags.isEmpty()){
-			Iterator<EventTag> iterator = loadedTags.iterator();
-			while(iterator.hasNext()){
-				addDefaultTagMediator(iterator.next(), credential);
-			}
-			return true;
-		}
-		return didUpdate;
-	}
-
-	/**
-	 * Returns an event tag follow instance if found. does not error check, not
-	 * thread safe
-	 * 
-	 * @param tag
-	 *            - event tag to check if user is following
-	 * @return result - event tag follow instance if exists
-	 */
-	public EventTagFollow fetchEventTagFollow(EventTag tag,
-			GoogleAccountCredential credential) {
-		EventTagFollow result = null;
-
-		Eventtagfollowendpoint.Builder endpointBuilder = new Eventtagfollowendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				AndroidJsonFactory.getDefaultInstance(), credential);
-		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-		Eventtagfollowendpoint endpoint = endpointBuilder.build();
-
-		String filter = "tagId == " + tag.getId().longValue() + " && followerId == " + getUserId().longValue();
-		String order = "created asc";
-		Integer limit = Integer.valueOf(1); // should only be one instance
-		
-		try {
-			ListEventTagFollow listEventTagFollowTask = endpoint.listEventTagFollow();
-			listEventTagFollowTask.setFilter(filter);
-			listEventTagFollowTask.setCursor(null);
-			listEventTagFollowTask.setOrdering(order);
-			listEventTagFollowTask.setLimit(limit);
-			
-			CollectionResponseEventTagFollow response = listEventTagFollowTask.execute();
-			
-			
-			if(response != null  && response.getItems() != null && !response.getItems().isEmpty()) {
-				if(response.getItems().size() > 1){
-					Log.v("TAG", "Backend contains multiple instances of follow");
-				}
-				
-				result = response.getItems().get(0);
-			}
-			
-		} catch (IOException e){
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-		
-	/**
-	 * This method determines what tags the application is not already holding
-	 * and adds them. It also determines if the user is following this event tag
-	 * 
-	 * @param heldMediators
-	 * @param eventTags
-	 * @param credential
-	 * @return
-	 */
-	private boolean addNewMediators(
-			List<AbstractEventTagMediator> heldMediators,
-			List<EventTag> eventTags, GoogleAccountCredential credential) {
-		boolean didUpdate = false;
-		Iterator<EventTag> tagIterator = eventTags.iterator();
-
-		while (tagIterator.hasNext()) {
-			EventTag eventTag = tagIterator.next();
-			boolean doAdd = true;
-			Iterator<AbstractEventTagMediator> mediatorIterator = heldMediators
-					.iterator();
-
-			while (mediatorIterator.hasNext()) {
-				if (mediatorIterator.next().getTagId().longValue() == 
-						eventTag.getKey().getId().longValue()) {
-					doAdd = false;
-					break;
-				}
-			}
-
-			if (doAdd) {
-
-				addDefaultTagMediator(eventTag, credential);
-			}
-
-		}
-
-		return didUpdate;
-	}
-
-	/**
-	 * This method takes an updated list of event tags and removes the old ones
-	 * 
-	 * @param heldMediators
-	 * @param eventTags
-	 * @return
-	 */
-	private boolean removeOldEventTags(
-			List<AbstractEventTagMediator> heldMediators,
-			List<EventTag> loadedEventTags) {
-		
-		if(heldMediators.isEmpty()){
-			return false;
-		}
-		
-		boolean didUpdate = false;
-		
-		Iterator<AbstractEventTagMediator> mediatorIterator = heldMediators
-				.iterator();
-
-		while (mediatorIterator.hasNext()) {
-			AbstractEventTagMediator mediator = mediatorIterator.next();
-			Iterator<EventTag> tagIterator = loadedEventTags.iterator();
-			
-			boolean remove = true;
-			
-			while (tagIterator.hasNext()) {
-				EventTag tag = tagIterator.next();
-				if (tag.getId().longValue() == 
-						mediator.getTagId().longValue()) {
-					
-					loadedEventTags.remove(tag);
-					remove = false;
-					break;
-				}
-			}
-			
-			if(remove) {
-				tagMediators.remove(mediator);
-				didUpdate = true;
-			}
-
-		}
-
-		return didUpdate;
 	}
 
 	/**

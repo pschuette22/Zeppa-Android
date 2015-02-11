@@ -12,7 +12,6 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -81,7 +80,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	private TextView addInvitesField;
 	private EditText newTagTextField;
 
-	private ImageView addNewTagField;
+	private TextView addNewTagField;
 	private ImageView addLocationField;
 
 	private LinearLayout invitesHolder;
@@ -94,7 +93,8 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	private InviteListAdapter invitesAdapter;
 
 	// Picker Variables:
-	private boolean is12HourFormat;
+	// TODO: give user the option to select a different time format
+	private boolean is12HourFormat = true;
 	private boolean isStartCalendar;
 
 	/*
@@ -122,9 +122,9 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		cancelButton = (Button) findViewById(R.id.neweventactivity_cancel);
 		invitesHolder = (LinearLayout) findViewById(R.id.neweventactivity_invitesholder);
 		guestsCanInviteField = (CheckBox) findViewById(R.id.neweventactivity_guestmayinvite);
-		
+
 		newTagTextField = (EditText) findViewById(R.id.neweventactivity_tagtext);
-		addNewTagField = (ImageView) findViewById(R.id.neweventactivity_addnewtag);
+		addNewTagField = (TextView) findViewById(R.id.neweventactivity_addnewtag);
 		addInvitesField = (TextView) findViewById(R.id.neweventactivity_addinvites);
 
 		addLocationField = (ImageView) findViewById(R.id.neweventactivity_exactlocation);
@@ -137,11 +137,6 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		tagAdapter = new CreateEventTagAdapter(this, tagHolder);
 		invitesAdapter = new InviteListAdapter(this);
 
-		// Initial Settings
-		SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFS,
-				MODE_PRIVATE);
-
-		is12HourFormat = prefs.getBoolean(Constants.IS_12HR_FORMAT, true);
 
 		// Set Default Times
 
@@ -333,7 +328,6 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 					try {
 						// TODO: update this so user specifies if invites are
 						// available
-						
 
 						event = ZeppaEventSingleton.getInstance()
 								.createZeppaEventWithBlocking(
@@ -343,11 +337,11 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 								event);
 
 						ZeppaEventSingleton.getInstance().addMediator(
-								myMediator, true);
+								myMediator);
 
 					} catch (IOException e) {
 						e.printStackTrace();
-						
+
 						event = null;
 					}
 
@@ -365,8 +359,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 						onBackPressed();
 					} else {
 						Toast.makeText(((ZeppaApplication) getApplication()),
-								"Error Posting", Toast.LENGTH_LONG)
-								.show();
+								"Error Posting", Toast.LENGTH_LONG).show();
 					}
 
 				}

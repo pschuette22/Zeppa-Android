@@ -12,19 +12,29 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.minook.zeppa.R;
+import com.minook.zeppa.Utils;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.adapter.eventlistadapter.AgendaListAdapter;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
+import com.minook.zeppa.singleton.ZeppaEventSingleton.OnZeppaEventLoadListener;
 
-public class AgendaFragment extends Fragment implements OnRefreshListener {
+public class AgendaFragment extends Fragment implements OnRefreshListener,
+		OnZeppaEventLoadListener {
 
 	// Private
-	View layout;
-	ListView agendaList;
-	PullToRefreshLayout pullToRefreshLayout;
-	AgendaListAdapter alAdapter;
+	private View layout;
+	private ListView agendaList;
+	private PullToRefreshLayout pullToRefreshLayout;
+	private AgendaListAdapter alAdapter;
+	private View loaderView;
 
-	// Constants
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		ZeppaEventSingleton.getInstance().registerObserver(this);
+
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,37 +48,59 @@ public class AgendaFragment extends Fragment implements OnRefreshListener {
 				.findViewById(R.id.watchingfragment_ptr);
 
 		alAdapter = new AgendaListAdapter(
-				(AuthenticatedFragmentActivity) getActivity(), agendaList);
+				(AuthenticatedFragmentActivity) getActivity());
 
-		agendaList.setAdapter(alAdapter);
 
 		ActionBarPullToRefresh.from(getActivity())
 				.options(Options.create().scrollDistance(.4f).build())
 				.allChildrenArePullable().listener(this)
 				.setup(pullToRefreshLayout);
 
+		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial()) {
+			loaderView = Utils.makeLoaderView(
+					(AuthenticatedFragmentActivity) getActivity(),
+					"Finding Activities...");
+			agendaList.addHeaderView(loaderView);
+		}
+		
+		agendaList.setAdapter(alAdapter);
+		agendaList.setOnItemClickListener(alAdapter);
+
+
 		return layout;
 	}
 
 	@Override
 	public void onRefreshStarted(View view) {
-		alAdapter.fetchNewEventsInAsync(pullToRefreshLayout);
+
+		pullToRefreshLayout.setRefreshComplete();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-
+		alAdapter.notifyDataSetChanged();
 	}
 
 	@Override
 	public void onDestroy() {
+		ZeppaEventSingleton.getInstance().unregisterObserver(this);
 		super.onDestroy();
-		
-		ZeppaEventSingleton.getInstance().unregisterObserver(alAdapter);
 	}
-	
-	
+
+	@Override
+	public void onZeppaEventsLoaded() {
+		
+		if (loaderView != null) {
+			loaderView.setVisibility(View.GONE);
+			agendaList.removeHeaderView(loaderView);
+			loaderView = null;
+		}
+		
+		pullToRefreshLayout.setRefreshing(false);
+		alAdapter.notifyDataSetChanged();
+
+	}
 
 	/*
 	 * --------------- Private Methods ---------------------

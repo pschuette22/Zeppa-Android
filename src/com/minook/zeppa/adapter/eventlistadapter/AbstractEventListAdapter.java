@@ -3,22 +3,24 @@ package com.minook.zeppa.adapter.eventlistadapter;
 import java.io.IOException;
 import java.util.List;
 
-import android.util.Log;
+import android.content.Intent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.R;
-import com.minook.zeppa.Utils;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
-import com.minook.zeppa.observer.OnLoadListener;
+import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 public abstract class AbstractEventListAdapter extends BaseAdapter implements
-		OnLoadListener {
+		OnItemClickListener, OnClickListener {
 
 	private final static String TAG = AbstractEventListAdapter.class.getName();
 
@@ -39,13 +41,12 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements
 	public AbstractEventListAdapter(AuthenticatedFragmentActivity activity) {
 		super();
 		this.activity = activity;
-		ZeppaEventSingleton.getInstance().registerObserver(this);
 	}
 
 	@Override
 	public int getCount() {
 		if (eventMediators == null) {
-			return 0; // check for some sort of error?
+			return 0;
 		}
 
 		return eventMediators.size();
@@ -59,8 +60,7 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements
 	@Override
 	public long getItemId(int position) {
 
-		AbstractZeppaEventMediator mediator = getItem(position);
-		return mediator.getEventId().longValue();
+		return getItem(position).getEventId().longValue();
 
 	}
 
@@ -68,46 +68,51 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		AbstractZeppaEventMediator mediator = getItem(position);
-		mediator.setContext(activity);
 
 		if (convertView == null) {
 			convertView = activity.getLayoutInflater().inflate(
 					R.layout.view_eventlist_item, parent, false);
 		}
 
-		mediator.convertEventListItemView(activity, convertView);
+		convertView = mediator.convertEventListItemView(activity, convertView);
+		convertView.setOnClickListener(this);
+
+		if (mediator instanceof DefaultZeppaEventMediator) {
+			View quickActionBar = convertView
+					.findViewById(R.id.eventview_quickactionbar);
+			quickActionBar.findViewById(R.id.quickaction_join)
+					.setOnClickListener(this);
+			quickActionBar.findViewById(R.id.quickaction_text)
+					.setOnClickListener(this);
+			quickActionBar.findViewById(R.id.quickaction_watch)
+					.setOnClickListener(this);
+
+		}
 
 		return convertView;
 
 	}
 
 	@Override
-	public boolean didLoadInitial() {
-		return ZeppaEventSingleton.getInstance().hasLoadedInitial();
+	public void notifyDataSetChanged() {
+		setEventMediators();
+		super.notifyDataSetChanged();
+
 	}
 
 	@Override
-	public void onFinishLoad() {
-		verifyDatasetValid();
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+
+		AbstractZeppaEventMediator mediator = getItem(position);
+		Intent intent = mediator.getToEventViewIntent(activity);
+		activity.startActivity(intent);
+		activity.overridePendingTransition(R.anim.slide_left_in,
+				R.anim.slide_left_out);
+
 	}
 
 	protected abstract List<AbstractZeppaEventMediator> getCurrentEventMediators();
-
-	public void verifyDatasetValid() {
-		if (didLoadInitial()) {
-			List<AbstractZeppaEventMediator> currentMediators = getCurrentEventMediators();
-			removeLoaderViewIfVisible();
-			if (eventMediators != null
-					&& eventMediators.containsAll(currentMediators)
-					&& currentMediators.containsAll(eventMediators)) {
-				Log.d(TAG, "Mediators up to date");
-			} else {
-				setEventMediators();
-				notifyDataSetChanged();
-			}
-
-		}
-	}
 
 	protected abstract void setEventMediators();
 
@@ -119,10 +124,39 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements
 		return ZeppaUserSingleton.getInstance().getUserId();
 	}
 
-	protected View getLoaderView() {
-		return Utils.makeLoaderView(activity, "Finding Activities");
-	}
+	@Override
+	public void onClick(View v) {
 
-	protected abstract void removeLoaderViewIfVisible();
+		AbstractZeppaEventMediator mediator = (AbstractZeppaEventMediator) v
+				.getTag();
+
+		if (v.getId() == R.id.eventview) {
+			mediator.launchIntoEventView(activity);
+		} else if (mediator instanceof DefaultZeppaEventMediator) {
+
+			switch (v.getId()) {
+
+			case R.id.quickaction_join:
+				((DefaultZeppaEventMediator) mediator)
+						.onJoinButtonClicked(activity);
+				ZeppaEventSingleton.getInstance().notifyObservers();
+				break;
+
+			case R.id.quickaction_text:
+				((DefaultZeppaEventMediator) mediator)
+						.onTextButtonClicked(activity);
+				break;
+
+			case R.id.quickaction_watch:
+				((DefaultZeppaEventMediator) mediator)
+						.onWatchButtonClicked(activity);
+				ZeppaEventSingleton.getInstance().notifyObservers();
+
+				break;
+			}
+
+		}
+
+	}
 
 }

@@ -19,12 +19,12 @@ import com.minook.zeppa.singleton.EventTagSingleton;
 public class MyTagAdapter extends AbstractTagAdapter {
 
 	private List<Long> tagIds;
-	
+
 	public MyTagAdapter(AuthenticatedFragmentActivity activity,
 			LinearLayout tagHolder, List<Long> tagIds) {
 		super(activity, tagHolder);
 		this.tagIds = tagIds;
-		
+
 		if (didLoadInitial()) {
 			setTags();
 		} else {
@@ -40,9 +40,10 @@ public class MyTagAdapter extends AbstractTagAdapter {
 
 		if (convertView == null)
 			convertView = activity.getLayoutInflater().inflate(
-					R.layout.view_tag_owned, parent, false);
+					R.layout.view_tag_base, parent, false);
 
-		tagMediator.convertView(activity, convertView);
+		tagMediator.convertView(convertView);
+		convertView.setClickable(false);
 
 		return convertView;
 
@@ -75,19 +76,56 @@ public class MyTagAdapter extends AbstractTagAdapter {
 		notifyDataSetChanged();
 	}
 
-	private void setTags(){
+	@Override
+	public List<AbstractEventTagMediator> getCurrentTagMediators() {
+		List<AbstractEventTagMediator> mediators;
+		if (tagIds == null) {
+			mediators = EventTagSingleton.getInstance().getMyTags();
+		} else {
+			mediators = EventTagSingleton.getInstance().getTagsFrom(tagIds);
+		}
+
+		return mediators;
+	}
+	
+	
+
+	@Override
+	public void notifyDataSetChanged() {
+		setTags();
+		super.notifyDataSetChanged();
+	}
+
+	public boolean tagsAreCurrent(){
+		
+		List<AbstractEventTagMediator> currentMediators;
+		
+		if (tagIds == null) {
+			currentMediators = EventTagSingleton.getInstance().getMyTags();
+		} else {
+			currentMediators = EventTagSingleton.getInstance().getTagsFrom(tagIds);
+		}
+		
+		return (currentMediators.containsAll(tagMediators) && tagMediators.containsAll(currentMediators));
+		
+	}
+	
+	private void setTags() {
 		if (tagIds == null) {
 			tagMediators = EventTagSingleton.getInstance().getMyTags();
 		} else {
-			tagMediators = EventTagSingleton.getInstance().getTagsFrom(
-					tagIds);
+			tagMediators = EventTagSingleton.getInstance().getTagsFrom(tagIds);
 		}
 	}
-	
+
 	public boolean createTagInAsync(EditText textView) {
 
 		String text = trimTag(textView.getText().toString());
 
+		if(text.isEmpty()){
+			return false;
+		}
+		
 		if (getMatchingMediator(text) != null) {
 			Toast.makeText(activity, "Already Made!", Toast.LENGTH_SHORT)
 					.show();

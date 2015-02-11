@@ -57,10 +57,12 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:scaleType="centerCrop"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:layout_margin="5dp"
                     android:background="@drawable/background_contact_picture"
                     android:contentDescription="@string/contdesc_contactimage"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/default_user_image" />
 
                 <EditText
@@ -109,6 +111,12 @@
                 android:drawablePadding="5dp"
                 android:drawableStart="@drawable/ic_phone_image"
                 android:textAppearance="@style/black_txt16sp" />
+
+            <LinearLayout
+                android:id="@+id/accountactivity_tagholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
         </LinearLayout>
     </ScrollView>
 

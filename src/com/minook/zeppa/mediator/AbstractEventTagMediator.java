@@ -1,15 +1,12 @@
 package com.minook.zeppa.mediator;
 
 import android.view.View;
-import android.view.View.OnClickListener;
 
-import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.eventtagendpoint.model.EventTag;
-import com.minook.zeppa.observer.MemoryObserver;
 
-public abstract class AbstractEventTagMediator extends AbstractMediator implements OnClickListener, MemoryObserver{
+public abstract class AbstractEventTagMediator {
 
-	
+	public static final int TAG = 400;
 	protected EventTag eventTag;
 	
 	public AbstractEventTagMediator(EventTag eventTag){
@@ -25,8 +22,9 @@ public abstract class AbstractEventTagMediator extends AbstractMediator implemen
 		return eventTag.getTagText();
 	}
 	
-	public void convertView(AuthenticatedFragmentActivity context, View convertView){
-		super.convertView(context);
+	public View convertView(View convertView){
+		convertView.setTag(this);
+		return convertView;
 	}
 	
 	

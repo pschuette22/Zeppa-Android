@@ -1,35 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
     <CheckBox
         android:id="@+id/quickaction_watch"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:background="@drawable/background_button_eventaction"
-        android:button="@drawable/ic_quickaction_watch"
-        android:text="@string/watch" />
+        android:button="@android:color/transparent"
+        android:drawableLeft="@drawable/ic_quickaction_watch"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_quickaction_watch"
+        android:padding="7dp"
+        android:text="@string/watch"
+        android:textSize="14sp" />
 
-    <Button
+    <View
+        android:layout_width="1px"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:background="@color/gray_light" />
+
+    <TextView
         android:id="@+id/quickaction_text"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:background="@drawable/background_button_eventaction"
         android:drawableLeft="@drawable/ic_quickaction_text"
+        android:drawablePadding="5dp"
         android:drawableStart="@drawable/ic_quickaction_text"
-        android:text="@string/text_host" />
+        android:gravity="center"
+        android:padding="7dp"
+        android:text="@string/text"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:background="@color/gray_light" />
 
     <CheckBox
         android:id="@+id/quickaction_join"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:background="@drawable/background_button_eventaction"
-        android:button="@drawable/ic_quickaction_join"
-        android:text="@string/join" />
+        android:button="@android:color/transparent"
+        android:drawableLeft="@drawable/ic_quickaction_join"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_quickaction_join"
+        android:padding="7dp"
+        android:text="@string/join"
+        android:textSize="14sp" />
 
 </LinearLayout>

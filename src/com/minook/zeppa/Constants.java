@@ -3,7 +3,7 @@ package com.minook.zeppa;
 
 
 public class Constants {
-
+	
 	/*
 	 * Software versions. Update with release
 	 * Current release: 1.0.0
@@ -14,25 +14,7 @@ public class Constants {
 	public static final int BUGFIX_CODE = 0;
 	public static final String APP_RELEASE_CODE = VERSION_CODE + "." + UPDATE_CODE +"." + BUGFIX_CODE;
 	
-	// Global Enumerators
-	public static enum EventScope {
-		PUBLIC, // Open to unlimited sharing
-		PRIVATE, // Host only sharing
-		CASUAL, // Friends of host can share
-		NO_REPOST
-	}
 
-	public static enum ConflictionStatus {
-		NO_CONFLICTION, PARTIAL_CONFLICTION, COMPLETE_CONFLICTION, ATTENDING
-	}
-
-	public static enum LoadType {
-		HOSTED_EVENTS, JOINED_EVENT, WATCHING_EVENT, HELD_EVENTS, NOTIFICATIONS, EVENT_TAGS, FRIENDS, EVENT_REFRESH
-	}
-
-	public static enum EventUpdateType {
-		SIMPLE_UPDATE, JOINED, LEAVE, WATCH, DELETE, STOP_WATCHING
-	}
 
 	public static enum NotificationType {
 		FRIEND_REQUEST, FRIEND_ACCEPTED,
@@ -47,16 +29,7 @@ public class Constants {
 
 		USER_LEAVING, FIND_TIME, TIME_FOUND
 	}
-	
-	public static enum UserDataRelationship {
-		IS_USER,
-		MINGLING,
-		SENT_REQUEST,
-		PENDING_REQUEST,
-		NOT_CONNECTED,
-		UNKNOWN
-		
-	}
+
 
 	/*
 	 * Debug variables
@@ -81,24 +54,24 @@ public class Constants {
 
 	// Account Preferences
 	public static final String LOGGED_IN_ACCOUNT = "Account Email Address";
-	public static final String USER_ID = "Zeppa User Id";
-	public static final String ZEPPA_INTERNAL_CALENDAR_ID = "Zeppa Internal Calendar Id";
-	public static final String ZEPPA_GOOGLE_CALENDAR_ID = "Zeppa Google Calendar Id";
+	public static final String LOGGED_IN_USER_ID = "Account User Id";
 	
-	// System Preferences
-	public static final String SHOW_TUTORIAL = "Has Seen Initial Tutorial";
-	public static final String IS_12HR_FORMAT = "Used 12-hr time format";
 
 	// Notification Preferences
-	public static final String PUSH_NOTIFICAIONS = "Send Push Notifications";
-	public static final String PN_EVENT_RECCOMENDATION = "Notificaiton With Event Reccomendation";
-	public static final String PN_FRIEND_REQUEST = "Notification @ Friend Request";
-	public static final String PN_FRIEND_ACCEPT = "Notiification @ Friend Accept";
-	public static final String PN_FRIEND_JOINS = "Notification When Friend Joins Event You Joined";
-	public static final String PN_EVENT_JOINED = "Notification When Someone Joins Your Event";
-	public static final String PN_EVENT_LEFT = "Notification When Friend Leaves your Event";
-	public static final String PN_SOUND_ON = "Ring When Received Notification";
-	public static final String PN_VIBRARTE_ON = "Vibrate When Received Notification";
+	public static final String PUSH_NOTIFICATIONS = "-PushNotifications";
+	public static final String PN_SOUND_ON = "-RingOnNotifications";
+	public static final String PN_VIBRARTE_ON = "-VibrateOnNotifications";
+	
+	public static final String PN_MINGLE_REQUEST = "-MingleRequestNotification";
+	public static final String PN_MINGLE_ACCEPT = "-MingleAcceptNotification";
+	
+	public static final String PN_EVENT_RECOMMENDATION = "-EventReccomendationNotification";
+	public static final String PN_EVENT_INVITATION = "-EventInviteNotification";
+	public static final String PN_EVENT_COMMENT = "-EventCommentNotification";
+	public static final String PN_EVENT_JOINED = "-EventJoinNotification";
+	public static final String PN_EVENT_LEFT = "-EventLeaveNotification";
+	public static final String PN_EVENT_CANCELED ="-EventCanceledNotification";
+
 
 	
 	/*
@@ -112,7 +85,8 @@ public class Constants {
 	public static final String APP_ENGINE_CLIENT_ID = "587859844920.project.googleusercontent.com";
 	public static final String WEB_CLIENT_ID = "587859844920-jiqoh8rn4j8d0941vunu4jfdcl2huv4l.apps.googleusercontent.com";
 	public static final String ANDROID_AUDIENCE = "server:client_id:" + WEB_CLIENT_ID;
-	
+	public static final String APP_ENGINE_UPLOAD_URL = "http://1-dot-zeppa-cloud-1821.appspot.com/upload";
+	public static final String APP_ENGINE_SERVE_URL = "http://1-dot-zeppa-cloud-1821.appspot.com/serve";
 	
 	/*
 	 * Navigation items are for labeling back stack instances When back button
@@ -129,7 +103,7 @@ public class Constants {
 	
 	public static final int NAVIGATION_ACCOUNT_INDEX = 0;
 	public static final int NAVIGATION_HOME_INDEX = 1;
-	public static final int NAVIGATION_CONTACTS_INDEX = 2;
+	public static final int NAVIGATION_MINGLERS_INDEX = 2;
 	public static final int NAVIGATION_FEEDBACK_INDEX = 3;
 	public static final int NAVIGATION_SETTINGS_INDEX = 4;
 

@@ -2,17 +2,22 @@ package com.minook.zeppa.adapter;
 
 import java.util.List;
 
-import android.content.res.Resources;
+import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.minook.zeppa.R;
+import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
-public class MinglerFinderAdapter extends BaseAdapter {
+public class MinglerFinderAdapter extends BaseAdapter implements
+		OnClickListener {
 
 	private AuthenticatedFragmentActivity context;
 
@@ -28,11 +33,8 @@ public class MinglerFinderAdapter extends BaseAdapter {
 	@Override
 	public void notifyDataSetChanged() {
 
-		if (!verifyDatasetValid()) {
-			setMediators();
-			super.notifyDataSetChanged();
-
-		}
+		setMediators();
+		super.notifyDataSetChanged();
 
 	}
 
@@ -63,31 +65,38 @@ public class MinglerFinderAdapter extends BaseAdapter {
 
 		DefaultUserInfoMediator mediator = getItem(position);
 
-		if (position < pendingRequestMediators.size()) {
+		if (mediator.getUserRelationship() == null
+				|| mediator.getUserRelationship().getCreatorId().longValue() == ZeppaUserSingleton
+						.getInstance().getUserId().longValue()) {
+
+			convertView = context.getLayoutInflater().inflate(
+					R.layout.view_addcontact_itemsend, parent, false);
+			convertView = mediator
+					.convertRequestConnectListItemView(convertView);
+			convertView.findViewById(R.id.newcontact_senditem_button)
+					.setOnClickListener(this);
+
+		} else {
+
 			convertView = context.getLayoutInflater().inflate(
 					R.layout.view_addcontact_itemrespond, parent, false);
 			mediator.convertRespondConnectListItemView(context, convertView);
-		} else {
-			convertView = context.getLayoutInflater().inflate(
-					R.layout.view_addcontact_itemsend, parent, false);
-			mediator.convertRequestConnectListItemView(context, convertView);
+			convertView.findViewById(R.id.newcontact_confirm_button)
+					.setOnClickListener(this);
+			convertView.findViewById(R.id.newcontact_deny_button)
+					.setOnClickListener(this);
+
 		}
 
+		ImageView image = (ImageView) convertView
+				.findViewById(R.id.newcontact_picture);
+		TextView nameText = (TextView) convertView
+				.findViewById(R.id.newcontact_name);
+
+		mediator.setImageWhenReady(image);
+		nameText.setText(mediator.getDisplayName());
+
 		return convertView;
-	}
-
-	public boolean verifyDatasetValid() {
-
-		List<DefaultUserInfoMediator> currentPossibleMediators = ZeppaUserSingleton
-				.getInstance().getPossibleFriendInfoMediators();
-		List<DefaultUserInfoMediator> currentPendingMediators = ZeppaUserSingleton
-				.getInstance().getPendingFriendRequests();
-
-		return (possibleConnectionMediators.contains(currentPossibleMediators)
-				&& pendingRequestMediators.containsAll(currentPendingMediators)
-				&& currentPossibleMediators
-						.containsAll(possibleConnectionMediators) && currentPendingMediators
-					.containsAll(pendingRequestMediators));
 	}
 
 	/*
@@ -102,13 +111,40 @@ public class MinglerFinderAdapter extends BaseAdapter {
 
 	}
 
-	private String getHeader(int position) {
-		Resources res = context.getResources();
-		if (position == 0) {
-			return res.getString(R.string.pending_requests);
-		} else {
-			return res.getString(R.string.contacts_using);
+	@Override
+	public void onClick(View v) {
+
+		DefaultUserInfoMediator mediator = (DefaultUserInfoMediator) v.getTag();
+
+		switch (v.getId()) {
+		case R.id.newcontact_confirm_button:
+			mediator.acceptMingleRequest(
+					(ZeppaApplication) context.getApplication(),
+					context.getGoogleAccountCredential());
+
+			break;
+		case R.id.newcontact_deny_button:
+			mediator.removeRelationship(
+					(ZeppaApplication) context.getApplication(),
+					context.getGoogleAccountCredential());
+			break;
+		case R.id.newcontact_senditem_button:
+
+			if (mediator.getUserRelationship() == null) {
+				mediator.sendMingleRequest(
+						(ZeppaApplication) context.getApplication(),
+						context.getGoogleAccountCredential());
+			} else {
+				mediator.removeRelationship(
+						(ZeppaApplication) context.getApplication(),
+						context.getGoogleAccountCredential());
+			} 
+
+			break;
 		}
+
+		ZeppaUserSingleton.getInstance().notifyObservers();
+
 	}
 
 }

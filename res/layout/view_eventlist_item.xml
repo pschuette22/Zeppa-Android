@@ -18,15 +18,15 @@
         <!-- Host Info -->
 
         <LinearLayout
-            android:padding="2dp"
             android:id="@+id/eventview_hostinfo"
-            android:background="@drawable/background_attribute_clickable"
             android:layout_width="66dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:orientation="vertical" >
+            android:background="@drawable/background_attribute_clickable"
+            android:orientation="vertical"
+            android:padding="2dp" >
 
             <ImageView
                 android:id="@+id/eventview_hostimage"
@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:gravity="center_horizontal"/>
+                android:gravity="center_horizontal" />
         </LinearLayout>
 
         <!-- Event Info -->
@@ -51,8 +51,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/eventview_hostinfo"
             android:layout_toEndOf="@id/eventview_hostinfo"
+            android:layout_toRightOf="@id/eventview_hostinfo"
             android:orientation="vertical" >
 
             <!-- Title and conflict indicator -->
@@ -66,8 +66,8 @@
                     android:id="@+id/eventview_conflictionindicator"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:contentDescription="@string/contdesc_conflictionimage" />
 
@@ -87,41 +87,37 @@
 
             <TextView
                 android:id="@+id/eventview_eventtime"
-                style="@style/gray_date_txt12sp"
-                android:layout_width="match_parent"
+                style="@style/black_txt14sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="10dp"
-                android:drawableLeft="@drawable/ic_eventtime"
+                android:drawableLeft="@drawable/ic_time"
                 android:drawablePadding="4dp"
-                android:drawableStart="@drawable/ic_eventtime"
-                android:maxLines="1" />
+                android:drawableStart="@drawable/ic_time"
+                android:gravity="center_vertical|start"
+                android:padding="3dp" />
 
             <TextView
                 android:id="@+id/eventview_eventlocation"
-                style="@style/gray_date_txt12sp"
-                android:layout_width="match_parent"
+                style="@style/black_txt14sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="10dp"
                 android:drawableLeft="@drawable/ic_location"
                 android:drawablePadding="4dp"
                 android:drawableStart="@drawable/ic_location"
-                android:maxLines="1" />
+                android:gravity="center_vertical|start"
+                android:padding="3dp" />
 
             <TextView
                 android:id="@+id/eventview_description"
                 style="@style/black_txt14sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="2dp"
-                android:maxLines="2" />
+                android:maxLines="2"
+                android:paddingBottom="3dp"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -129,8 +125,9 @@
 
     <include
         android:id="@+id/eventview_quickactionbar"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         layout="@layout/view_eventactionbar" />
 
 </LinearLayout>

@@ -2,17 +2,21 @@ package com.minook.zeppa.adapter;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
-import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.singleton.ZeppaUserSingleton.OnMinglersLoadListener;
 
-public class MinglerListAdapter extends BaseAdapter implements OnLoadListener {
+public class MinglerListAdapter extends BaseAdapter implements
+		OnMinglersLoadListener, OnItemClickListener {
 
 	private AuthenticatedFragmentActivity activity;
 	private List<DefaultUserInfoMediator> infoManagers;
@@ -21,8 +25,12 @@ public class MinglerListAdapter extends BaseAdapter implements OnLoadListener {
 			List<DefaultUserInfoMediator> friendInfoManagers) {
 		this.activity = activity;
 
-		this.infoManagers = ZeppaUserSingleton.getInstance()
-				.getFriendInfoMediators();
+		if (friendInfoManagers == null) {
+			this.infoManagers = ZeppaUserSingleton.getInstance()
+					.getFriendInfoMediators();
+		} else {
+			this.infoManagers = friendInfoManagers;
+		}
 	}
 
 	@Override
@@ -49,23 +57,26 @@ public class MinglerListAdapter extends BaseAdapter implements OnLoadListener {
 		}
 		DefaultUserInfoMediator infoManager = getItem(position);
 
-		convertView = infoManager.convertFriendListItemView(activity, convertView);
+		convertView = infoManager.convertFriendListItemView(activity,
+				convertView);
 
 		return convertView;
 	}
 
-	/*
-	 * Load listener methods
-	 */
 	@Override
-	public boolean didLoadInitial() {
-		return ZeppaUserSingleton.getInstance().hasLoadedInitial();
-	}
-
-	@Override
-	public void onFinishLoad() {
+	public void onMinglersLoaded() {
 		notifyDataSetChanged();
+
 	}
 
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		DefaultUserInfoMediator mediator = (DefaultUserInfoMediator) getItem(position);
+		Intent intent = mediator.getToUserIntent(activity);
+		activity.startActivity(intent);
+		activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+		
+	}
 
 }

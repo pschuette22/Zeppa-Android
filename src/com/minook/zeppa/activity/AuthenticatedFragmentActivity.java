@@ -1,14 +1,13 @@
 package com.minook.zeppa.activity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,10 +16,18 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.plus.Plus;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
-import com.minook.zeppa.mediator.AbstractMediator;
+import com.minook.zeppa.PrefsManager;
+import com.minook.zeppa.ZeppaApplication;
+import com.minook.zeppa.runnable.RemoveCurrentDeviceRunnable;
+import com.minook.zeppa.runnable.ThreadManager;
+import com.minook.zeppa.singleton.EventTagSingleton;
+import com.minook.zeppa.singleton.NotificationSingleton;
+import com.minook.zeppa.singleton.ZeppaEventSingleton;
+import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class AuthenticatedFragmentActivity extends FragmentActivity implements
-		ConnectionCallbacks, OnConnectionFailedListener {
+		ConnectionCallbacks, OnConnectionFailedListener, OnClickListener {
 
 	/*
 	 * --------------- Intent Constants ----------------------
@@ -38,8 +45,6 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 	protected final int REQUEST_CODE_RESOLVE_ERR = 8000;
 	protected final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-	private List<AbstractMediator> mediatorsWithContext;
-
 	protected enum Error {
 		CONNECTION_ERROR, LOGIN_ERROR, AUTHENTICATION_ERROR,
 
@@ -56,15 +61,24 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 		connectionProgress = new ProgressDialog(this);
 		connectionProgress.setTitle("Signing in");
 		connectionProgress.setMessage("One Moment Please");
-		mediatorsWithContext = new ArrayList<AbstractMediator>();
+		connectionProgress.setCanceledOnTouchOutside(false);
+		connectionProgress.setCancelable(false);
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 
-		String heldAccountName = getSharedPreferences(Constants.SHARED_PREFS,
-				MODE_PRIVATE).getString(Constants.LOGGED_IN_ACCOUNT, null);
+		if (!(this instanceof LoginActivity)
+				&& !(this instanceof NewAccountActivity)
+				&& ZeppaUserSingleton.getInstance().getUserMediator() == null) {
+			Intent toLogin = new Intent(this, LoginActivity.class);
+			startActivity(toLogin);
+			finish();
+		}
+
+		((ZeppaApplication) getApplication()).setCurrentActivity(this);
+		String heldAccountName = PrefsManager.getLoggedInEmail(getApplication());
 
 		if (heldAccountName != null) {
 			initializeApiClient(heldAccountName);
@@ -84,20 +98,23 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 
 	}
 
-	/**
-	 * Activity view is lost, kill held context
-	 */
-	@Override
-	protected void onPause() {
-		super.onPause();
+	public void onNotificationReceived(ZeppaNotification notification) {
+		Toast.makeText(
+				this,
+				NotificationSingleton.getInstance().getNotificationMessage(
+						notification), Toast.LENGTH_SHORT).show();
 
-		if (!mediatorsWithContext.isEmpty()) {
-			Iterator<AbstractMediator> iterator = mediatorsWithContext
-					.iterator();
-			while (iterator.hasNext()) {
-				iterator.next().killContextIfMatching(this);
-			}
+		// Event Canceled
+		if (NotificationSingleton.getInstance().getNotificationTypeOrder(
+				notification) == 5) {
+			ZeppaEventSingleton.getInstance().removeEventById(
+					notification.getEventId());
+			ZeppaEventSingleton.getInstance().notifyObservers();
 
+		} else if (notification.getType().equalsIgnoreCase(
+				"EVENT_RECOMMENDATION")
+				|| notification.getType().equalsIgnoreCase("DIRECT_INVITE")) {
+			ZeppaEventSingleton.getInstance().notifyObservers();
 		}
 
 	}
@@ -114,32 +131,8 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 		builder.setAccountName(accountName);
 		builder.addApi(Plus.API);
 		builder.addScope(Plus.SCOPE_PLUS_LOGIN);
-//		builder.addScope(new Scope(CalendarScopes.CALENDAR));
 		apiClient = builder.build();
 
-	}
-
-	/**
-	 * This method is so that a given activity knows that its context is held by
-	 * a given mediator
-	 * 
-	 * @param mediator
-	 * @return
-	 */
-	public boolean addHeldContext(AbstractMediator mediator) {
-		boolean success = false;
-
-		if (!mediatorsWithContext.contains(mediator)) {
-			mediatorsWithContext.add(mediator);
-			success = true;
-		}
-
-		return success;
-
-	}
-
-	public boolean removeHeldContext(AbstractMediator mediator) {
-		return mediatorsWithContext.remove(mediator);
 	}
 
 	public boolean isConnected() {
@@ -161,26 +154,9 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 
 		credential.setSelectedAccountName(Plus.AccountApi
 				.getAccountName(apiClient));
-		
+
 		return credential;
 	}
-
-//	/**
-//	 * 
-//	 * @return Credential used for accessing Google Calendar API
-//	 */
-//	public GoogleAccountCredential getGoogleCalendarCredential() {
-//
-//		GoogleAccountCredential credential = GoogleAccountCredential
-//				.usingOAuth2(this,
-//						Collections.singleton(CalendarScopes.CALENDAR));
-//
-//		
-//		credential.setSelectedAccountName(Plus.AccountApi
-//				.getAccountName(apiClient));
-//
-//		return credential;
-//	}
 
 	/**
 	 * This method clears the current account address and launches Login
@@ -190,59 +166,22 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 	public void logout() {
 		getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE).edit()
 				.remove(Constants.LOGGED_IN_ACCOUNT).commit();
+		getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE).edit()
+				.remove(Constants.LOGGED_IN_USER_ID).commit();
+
+		ThreadManager.execute(new RemoveCurrentDeviceRunnable(
+				(ZeppaApplication) getApplication(),
+				getGoogleAccountCredential()));
+
+		EventTagSingleton.getInstance().restore();
+		NotificationSingleton.getInstance().restore();
+		ZeppaEventSingleton.getInstance().restore();
+		ZeppaUserSingleton.getInstance().restore();
+
 		Intent toLogin = new Intent(this, LoginActivity.class);
 		startActivity(toLogin);
 		finish();
 	}
-
-	// public String getApiAuthToken() {
-	// String result = null;
-	// Bundle appActivities = new Bundle();
-	// appActivities.putString(GoogleAuthUtil.KEY_REQUEST_VISIBLE_ACTIVITIES,
-	// "AuthenticatedFragmentActivity");
-	// String scopes = "oauth2:server:client_id:"
-	// + Constants.APP_ENGINE_CLIENT_ID + ":api_scope:"
-	// + CalendarScopes.CALENDAR + " " + PlusScopes.USERINFO_PROFILE;
-	// try {
-	// result = GoogleAuthUtil.getToken(this, // Context context
-	// Plus.AccountApi.getAccountName(apiClient), // String
-	// // accountName
-	// scopes, // String scope
-	// appActivities // Bundle bundle
-	// );
-	//
-	// } catch (IOException transientEx) {
-	// // network or server error, the call is expected to succeed if you
-	// // try again later.
-	// // Don't attempt to call again immediately - the request is likely
-	// // to
-	// // fail, you'll hit quotas or back-off.
-	//
-	// return null;
-	// } catch (UserRecoverableAuthException e) {
-	// // Requesting an authorization code will always throw
-	// // UserRecoverableAuthException on the first call to
-	// // GoogleAuthUtil.getToken
-	// // because the user must consent to offline access to their data.
-	// // After
-	// // consent is granted control is returned to your activity in
-	// // onActivityResult
-	// // and the second call to GoogleAuthUtil.getToken will succeed.
-	// startActivityForResult(e.getIntent(), AUTH_CODE_REQUEST_CODE);
-	//
-	// return null;
-	// } catch (GoogleAuthException authEx) {
-	// // Failure. The call is not expected to ever succeed so it should
-	// // not be
-	// // retried.
-	//
-	// return null;
-	// } catch (Exception e) {
-	// throw new RuntimeException(e);
-	// }
-	//
-	// return result;
-	// }
 
 	/*
 	 * --------------- My Methods ----------------------
@@ -288,17 +227,23 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
-
+		// Do Nothing
 	}
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		// API Client is now connected
+		// Do Nothing
 
 	}
 
 	@Override
 	public void onConnectionSuspended(int cause) {
+		// Do Nothing
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
 
 	}
 

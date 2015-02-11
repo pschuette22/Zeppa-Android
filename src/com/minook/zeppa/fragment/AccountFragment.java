@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,6 +40,9 @@ public class AccountFragment extends Fragment implements OnClickListener {
 	private TextView displayName;
 	private TextView phoneNumber;
 	private TextView emailAddress;
+	private TextView addNewTag;
+	private EditText newTagText;
+
 	private LinearLayout eventHolder;
 
 	/*
@@ -63,34 +67,27 @@ public class AccountFragment extends Fragment implements OnClickListener {
 		eventHolder = (LinearLayout) layout
 				.findViewById(R.id.accountfragment_eventholder);
 
-		userMediator.setImageWhenReady(userImage);
-		displayName.setText(userMediator.getDisplayName());
+		newTagText = (EditText) layout
+				.findViewById(R.id.accountfragment_tagtext);
+		addNewTag = (TextView) layout
+				.findViewById(R.id.accountfragment_addnewtag);
+		addNewTag.setOnClickListener(this);
 
-		try {
-			phoneNumber.setText(userMediator.getPrimaryPhoneNumber());
-		} catch (NullPointerException e) {
-			phoneNumber.setVisibility(View.GONE);
-		}
-		emailAddress.setText(userMediator.getGmail());
-
-		// Handle tag stuff
 		LinearLayout tagHolder = (LinearLayout) layout
 				.findViewById(R.id.accountfragment_tagholder);
 
 		tagAdapter = new MyTagAdapter(
 				(AuthenticatedFragmentActivity) getActivity(), tagHolder, null);
 		tagAdapter.drawTags();
-
-		// Events list
-
+		
 		eventAdapter = new MyEventsAdapter(
 				(AuthenticatedFragmentActivity) getActivity(), eventHolder);
-
 		try {
 			eventAdapter.drawEvents();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		
 		return layout;
 	}
@@ -104,8 +101,36 @@ public class AccountFragment extends Fragment implements OnClickListener {
 
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setTitle(R.string.my_profile);
-
 		setHasOptionsMenu(true);
+
+		userMediator.setImageWhenReady(userImage);
+		displayName.setText(userMediator.getDisplayName());
+		
+		try {
+			phoneNumber.setText(userMediator.getPrimaryPhoneNumber());
+		} catch (NullPointerException e) {
+			phoneNumber.setVisibility(View.GONE);
+		}
+		emailAddress.setText(userMediator.getGmail());
+
+		// Handle tag stuff
+		
+		if(!tagAdapter.tagsAreCurrent()){
+			tagAdapter.notifyDataSetChanged();
+			tagAdapter.drawTags();
+		}
+		
+
+		// Events list
+
+		if(!eventAdapter.isUpToDate()){
+			eventAdapter.notifyDataSetChanged();
+			try {
+				eventAdapter.drawEvents();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 
@@ -137,6 +162,13 @@ public class AccountFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.accountfragment_addnewtag:
+
+			if (newTagText.isEnabled()) {
+				tagAdapter.createTagInAsync(newTagText);
+			}
+
+			break;
 
 		}
 

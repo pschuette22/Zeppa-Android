@@ -2,7 +2,6 @@ package com.minook.zeppa.adapter.eventlistadapter;
 
 import java.util.List;
 
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
@@ -26,14 +25,21 @@ public class MyEventsAdapter extends AbstractEventLayoutAdapter {
 	}
 
 
-
-
 	@Override
 	protected List<AbstractZeppaEventMediator> getCurrentEventMediators() {
 		// TODO Auto-generated method stub
 		return ZeppaEventSingleton.getInstance().getHostedEventMediators();
 	}
 
+	public boolean isUpToDate(){
+		List<AbstractZeppaEventMediator> current = getCurrentEventMediators();
+		
+		if(eventMediators == null){
+			return false;
+		}
+		
+		return (current.containsAll(eventMediators) && eventMediators.containsAll(current));
+	}
 
 
 }

@@ -14,39 +14,43 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
-import com.google.api.client.json.gson.GsonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
-import com.minook.zeppa.adapter.eventlistadapter.AbstractEventListAdapter;
+import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
-import com.minook.zeppa.task.FetchHostedEventsTask;
-import com.minook.zeppa.task.FetchJoinableEventsTask;
+import com.minook.zeppa.runnable.FetchMoreEventsRunnable;
+import com.minook.zeppa.runnable.FetchNewEventsRunnable;
+import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.zeppaeventendpoint.Zeppaeventendpoint;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
-import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint;
-import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint.ListZeppaEventToUserRelationship;
-import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.CollectionResponseZeppaEventToUserRelationship;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
+import com.tyczj.extendedcalendarview.Event;
 
 public class ZeppaEventSingleton {
 
-	private final String TAG = "ZeppaEventSingleton";
+	public interface OnZeppaEventLoadListener {
+		public void onZeppaEventsLoaded();
+	}
+
+	private final String TAG = ZeppaEventSingleton.class.getName();
 
 	private static ZeppaEventSingleton singleton;
 
 	private List<AbstractZeppaEventMediator> eventMediators;
-	private List<AbstractEventListAdapter> eventAdapters;
+	private List<OnZeppaEventLoadListener> eventLoadListeners;
 
 	private boolean hasLoadedInitialEvents;
-	private boolean hasLoadedInitialHostedEvent;
-	private boolean hasLoadedInitialFeedEvents;
+	private boolean isLoadingEvents;
+	private boolean isMoreEvents;
 
 	private String nextRelationshipPageToken;
-	private Long lastUpdateCallTime;
+	private long lastUpdateCallTime;
 
 	/*
 	 * Instance Handlers
@@ -61,11 +65,12 @@ public class ZeppaEventSingleton {
 	private ZeppaEventSingleton() {
 
 		hasLoadedInitialEvents = false;
-		hasLoadedInitialHostedEvent = false;
-		hasLoadedInitialFeedEvents = false;
+		isLoadingEvents = false;
+		isMoreEvents = true;
 
 		eventMediators = new ArrayList<AbstractZeppaEventMediator>();
-		eventAdapters = new ArrayList<AbstractEventListAdapter>();
+		eventLoadListeners = new ArrayList<OnZeppaEventLoadListener>();
+		this.lastUpdateCallTime = System.currentTimeMillis();
 	}
 
 	/**
@@ -81,15 +86,21 @@ public class ZeppaEventSingleton {
 		return singleton;
 	}
 
-	public void loadInitialEvents(GoogleAccountCredential credential,
-			Long userId) {
-		new FetchHostedEventsTask(credential, userId).execute();
-		new FetchJoinableEventsTask(credential, userId,
-				nextRelationshipPageToken).execute();
+	public void restore() {
+		singleton = new ZeppaEventSingleton();
+	}
+
+	public void clear() {
+		eventMediators.clear();
 	}
 
 	public void setNextRelationshipPageToken(String token) {
 		this.nextRelationshipPageToken = token;
+
+		if (token == null) {
+			isMoreEvents = false;
+		}
+
 	}
 
 	public void setLastUpdateCallTime(long callTime) {
@@ -109,52 +120,47 @@ public class ZeppaEventSingleton {
 		if (!eventMediators.isEmpty()) {
 			long currentTime = System.currentTimeMillis();
 
-			boolean changeMade = false;
 			Iterator<AbstractZeppaEventMediator> iterator = eventMediators
 					.iterator();
 
+			List<AbstractZeppaEventMediator> remove = new ArrayList<AbstractZeppaEventMediator>();
 			while (iterator.hasNext()) {
 				AbstractZeppaEventMediator mediator = iterator.next();
 				if (mediator.getEndInMillis().longValue() < currentTime) {
-					eventMediators.remove(mediator);
-					changeMade = true;
+					remove.add(mediator);
+					NotificationSingleton.getInstance()
+							.removeNotificationsForEvent(
+									mediator.getEventId().longValue());
 				}
 			}
 
-			if (changeMade) {
-				notifyObservers();
-			}
+			eventMediators.removeAll(remove);
 
 		}
 	}
 
-	/*
-	 * ----------- New Instances ---------
-	 */
+	public void removeEventById(long eventId) {
 
-	public ZeppaEvent newRepostEventInstance(ZeppaEvent repostEvent) {
+		if (!eventMediators.isEmpty()) {
 
-		ZeppaEvent event = new ZeppaEvent();
-		event.setHostId(ZeppaUserSingleton.getInstance().getUserId());
-		event.setRepostedEventId(repostEvent.getKey().getId());
+			AbstractZeppaEventMediator remove = null;
+			Iterator<AbstractZeppaEventMediator> iterator = eventMediators
+					.iterator();
+			while (iterator.hasNext()) {
+				AbstractZeppaEventMediator mediator = iterator.next();
+				if (mediator.getEventId().longValue() == eventId) {
+					remove = mediator;
+					NotificationSingleton.getInstance()
+							.removeNotificationsForEvent(eventId);
+					break;
+				}
 
-		if (repostEvent.getOriginalEventId() == null) {
-			event.setOriginalEventId(repostEvent.getKey().getId());
-		} else {
-			event.setOriginalEventId(repostEvent.getOriginalEventId());
+			}
+			if (remove != null) {
+				eventMediators.remove(remove);
+			}
 		}
 
-		event.setDescription(repostEvent.getDescription());
-		event.setDisplayLocation(repostEvent.getDisplayLocation());
-		event.setMapsLocation(repostEvent.getMapsLocation());
-		event.setPrivacy(repostEvent.getPrivacy());
-		event.setStart(repostEvent.getStart());
-		event.setEnd(repostEvent.getEnd());
-		event.setGoogleCalendarEventId(repostEvent.getGoogleCalendarEventId());
-		event.setGoogleCalendarId(repostEvent.getGoogleCalendarId());
-		event.setICalUID(repostEvent.getICalUID());
-
-		return event;
 	}
 
 	/*
@@ -181,31 +187,57 @@ public class ZeppaEventSingleton {
 		return hasLoadedInitialEvents;
 	}
 
-	public boolean hasLoadedInitialHostedEvents() {
-		return hasLoadedInitialHostedEvent;
-	}
-
-	public void setHasLoadedInitialHostedEvents() {
-		hasLoadedInitialHostedEvent = true;
-		if (hasLoadedInitialFeedEvents) {
-			onInitialEventsLoaded();
-		}
-	}
-
-	public boolean hasLoadedInitialFeedEvents() {
-		return hasLoadedInitialFeedEvents;
-	}
-
-	public void setHasLoadedInitialFeedEvents() {
-		hasLoadedInitialFeedEvents = true;
-		if (hasLoadedInitialHostedEvent) {
-			onInitialEventsLoaded();
-		}
-	}
-
-	private void onInitialEventsLoaded() {
+	public void onInitialEventsLoaded() {
 		hasLoadedInitialEvents = true;
+		isLoadingEvents = false;
 		notifyObservers();
+	}
+
+	public void onFinishLoading() {
+		isLoadingEvents = false;
+		notifyObservers();
+	}
+
+	/**
+	 * Register an adapter listening for changes made to the events list
+	 * 
+	 * @param adapter
+	 */
+	public void registerObserver(OnZeppaEventLoadListener listener) {
+		if (!eventLoadListeners.contains(listener)) {
+			eventLoadListeners.add(listener);
+		}
+	}
+
+	/**
+	 * Unregister an adapter listening for changes made to the events list
+	 * 
+	 * @param adapter
+	 */
+	public void unregisterObserver(OnZeppaEventLoadListener listener) {
+		eventLoadListeners.remove(listener);
+	}
+
+	/**
+	 * When change is made to the events list (or a relationship is updated),
+	 * notify waiting adapters
+	 */
+	public void notifyObservers() {
+		clearOldEvents();
+		if (!eventLoadListeners.isEmpty()) {
+			Iterator<OnZeppaEventLoadListener> iterator = eventLoadListeners
+					.iterator();
+			while (iterator.hasNext()) {
+				try {
+					OnZeppaEventLoadListener listener = iterator.next();
+					listener.onZeppaEventsLoaded();
+				} catch (Exception e) {
+					e.printStackTrace();
+
+				}
+
+			}
+		}
 	}
 
 	public List<AbstractZeppaEventMediator> getEventMediators() {
@@ -226,6 +258,7 @@ public class ZeppaEventSingleton {
 
 	public List<AbstractZeppaEventMediator> getEventMediatorsForFriend(
 			long userId) {
+		clearOldEvents();
 		List<AbstractZeppaEventMediator> friendEvents = new ArrayList<AbstractZeppaEventMediator>();
 		Iterator<AbstractZeppaEventMediator> iterator = eventMediators
 				.iterator();
@@ -245,6 +278,7 @@ public class ZeppaEventSingleton {
 	 * @return list of
 	 */
 	public List<AbstractZeppaEventMediator> getHostedEventMediators() {
+		clearOldEvents();
 		long userId = getUserId();
 		List<AbstractZeppaEventMediator> hostedEventMediators = new ArrayList<AbstractZeppaEventMediator>();
 		for (AbstractZeppaEventMediator mediator : eventMediators) {
@@ -266,102 +300,43 @@ public class ZeppaEventSingleton {
 	 *         a relationship to it: Attending or Watching for v1
 	 */
 	public List<AbstractZeppaEventMediator> getInterestingEventMediators() {
+		clearOldEvents();
 		List<AbstractZeppaEventMediator> interestingEventMediators = new ArrayList<AbstractZeppaEventMediator>();
-		for (AbstractZeppaEventMediator facade : eventMediators) {
-			if (facade.isAgendaEvent()) {
-				interestingEventMediators.add(facade);
+		for (AbstractZeppaEventMediator mediator : eventMediators) {
+			if (mediator.isAgendaEvent()) {
+				interestingEventMediators.add(mediator);
 			}
 		}
 		Collections.sort(interestingEventMediators);
 		return interestingEventMediators;
 	}
 
-	// public Long getMyRepostId(Long originalId) {
-	// Long repostId = Long.valueOf(-1);
-	// Long userId = getUserId();
-	// for (ZeppaEvent event : events) {
-	// if (event.getHostId().equals(userId)
-	// && event.getKey().getId().equals(originalId)) {
-	// return event.getKey().getId();
-	// }
-	// }
-	//
-	// return repostId;
-	// }
-	//
-	// public List<ZeppaEvent> getEventsFor(long userId) {
-	// List<ZeppaEvent> friendEvents = new ArrayList<ZeppaEvent>();
-	//
-	// for (ZeppaEvent event : events) {
-	// if (event.getHostId().longValue() == userId) {
-	// friendEvents.add(event);
-	// }
-	// }
-	//
-	// return friendEvents;
-	// }
-	//
-	// public ZeppaEvent getZeppaEventFor(Event event) {
-	// ZeppaEvent result = null;
-	//
-	// for (ZeppaEvent zeppaEvent : events) {
-	// if (zeppaEvent.getTitle().equals(event.title)
-	// && zeppaEvent.getStart().longValue() == event
-	// .getStartMillis()
-	// && zeppaEvent.getEnd().longValue() == event.getEndMillis()) {
-	// result = zeppaEvent;
-	// break;
-	// }
-	//
-	// }
-	// return result;
-	// }
+	public AbstractZeppaEventMediator getMatchingEventMediator(Event event) {
 
-	/*
-	 * Setters
-	 */
+		Iterator<AbstractZeppaEventMediator> iterator = eventMediators
+				.iterator();
+		while (iterator.hasNext()) {
 
-	/**
-	 * Register an adapter listening for changes made to the events list
-	 * 
-	 * @param adapter
-	 */
-	public void registerObserver(AbstractEventListAdapter adapter) {
-		if (!eventAdapters.contains(adapter)) {
-			eventAdapters.add(adapter);
-		}
-	}
+			AbstractZeppaEventMediator mediator = iterator.next();
+			String mTitle = mediator.getTitle();
+			String eTitle = event.getTitle();
 
-	/**
-	 * Unregister an adapter listening for changes made to the events list
-	 * 
-	 * @param adapter
-	 */
-	public void unregisterObserver(AbstractEventListAdapter adapter) {
-		eventAdapters.remove(adapter);
-	}
+			// Get start and end times. remove milliseconds for compatibility
+			long mStart = (mediator.getStartInMillis().longValue() / 1000) * 1000;
+			long eStart = event.getStartTime();
 
-	/**
-	 * When change is made to the events list (or a relationship is updated),
-	 * notify waiting adapters
-	 */
-	public void notifyObservers() {
-		if (!eventAdapters.isEmpty()) {
-			Iterator<AbstractEventListAdapter> iterator = eventAdapters
-					.iterator();
-			while (iterator.hasNext()) {
-				AbstractEventListAdapter adapter = iterator.next();
-				try {
-					adapter.verifyDatasetValid();
+			long mEnd = (mediator.getEndInMillis().longValue() / 1000) * 1000;
+			long eEnd = event.getEndTime();
 
-				} catch (Exception e) {
-					e.printStackTrace();
-					unregisterObserver(adapter);
+			if (mTitle.equals(eTitle) && (mStart == eStart) && (mEnd == eEnd)) {
 
-				}
+				return mediator;
 
 			}
+
 		}
+
+		return null;
 	}
 
 	/*
@@ -399,15 +374,24 @@ public class ZeppaEventSingleton {
 	 */
 
 	/**
-	 * This adds a mediator to a the list and notifies the observers
+	 * This adds a mediator to a the list and notifies the observers This method
+	 * assumes that the event is not already held
 	 * 
 	 * @param mediator
 	 */
-	public void addMediator(AbstractZeppaEventMediator mediator, boolean notify) {
-		this.eventMediators.add(mediator);
-		if (notify) {
-			notifyObservers();
+	public void addMediator(AbstractZeppaEventMediator mediator) {
+
+		Iterator<AbstractZeppaEventMediator> iterator = eventMediators
+				.iterator();
+		while (iterator.hasNext()) {
+			AbstractZeppaEventMediator m = iterator.next();
+			if (m.getEventId().longValue() == mediator.getEventId().longValue()) {
+				return;
+			}
+
 		}
+
+		this.eventMediators.add(mediator);
 	}
 
 	/**
@@ -425,6 +409,22 @@ public class ZeppaEventSingleton {
 
 		return success;
 	}
+	
+	public void removeMediatorsForUser(long userId){
+		Iterator<AbstractZeppaEventMediator> iterator = eventMediators.iterator();
+		List<AbstractZeppaEventMediator> removalList = new ArrayList<AbstractZeppaEventMediator>();
+		
+		while(iterator.hasNext()){
+			AbstractZeppaEventMediator mediator = iterator.next();
+			if(mediator.getHostId().longValue() == userId && !((DefaultZeppaEventMediator)mediator).isAttending()){
+				removalList.add(mediator);
+				NotificationSingleton.getInstance().removeNotificationsForEvent(mediator.getEventId().longValue());
+			}
+		}
+		
+		eventMediators.remove(removalList);
+		
+	}
 
 	/**
 	 * This method returns true if relationship is already held with event to
@@ -435,19 +435,19 @@ public class ZeppaEventSingleton {
 	 */
 	public boolean relationshipAlreadyHeld(
 			ZeppaEventToUserRelationship relationship) {
-		if (eventMediators.isEmpty()) {
-			return false;
-		}
+		if (!eventMediators.isEmpty()) {
 
-		Iterator<AbstractZeppaEventMediator> iterator = eventMediators
-				.iterator();
-		while (iterator.hasNext()) {
-			AbstractZeppaEventMediator mediator = iterator.next();
-			if ((mediator instanceof DefaultZeppaEventMediator)
-					&& ((DefaultZeppaEventMediator) mediator)
-							.relationshipDoesMatch(relationship)) {
-				return true;
+			Iterator<AbstractZeppaEventMediator> iterator = eventMediators
+					.iterator();
+			while (iterator.hasNext()) {
+				AbstractZeppaEventMediator mediator = iterator.next();
+				if ((mediator instanceof DefaultZeppaEventMediator)
+						&& ((DefaultZeppaEventMediator) mediator)
+								.relationshipDoesMatch(relationship)) {
+					return true;
+				}
 			}
+
 		}
 
 		return false;
@@ -457,80 +457,33 @@ public class ZeppaEventSingleton {
 	 * ------------ Loader Method ---------------
 	 */
 
-	/**
-	 * This method verifies that an event and relationship are held or loads
-	 * them by event ID THIS METHOD IS NOT THREAD SAFE
-	 * 
-	 * @param eventId
-	 * @param credential
-	 * @return true if event found or successfully loaded
-	 */
-	public boolean fetchEventAndRelationshipWithBlocking(
-			GoogleAccountCredential credential, Long eventId) {
+	public void fetchNewEventsInAsync(ZeppaApplication application,
+			GoogleAccountCredential credential,
+			PullToRefreshLayout pullToRefresh) {
 
-		if (getEventById(eventId) == null) {
+		if (isLoadingEvents) {
+			return;
+		}
 
-			Zeppaeventendpoint endpointEvent = buildEventEndpoint(credential);
-			Zeppaeventtouserrelationshipendpoint endpointRelationship = buildEventRelationshipEndpoint(credential);
-
-			try {
-				ZeppaEvent event = endpointEvent.getZeppaEvent(eventId)
-						.execute();
-
-				ListZeppaEventToUserRelationship listRelationshipsTask = endpointRelationship
-						.listZeppaEventToUserRelationship();
-				listRelationshipsTask.setFilter("userId == "
-						+ ZeppaUserSingleton.getInstance().getUserId()
-								.longValue() + " && eventId == "
-						+ eventId.longValue());
-				listRelationshipsTask.setLimit(Integer.valueOf(1)); // Only
-																	// retrieve
-																	// 1
-
-				CollectionResponseZeppaEventToUserRelationship response = listRelationshipsTask
-						.execute();
-
-				if (response.getItems().isEmpty()) {
-					return false;
-				}
-
-				ZeppaEventToUserRelationship relationship = response.getItems()
-						.get(0);
-
-				addMediator(new DefaultZeppaEventMediator(event, relationship),
-						true);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
-
-			return true;
-		} else
-			return true;
-
+		isLoadingEvents = true;
+		ThreadManager.execute(new FetchNewEventsRunnable(application,
+				credential, ZeppaUserSingleton.getInstance().getUserId()
+						.longValue(), lastUpdateCallTime));
+		lastUpdateCallTime = Long.valueOf(System.currentTimeMillis());
 	}
 
-	private Zeppaeventendpoint buildEventEndpoint(
+	public void fetchMoreEvents(ZeppaApplication application,
 			GoogleAccountCredential credential) {
-		Zeppaeventendpoint.Builder builder = new Zeppaeventendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		CloudEndpointUtils.updateBuilder(builder);
-		Zeppaeventendpoint endpoint = builder.build();
 
-		return endpoint;
-	}
+		if (isLoadingEvents || !isMoreEvents) {
+			return;
+		}
 
-	private Zeppaeventtouserrelationshipendpoint buildEventRelationshipEndpoint(
-			GoogleAccountCredential credential) {
-		Zeppaeventtouserrelationshipendpoint.Builder builder = new Zeppaeventtouserrelationshipendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		CloudEndpointUtils.updateBuilder(builder);
-		Zeppaeventtouserrelationshipendpoint endpoint = builder.build();
+		isLoadingEvents = true;
+		ThreadManager.execute(new FetchMoreEventsRunnable(application,
+				credential, ZeppaUserSingleton.getInstance().getUserId()
+						.longValue(), nextRelationshipPageToken));
 
-		return endpoint;
 	}
 
 }

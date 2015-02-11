@@ -1,19 +1,12 @@
 package com.minook.zeppa.gcm;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.IntentService;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -25,18 +18,22 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
-import com.minook.zeppa.R;
+import com.minook.zeppa.PrefsManager;
+import com.minook.zeppa.ZeppaApplication;
+import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
+import com.minook.zeppa.mediator.DefaultUserInfoMediator;
+import com.minook.zeppa.runnable.NotificationReceivedRunnable;
+import com.minook.zeppa.runnable.ThreadManager;
+import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.NotificationSingleton;
+import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class ZeppaGCMIntentService extends IntentService implements
 		ConnectionCallbacks, OnConnectionFailedListener {
 
 	private static final String TAG = ZeppaGCMIntentService.class.getName();
-	public static final int NOTIFICATION_ID = 1;
 
-	private static NotificationManager mNotificationManager;
 	private static GoogleApiClient apiClient;
 	private static List<Intent> notificationIntents;
 
@@ -76,13 +73,65 @@ public class ZeppaGCMIntentService extends IntentService implements
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
 					.equals(messageType)) {
 				// This loop represents the service doing some work
-				Log.d(TAG, "Received Notification with Payload");
-				notificationIntents.add(intent);
 
-				if (apiClient != null && apiClient.isConnected()) {
-					fetchNotificationsAndPushInAsync(getGoogleAccountCredential());
-				} else if (apiClient == null || !apiClient.isConnecting()) {
-					connectApiClient();
+				if (intent.getExtras().getString("purpose")
+						.equalsIgnoreCase("payload")) {
+					Log.d(TAG, "Received Notification with Payload");
+					notificationIntents.add(intent);
+
+					if (apiClient != null && apiClient.isConnected()) {
+						executeNotificationRunnables(getApplication(),
+								getGoogleAccountCredential());
+					} else if (apiClient == null || !apiClient.isConnecting()) {
+						connectApiClient();
+					}
+
+				} else if (intent.getExtras().getString("purpose")
+						.equalsIgnoreCase("unmingle")) {
+					long userId = Long.valueOf(intent.getExtras().getString(
+							"fromUserId"));
+					try {
+
+						DefaultUserInfoMediator mediator = (DefaultUserInfoMediator) ZeppaUserSingleton
+								.getInstance().getAbstractUserMediatorById(
+										userId);
+						mediator.setUserRelationship(null);
+						ZeppaEventSingleton.getInstance()
+								.removeMediatorsForUser(userId);
+						EventTagSingleton.getInstance().removeEventTagsForUser(
+								userId);
+
+						ZeppaUserSingleton.getInstance().notifyObservers();
+						ZeppaEventSingleton.getInstance().notifyObservers();
+						NotificationSingleton.getInstance().notifyObservers();
+						
+					} catch (NullPointerException e) {
+						e.printStackTrace();
+					}
+
+				} else if(intent.getExtras().getString("purpose")
+						.equalsIgnoreCase("accountdeleted")){
+					
+					long userId = Long.valueOf(intent.getExtras().getString(
+							"fromUserId"));
+					try {
+
+						DefaultUserInfoMediator mediator = (DefaultUserInfoMediator) ZeppaUserSingleton
+								.getInstance().getAbstractUserMediatorById(
+										userId);
+						mediator.setUserRelationship(null);
+						ZeppaEventSingleton.getInstance()
+								.removeMediatorsForUser(userId);
+						EventTagSingleton.getInstance().removeEventTagsForUser(
+								userId);
+
+						ZeppaUserSingleton.getInstance().notifyObservers();
+						ZeppaEventSingleton.getInstance().notifyObservers();
+						NotificationSingleton.getInstance().notifyObservers();
+						
+					} catch (NullPointerException e) {
+						e.printStackTrace();
+					}
 				}
 
 			}
@@ -139,90 +188,40 @@ public class ZeppaGCMIntentService extends IntentService implements
 		return credential;
 	}
 
-	private void fetchNotificationsAndPushInAsync(
+	/**
+	 * This method handles fetching the notification data and related elements
+	 * It then verifies that the correct user received the notification and
+	 * dispatches a push notification if appropriate
+	 * 
+	 * @param context
+	 * @param credential
+	 */
+	private void executeNotificationRunnables(Context context,
 			GoogleAccountCredential credential) {
 		Log.d(TAG, "Fetching Notifications");
 		if (notificationIntents.isEmpty()) {
 			Log.d(TAG, "Notifications Intents Empty");
 		} else {
 
-			Object[] params = { credential };
-			new AsyncTask<Object, Void, Void>() {
+			// Copy intents and clear global list
+			List<Intent> copyIntents = new ArrayList<Intent>();
+			copyIntents.addAll(notificationIntents);
+			notificationIntents.clear();
 
-				@Override
-				protected Void doInBackground(Object... params) {
+			Iterator<Intent> iterator = copyIntents.iterator();
 
-					GoogleAccountCredential credential = (GoogleAccountCredential) params[0];
+			while (iterator.hasNext()) {
+				Intent intent = iterator.next();
+				Long notificationId = Long.valueOf(intent.getExtras()
+						.getString("notificationId"));
 
-					try {
+				ThreadManager.execute(new NotificationReceivedRunnable(
+						(ZeppaApplication) getApplication(), credential,
+						notificationId.longValue(), PrefsManager
+								.getLoggedInUserId(getApplication())));
 
-						// Verify that the application is logged in as the given
-						// user
-						ZeppaUserSingleton.getInstance()
-								.fetchLoggedInUserWithBlocking(credential);
+			}
 
-						Iterator<Intent> iterator = notificationIntents
-								.iterator();
-
-						while (iterator.hasNext()) {
-							Intent intent = iterator.next();
-							Long notificationId = Long.valueOf(intent
-									.getExtras().getString("notificationId"));
-
-							ZeppaNotification notification = NotificationSingleton
-									.getInstance()
-									.fetchNotificationAndElementsWithBlocking(
-											credential, notificationId);
-							if (notification != null) {
-								pushZeppaNotification(notification);
-							}
-
-							notificationIntents.remove(intent);
-						}
-
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					return null;
-				}
-
-			}.execute(params);
-
-
-		}
-
-	}
-
-	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
-	private void pushZeppaNotification(ZeppaNotification notification) {
-
-		mNotificationManager = (NotificationManager) this
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-
-		Notification.Builder mBuilder = new Notification.Builder(this)
-				.setSmallIcon(R.drawable.zeppa_icon)
-				.setAutoCancel(true)
-				.setContentTitle(
-						NotificationSingleton.getInstance()
-								.getNotificationTitle(notification))
-				.setContentText(
-						NotificationSingleton.getInstance()
-								.getNotificationMessage(notification));
-
-		PendingIntent intent = NotificationSingleton.getInstance()
-				.getPendingIntent(this, notification);
-		if (intent != null) {
-			mBuilder.setContentIntent(intent);
-		}
-
-		if (Build.VERSION.SDK_INT >= 16) {
-			mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-		} else {
-			mNotificationManager.notify(NOTIFICATION_ID,
-					mBuilder.getNotification());
 		}
 
 	}
@@ -230,7 +229,8 @@ public class ZeppaGCMIntentService extends IntentService implements
 	@Override
 	public void onConnected(Bundle connectionHint) {
 
-		fetchNotificationsAndPushInAsync(getGoogleAccountCredential());
+		executeNotificationRunnables(getApplication(),
+				getGoogleAccountCredential());
 
 	}
 

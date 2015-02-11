@@ -66,6 +66,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
@@ -76,7 +77,9 @@ import com.minook.zeppa.fragment.HomeFragment;
 import com.minook.zeppa.fragment.MinglersFragment;
 import com.minook.zeppa.fragment.SettingsFragment;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
+import com.minook.zeppa.singleton.NotificationSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class MainActivity extends AuthenticatedFragmentActivity {
 
@@ -87,11 +90,9 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 	private DrawerLayout drawerLayout;
 	private LinearLayout navigationCabinet;
 	private ListView navigationList;
-	private ListView activityList;
 	private String[] navigationOptions;
 	private ActionBarDrawerToggle drawerToggle;
 	private NavigationItemAdapter navListAdapter;
-	private NotificationsAdapter notifictionsAdapter;
 
 	// Navigation options:
 	private AccountFragment accountFragment;
@@ -117,7 +118,6 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		navigationList = (ListView) findViewById(R.id.navigation_drawer_list);
-		activityList = (ListView) findViewById(R.id.activity_drawer_list);
 		navigationCabinet = (LinearLayout) findViewById(R.id.navigation_cabinet);
 
 		// Options Menu setup
@@ -131,16 +131,6 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 			}
 
 			public void onDrawerOpened(View view) {
-
-				if (view.equals(activityList)
-						&& drawerLayout.isDrawerOpen(navigationCabinet)) {
-					drawerLayout.closeDrawer(navigationCabinet);
-				}
-
-				if (view.equals(navigationCabinet)
-						&& drawerLayout.isDrawerOpen(activityList)) {
-					drawerLayout.closeDrawer(activityList);
-				}
 
 				invalidateOptionsMenu();
 			}
@@ -157,16 +147,13 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 		navigationList.setOnItemClickListener(navListAdapter);
 		navigationList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-		if (notifictionsAdapter == null)
-			notifictionsAdapter = new NotificationsAdapter(this, activityList);
-
-		activityList.setAdapter(notifictionsAdapter);
-
 		drawerLayout.setDrawerListener(drawerToggle);
 
 		int currentPage = currentPage();
 		if (currentPage < 0) {
 			selectItem(1, false);
+			if(getIntent().getExtras().getBoolean(Constants.INTENT_NOTIFICATIONS));
+
 		} else {
 			selectItem(currentPage, false);
 		}
@@ -187,17 +174,10 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 			return true;
 		}
 
-		if (drawerLayout.isDrawerVisible(navigationCabinet)
-				|| drawerLayout.isDrawerVisible(activityList)) {
+		if (drawerLayout.isDrawerVisible(navigationCabinet)) {
 
 			drawerLayout.closeDrawers();
 			return true;
-		}
-
-		if (item.getItemId() == R.id.action_activity) {
-
-			drawerLayout.openDrawer(activityList);
-
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -212,8 +192,7 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 	@Override
 	public void onBackPressed() {
 		// Close Drawer if Open
-		if (drawerLayout.isDrawerVisible(navigationCabinet)
-				|| drawerLayout.isDrawerVisible(activityList)) {
+		if (drawerLayout.isDrawerVisible(navigationCabinet)) {
 			drawerLayout.closeDrawers();
 			return;
 		}
@@ -359,7 +338,7 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 				} else {
 					profileName.setText("Error Occured!");
 				}
-				
+
 			} else {
 
 				convertView = getLayoutInflater().inflate(layoutRes, parent,
@@ -418,5 +397,5 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 		}
 
 	}
-
+	
 }

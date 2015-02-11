@@ -17,18 +17,17 @@
             backward-compatibility can go here.
         -->
     </style>
-    
-      <!-- Application theme -->
+
+    <!-- Application theme -->
     <style name="ZeppaTheme" parent="@android:style/Theme.Holo.Light">
-       	<item name="android:actionBarStyle">@style/ZeppaActionBarStyle</item>
+        <item name="android:actionBarStyle">@style/ZeppaActionBarStyle</item>
+        <item name="android:actionMenuTextAppearance">@style/white_black_txt14sp</item>
     </style>
-    
-        <!-- Action Bar Style --> 
-    <style name="ZeppaActionBarStyle"
-           parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
-        <item name="android:titleTextStyle">@style/white_black_txt18sp</item>
+
+    <!-- Action Bar Style -->
+    <style name="ZeppaActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:titleTextStyle">@style/actionbar_text</item>
         <item name="android:background">@color/teal</item>
     </style>
-    
 
 </resources>

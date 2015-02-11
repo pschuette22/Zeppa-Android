@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 //	private int currentPage;
 
 	// Constant
-	private final int NUM_PAGES = 3;
+	private final int NUM_PAGES = 4;
 
 	/*
 	 * -------------- OVERRIDE METHODS ------------------- NOTES:
@@ -114,6 +114,10 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 		return true;
 	}
 	
+	public void setCurrentPageToNotifications(){
+		onPageSelected(3);
+	}
+	
 	@Override
 	public void onPageScrollStateChanged(int position) {
 
@@ -150,11 +154,12 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 
 		private String[] tabOptions;
 		 private int[] iconOptions = { R.drawable.ic_tab_calendar,
-		 R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda };
+		 R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda, R.drawable.ic_tab_activity };
 
 		private CalendarFragment calendarFragment;
 		private FeedFragment feedFragment;
 		private AgendaFragment watchingFragment;
+		private ActivityFragment activityFragment;
 
 		public ZeppaViewPagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -187,6 +192,12 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 				if (watchingFragment == null)
 					watchingFragment = new AgendaFragment();
 				return watchingFragment;
+				
+			case 3:
+				if(activityFragment == null)
+					activityFragment = new ActivityFragment();
+				
+				return activityFragment;
 			}
 
 			return null;

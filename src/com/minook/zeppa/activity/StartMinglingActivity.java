@@ -1,25 +1,29 @@
 package com.minook.zeppa.activity;
 
 import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.minook.zeppa.R;
+import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.MinglerFinderAdapter;
-import com.minook.zeppa.observer.OnLoadListener;
+import com.minook.zeppa.singleton.NotificationSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.singleton.ZeppaUserSingleton.OnMinglersLoadListener;
+import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
-public class StartMinglingActivity extends AuthenticatedFragmentActivity implements OnLoadListener{
+public class StartMinglingActivity extends AuthenticatedFragmentActivity
+		implements OnMinglersLoadListener {
 
 	private final String TAG = getClass().getName();
-	MinglerFinderAdapter adapter;
-
+	private MinglerFinderAdapter adapter;
 	private ListView listView;
 	private View loaderView;
+	private ProgressDialog dialog;
 
 	/*
 	 * -------------- Override Methods ---------------------
@@ -33,14 +37,18 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity impleme
 
 		setContentView(listView);
 
-		loaderView = getLayoutInflater().inflate(R.layout.view_loaderview, listView, false);
-		((TextView) loaderView.findViewById(R.id.loaderview_text)).setText("Finding friends, one moment");
-		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayShowHomeEnabled(false);
+		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setTitle("Start Mingling");
 		
+		dialog = new ProgressDialog(this);
+		dialog.setIndeterminate(true);
+		dialog.setTitle("Finding Potential Minglers");
+		dialog.setMessage("One moment please. This may take a minute or two...");
+		dialog.setCancelable(false);
 	}
 
 	@Override
@@ -50,18 +58,15 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity impleme
 		Log.d(TAG, "On Start, Registering new adapter");
 		adapter = new MinglerFinderAdapter(this);
 		listView.setAdapter(adapter);
-		ZeppaUserSingleton.getInstance().registerWaitingFinderAdapter(adapter);
-		
+		ZeppaUserSingleton.getInstance().registerLoadListener(this);
+
 	}
-	
-	
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.d(TAG, "On Stop, unregistering adapter");
 
-		ZeppaUserSingleton.getInstance().unregisterWaitingFinderAdapter(adapter);
+		ZeppaUserSingleton.getInstance().unregisterMinglerLoadListener(this);
 	}
 
 	@Override
@@ -87,30 +92,47 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity impleme
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		super.onConnected(connectionHint);
-		
-		if(didLoadInitial() && ZeppaUserSingleton.getInstance().getLastMinglerFinderTaskExecutionDate() == null){
+
+		if (ZeppaUserSingleton.getInstance()
+				.getLastMinglerFinderTaskExecutionDate() == null
+				&& ZeppaUserSingleton.getInstance().hasLoadedInitial()) {
 			findMinglers();
 		}
+
 	}
-	
-	@Override
-	public boolean didLoadInitial() {
-		return ZeppaUserSingleton.getInstance().hasLoadedInitial();
+
+	private void findMinglers() {
+		dialog.show();
+		ZeppaUserSingleton.getInstance().executeFindMinglerTask((ZeppaApplication) getApplication(), getGoogleAccountCredential());
 	}
 
 	@Override
-	public void onFinishLoad() {
-		if(listView.removeHeaderView(loaderView)){
-			Log.d(TAG, "Removed header View");
+	public void onNotificationReceived(ZeppaNotification notification) {
+
+		int notificationType = NotificationSingleton.getInstance()
+				.getNotificationTypeOrder(notification);
+		if (notificationType == 0 || notificationType == 1) {
+			runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					adapter.notifyDataSetChanged();
+				}
+
+			});
 		}
-		
+
+		super.onNotificationReceived(notification);
+	}
+
+	@Override
+	public void onMinglersLoaded() {
+		if(dialog.isShowing()){
+			dialog.dismiss();
+		}
+
 		adapter.notifyDataSetChanged();
 		
-	}
-	
-	private void findMinglers(){
-		listView.addHeaderView(loaderView);
-		ZeppaUserSingleton.getInstance().executeFindMinglerTask(this, getGoogleAccountCredential(), this);
 	}
 
 }

@@ -2,13 +2,25 @@ package com.minook.zeppa.activity;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.minook.zeppa.R;
+import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.tagadapter.MyTagAdapter;
+import com.minook.zeppa.mediator.MyZeppaEventMediator;
+import com.minook.zeppa.runnable.RemoveEventRunnable;
+import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.singleton.EventTagSingleton;
+import com.minook.zeppa.singleton.NotificationSingleton;
+import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 /**
  * This class is for displaying an event view activity for an event the host
@@ -18,16 +30,18 @@ import com.minook.zeppa.singleton.ZeppaUserSingleton;
  */
 public class MyEventViewActivity extends AbstractEventViewActivity {
 
+	private final static String TAG = MyEventViewActivity.class.getName();
+
 	/*
 	 * Hold the originals just in case
 	 */
 	// private DefaultUserInfoMediator repostedFromUserInfoMediator;
 	// private DefaultZeppaEventMediator repostedFromEventMediator;
 
-
 	@Override
-	protected void onStart() {
-		super.onStart();
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		sendInvites.setOnClickListener(this);
 
 	}
 
@@ -41,7 +55,7 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(super.onOptionsItemSelected(item)){
+		if (super.onOptionsItemSelected(item)) {
 			return true;
 		}
 
@@ -53,14 +67,9 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 			/*
 			 * Host Controls
 			 */
-			
-		case R.id.menu_event_edit:
-			return true;
-			
+
 		case R.id.menu_event_cancel:
-			return true;
-			
-		case R.id.menu_event_reposts:
+			raiseCancelDialog();
 			return true;
 
 		}
@@ -72,6 +81,7 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 	@Override
 	protected void setHostMediator() {
 		hostMediator = ZeppaUserSingleton.getInstance().getUserMediator();
+
 	}
 
 	@Override
@@ -83,8 +93,7 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 			EventTagSingleton.getInstance().setWaitingAdapter(
 					(MyTagAdapter) tagAdapter);
 		}
-		
-		tagAdapter.drawTags();
+
 	}
 
 	@Override
@@ -98,27 +107,71 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 
 	@Override
 	protected void setAttendingText() {
-		if(eventMediator.getHasLoadedAttendingRelationship()){
+		if (eventMediator.getHasLoadedRelationships()) {
 			List<Long> attendingUserIds = eventMediator.getAttendingUserIds();
-			if(attendingUserIds.isEmpty()){
-				attending.setText("Nobody has joined yet");
+			if (attendingUserIds.isEmpty()) {
+				attending.setText("Nobody is going yet");
+			} else if (attendingUserIds.size() == 1) {
+				attending.setText("1 person is going");
+
 			} else {
-				attending.setText(attendingUserIds.size() + " people joined");
+				attending
+						.setText(attendingUserIds.size() + " people are going");
 			}
-			
+
 		} else {
 			attending.setText("Loading...");
 		}
 
 	}
 
-	@Override
-	protected void setConfliction() {
-		conflictIndicator.setImageResource(R.drawable.conflict_blue);
+	public void raiseCancelDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Cancel " + eventMediator.getTitle());
+		builder.setMessage("Are you sure? This cannot be undone");
 
+		AlertDialog.OnClickListener listener = new AlertDialog.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (which == AlertDialog.BUTTON_POSITIVE) {
+					cancelEvent();
+				}
+				dialog.dismiss();
+			}
+
+		};
+
+		builder.setPositiveButton("Yes, Cancel", listener);
+		builder.setNegativeButton("Nevermind", listener);
+		builder.show();
 	}
 
+	private void cancelEvent() {
+		if (eventMediator instanceof MyZeppaEventMediator) {
 
+			ZeppaEventSingleton.getInstance().removeMediator(eventMediator);
+			NotificationSingleton.getInstance().removeNotificationsForEvent(
+					eventMediator.getEventId().longValue());
+			ZeppaEventSingleton.getInstance().notifyObservers();
+			ThreadManager.execute(new RemoveEventRunnable(
+					(ZeppaApplication) getApplication(),
+					getGoogleAccountCredential(), eventMediator.getEventId()
+							.longValue()));
+			onBackPressed();
+		} else {
+			Log.wtf(TAG, "Trying to delete unowned event");
+		}
+	}
 
+	@Override
+	public void onNotificationReceived(ZeppaNotification notification) {
+		super.onNotificationReceived(notification);
+
+		if (notification.getType().equals("USER_JOINED")
+				|| notification.getType().equals("USER_LEFT")) {
+			startFetchEventRelationshipsThread();
+		}
+	}
 
 }

@@ -18,11 +18,9 @@
                 android:id="@+id/accountfragment_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginTop="7dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:background="@drawable/background_contact_picture"
                 android:contentDescription="@string/contdesc_contactimage"
                 android:padding="1dp"
@@ -38,32 +36,36 @@
                     style="@style/black_txt21sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@id/accountfragment_image"
                     android:orientation="horizontal" />
 
                 <TextView
                     android:id="@+id/accountfragment_phonenumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="4dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="4dp"
                     android:background="@drawable/background_listitem_default"
-                    android:drawableLeft="@drawable/ic_phone_image" />
+                    android:drawableLeft="@drawable/ic_phone_image"
+                    android:drawableStart="@drawable/ic_phone_image" />
 
                 <TextView
                     android:id="@+id/accountfragment_emailaddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="4dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="4dp"
                     android:background="@drawable/background_listitem_default"
-                    android:drawableLeft="@drawable/ic_mail_image" />
+                    android:drawableLeft="@drawable/ic_mail_image"
+                    android:drawableStart="@drawable/ic_mail_image" />
             </LinearLayout>
         </LinearLayout>
 
@@ -72,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:animateLayoutChanges="true"
+            android:animateLayoutChanges="false"
             android:orientation="vertical" />
 
         <RelativeLayout
@@ -81,22 +83,28 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp" >
 
-            <ImageView
+            <TextView
                 android:id="@+id/accountfragment_addnewtag"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/background_imagebutton"
+                android:background="@drawable/background_button"
                 android:contentDescription="@string/contdesc_addtag"
-                android:src="@drawable/ic_cab_done_holo_light" />
+                android:paddingBottom="4dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:paddingTop="4dp"
+                android:text="@string/add" />
 
             <EditText
                 android:id="@+id/accountfragment_tagtext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@id/neweventactivity_addnewtag"
+                android:layout_toLeftOf="@id/accountfragment_addnewtag"
+                android:layout_toStartOf="@id/accountfragment_addnewtag"
                 android:hint="@string/newtag"
                 android:inputType="textCapWords"
                 android:lines="1"
@@ -111,7 +119,7 @@
             android:id="@+id/accountfragment_eventholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
+            android:animateLayoutChanges="false"
             android:orientation="vertical"
             android:padding="7dp" />
     </LinearLayout>

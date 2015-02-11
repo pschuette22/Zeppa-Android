@@ -10,53 +10,48 @@ package com.minook.zeppa.singleton;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
-import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
-import com.minook.zeppa.adapter.MinglerFinderAdapter;
-import com.minook.zeppa.adapter.MinglerListAdapter;
+import com.minook.zeppa.Utils;
+import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
-import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
-import com.minook.zeppa.observer.OnLoadListener;
-import com.minook.zeppa.task.FindMinglersTask;
+import com.minook.zeppa.runnable.FindMinglersRunnable;
+import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
-import com.minook.zeppa.zeppauserinfoendpoint.Zeppauserinfoendpoint;
 import com.minook.zeppa.zeppauserinfoendpoint.model.ZeppaUserInfo;
-import com.minook.zeppa.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint;
-import com.minook.zeppa.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint.ListZeppaUserToUserRelationship;
-import com.minook.zeppa.zeppausertouserrelationshipendpoint.model.CollectionResponseZeppaUserToUserRelationship;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
 
 public class ZeppaUserSingleton {
+
+	// Provides an interface for when minglers are loaded by the singleton
+	public interface OnMinglersLoadListener {
+		public void onMinglersLoaded();
+	}
+
 	private static ZeppaUserSingleton singleton;
 
 	private final String TAG = getClass().getName();
 
 	private MyZeppaUserMediator userMediator;
 	private List<DefaultUserInfoMediator> heldUserMediators;
-	private List<OnLoadListener> loadListeners;
 	private Date lastFindMinglersTaskExecutionDate;
-	private List<MinglerListAdapter> minglerAdapters;
 	private boolean hasLoadedInitial;
+
+	private List<OnMinglersLoadListener> minglerLoadListeners;
 
 	/*
 	 * Waiting adapters. These will be notified as user mediators are added
 	 */
-
-	private MinglerFinderAdapter finderAdapter;
-	private MinglerListAdapter minglerListAdapter;
 
 	/*
 	 * Instance should only be called once
@@ -67,8 +62,7 @@ public class ZeppaUserSingleton {
 		hasLoadedInitial = false;
 		lastFindMinglersTaskExecutionDate = null;
 		heldUserMediators = new ArrayList<DefaultUserInfoMediator>();
-		loadListeners = new ArrayList<OnLoadListener>();
-		minglerAdapters = new ArrayList<MinglerListAdapter>();
+		minglerLoadListeners = new ArrayList<OnMinglersLoadListener>();
 
 	}
 
@@ -76,6 +70,14 @@ public class ZeppaUserSingleton {
 		if (singleton == null)
 			singleton = new ZeppaUserSingleton();
 		return singleton;
+	}
+
+	public void restore() {
+		singleton = new ZeppaUserSingleton();
+	}
+
+	public void clear() {
+		heldUserMediators.clear();
 	}
 
 	public void onLowMemory() {
@@ -89,65 +91,73 @@ public class ZeppaUserSingleton {
 		userMediator = new MyZeppaUserMediator(user);
 	}
 
-	public void registerWaitingMinglerListAdapter(MinglerListAdapter adapter) {
-		this.minglerListAdapter = adapter;
-	}
+	// public void registerWaitingMinglerListAdapter(MinglerListAdapter adapter)
+	// {
+	// this.minglerListAdapter = adapter;
+	// }
+	//
+	// public void unregisterWaitingMinglerListAdapter(MinglerListAdapter
+	// adapter) {
+	// if (minglerListAdapter != null && minglerListAdapter == adapter) {
+	// this.minglerListAdapter = null;
+	// }
+	// }
 
-	public void unregisterWaitingMinglerListAdapter(MinglerListAdapter adapter) {
-		if (minglerListAdapter != null && minglerListAdapter == adapter) {
-			this.minglerListAdapter = null;
+	public MyZeppaUserMediator fetchLoggedInUserWithBlocking(
+			GoogleAccountCredential credential) throws IOException {
+
+		if (userMediator != null) {
+			return userMediator;
 		}
-	}
 
-	public void registerWaitingFinderAdapter(MinglerFinderAdapter adapter) {
-		this.finderAdapter = adapter;
-	}
+		Zeppauserendpoint.Builder builder = new Zeppauserendpoint.Builder(
+				AndroidHttp.newCompatibleTransport(),
+				GsonFactory.getDefaultInstance(), credential);
+		builder = CloudEndpointUtils.updateBuilder(builder);
+		Zeppauserendpoint endpoint = builder.build();
 
-	public void unregisterWaitingFinderAdapter(MinglerFinderAdapter adapter) {
-		if (finderAdapter != null && finderAdapter == adapter) {
-			this.finderAdapter = null;
+		ZeppaUser zeppaUser = endpoint.fetchCurrentZeppaUser().execute();
+
+		if (zeppaUser == null) {
+			return null;
 		}
+
+		MyZeppaUserMediator mediator = new MyZeppaUserMediator(zeppaUser);
+		this.userMediator = mediator;
+		return userMediator;
+
 	}
 
-	public void executeFindMinglerTask(Context context,
-			GoogleAccountCredential credential, OnLoadListener listener) {
+	public void executeFindMinglerTask(ZeppaApplication application,
+			GoogleAccountCredential credential) {
 		lastFindMinglersTaskExecutionDate = new Date();
-		new FindMinglersTask(context, credential, listener).execute();
+		ThreadManager
+				.execute(new FindMinglersRunnable(application, credential));
 	}
 
 	/**
-	 * Create a new defaultUserInfoMediator at runtime and add it to the friends
+	 * Create a new defaultUserInfoMediator at runtime and add it to the minglers
 	 * list
 	 * 
 	 * @param userInfo
 	 * @param relationship
 	 * @param credential
 	 */
-	public synchronized void addDefaultZeppaUserMediator(
-			ZeppaUserInfo userInfo, ZeppaUserToUserRelationship relationship,
-			boolean notify) {
+	public void addDefaultZeppaUserMediator(ZeppaUserInfo userInfo,
+			ZeppaUserToUserRelationship relationship) {
 
-		if (getAbstractUserMediatorById(userInfo.getId()) == null) {
+		AbstractZeppaUserMediator mediator = null;
+		try {
+			mediator = getAbstractUserMediatorById(userInfo.getKey().getParent().getId().longValue());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+
+		if (mediator == null) {
 
 			heldUserMediators.add(new DefaultUserInfoMediator(userInfo,
 					relationship));
 
-			if (notify) {
-				notifyAdaptersMinglerListChanged();
-			}
-		}
-
-	}
-
-	public void addAllPotentialMinglers(GoogleAccountCredential credential,
-			List<ZeppaUserInfo> userInfoList, boolean notify) {
-
-		Iterator<ZeppaUserInfo> iterator = userInfoList.iterator();
-		while (iterator.hasNext()) {
-			addDefaultZeppaUserMediator(iterator.next(), null, false);
-			if (notify) {
-				notifyAdaptersMinglerListChanged();
-			}
 		}
 
 	}
@@ -158,18 +168,9 @@ public class ZeppaUserSingleton {
 	 * 
 	 * @param view
 	 */
-	public void registerLoadListener(OnLoadListener listener) {
-		this.loadListeners.add(listener);
-	}
-
-	/**
-	 * Register an adapter to listen for changes to mingler list
-	 * 
-	 * @param adapter
-	 */
-	public void registerMinglerAdapter(MinglerListAdapter adapter) {
-		if (!this.minglerAdapters.contains(adapter)) {
-			minglerAdapters.add(adapter);
+	public void registerLoadListener(OnMinglersLoadListener listener) {
+		if (!minglerLoadListeners.contains(listener)) {
+			this.minglerLoadListeners.add(listener);
 		}
 	}
 
@@ -178,27 +179,25 @@ public class ZeppaUserSingleton {
 	 * 
 	 * @param adapter
 	 */
-	public void unregisterMinglerAdapter(MinglerListAdapter adapter) {
-		minglerAdapters.remove(adapter);
+	public boolean unregisterMinglerLoadListener(OnMinglersLoadListener listener) {
+		return minglerLoadListeners.remove(listener);
 	}
 
-	private void notifyAdaptersMinglerListChanged() {
+	public void notifyObservers() {
 
-		if (minglerAdapters.isEmpty()) {
-			Iterator<MinglerListAdapter> iterator = minglerAdapters.iterator();
+		if (!minglerLoadListeners.isEmpty()) {
+			Iterator<OnMinglersLoadListener> iterator = minglerLoadListeners
+					.iterator();
 
 			while (iterator.hasNext()) {
-				iterator.next().notifyDataSetChanged();
+				try {
+					iterator.next().onMinglersLoaded();
+				} catch (Exception e) {
+
+				}
 			}
 		}
 
-		if (finderAdapter != null) {
-			notifyFinderAdapterDataChanged();
-		}
-	}
-
-	public void notifyFinderAdapterDataChanged() {
-		this.finderAdapter.notifyDataSetChanged();
 	}
 
 	/*
@@ -207,6 +206,10 @@ public class ZeppaUserSingleton {
 
 	public boolean hasLoadedInitial() {
 		return hasLoadedInitial;
+	}
+	
+	public void setHasLoadedInitial() {
+		this.hasLoadedInitial = true;
 	}
 
 	public Date getLastMinglerFinderTaskExecutionDate() {
@@ -225,22 +228,36 @@ public class ZeppaUserSingleton {
 		return userMediator.getZeppaCalendarId();
 	}
 
-	public ArrayList<DefaultUserInfoMediator> getFriendsFrom(List<Long> list) {
-		ArrayList<DefaultUserInfoMediator> friends = new ArrayList<DefaultUserInfoMediator>();
+	private boolean listContainsId(List<Long> list, long id){
+		Iterator<Long> iterator = list.iterator();
+		while(iterator.hasNext()){
+			if(iterator.next().longValue() == id){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public ArrayList<DefaultUserInfoMediator> getMinglersFrom(List<Long> list) {
+		ArrayList<DefaultUserInfoMediator> minglers = new ArrayList<DefaultUserInfoMediator>();
 
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
 				.iterator();
 
 		while (iterator.hasNext()) {
 			DefaultUserInfoMediator userInfoMediator = iterator.next();
-			if (userInfoMediator.isConnected()
-					&& list.contains(userInfoMediator.getUserId())) {
-				friends.add(userInfoMediator);
+			if (userInfoMediator.isMingling()
+					&& listContainsId(list, userInfoMediator.getUserId().longValue())) {
+				minglers.add(userInfoMediator);
 			}
 
 		}
+		
+		Collections.sort(minglers, Utils.USER_COMPARATOR);
 
-		return friends;
+
+		return minglers;
 	}
 
 	public List<Long> getAllFriendZeppaIds() {
@@ -266,10 +283,10 @@ public class ZeppaUserSingleton {
 		while (iterator.hasNext()) {
 			DefaultUserInfoMediator infoMediator = iterator.next();
 
-			if (infoMediator.isConnected())
+			if (infoMediator.isMingling())
 				friendList.add(infoMediator);
 		}
-
+		Collections.sort(friendList, Utils.USER_COMPARATOR);
 		return friendList;
 
 	}
@@ -284,13 +301,15 @@ public class ZeppaUserSingleton {
 			DefaultUserInfoMediator mediator = iterator.next();
 
 			// If the user is
-			if (!mediator.isConnected()
+			if (!mediator.isMingling()
 					&& (!mediator.requestPending() || (mediator
 							.requestPending() && mediator.didSendRequest()))) {
 				potentialConnectionList.add(mediator);
 			}
 		}
 
+		Collections.sort(potentialConnectionList, Utils.USER_COMPARATOR);
+		
 		return potentialConnectionList;
 	}
 
@@ -308,13 +327,18 @@ public class ZeppaUserSingleton {
 			}
 		}
 
+		Collections.sort(pendingRequests, Utils.USER_COMPARATOR);
+
 		return pendingRequests;
 	}
 
 	public AbstractZeppaUserMediator getAbstractUserMediatorById(Long userId) {
 
-		if (userId.longValue() == userMediator.getUserId().longValue()) {
-			return userMediator;
+		try {
+			if (userId.longValue() == userMediator.getUserId().longValue()) {
+				return userMediator;
+			}
+		} catch (NullPointerException e) {
 		}
 
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
@@ -330,357 +354,9 @@ public class ZeppaUserSingleton {
 		return null;
 	}
 
-	public MyZeppaUserMediator fetchLoggedInUserWithBlocking(
-			GoogleAccountCredential credential) throws IOException {
-
-		if (userMediator != null) {
-			return userMediator;
-		}
-
-		Zeppauserendpoint endpoint = buildZeppaUserEndpoint(credential);
-
-		ZeppaUser zeppaUser = endpoint.fetchCurrentZeppaUser().execute();
-
-		if (zeppaUser == null) {
-			return null;
-		}
-
-		MyZeppaUserMediator mediator = new MyZeppaUserMediator(zeppaUser);
-		this.userMediator = mediator;
-		return userMediator;
-
-	}
-
-	/**
-	 * This creates
-	 * 
-	 * @param userId
-	 * @param credential
-	 * @return true if user is now held
-	 */
-	public boolean fetchUserAndRelationshipWithBlocking(Long userId,
-			GoogleAccountCredential credential, boolean updateRelationship) {
-
-		boolean success = false;
-
-		AbstractZeppaUserMediator mediator = getAbstractUserMediatorById(userId);
-
-		if (mediator == null) {
-			Zeppauserinfoendpoint infoEndpoint = buildUserInfoEndpoint(credential);
-
-			try {
-				ZeppaUserInfo userInfo = infoEndpoint
-						.fetchZeppaUserInfoByParentId(userId).execute();
-				if (userInfo != null) {
-
-					ZeppaUserToUserRelationship relationship = fetchRelationshipToUserWithBlocking(
-							credential, userId);
-
-					addDefaultZeppaUserMediator(userInfo, relationship, true);
-					success = true;
-				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		} else if (mediator instanceof DefaultUserInfoMediator && updateRelationship){
-			
-			// Update the current state of the relationship
-			try {
-				ZeppaUserToUserRelationship relationship = fetchRelationshipToUserWithBlocking(
-						credential, mediator.getUserId());
-				((DefaultUserInfoMediator) mediator).setUserRelationship(relationship);
-				success = true;
-			} catch (IOException e){
-				e.printStackTrace();
-			}
-			
-		}
-
-		return success;
-	}
-	
-
-	private Zeppauserinfoendpoint buildUserInfoEndpoint(
-			GoogleAccountCredential credential) {
-		Zeppauserinfoendpoint.Builder builder = new Zeppauserinfoendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		builder = CloudEndpointUtils.updateBuilder(builder);
-		Zeppauserinfoendpoint endpoint = builder.build();
-		return endpoint;
-	}
-
-	private Zeppauserendpoint buildZeppaUserEndpoint(
-			GoogleAccountCredential credential) {
-		Zeppauserendpoint.Builder builder = new Zeppauserendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		builder = CloudEndpointUtils.updateBuilder(builder);
-		Zeppauserendpoint endpoint = builder.build();
-		return endpoint;
-	}
-
-	private Zeppausertouserrelationshipendpoint buildZeppaUserToUserRelationshipEndpoint(
-			GoogleAccountCredential credential) {
-		Zeppausertouserrelationshipendpoint.Builder builder = new Zeppausertouserrelationshipendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		builder = CloudEndpointUtils.updateBuilder(builder);
-		Zeppausertouserrelationshipendpoint endpoint = builder.build();
-		return endpoint;
-	}
-
 	/*
 	 * Loader Methods
 	 */
-
-	/**
-	 * 
-	 * This method loads all users who share a relationship with the user
-	 * 
-	 * It does this by retrieving lists of relationships then fetching the
-	 * userInfo directly
-	 * 
-	 * @param credential
-	 */
-
-	public void loadConnectedUsers(Context context,
-			GoogleAccountCredential credential, Long userId) {
-		Object[] params = { context, credential, userId };
-
-		new AsyncTask<Object, Void, Void>() {
-
-			private Context context;
-			private GoogleAccountCredential credential;
-
-			@Override
-			protected Void doInBackground(Object... params) {
-				context = (Context) params[0];
-				credential = (GoogleAccountCredential) params[1];
-				Long userId = (Long) params[2];
-
-				Zeppausertouserrelationshipendpoint endpoint = buildZeppaUserToUserRelationshipEndpoint(credential);
-
-				/*
-				 * The following protocol executes a query and continues to do
-				 * so until all values have been returned
-				 */
-
-				List<ZeppaUserToUserRelationship> relationships = new ArrayList<ZeppaUserToUserRelationship>();
-
-				String filter = "creatorId == " + userId.longValue();
-				String cursor = null;
-				ListZeppaUserToUserRelationship listInfotask = null;
-
-				do {
-
-					try {
-						listInfotask = endpoint
-								.listZeppaUserToUserRelationship();
-
-						Log.d(TAG, "Filter: " + filter);
-						Log.d(TAG, "Cursor: " + cursor);
-						listInfotask.setFilter(filter);
-						listInfotask.setCursor(cursor);
-						listInfotask.setLimit(25);
-
-						CollectionResponseZeppaUserToUserRelationship response = listInfotask
-								.execute();
-
-						if (response == null || response.getItems() == null
-								|| response.getItems().isEmpty()) {
-							cursor = null;
-						} else {
-							relationships.addAll(response.getItems());
-							filter = null;
-							cursor = response.getNextPageToken();
-						}
-
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				} while (cursor != null);
-
-				filter = "subjectId == " + userId.longValue();
-				cursor = null;
-				do {
-
-					try {
-						listInfotask = endpoint
-								.listZeppaUserToUserRelationship();
-
-						Log.d(TAG, "Filter: " + filter);
-						Log.d(TAG, "Cursor: " + cursor);
-						listInfotask.setFilter(filter);
-						listInfotask.setCursor(cursor);
-						listInfotask.setLimit(25);
-
-						CollectionResponseZeppaUserToUserRelationship response = listInfotask
-								.execute();
-
-						if (response == null || response.getItems() == null
-								|| response.getItems().isEmpty()) {
-							cursor = null;
-						} else {
-							relationships.addAll(response.getItems());
-							filter = null;
-							cursor = response.getNextPageToken();
-						}
-
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				} while (cursor != null);
-
-				if (!relationships.isEmpty()) {
-					fetchUsersByRelationshipCollection(relationships,
-							credential, userId);
-					// TODO: error check for those who were not loaded properly
-					// and flag internally
-
-				}
-
-				return null;
-			}
-
-			@Override
-			protected void onPostExecute(Void result) {
-				super.onPostExecute(result);
-				hasLoadedInitial = true;
-				onFinishLoad();
-
-				// Once Connected Users are loaded, load notifications
-				NotificationSingleton.getInstance()
-						.loadInitialNotificationsInAsync(credential,
-								getUserId());
-
-				// new FindMinglersTask(context, credential).execute();
-
-			}
-
-		}.execute(params);
-
-	}
-
-	/**
-	 * This method takes a collection of relationships and loads the
-	 * corresponding UserInfo then creates a list of default user info
-	 * 
-	 * @param relationships
-	 *            - list of loaded relationships
-	 * @param credential
-	 *            - authenticated credential
-	 * @param userId
-	 *            - userId of the current user
-	 * @return successfullyLoaded - list of successfully loaded
-	 *         DefaultUserInfoMediators
-	 */
-	private void fetchUsersByRelationshipCollection(
-			List<ZeppaUserToUserRelationship> relationships,
-			GoogleAccountCredential credential, Long userId) {
-
-		Zeppauserinfoendpoint endpoint = buildUserInfoEndpoint(credential);
-
-		Iterator<ZeppaUserToUserRelationship> iterator = relationships
-				.iterator();
-
-		boolean listDidChange = false;
-		while (iterator.hasNext()) {
-
-			ZeppaUserToUserRelationship relationship = iterator.next();
-			try {
-				ZeppaUserInfo info;
-
-				if (relationship.getCreatorId().equals(userId)
-						&& !relationship.getSubjectId().equals(userId)) {
-
-					info = endpoint.fetchZeppaUserInfoByParentId(
-							relationship.getSubjectId()).execute();
-
-				} else if (!relationship.getCreatorId().equals(userId)
-						&& relationship.getSubjectId().equals(userId)) {
-					// TODO: fetch creator
-					info = endpoint.fetchZeppaUserInfoByParentId(
-							relationship.getCreatorId()).execute();
-				} else {
-					Log.wtf(TAG, "Relationship held that shouldnt be here");
-					continue;
-				}
-
-				if (info != null) {
-					addDefaultZeppaUserMediator(info, relationship, false);
-					listDidChange = true;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				// Handle IOexception, Likely 404 not found.
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-				// TODO: flag internally, should not happen but dont let it
-				// crash app
-			}
-
-		}
-
-		if (listDidChange) {
-			notifyAdaptersMinglerListChanged();
-		}
-
-	}
-
-	/**
-	 * Retrieves current users relationship to another if exists
-	 * 
-	 * @param credential
-	 * @param userId
-	 * @return relationship or null
-	 * @throws IOException
-	 */
-	private ZeppaUserToUserRelationship fetchRelationshipToUserWithBlocking(
-			GoogleAccountCredential credential, Long userId) throws IOException {
-		ZeppaUserToUserRelationship relationship = null;
-
-		Zeppausertouserrelationshipendpoint relationshipEndpoint = buildZeppaUserToUserRelationshipEndpoint(credential);
-
-		ListZeppaUserToUserRelationship task = relationshipEndpoint
-				.listZeppaUserToUserRelationship();
-		task.setLimit(Integer.valueOf(1)); // Should be a single
-											// instance
-		task.setFilter("(creatorId == " + getUserId().longValue()
-				+ " || creatorId == " + userId.longValue()
-				+ ") && (subjectId == " + getUserId().longValue()
-				+ " || subjectId == " + userId.longValue() + ")");
-		CollectionResponseZeppaUserToUserRelationship response = task.execute();
-
-		if (response != null && response.getItems() != null
-				&& !response.isEmpty()) {
-			relationship = response.getItems().get(0);
-		}
-
-		return relationship;
-	}
-
-	/**
-	 * This method is called when loads have completed</p> Iterates through list
-	 * of listeners and calls onFinishLoad()
-	 */
-	private void onFinishLoad() {
-		Iterator<OnLoadListener> iterator = loadListeners.iterator();
-		while (iterator.hasNext()) {
-			try {
-				iterator.next().onFinishLoad();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	public boolean emailIsRecognized(String email) {
 

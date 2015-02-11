@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_fragment" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:color="@color/white_eggshell"
+        android:paddingBottom="10dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white" >
+
+            <ImageView
+                android:id="@+id/useractivity_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/background_contact_picture"
+                android:contentDescription="@string/contdesc_contactimage"
+                android:padding="1dp"
+                android:src="@drawable/default_user_image" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@id/useractivity_image"
+                android:layout_toRightOf="@id/useractivity_image"
+                android:dividerPadding="2dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/useractivity_username"
+                    style="@style/black_txt18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/useractivity_phonenumber"
+                    style="@style/black_txt14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_phone_image"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/ic_phone_image" />
+
+                <TextView
+                    android:id="@+id/useractivity_email"
+                    style="@style/black_txt14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_mail_image"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/ic_mail_image" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/useractivity_mutualfriends"
+            style="@style/black_txt16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_attribute_clickable"
+            android:padding="4dp" />
+
+        <LinearLayout
+            android:id="@+id/useractivity_tagholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:id="@+id/useractivity_eventholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:animateLayoutChanges="true"
+            android:dividerPadding="3dp"
+            android:orientation="vertical"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp" />
+    </LinearLayout>
+
+</ScrollView>

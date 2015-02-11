@@ -1,39 +1,57 @@
 package com.minook.zeppa.mediator;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import android.os.AsyncTask;
-import android.support.v4.app.DialogFragment;
+import android.content.ContentUris;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;
+import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.eventcommentendpoint.model.EventComment;
+import com.minook.zeppa.runnable.FetchEventCommentsRunnable;
+import com.minook.zeppa.runnable.FetchEventToUserRelationshipsRunnable;
+import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
-import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint;
-import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint.ListZeppaEventToUserRelationship;
-import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.CollectionResponseZeppaEventToUserRelationship;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
 
-public abstract class AbstractZeppaEventMediator extends AbstractMediator
-		implements OnClickListener, Comparable<AbstractZeppaEventMediator> {
+public abstract class AbstractZeppaEventMediator implements
+		Comparable<AbstractZeppaEventMediator> {
 
 	/*
 	 * This is the last context the event mediator was called in. Must call
 	 * killContext() when moving to another activity
 	 */
+
+	public interface OnEventUpdateListener {
+		public void onEventUpdate(ZeppaEvent event);
+
+		public void onErrorUpdatingEvent();
+	}
+
+	public interface OnCommentLoadListener {
+		public void onCommentsLoaded();
+
+		public void onErrorLoadingComments();
+	}
+
+	public interface OnRelationshipsLoadedListener {
+		public void onRelationshipsLoaded();
+
+		public void onErrorLoadingRelationships();
+
+	}
 
 	public enum ConflictStatus {
 		ATTENDING, NONE, PARTIAL, COMPLETE, UNKNOWN
@@ -43,36 +61,51 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 	protected ZeppaEvent event;
 
 	// Users' with attending relationships
+
 	protected boolean hasLoadedRelationships;
-	protected List<ZeppaEventToUserRelationship> attendingRelationships;
+	protected boolean isLoadingRelationships;
+	protected List<ZeppaEventToUserRelationship> relationships;
+	private OnRelationshipsLoadedListener relationshipListener;
 
-
-	private String commentCursor;
 	protected List<EventComment> comments;
-	
+	private OnCommentLoadListener commentLoadListener;
+
 	protected long lastUpdateTimeInMillis;
 	protected ConflictStatus conflictStatus;
-
 
 	public AbstractZeppaEventMediator(ZeppaEvent event) {
 		this.event = event;
 		this.conflictStatus = ConflictStatus.UNKNOWN;
-		this.lastUpdateTimeInMillis = System.currentTimeMillis();
-		
-		this.attendingRelationships = new ArrayList<ZeppaEventToUserRelationship>();
-		this.hasLoadedRelationships = false;
+		this.relationships = new ArrayList<ZeppaEventToUserRelationship>();
 		this.comments = new ArrayList<EventComment>();
-		this.commentCursor = null;
+		this.hasLoadedRelationships = false;
+		this.isLoadingRelationships = false;
 
+	}
+
+	/*
+	 * The Following section handles displaying the users calendar day as a
+	 * fragment showing this event
+	 */
+
+	@Override
+	public int compareTo(AbstractZeppaEventMediator another) {
+
+		long compare = another.getEndInMillis().longValue()
+				- getEndInMillis().longValue();
+
+		return (int) compare;
 	}
 
 	/**
 	 * Pass in a ConvertView for a ZeppaEvent and set elements of this view to
 	 * reflect the given zeppa event
 	 */
-	public void convertEventListItemView(AuthenticatedFragmentActivity context,
+	public View convertEventListItemView(AuthenticatedFragmentActivity context,
 			View convertView) {
-		super.convertView(context);
+
+		convertView.setTag(this);
+
 		TextView title = (TextView) convertView
 				.findViewById(R.id.eventview_eventtitle);
 		TextView description = (TextView) convertView
@@ -99,47 +132,53 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		ImageView conflictIndicator = (ImageView) convertView
 				.findViewById(R.id.eventview_conflictionindicator);
 
-		setConflictIndicator(conflictIndicator);
+		setConflictIndicator(context, conflictIndicator);
 
 		setHostInfo(convertView);
 
 		View quickActionBar = (View) convertView
 				.findViewById(R.id.eventview_quickactionbar);
-		convertQuickActionBar(quickActionBar);
+		convertQuickActionBar(context, quickActionBar);
 
-		View container = convertView.findViewById(R.id.eventview);
-		container.setOnClickListener(this);
+		return convertView;
 
 	}
 
-	public abstract void convertQuickActionBar(View barView);
+	public abstract void launchIntoEventView(Context context);
+
+	public abstract View convertQuickActionBar(Context context, View barView);
 
 	public Long getEventId() {
 		return event.getKey().getId();
+	}
+
+	public String getCalendarEventId() {
+		return event.getGoogleCalendarEventId();
 	}
 
 	public Long getHostId() {
 		return event.getHostId();
 	}
 
-	public Long getRepostedFromEventId() {
-		return event.getRepostedEventId();
-	}
-
-	public Long getOriginalEventId() {
-		return event.getOriginalEventId();
-
-	}
-
 	public Long getEndInMillis() {
 		return event.getEnd();
 	}
 
-	public boolean getHasLoadedAttendingRelationship() {
-		return hasLoadedRelationships;
+	public Long getStartInMillis() {
+		return event.getStart();
 	}
-	
+
+	public ConflictStatus getConflictStatus() {
+		return conflictStatus;
+	}
+
 	public abstract boolean isHostedByCurrentUser();
+
+	protected AbstractZeppaUserMediator getHostMediator() {
+		AbstractZeppaUserMediator hostMediator = ZeppaUserSingleton
+				.getInstance().getAbstractUserMediatorById(event.getHostId());
+		return hostMediator;
+	}
 
 	public List<Long> getTagIds() {
 
@@ -150,52 +189,106 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		}
 
 	}
+
+	public List<ZeppaEventToUserRelationship> getEventRelationships(){
+		return relationships;
+	}
 	
+	public void setEventRelationships(
+			List<ZeppaEventToUserRelationship> relationships) {
+		this.hasLoadedRelationships = true;
+		this.isLoadingRelationships = false;
+		this.relationships = relationships;
+		try {
+			this.relationshipListener.onRelationshipsLoaded();
+		} catch (NullPointerException e) {
+
+		}
+	}
+
+	public void errorLoadingRelationships() {
+		this.isLoadingRelationships = false;
+		try {
+			this.relationshipListener.onErrorLoadingRelationships();
+		} catch (NullPointerException e) {
+
+		}
+	}
+
+	public void registerOnRelationshipsLoadedListener(
+			OnRelationshipsLoadedListener relationshipsListener) {
+		this.relationshipListener = relationshipsListener;
+	}
+
+	public void unregisterOnRelationshipsLoadedListener(
+			OnRelationshipsLoadedListener relationshipsListener) {
+		if (this.relationshipListener == relationshipsListener) {
+			this.relationshipListener = null;
+		}
+	}
+
+	public boolean getHasLoadedRelationships() {
+		return this.hasLoadedRelationships;
+	}
+
 	/*
 	 * Getters and setters for comment objects
-	 * 
 	 */
-	public String getCommentCursor(){
-		return this.commentCursor;
-	}
-	
-	public void setCommentCursor(String commentCursor){
-		this.commentCursor = commentCursor;
-	}
-	
-	public List<EventComment> getEventComments(){
+
+	public List<EventComment> getEventComments() {
 		return this.comments;
 	}
-	
-	public void addAllComments(List<EventComment> comments){
-		this.comments.addAll(comments);
-	}
-	
-	public void setEventComments(List<EventComment> comments){
+
+	public void setComments(List<EventComment> comments) {
 		this.comments = comments;
 	}
-	
-	
-	
+
+	public void addAllComments(List<EventComment> comments) {
+		this.comments.addAll(comments);
+	}
+
+	public void addComment(EventComment comment) {
+		this.comments.add(comment);
+	}
+
+	public void registerCommentLoadListener(
+			OnCommentLoadListener commentLoadListener) {
+		this.commentLoadListener = commentLoadListener;
+	}
+
+	public void unregisterCommentLoadListener() {
+		this.commentLoadListener = null;
+	}
+
+	public void onCommentsLoaded() {
+		if (commentLoadListener != null)
+			this.commentLoadListener.onCommentsLoaded();
+
+	}
+
 	/**
-	 * This Method Returns an array List of ID values for users attending this event
+	 * This Method Returns an array List of ID values for users attending this
+	 * event
+	 * 
 	 * @return
 	 */
 	public List<Long> getAttendingUserIds() {
 
 		List<Long> attendingUserIds = new ArrayList<Long>();
-		if (!attendingRelationships.isEmpty()) {
-			Iterator<ZeppaEventToUserRelationship> iterator = attendingRelationships
+		if (!relationships.isEmpty()) {
+			Iterator<ZeppaEventToUserRelationship> iterator = relationships
 					.iterator();
-			while(iterator.hasNext()){
-				attendingUserIds.add(iterator.next().getUserId());
+			while (iterator.hasNext()) {
+				ZeppaEventToUserRelationship relationship = iterator.next();
+				if (relationship.getIsAttending().booleanValue()) {
+					attendingUserIds.add(relationship.getUserId());
+				}
 			}
 		}
 
 		return attendingUserIds;
 
 	}
-	
 
 	public abstract boolean isAgendaEvent();
 
@@ -241,14 +334,6 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 		return (event.getHostId().longValue() == hostId);
 	}
 
-	public void update() {
-		new UpdateEventTask().execute();
-	}
-
-	public boolean isPublicEvent() {
-		return event.getPrivacy().equals("PUBLIC");
-	}
-
 	public boolean isPrivateEvent() {
 		return event.getPrivacy().equals("PRIVATE");
 	}
@@ -264,127 +349,49 @@ public abstract class AbstractZeppaEventMediator extends AbstractMediator
 
 	protected abstract void setHostInfo(View view);
 
-	protected void setConflictIndicator(ImageView image) {
-		switch (conflictStatus.ordinal()) {
-		case 0:
-			image.setImageResource(R.drawable.conflict_blue);
-			break;
-		case 1:
-			image.setImageResource(R.drawable.conflict_green);
-			break;
-		case 2:
-			image.setImageResource(R.drawable.conflict_yellow);
-			break;
-		case 3:
-			image.setImageResource(R.drawable.conflict_red);
-			break;
-		default:
-			image.setVisibility(View.GONE);
-			return;
-		}
+	public abstract void setConflictIndicator(Context context, ImageView image);
 
-		image.setVisibility(View.VISIBLE);
-
+	public void viewInCalendarApplication(Context context) {
+		Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+		builder.appendPath("time");
+		ContentUris.appendId(builder, getStartInMillis());
+		Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+		context.startActivity(intent);
 	}
-	
+
+	public abstract Intent getToEventViewIntent(Context context);
+
 	/**
 	 * This Method loads
 	 * 
 	 * @param credentail
 	 * @return
 	 */
-	public boolean loadAttendingRelationshipsWithBlocking(
-			GoogleAccountCredential credentail) {
-		boolean success = true;
-		Zeppaeventtouserrelationshipendpoint.Builder builder = new Zeppaeventtouserrelationshipendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credentail);
-		CloudEndpointUtils.updateBuilder(builder);
-		Zeppaeventtouserrelationshipendpoint endpoint = builder.build();
+	public void loadEventRelationships(ZeppaApplication application,
+			GoogleAccountCredential credential,
+			OnRelationshipsLoadedListener listener) {
 
-		String filter = "eventId == " + event.getId().longValue()
-				+ " && isAttending == " + true + " && userId != "
-				+ ZeppaUserSingleton.getInstance().getUserId().longValue();
-		String cursor = null;
-		Integer limit = Integer.valueOf(30);
-
-		List<ZeppaEventToUserRelationship> loadedRelationships = new ArrayList<ZeppaEventToUserRelationship>();
-		do {
-			try {
-				ListZeppaEventToUserRelationship listRelationshipsTask = endpoint
-						.listZeppaEventToUserRelationship();
-				listRelationshipsTask.setFilter(filter);
-				listRelationshipsTask.setCursor(cursor);
-				listRelationshipsTask.setLimit(limit);
-
-				CollectionResponseZeppaEventToUserRelationship response = listRelationshipsTask
-						.execute();
-
-				if (response != null && response.getItems() != null
-						&& !response.getItems().isEmpty()) {
-					loadedRelationships.addAll(response.getItems());
-					cursor = response.getNextPageToken();
-
-				} else {
-					cursor = null;
-					break;
-				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
-				cursor = null;
-				break;
-			}
-
-		} while (cursor != null);
-
-		if ((success || attendingRelationships.isEmpty())) {
-			attendingRelationships = loadedRelationships;
+		if (isLoadingRelationships) {
+			return;
 		}
 
-		hasLoadedRelationships = true;
-		return success;
-	}
-	
-	
-	protected class UpdateEventTask extends AsyncTask<Void, Void, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			return null;
-		}
+		ThreadManager.execute(new FetchEventToUserRelationshipsRunnable(
+				application, credential, getEventId().longValue(),
+				ZeppaUserSingleton.getInstance().getUserId().longValue(),
+				listener));
 
 	}
-	
 
 	/*
-	 * The Following section handles displaying the users calendar day as a fragment showing this event
+	 * This Section deals with comments made on an event
 	 */
-	
-	public void raiseCalendarDialog() {
-//		CalendarController controller = CalendarController
-//				.getInstance(getContext());
-//		controller.setTime(event.getStart());
-//		controller.setViewType(ViewType.DAY);
 
+	/**
+	 */
+	public void loadComments(ZeppaApplication application,
+			GoogleAccountCredential credential, OnCommentLoadListener listener) {
+		ThreadManager.execute(new FetchEventCommentsRunnable(application,
+				credential, this, listener));
 	}
-
-	private class CalendarDialog extends DialogFragment {
-
-	}
-
-
-	@Override
-	public int compareTo(AbstractZeppaEventMediator another) {
-
-		long compare = getEndInMillis().longValue() - another.getEndInMillis().longValue();
-		
-		return (int) compare;
-	}
-	
-
-	
-	
 
 }

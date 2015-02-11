@@ -34,9 +34,23 @@ public abstract class AbstractTagAdapter extends BaseAdapter implements
 
 	@Override
 	public void notifyDataSetChanged() {
+		tagMediators = getCurrentTagMediators();
 		super.notifyDataSetChanged();
-		drawTags();
 	}
+
+	public void verifyDatasetValid() {
+		List<AbstractEventTagMediator> mediators = getCurrentTagMediators();
+
+		if (mediators.containsAll(tagMediators)
+				&& tagMediators.containsAll(mediators)) {
+			// Dataset did not change
+		} else {
+			notifyDataSetChanged();
+		}
+
+	}
+
+	public abstract List<AbstractEventTagMediator> getCurrentTagMediators();
 
 	@Override
 	public AbstractEventTagMediator getItem(int position) {
@@ -56,49 +70,38 @@ public abstract class AbstractTagAdapter extends BaseAdapter implements
 
 	public void drawTags() {
 
-		if (didLoadInitial()) {
+		tagHolder.removeAllViews();
 
-			tagHolder.removeAllViews();
+		if (getCount() > 0) {
 
-			if (getCount() > 0) {
+			LayoutInflater inflater = activity.getLayoutInflater();
+			LinearLayout currentLine = (LinearLayout) inflater.inflate(
+					R.layout.view_tag_line, null, false);
 
-				LayoutInflater inflater = activity.getLayoutInflater();
-				LinearLayout currentLine = (LinearLayout) inflater.inflate(
-						R.layout.view_tag_line, null, false);
+			tagHolder.addView(currentLine);
+			currentLine.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.EXACTLY);
+			int lineWidth = activity.getResources().getDisplayMetrics().widthPixels;
+			int tagsWidth = 0;
 
-				tagHolder.addView(currentLine);
-				currentLine.measure(MeasureSpec.UNSPECIFIED,
-						MeasureSpec.EXACTLY);
-				int lineWidth = activity.getResources().getDisplayMetrics().widthPixels;
-				int tagsWidth = 0;
+			for (int i = 0; i < getCount(); i++) {
+				View tagView = getView(i, null, null);
+				tagView.measure(MeasureSpec.UNSPECIFIED,
+						MeasureSpec.UNSPECIFIED);
+				int tagWidth = tagView.getMeasuredWidth();
 
-				for (int i = 0; i < getCount(); i++) {
-					View tagView = getView(i, null, null);
-					tagView.measure(MeasureSpec.UNSPECIFIED,
-							MeasureSpec.UNSPECIFIED);
-					int tagWidth = tagView.getMeasuredWidth();
-
-					if ((lineWidth - tagsWidth) < tagWidth) {
-						currentLine = (LinearLayout) inflater.inflate(
-								R.layout.view_tag_line, null, false);
-						tagHolder.addView(currentLine);
-						tagsWidth = 0;
-					}
-
-					currentLine.addView(tagView);
-
-					tagsWidth += tagWidth;
-
+				if ((lineWidth - tagsWidth) < tagWidth) {
+					currentLine = (LinearLayout) inflater.inflate(
+							R.layout.view_tag_line, null, false);
+					tagHolder.addView(currentLine);
+					tagsWidth = 0;
 				}
 
+				currentLine.addView(tagView);
+
+				tagsWidth += tagWidth;
+
 			}
-		} else {
-			LayoutInflater inflater = activity.getLayoutInflater();
-			View loaderView = inflater.inflate(R.layout.view_loaderview, tagHolder, false);
-			((ProgressBar) loaderView.findViewById(R.id.loaderview_progressbar)).setIndeterminate(true);
-			((TextView) loaderView.findViewById(R.id.loaderview_text)).setText("Loading...");
-			tagHolder.addView(loaderView);
-		
+
 		}
 
 	}

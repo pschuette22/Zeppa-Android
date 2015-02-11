@@ -1,52 +1,44 @@
 package com.minook.zeppa.singleton;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.util.Log;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
-import com.minook.zeppa.CloudEndpointUtils;
-import com.minook.zeppa.Utils;
-import com.minook.zeppa.activity.DefaultEventViewActivity;
-import com.minook.zeppa.activity.MainActivity;
-import com.minook.zeppa.activity.MinglerActivity;
-import com.minook.zeppa.activity.MyEventViewActivity;
-import com.minook.zeppa.activity.StartMinglingActivity;
+import com.minook.zeppa.Constants;
+import com.minook.zeppa.PrefsManager;
+import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
-import com.minook.zeppa.observer.OnLoadListener;
-import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint;
-import com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint.ListZeppaNotification;
-import com.minook.zeppa.zeppanotificationendpoint.model.CollectionResponseZeppaNotification;
+import com.minook.zeppa.runnable.FetchInitialNotificationsRunnable;
+import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class NotificationSingleton {
-	private static NotificationSingleton singleton;
 
+	public interface NotificationLoadListener {
+		public void onNotificationsLoaded();
+	}
+
+	private static NotificationSingleton singleton;
 	private final String TAG = "NotificationSingleton";
 	private List<ZeppaNotification> notifications;
-	private List<OnLoadListener> loadListeners;
+	private List<NotificationLoadListener> loadListeners;
 	private boolean hasLoadedInitial;
-
+	private boolean isFetchingNotifications;
+	private String nextNotificationPageToken;
+	
 	/*
 	 * Instance Handlers
 	 */
 
 	private NotificationSingleton() {
 		notifications = new ArrayList<ZeppaNotification>();
-		loadListeners = new ArrayList<OnLoadListener>();
+		loadListeners = new ArrayList<NotificationLoadListener>();
 		hasLoadedInitial = false;
+		isFetchingNotifications = false;
 	}
 
 	public static NotificationSingleton getInstance() {
@@ -54,7 +46,45 @@ public class NotificationSingleton {
 			singleton = new NotificationSingleton();
 		return singleton;
 	}
+	
+	public void restore(){
+		singleton = new NotificationSingleton();
+	}
+	
+	public void clear(){
+		notifications.clear();
+	}
+	
+	public void removeNotificationsForEvent(long eventId){
+		
+		List<ZeppaNotification> remove = new ArrayList<ZeppaNotification>();
+		Iterator<ZeppaNotification> iterator = notifications.iterator();
+		while(iterator.hasNext()){
+			ZeppaNotification notification = iterator.next();
+			if(notification.getEventId() != null && notification.getEventId().longValue() == eventId){
+				remove.add(notification);
+			}
+		}
+		notifications.removeAll(remove);
+	}
 
+	public void removeNotification(long notificationId){
+		
+		ZeppaNotification notification = null;
+		Iterator<ZeppaNotification> iterator = notifications.iterator();
+		while(iterator.hasNext()){
+			ZeppaNotification n = iterator.next();
+			if(n.getId().longValue() == notificationId){
+				notification = n;
+				break;
+			}
+		}
+		
+		if(notification != null){
+			notifications.remove(notification);
+		}
+	}
+	
 	/*
 	 * Getters
 	 */
@@ -63,11 +93,15 @@ public class NotificationSingleton {
 		return notifications;
 	}
 
-
 	public boolean hasLoadedInitial() {
 		return hasLoadedInitial;
 	}
 
+	public void onLoadedNotifications(){
+		hasLoadedInitial = true;
+		notifyObservers();
+	}
+	
 	public int getNotificationTypeOrder(ZeppaNotification notification) {
 		String type = notification.getType();
 		if (type.equals("MINGLE_REQUEST")) {
@@ -135,6 +169,8 @@ public class NotificationSingleton {
 		return builder.toString();
 	}
 
+	
+	
 	public String getNotificationMessage(ZeppaNotification notification) {
 		StringBuilder builder = new StringBuilder();
 
@@ -147,14 +183,14 @@ public class NotificationSingleton {
 		switch (getNotificationTypeOrder(notification)) {
 		case 0:
 			builder.append(userInfoMediator.getDisplayName()
-					+ " sent mingle request");
+					+ " wants to mingle");
 			break;
 		case 1:
 			builder.append(userInfoMediator.getDisplayName()
 					+ " accepted mingle request");
 			break;
 		case 2:
-			builder.append(userInfoMediator.getDisplayName() + " just started "
+			builder.append(userInfoMediator.getDisplayName() + " started "
 					+ eventMediator.getTitle());
 			break;
 		case 3:
@@ -192,95 +228,116 @@ public class NotificationSingleton {
 		return builder.toString();
 	}
 
-	public PendingIntent getPendingIntent(Context context,
-			ZeppaNotification notification) {
-
-		Intent intent = null;
-
-		switch (getNotificationTypeOrder(notification)) {
-		case 0:
-			intent = new Intent(context, StartMinglingActivity.class);
-			break;
-		case 1:
-			intent = new Intent(context, MinglerActivity.class);
-			break;
-		case 5:
-			intent = new Intent(context, MainActivity.class);
-			break;
-		case 2:
-		case 3:
-		case 4:
-		case 6:
-		case 7:
-		case 8:
-		case 9:
-			AbstractZeppaEventMediator mediator = ZeppaEventSingleton
-					.getInstance().getEventById(notification.getEventId());
-
-			if (mediator.isHostedByCurrentUser()) {
-				intent = new Intent(context, MyEventViewActivity.class);
-			} else {
-				intent = new Intent(context, DefaultEventViewActivity.class);
-			}
-			
-			break;
-
-		}
-
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-				intent, 0);
-		
-		return contentIntent;
-	}
-
 	/*
 	 * Setters
 	 */
 
-	/**
-	 * This method creates a new basic instance of a ZeppaNotification</p> This
-	 * instance is only to be sent to another user from this user.
-	 * 
-	 * @return instance - Basic ZeppaNotification Instance
-	 */
-	public ZeppaNotification newNotificationInstance() {
-		ZeppaNotification instance = new ZeppaNotification();
 
-		instance.setHasSeen(Boolean.FALSE);
-		instance.setSenderId(ZeppaUserSingleton.getInstance().getUserId());
-
-		return instance;
-	}
-
-	public void registerOnLoadListener(OnLoadListener listener) {
+	public void registerOnLoadListener(NotificationLoadListener listener) {
 		if (!loadListeners.contains(listener)) {
 			this.loadListeners.add(listener);
 		}
 	}
 
+	public void unregisterOnLoadListener(NotificationLoadListener listener) {
+		this.loadListeners.remove(listener);
+
+	}
+
+	private boolean alreadyHoldingNotification(ZeppaNotification notification) {
+
+		if (!notifications.isEmpty()) {
+			Iterator<ZeppaNotification> iterator = notifications.iterator();
+			while (iterator.hasNext()) {
+				if (iterator.next().getId().longValue() == notification.getId()
+						.longValue()) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public void addNotification(ZeppaNotification notification) {
-		notifications.add(notification);
+		if (!alreadyHoldingNotification(notification)) {
+			notifications.add(notification);
+		}
 	}
 
-	public void addAllNotifications(List<ZeppaNotification> notifications) {
+	
+	// public void addAllNotifications(List<ZeppaNotification> notifications) {
+	//
+	// notifications.removeAll(notifications);
+	// notifications.addAll(notifications);
+	//
+	// Collections.sort(notifications, Utils.NOTIFICAITON_COMPARATOR);
+	// }
 
-		notifications.removeAll(notifications);
-		notifications.addAll(notifications);
+	public boolean doPushNotification(Context context,
+			ZeppaNotification notification) {
+		if (PrefsManager.getUserPreference(context,
+				Constants.PUSH_NOTIFICATIONS)) {
+			switch (getNotificationTypeOrder(notification)) {
+			case 0:
+				return PrefsManager.getUserPreference(context,
+						Constants.PN_MINGLE_REQUEST);
+			case 1:
+				return PrefsManager.getUserPreference(context,
+						Constants.PN_MINGLE_ACCEPT);
 
-		Collections.sort(notifications, Utils.NOTIFICAITON_COMPARATOR);
+			case 2:
+				return PrefsManager.getUserPreference(context,
+						Constants.PN_EVENT_RECOMMENDATION);
+
+			case 3:
+				return PrefsManager.getUserPreference(context,
+						Constants.PN_EVENT_RECOMMENDATION);
+
+			case 4:
+				return PrefsManager.getUserPreference(context,
+						Constants.PN_EVENT_COMMENT);
+
+			case 5:
+				return PrefsManager.getUserPreference(context,
+						Constants.PN_EVENT_CANCELED);
+
+			case 6:
+				return false;
+			case 7:
+				return PrefsManager.getUserPreference(context,
+						Constants.PN_EVENT_JOINED);
+
+			case 8:
+				return PrefsManager.getUserPreference(context,
+						Constants.PN_EVENT_LEFT);
+
+			case 9:
+				return false;
+
+			default:
+				return false;
+			}
+
+		} else {
+			return false;
+		}
+
 	}
+	
+	
 
 	/*
 	 * Private
 	 */
 
-	private void onFinishLoad() {
-		Iterator<OnLoadListener> listeners = loadListeners.iterator();
+	public void notifyObservers() {
+		Iterator<NotificationLoadListener> listeners = loadListeners.iterator();
 
 		while (listeners.hasNext()) {
-			OnLoadListener listener = listeners.next();
+			NotificationLoadListener listener = listeners.next();
 			try {
-				listener.onFinishLoad();
+				listener.onNotificationsLoaded();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -288,99 +345,7 @@ public class NotificationSingleton {
 		}
 	}
 
-	/*
-	 * Loaders
-	 */
 
-	/**
-	 * This method takes a Notification ID and loads all necessary values to
-	 * display it. NOT THREAD SAFE
-	 * 
-	 * @param credential
-	 * @param notificationId
-	 * @return result
-	 */
-	public ZeppaNotification fetchNotificationAndElementsWithBlocking(
-			GoogleAccountCredential credential, Long notificationId) {
-		ZeppaNotification result = null;
-		Zeppanotificationendpoint notificationEndpoint = buildNotificationEndpoint(credential);
-
-		
-		try {
-			result = notificationEndpoint.getZeppaNotification(notificationId)
-					.execute();
-
-			
-			if (fetchNotificationElementsWithBlocking(credential, result)) {
-				addNotification(result);
-			} else {
-				return null;
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	private boolean fetchNotificationElementsWithBlocking(
-			GoogleAccountCredential credential, ZeppaNotification notification) {
-		boolean success = false;
-
-		int notificationType = NotificationSingleton.getInstance().getNotificationTypeOrder(notification);
-		boolean updateUserRelationship = (notificationType <= 1);
-		
-		success = ZeppaUserSingleton.getInstance()
-				.fetchUserAndRelationshipWithBlocking(notification.getSenderId(),
-						credential, updateUserRelationship);
-
-
-		if (notification.getEventId() != null) {
-			success = ZeppaEventSingleton.getInstance()
-					.fetchEventAndRelationshipWithBlocking(credential,
-							notification.getEventId());
-		} 
-		return success;
-	}
-
-	/**
-	 * This Updates Notification and sets it as seen
-	 * 
-	 * @param notification
-	 * @param credential
-	 * @return
-	 */
-	public boolean markNotificationAsSeen(ZeppaNotification notification,
-			GoogleAccountCredential credential) {
-		boolean success = false;
-		Zeppanotificationendpoint notificationEndpoint = buildNotificationEndpoint(credential);
-
-		try {
-			notificationEndpoint.updateZeppaNotification(notification)
-					.execute();
-			success = true;
-		} catch (GoogleAuthIOException aEx) {
-			Log.wtf(TAG, "AuthException");
-			success = false;
-		} catch (IOException ex) {
-
-		}
-		return success;
-	}
-
-	private Zeppanotificationendpoint buildNotificationEndpoint(GoogleAccountCredential credential){
-		Zeppanotificationendpoint.Builder endpointBuilder = new Zeppanotificationendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				AndroidJsonFactory.getDefaultInstance(), credential);
-		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-		Zeppanotificationendpoint notificationEndpoint = endpointBuilder
-				.build();
-		
-		return notificationEndpoint;
-	}
-	
 	/**
 	 * This method loads the initial instances of notifications the user should
 	 * see
@@ -388,82 +353,14 @@ public class NotificationSingleton {
 	 * @param credential
 	 * @param userId
 	 */
-	public void loadInitialNotificationsInAsync(
+	public void fetchNotifications(ZeppaApplication application, 
 			GoogleAccountCredential credential, Long userId) {
 
-		Object[] params = { credential, userId };
-
-		new AsyncTask<Object, Void, Void>() {
-
-			@Override
-			protected Void doInBackground(Object... params) {
-
-				GoogleAccountCredential credential = (GoogleAccountCredential) params[0];
-				Long userId = (Long) params[1];
-
-				
-				Zeppanotificationendpoint notificationEndpoint = buildNotificationEndpoint(credential);
-
-				// TODO: list notifications for this user
-
-				String cursor = null;
-				String filter = "recipientId == " + userId.longValue()
-						+ " && expires > " + System.currentTimeMillis();
-
-				do {
-					try {
-
-						ListZeppaNotification listNotificationsTask = notificationEndpoint
-								.listZeppaNotification();
-
-						listNotificationsTask.setCursor(cursor);
-						listNotificationsTask.setFilter(filter);
-						listNotificationsTask.setLimit(Integer.valueOf(25));
-
-						CollectionResponseZeppaNotification response = listNotificationsTask
-								.execute();
-
-						if (response == null || response.getItems() == null
-								|| response.getItems().isEmpty()) {
-							cursor = null;
-							break;
-						} else {
-							Iterator<ZeppaNotification> iterator = response
-									.getItems().iterator();
-
-							while (iterator.hasNext()) {
-								ZeppaNotification notification = iterator
-										.next();
-
-								if (fetchNotificationElementsWithBlocking(
-										credential, notification)) {
-									addNotification(notification);
-								}
-
-							}
-
-							cursor = response.getNextPageToken();
-						}
-
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						cursor = null;
-					}
-
-				} while (cursor != null);
-
-				return null;
-			}
-
-			@Override
-			protected void onPostExecute(Void result) {
-				super.onPostExecute(result);
-				hasLoadedInitial = true;
-				onFinishLoad();
-			}
-		}.execute(params);
-
+		
+		ThreadManager.execute(new FetchInitialNotificationsRunnable(application, credential, userId, nextNotificationPageToken));
+		
+		
 	}
+
 
 }

@@ -7,11 +7,9 @@ import android.widget.LinearLayout;
 
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
-import com.minook.zeppa.observer.OnLoadListener;
-import com.minook.zeppa.singleton.ZeppaEventSingleton;
 
 public abstract class AbstractEventLayoutAdapter extends
-		AbstractEventListAdapter implements OnLoadListener {
+		AbstractEventListAdapter {
 
 	protected LinearLayout eventHolder;
 
@@ -20,16 +18,6 @@ public abstract class AbstractEventLayoutAdapter extends
 		super(activity);
 		this.eventHolder = eventHolder;
 
-	}
-
-	@Override
-	public boolean didLoadInitial() {
-		return ZeppaEventSingleton.getInstance().hasLoadedInitial();
-	}
-
-	@Override
-	public void onFinishLoad() {
-		verifyDatasetValid();
 	}
 
 	@Override
@@ -47,36 +35,20 @@ public abstract class AbstractEventLayoutAdapter extends
 			e.printStackTrace();
 		}
 	}
-	
-	
-
-	@Override
-	protected void removeLoaderViewIfVisible() {
-
-		if(loaderView != null && loaderView.getVisibility() == View.VISIBLE){
-			eventHolder.removeView(loaderView);
-			loaderView = null;
-		}
-	}
 
 	public void drawEvents() throws Exception {
 		eventHolder.removeAllViews();
-		if (didLoadInitial()) {
-			if (!eventMediators.isEmpty()) {
+		if (eventMediators != null && !eventMediators.isEmpty()) {
 
-				for (int i = eventHolder.getChildCount(); i < eventMediators
-						.size(); i++) {
-					eventHolder.addView(getView(i, null, eventHolder));
+			for (int i = eventHolder.getChildCount(); i < eventMediators.size(); i++) {
+				View v = getView(i, null, eventHolder);
+				v.setOnClickListener(this);
+				eventHolder.addView(v);
 
-				}
 			}
-		} else {
-			if (loaderView == null) {
-				loaderView = getLoaderView();
-			}
-			eventHolder.addView(loaderView);
 		}
+
 	}
-	
+
 
 }
