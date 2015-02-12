@@ -6,6 +6,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckedTextView;
 import android.widget.Toast;
 
 import com.minook.zeppa.R;
@@ -185,6 +186,8 @@ public class DefaultEventViewActivity extends AbstractEventViewActivity
 			((DefaultZeppaEventMediator) eventMediator)
 					.onJoinButtonClicked(this);
 			onAttendanceChanged();
+			eventMediator.convertQuickActionBar(this, barView);
+			
 			return;
 		case R.id.quickaction_text:
 			((DefaultZeppaEventMediator) eventMediator)

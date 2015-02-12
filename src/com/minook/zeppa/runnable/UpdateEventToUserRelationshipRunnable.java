@@ -25,10 +25,10 @@ public class UpdateEventToUserRelationshipRunnable extends BaseRunnable {
 		try {
 			buildEventRelationshipEndpoint()
 					.updateZeppaEventToUserRelationship(relationship).execute();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
-
 }

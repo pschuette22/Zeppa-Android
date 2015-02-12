@@ -8,6 +8,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -45,6 +49,7 @@ import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator.OnCommentLoadListener;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator.OnEventUpdateListener;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator.OnRelationshipsLoadedListener;
+import com.minook.zeppa.mediator.DefaultZeppaEventMediator.DetermineAndSetConflictStatus;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.runnable.FetchCommentsRunnable;
@@ -59,7 +64,7 @@ import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 public abstract class AbstractEventViewActivity extends
 		AuthenticatedFragmentActivity implements OnClickListener,
 		OnCommentLoadListener, OnEventUpdateListener,
-		OnRelationshipsLoadedListener {
+		OnRelationshipsLoadedListener, OnRefreshListener {
 
 	final private String TAG = getClass().getName();
 
@@ -68,9 +73,6 @@ public abstract class AbstractEventViewActivity extends
 	protected AbstractZeppaUserMediator hostMediator;
 	protected AbstractTagAdapter tagAdapter;
 	protected EventCommentAdapter commentAdapter;
-	private String nextCommentPageToken;
-
-	private boolean updatingRelationships;
 
 	private AddInvitesAdapter mInvitesAdapter;
 
@@ -92,6 +94,9 @@ public abstract class AbstractEventViewActivity extends
 	protected TextView postComment;
 	protected LinearLayout tagHolder;
 	protected LinearLayout commentHolder;
+
+	private PullToRefreshLayout pullToRefreshLayout;
+	private boolean isUpdatingEventRelationships;
 
 	protected View barView;
 
@@ -145,7 +150,14 @@ public abstract class AbstractEventViewActivity extends
 		commentText = (EditText) findViewById(R.id.eventactivity_commenttext);
 		postComment = (TextView) findViewById(R.id.eventactivity_postcomment);
 		postComment.setOnClickListener(this);
-		updatingRelationships = false;
+
+		isUpdatingEventRelationships = false;
+		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.eventactivity_ptr);
+
+		ActionBarPullToRefresh.from(this)
+				.options(Options.create().scrollDistance(.4f).build())
+				.allChildrenArePullable().listener(this)
+				.setup(pullToRefreshLayout);
 
 		tagHolder = (LinearLayout) findViewById(R.id.eventactivity_tagholder);
 		commentHolder = (LinearLayout) findViewById(R.id.eventactivity_commentholder);
@@ -183,7 +195,7 @@ public abstract class AbstractEventViewActivity extends
 	public void onConnected(Bundle connectionHint) {
 		super.onConnected(connectionHint);
 
-		startFetchEventRelationshipsThread();
+		startFetchEventExtrasThread();
 		ThreadManager.execute(new FetchCommentsRunnable(
 				(ZeppaApplication) getApplication(),
 				getGoogleAccountCredential(), eventMediator, commentAdapter
@@ -290,8 +302,8 @@ public abstract class AbstractEventViewActivity extends
 		attending.setOnClickListener(this);
 		mInvitesAdapter = new AddInvitesAdapter(
 				eventMediator.getEventRelationships());
-		updatingRelationships = false;
-
+		isUpdatingEventRelationships = false;
+		pullToRefreshLayout.setRefreshing(false);
 	}
 
 	@Override
@@ -303,7 +315,8 @@ public abstract class AbstractEventViewActivity extends
 	@Override
 	public void onErrorLoadingRelationships() {
 		Toast.makeText(this, "Error Updating Event", Toast.LENGTH_SHORT).show();
-		updatingRelationships = false;
+		isUpdatingEventRelationships = false;
+		pullToRefreshLayout.setRefreshing(false);
 	}
 
 	@Override
@@ -316,7 +329,6 @@ public abstract class AbstractEventViewActivity extends
 	public void onErrorLoadingComments() {
 		Toast.makeText(this, "Error Loading Comments", Toast.LENGTH_SHORT)
 				.show();
-
 	}
 
 	@Override
@@ -335,6 +347,11 @@ public abstract class AbstractEventViewActivity extends
 			super.onNotificationReceived(notification);
 		}
 
+	}
+
+	@Override
+	public void onRefreshStarted(View view) {
+		startFetchEventExtrasThread();
 	}
 
 	protected void setEventInfo() {
@@ -389,7 +406,7 @@ public abstract class AbstractEventViewActivity extends
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if (which == DialogInterface.BUTTON_POSITIVE) {
-					updatingRelationships = true;
+					isUpdatingEventRelationships = true;
 					ThreadManager.execute(new SendEventInvitesRunnable(
 							(ZeppaApplication) getApplication(),
 							getGoogleAccountCredential(), eventMediator
@@ -469,14 +486,16 @@ public abstract class AbstractEventViewActivity extends
 	/**
 	 * This method fetches the attending user relationships in a new thread
 	 */
-	protected void startFetchEventRelationshipsThread() {
+	protected void startFetchEventExtrasThread() {
 
-		if (updatingRelationships) {
+		if (isUpdatingEventRelationships) {
 			return;
 		} else {
-			updatingRelationships = true;
+			isUpdatingEventRelationships = true;
 		}
 
+		eventMediator.setConflictIndicator(this, conflictIndicator);
+		pullToRefreshLayout.setRefreshing(true);
 		eventMediator.loadEventRelationships(
 				(ZeppaApplication) getApplication(),
 				getGoogleAccountCredential(), this);

@@ -170,7 +170,7 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 
 		if (notification.getType().equals("USER_JOINED")
 				|| notification.getType().equals("USER_LEFT")) {
-			startFetchEventRelationshipsThread();
+			startFetchEventExtrasThread();
 		}
 	}
 

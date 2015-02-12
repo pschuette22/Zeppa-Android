@@ -9,7 +9,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CalendarContract.Instances;
 import android.util.Log;
@@ -244,16 +243,16 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 
 		try {
 
-			((DefaultUserInfoMediator)getHostMediator()).sendTextMessage(activity);
-			
+			((DefaultUserInfoMediator) getHostMediator())
+					.sendTextMessage(activity);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			((DefaultUserInfoMediator)getHostMediator()).sendEmail(activity, null);
+			((DefaultUserInfoMediator) getHostMediator()).sendEmail(activity,
+					null);
 
-			
 		}
-		
+
 	}
 
 	public void onJoinButtonClicked(AuthenticatedFragmentActivity activity) {
@@ -273,7 +272,7 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 		try {
 			attendanceChangeListener.onAttendanceChanged();
 		} catch (NullPointerException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
