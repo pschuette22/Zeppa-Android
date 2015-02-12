@@ -15,8 +15,7 @@ import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.observer.OnLoadListener;
 
-public abstract class AbstractTagAdapter extends BaseAdapter implements
-		OnLoadListener {
+public abstract class AbstractTagAdapter extends BaseAdapter {
 
 	protected AuthenticatedFragmentActivity activity;
 	protected LinearLayout tagHolder;

@@ -62,6 +62,8 @@ public class ActivityFragment extends Fragment implements OnRefreshListener,
 				.allChildrenArePullable().listener(this)
 				.setup(pullToRefreshLayout);
 
+		NotificationSingleton.getInstance().registerOnLoadListener(this);
+
 		return layout;
 	}
 
@@ -96,8 +98,10 @@ public class ActivityFragment extends Fragment implements OnRefreshListener,
 	@Override
 	public void onNotificationsLoaded() {
 
-		if (pullToRefreshLayout != null) {
+		try {
 			pullToRefreshLayout.setRefreshing(false);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		if (loaderView != null) {

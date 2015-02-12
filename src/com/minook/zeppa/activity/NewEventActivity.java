@@ -38,6 +38,8 @@ import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.InviteListAdapter;
 import com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter;
 import com.minook.zeppa.mediator.MyZeppaEventMediator;
+import com.minook.zeppa.runnable.SyncZeppaCalendarRunnable;
+import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
@@ -316,6 +318,9 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 					R.string.one_moment));
 			progressDialog.setCancelable(false);
 			progressDialog.show();
+			
+			// Make Sure Zeppa Calendar is Synced
+			ThreadManager.execute(new SyncZeppaCalendarRunnable((ZeppaApplication) getApplication(), getGoogleAccountCredential()));
 
 			Object[] params = { event, progressDialog };
 

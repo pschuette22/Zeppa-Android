@@ -6,11 +6,11 @@
     android:orientation="vertical" >
 
     <ListView
-        android:id="@+id/feedListView"
+        android:id="@+id/startmingling_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:divider="@color/white_eggshell"
-        android:dividerHeight="10dp"/>
+        android:dividerHeight="1dp"/>
 
 </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>

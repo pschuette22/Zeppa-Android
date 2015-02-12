@@ -24,9 +24,9 @@ import com.minook.zeppa.activity.MainActivity;
 import com.minook.zeppa.runnable.DeleteAccountRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.tyczj.extendedcalendarview.CalendarData;
-import com.tyczj.extendedcalendarview.CalendarSyncStateAdapter.OnSyncStateChangedListener;
-import com.tyczj.extendedcalendarview.CalendarSyncStateView;
+import com.pschuette.android.calendarlibrary.CalendarData;
+import com.pschuette.android.calendarlibrary.CalendarSyncStateAdapter.OnSyncStateChangedListener;
+import com.pschuette.android.calendarlibrary.CalendarSyncStateView;
 
 public class SettingsFragment extends Fragment implements OnClickListener,
 		OnCheckedChangeListener, OnSyncStateChangedListener {

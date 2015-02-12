@@ -683,7 +683,7 @@ public abstract class AbstractEventViewActivity extends
 			this.inviteMediators = new ArrayList<DefaultUserInfoMediator>();
 
 			List<DefaultUserInfoMediator> current = ZeppaUserSingleton
-					.getInstance().getFriendInfoMediators();
+					.getInstance().getMinglerMediators();
 			Iterator<DefaultUserInfoMediator> iterator = current.iterator();
 
 			while (iterator.hasNext()) {

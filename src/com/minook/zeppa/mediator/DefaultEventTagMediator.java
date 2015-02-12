@@ -114,7 +114,7 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 		if (myFollow == null) {
 			return;
 		}
-
+		
 		Object[] params = { credential, myFollow, view };
 
 		new AsyncTask<Object, Void, Boolean>() {

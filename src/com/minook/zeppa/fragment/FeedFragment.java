@@ -25,7 +25,6 @@ import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.adapter.eventlistadapter.FeedListAdapter;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
-import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.singleton.ZeppaEventSingleton.OnZeppaEventLoadListener;
 
 public class FeedFragment extends Fragment implements OnRefreshListener,
@@ -96,7 +95,7 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 		feedList.setAdapter(flAdapter);
 		feedList.setOnItemClickListener(flAdapter);
 
-		ZeppaEventSingleton.getInstance().registerObserver(this);
+		ZeppaEventSingleton.getInstance().registerEventLoadListener(this);
 		return layout;
 	}
 
@@ -105,7 +104,7 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 		try {
 			GoogleAccountCredential credential = ((AuthenticatedFragmentActivity) getActivity())
 					.getGoogleAccountCredential();
-			ZeppaEventSingleton.getInstance().fetchNewEventsInAsync(
+			ZeppaEventSingleton.getInstance().fetchNewEvents(
 					(ZeppaApplication) getActivity().getApplication(),
 					credential, pullToRefreshLayout);
 

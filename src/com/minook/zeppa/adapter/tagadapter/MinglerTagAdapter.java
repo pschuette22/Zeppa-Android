@@ -98,18 +98,6 @@ public class MinglerTagAdapter extends AbstractTagAdapter implements
 		super.notifyDataSetChanged();
 	}
 
-	@Override
-	public boolean didLoadInitial() {
-
-		return true;
-	}
-
-	@Override
-	public void onFinishLoad() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public boolean doUpdateAdapter(
 			List<DefaultEventTagMediator> currentMediatorList) {
 

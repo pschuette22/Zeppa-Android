@@ -262,7 +262,7 @@ public class ZeppaUserSingleton {
 
 	public List<Long> getAllFriendZeppaIds() {
 		List<Long> allFriendZeppaIds = new ArrayList<Long>();
-		Iterator<DefaultUserInfoMediator> iterator = getFriendInfoMediators()
+		Iterator<DefaultUserInfoMediator> iterator = getMinglerMediators()
 				.iterator();
 		while (iterator.hasNext()) {
 			allFriendZeppaIds.add(iterator.next().getUserId());
@@ -274,7 +274,7 @@ public class ZeppaUserSingleton {
 	 * 
 	 * @return friendInfoMediators
 	 */
-	public List<DefaultUserInfoMediator> getFriendInfoMediators() {
+	public List<DefaultUserInfoMediator> getMinglerMediators() {
 		List<DefaultUserInfoMediator> friendList = new ArrayList<DefaultUserInfoMediator>();
 
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators

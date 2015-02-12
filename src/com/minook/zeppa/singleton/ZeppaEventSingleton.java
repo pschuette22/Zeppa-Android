@@ -30,7 +30,7 @@ import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.zeppaeventendpoint.Zeppaeventendpoint;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
-import com.tyczj.extendedcalendarview.Event;
+import com.pschuette.android.calendarlibrary.Event;
 
 public class ZeppaEventSingleton {
 
@@ -203,7 +203,7 @@ public class ZeppaEventSingleton {
 	 * 
 	 * @param adapter
 	 */
-	public void registerObserver(OnZeppaEventLoadListener listener) {
+	public void registerEventLoadListener(OnZeppaEventLoadListener listener) {
 		if (!eventLoadListeners.contains(listener)) {
 			eventLoadListeners.add(listener);
 		}
@@ -214,7 +214,7 @@ public class ZeppaEventSingleton {
 	 * 
 	 * @param adapter
 	 */
-	public void unregisterObserver(OnZeppaEventLoadListener listener) {
+	public void unregisterEventLoadListener(OnZeppaEventLoadListener listener) {
 		eventLoadListeners.remove(listener);
 	}
 
@@ -457,7 +457,7 @@ public class ZeppaEventSingleton {
 	 * ------------ Loader Method ---------------
 	 */
 
-	public void fetchNewEventsInAsync(ZeppaApplication application,
+	public void fetchNewEvents(ZeppaApplication application,
 			GoogleAccountCredential credential,
 			PullToRefreshLayout pullToRefresh) {
 

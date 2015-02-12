@@ -66,7 +66,7 @@ public class FetchInitialNotificationsRunnable extends BaseRunnable {
 									.getAbstractUserMediatorById(
 											notification.getSenderId()) == null) {
 								ZeppaUserInfo info = buildUserInfoEndpoint()
-										.getZeppaUserInfo(
+										.fetchZeppaUserInfoByParentId(
 												notification.getSenderId())
 										.execute();
 								ZeppaUserSingleton

@@ -14,6 +14,7 @@ import com.minook.zeppa.runnable.FetchInitialEventsRunnable;
 import com.minook.zeppa.runnable.FetchInitialMinglersRunnable;
 import com.minook.zeppa.runnable.FetchMyEventTagsRunnable;
 import com.minook.zeppa.runnable.InsertDeviceRunnable;
+import com.minook.zeppa.runnable.SyncZeppaCalendarRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
@@ -111,6 +112,9 @@ public class ZeppaApplication extends Application {
 		ThreadManager.execute(new FetchMyEventTagsRunnable(this, credential, userId));
 
 		ThreadManager.execute(new InsertDeviceRunnable(this, credential, userId));
+
+		ThreadManager.execute(new SyncZeppaCalendarRunnable(this, credential));
+
 	}
 
 

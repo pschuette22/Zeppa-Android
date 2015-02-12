@@ -14,9 +14,10 @@ import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.eventtagendpoint.model.EventTag;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.mediator.MyEventTagMediator;
+import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.singleton.EventTagSingleton;
 
-public class MyTagAdapter extends AbstractTagAdapter {
+public class MyTagAdapter extends AbstractTagAdapter implements OnLoadListener {
 
 	private List<Long> tagIds;
 
@@ -72,7 +73,6 @@ public class MyTagAdapter extends AbstractTagAdapter {
 
 	@Override
 	public void onFinishLoad() {
-		setTags();
 		notifyDataSetChanged();
 	}
 

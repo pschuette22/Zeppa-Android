@@ -25,7 +25,7 @@ public class InviteListAdapter extends BaseAdapter implements OnClickListener {
 		this.activity = activity;
 
 		friendInfoManagers = ZeppaUserSingleton.getInstance()
-				.getFriendInfoMediators();
+				.getMinglerMediators();
 		invitedUserIds = new ArrayList<Long>();
 
 	}

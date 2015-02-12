@@ -12,12 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.minook.zeppa.Constants;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
-import com.tyczj.extendedcalendarview.DayAdapter.EventItemClickListener;
-import com.tyczj.extendedcalendarview.Event;
-import com.tyczj.extendedcalendarview.ExtendedCalendarView;
+import com.pschuette.android.calendarlibrary.DayAdapter.EventItemClickListener;
+import com.pschuette.android.calendarlibrary.Event;
+import com.pschuette.android.calendarlibrary.ExtendedCalendarView;
 
 public class CalendarFragment extends Fragment implements
 		EventItemClickListener {

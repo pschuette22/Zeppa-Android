@@ -27,7 +27,7 @@ public class MinglerListAdapter extends BaseAdapter implements
 
 		if (friendInfoManagers == null) {
 			this.infoManagers = ZeppaUserSingleton.getInstance()
-					.getFriendInfoMediators();
+					.getMinglerMediators();
 		} else {
 			this.infoManagers = friendInfoManagers;
 		}

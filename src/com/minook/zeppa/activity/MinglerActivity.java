@@ -2,6 +2,10 @@ package com.minook.zeppa.activity;
 
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -38,7 +42,7 @@ import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		OnClickListener, OnMinglerRelationshipsLoadedListener,
-		OnTagLoadListener, OnZeppaEventLoadListener {
+		OnTagLoadListener, OnZeppaEventLoadListener, OnRefreshListener {
 
 	private static final String TAG = "UserActivity";
 
@@ -51,11 +55,17 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 
 	private LinearLayout eventHolder;
 	private LinearLayout tagHolder;
+	private PullToRefreshLayout pullToRefreshLayout;
 
 	private MinglerTagAdapter tagAdapter;
 	private MinglerEventsAdapter friendEventsAdapter;
-
 	private DefaultUserInfoMediator userMediator;
+
+	private boolean isUpdating;
+	private boolean isUpdatingMinglerRelationships;
+	private boolean isUpdatingMinglerEvents;
+	private boolean isUpdatingMinglerTags;
+	private boolean didInitialFetch;
 
 	/*
 	 * ------------- Override Methods --------------
@@ -66,9 +76,17 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_mingler);
+		isUpdating = false;
+		isUpdatingMinglerRelationships = false;
+		isUpdatingMinglerEvents = false;
+		isUpdatingMinglerTags = false;
+		didInitialFetch = false;
 
 		userId = getIntent().getExtras()
 				.getLong(Constants.INTENT_ZEPPA_USER_ID);
+
+		userMediator = (DefaultUserInfoMediator) ZeppaUserSingleton
+				.getInstance().getAbstractUserMediatorById(userId);
 
 		// find UI Elements and hold
 		userImage = (ImageView) findViewById(R.id.useractivity_image);
@@ -92,14 +110,18 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(false);
 
+		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.mingleractivity_ptr);
+
+		ActionBarPullToRefresh.from(this)
+				.options(Options.create().scrollDistance(.4f).build())
+				.allChildrenArePullable().listener(this)
+				.setup(pullToRefreshLayout);
+
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-
-		userMediator = (DefaultUserInfoMediator) ZeppaUserSingleton
-				.getInstance().getAbstractUserMediatorById(userId);
 
 		tagAdapter = new MinglerTagAdapter(this, tagHolder,
 				userMediator.getUserId(), null);
@@ -108,6 +130,8 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 
 		setUserInfo();
 		mutualMinglers.setText("Loading...");
+		ZeppaEventSingleton.getInstance().registerEventLoadListener(this);
+
 	}
 
 	@Override
@@ -125,22 +149,10 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 	public void onConnected(Bundle connectionHint) {
 		super.onConnected(connectionHint);
 		// TODO: update UI
-		ThreadManager.execute(new FetchMutualMingersRunnable(
-				(ZeppaApplication) getApplication(),
-				getGoogleAccountCredential(), ZeppaUserSingleton.getInstance()
-						.getUserId().longValue(), userMediator, this));
-
-		ThreadManager.execute(new FetchDefaultTagsForUserRunnable(
-				(ZeppaApplication) getApplication(),
-				getGoogleAccountCredential(), ZeppaUserSingleton.getInstance()
-						.getUserId().longValue(), userMediator.getUserId()
-						.longValue(), this));
-
-		ThreadManager.execute(new FetchEventsForMinglerRunnable(
-				(ZeppaApplication) getApplication(),
-				getGoogleAccountCredential(), ZeppaUserSingleton.getInstance()
-						.getUserId().longValue(), userMediator.getUserId()
-						.longValue()));
+		if (!didInitialFetch) {
+			didInitialFetch = true;
+			fetchUpdatedInfo();
+		}
 	}
 
 	@Override
@@ -230,6 +242,9 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 			mutualMinglers.setText(mutualMingerMediators.size()
 					+ " Mutual Minglers");
 		}
+
+		isUpdatingMinglerRelationships = false;
+		onEntityTypeUpdateFinished();
 	}
 
 	@Override
@@ -238,18 +253,87 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 				.show();
 		mutualMinglers.setVisibility(View.GONE);
 
+		isUpdatingMinglerRelationships = false;
+		onEntityTypeUpdateFinished();
+
 	}
 
 	@Override
 	public void onTagsLoaded() {
 		tagAdapter.notifyDataSetChanged();
 		tagAdapter.drawTags();
+		isUpdatingMinglerTags = false;
+		onEntityTypeUpdateFinished();
+
+	}
+
+	@Override
+	public void onRefreshStarted(View view) {
+		fetchUpdatedInfo();
 
 	}
 
 	@Override
 	public void onErrorLoadingTags() {
 		Toast.makeText(this, "Error loading tags", Toast.LENGTH_SHORT).show();
+		isUpdatingMinglerTags = false;
+		onEntityTypeUpdateFinished();
+	}
+
+	@Override
+	public void onZeppaEventsLoaded() {
+		friendEventsAdapter.notifyDataSetChanged();
+		try {
+			friendEventsAdapter.drawEvents();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		isUpdatingMinglerEvents = false;
+		onEntityTypeUpdateFinished();
+
+	}
+
+	private void onEntityTypeUpdateFinished() {
+
+		if (isUpdatingMinglerEvents || isUpdatingMinglerRelationships
+				|| isUpdatingMinglerTags) {
+			return;
+		} else {
+			pullToRefreshLayout.setRefreshing(false);
+			isUpdating = false;
+		}
+
+	}
+
+	private void fetchUpdatedInfo() {
+
+		if (!isConnected() || isUpdating)
+			return;
+
+		pullToRefreshLayout.setRefreshing(true);
+
+		isUpdatingMinglerRelationships = true;
+		ThreadManager.execute(new FetchMutualMingersRunnable(
+				(ZeppaApplication) getApplication(),
+				getGoogleAccountCredential(), ZeppaUserSingleton.getInstance()
+						.getUserId().longValue(), userMediator, this));
+
+		isUpdatingMinglerTags = true;
+		ThreadManager.execute(new FetchDefaultTagsForUserRunnable(
+				(ZeppaApplication) getApplication(),
+				getGoogleAccountCredential(), ZeppaUserSingleton.getInstance()
+						.getUserId().longValue(), userMediator.getUserId()
+						.longValue(), this));
+
+		// Update Mingler Events
+		isUpdatingMinglerEvents = true;
+		ThreadManager.execute(new FetchEventsForMinglerRunnable(
+				(ZeppaApplication) getApplication(),
+				getGoogleAccountCredential(), ZeppaUserSingleton.getInstance()
+						.getUserId().longValue(), userMediator.getUserId()
+						.longValue()));
 
 	}
 
@@ -306,18 +390,6 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 						}
 					});
 			builder.show();
-		}
-
-	}
-
-	@Override
-	public void onZeppaEventsLoaded() {
-		friendEventsAdapter.notifyDataSetChanged();
-		try {
-			friendEventsAdapter.drawEvents();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 	}

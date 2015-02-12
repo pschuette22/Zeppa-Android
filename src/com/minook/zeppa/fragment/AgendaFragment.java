@@ -32,7 +32,7 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ZeppaEventSingleton.getInstance().registerObserver(this);
+		ZeppaEventSingleton.getInstance().registerEventLoadListener(this);
 
 	}
 
@@ -84,7 +84,7 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 
 	@Override
 	public void onDestroy() {
-		ZeppaEventSingleton.getInstance().unregisterObserver(this);
+		ZeppaEventSingleton.getInstance().unregisterEventLoadListener(this);
 		super.onDestroy();
 	}
 

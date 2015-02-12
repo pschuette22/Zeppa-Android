@@ -65,7 +65,7 @@ public class MinglersFragment extends Fragment implements OnMinglersLoadListener
 		super.onStart();
 		
 		List<DefaultUserInfoMediator> friendInfoManagers = ZeppaUserSingleton
-				.getInstance().getFriendInfoMediators();
+				.getInstance().getMinglerMediators();
 		adapter = new MinglerListAdapter((AuthenticatedFragmentActivity) getActivity(), friendInfoManagers);
 		contactList.setAdapter(adapter);
 		contactList.setOnItemClickListener(this);
