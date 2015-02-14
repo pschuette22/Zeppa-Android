@@ -75,7 +75,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 		AbstractZeppaUserMediator senderMediator = ZeppaUserSingleton
 				.getInstance().getAbstractUserMediatorById(
-						notification.getSenderId());
+						notification.getSenderId().longValue());
 
 		if (senderMediator == null) {
 			Log.wtf("TAG", "No User Found for received Notification");

@@ -5,7 +5,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;

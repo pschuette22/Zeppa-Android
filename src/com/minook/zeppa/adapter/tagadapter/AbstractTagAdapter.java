@@ -7,13 +7,10 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
-import com.minook.zeppa.observer.OnLoadListener;
 
 public abstract class AbstractTagAdapter extends BaseAdapter {
 

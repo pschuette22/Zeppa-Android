@@ -56,7 +56,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,20 +65,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
-import com.minook.zeppa.adapter.NotificationsAdapter;
 import com.minook.zeppa.fragment.AccountFragment;
 import com.minook.zeppa.fragment.FeedbackFragment;
 import com.minook.zeppa.fragment.HomeFragment;
 import com.minook.zeppa.fragment.MinglersFragment;
 import com.minook.zeppa.fragment.SettingsFragment;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
-import com.minook.zeppa.singleton.NotificationSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class MainActivity extends AuthenticatedFragmentActivity {
 

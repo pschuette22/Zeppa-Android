@@ -57,8 +57,11 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 		this.minglingUserIds = new ArrayList<Long>();
 		this.hasLoadedInitialTags = false;
 
-		loadImageInAsync(userInfo.getImageUrl());
-
+		try {
+			loadImageInAsync(userInfo.getImageUrl());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -294,17 +297,17 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 				application, credential, relationship));
 
 	}
-	
-	public void sendTextMessage(Context context){
+
+	public void sendTextMessage(Context context) {
 		Intent smsIntent = new Intent(Intent.ACTION_VIEW);
 		smsIntent.setType("vnd.android-dir/mms-sms");
 		smsIntent.putExtra("address", getPrimaryPhoneNumber());
 		context.startActivity(smsIntent);
 	}
-	
-	public void sendEmail(Context context, String emailSubject){
-		Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
-				Uri.fromParts("mailto", getGmail(), null));
+
+	public void sendEmail(Context context, String emailSubject) {
+		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+				"mailto", getGmail(), null));
 		emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
 		context.startActivity(Intent.createChooser(emailIntent, "Email "
 				+ getGivenName()));

@@ -80,7 +80,7 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 		((ZeppaApplication) getApplication()).setCurrentActivity(this);
 		String heldAccountName = PrefsManager.getLoggedInEmail(getApplication());
 
-		if (heldAccountName != null) {
+		if (heldAccountName != null && !heldAccountName.isEmpty()) {
 			initializeApiClient(heldAccountName);
 			apiClient.connect();
 		}
@@ -147,13 +147,18 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 	 * 
 	 * @return credential used to access App Engine API
 	 */
-	public GoogleAccountCredential getGoogleAccountCredential() {
+	public GoogleAccountCredential getGoogleAccountCredential() throws NullPointerException {
 
 		GoogleAccountCredential credential = GoogleAccountCredential
 				.usingAudience(this, Constants.ANDROID_AUDIENCE);
 
-		credential.setSelectedAccountName(Plus.AccountApi
-				.getAccountName(apiClient));
+		String loggedInAccount = PrefsManager.getLoggedInEmail(getApplication());
+		
+		if(loggedInAccount == null){
+			throw new NullPointerException("No Logged In Account");
+		}
+		
+		credential.setSelectedAccountName(loggedInAccount);
 
 		return credential;
 	}
@@ -164,20 +169,25 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 	 */
 
 	public void logout() {
+		
+		// Remove current device on the backend so notifications are not sent to it
+		ThreadManager.execute(new RemoveCurrentDeviceRunnable(
+				(ZeppaApplication) getApplication(),
+				getGoogleAccountCredential()));
+		
+		// Restore all singleton instances.
+		EventTagSingleton.getInstance().restore();
+		NotificationSingleton.getInstance().restore();
+		ZeppaEventSingleton.getInstance().restore();
+		ZeppaUserSingleton.getInstance().restore();
+		
+		// Clear logged in prefs
 		getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE).edit()
 				.remove(Constants.LOGGED_IN_ACCOUNT).commit();
 		getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE).edit()
 				.remove(Constants.LOGGED_IN_USER_ID).commit();
 
-		ThreadManager.execute(new RemoveCurrentDeviceRunnable(
-				(ZeppaApplication) getApplication(),
-				getGoogleAccountCredential()));
-
-		EventTagSingleton.getInstance().restore();
-		NotificationSingleton.getInstance().restore();
-		ZeppaEventSingleton.getInstance().restore();
-		ZeppaUserSingleton.getInstance().restore();
-
+		// Return to Login activity
 		Intent toLogin = new Intent(this, LoginActivity.class);
 		startActivity(toLogin);
 		finish();
@@ -197,10 +207,7 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 			if (resultCode == RESULT_OK) {
 				String accountName = data
 						.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-				getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE)
-						.edit()
-						.putString(Constants.LOGGED_IN_ACCOUNT, accountName)
-						.commit();
+				PrefsManager.setLoggedInAccountEmail(getApplication(), accountName);
 				initializeApiClient(accountName);
 
 				connectionProgress.show();

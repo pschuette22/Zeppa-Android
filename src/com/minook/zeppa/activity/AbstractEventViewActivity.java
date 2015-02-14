@@ -49,7 +49,6 @@ import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator.OnCommentLoadListener;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator.OnEventUpdateListener;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator.OnRelationshipsLoadedListener;
-import com.minook.zeppa.mediator.DefaultZeppaEventMediator.DetermineAndSetConflictStatus;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.runnable.FetchCommentsRunnable;

@@ -14,10 +14,9 @@ import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.eventtagendpoint.model.EventTag;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.mediator.MyEventTagMediator;
-import com.minook.zeppa.observer.OnLoadListener;
 import com.minook.zeppa.singleton.EventTagSingleton;
 
-public class MyTagAdapter extends AbstractTagAdapter implements OnLoadListener {
+public class MyTagAdapter extends AbstractTagAdapter {
 
 	private List<Long> tagIds;
 
@@ -26,11 +25,8 @@ public class MyTagAdapter extends AbstractTagAdapter implements OnLoadListener {
 		super(activity, tagHolder);
 		this.tagIds = tagIds;
 
-		if (didLoadInitial()) {
-			setTags();
-		} else {
-			EventTagSingleton.getInstance().setWaitingAdapter(this);
-		}
+		setTags();
+
 	}
 
 	@Override
@@ -66,17 +62,6 @@ public class MyTagAdapter extends AbstractTagAdapter implements OnLoadListener {
 	}
 
 	@Override
-	public boolean didLoadInitial() {
-		// TODO Auto-generated method stub
-		return EventTagSingleton.getInstance().didLoadInitialTags();
-	}
-
-	@Override
-	public void onFinishLoad() {
-		notifyDataSetChanged();
-	}
-
-	@Override
 	public List<AbstractEventTagMediator> getCurrentTagMediators() {
 		List<AbstractEventTagMediator> mediators;
 		if (tagIds == null) {
@@ -87,8 +72,6 @@ public class MyTagAdapter extends AbstractTagAdapter implements OnLoadListener {
 
 		return mediators;
 	}
-	
-	
 
 	@Override
 	public void notifyDataSetChanged() {
@@ -96,20 +79,22 @@ public class MyTagAdapter extends AbstractTagAdapter implements OnLoadListener {
 		super.notifyDataSetChanged();
 	}
 
-	public boolean tagsAreCurrent(){
-		
+	public boolean tagsAreCurrent() {
+
 		List<AbstractEventTagMediator> currentMediators;
-		
+
 		if (tagIds == null) {
 			currentMediators = EventTagSingleton.getInstance().getMyTags();
 		} else {
-			currentMediators = EventTagSingleton.getInstance().getTagsFrom(tagIds);
+			currentMediators = EventTagSingleton.getInstance().getTagsFrom(
+					tagIds);
 		}
-		
-		return (currentMediators.containsAll(tagMediators) && tagMediators.containsAll(currentMediators));
-		
+
+		return (currentMediators.containsAll(tagMediators) && tagMediators
+				.containsAll(currentMediators));
+
 	}
-	
+
 	private void setTags() {
 		if (tagIds == null) {
 			tagMediators = EventTagSingleton.getInstance().getMyTags();
@@ -122,10 +107,10 @@ public class MyTagAdapter extends AbstractTagAdapter implements OnLoadListener {
 
 		String text = trimTag(textView.getText().toString());
 
-		if(text.isEmpty()){
+		if (text.isEmpty()) {
 			return false;
 		}
-		
+
 		if (getMatchingMediator(text) != null) {
 			Toast.makeText(activity, "Already Made!", Toast.LENGTH_SHORT)
 					.show();

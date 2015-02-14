@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
@@ -108,7 +107,8 @@ public class Utils {
 			if (timeBetween < (3 * 1000 * 60)) { // in within 3 minutes
 				builder.append("Right Now");
 			} else if (timeBetween < (30 * 1000 * 60)) {
-				builder.append((timeBetween / (1000 * 60)) + " minutes from now");
+				builder.append((timeBetween / (1000 * 60))
+						+ " minutes from now");
 			} else {
 				builder.append(getTimeAsString(dateMillis));
 			}
@@ -226,45 +226,48 @@ public class Utils {
 	public static final Comparator<AbstractZeppaUserMediator> USER_COMPARATOR = new Comparator<AbstractZeppaUserMediator>() {
 
 		@Override
-		public int compare(AbstractZeppaUserMediator lhs, AbstractZeppaUserMediator rhs) {
+		public int compare(AbstractZeppaUserMediator lhs,
+				AbstractZeppaUserMediator rhs) {
 			// TODO Auto-generated method stub
-			return (lhs.getDisplayName())
-					.compareToIgnoreCase(rhs.getDisplayName());
+			return (lhs.getDisplayName()).compareToIgnoreCase(rhs
+					.getDisplayName());
 		}
 
 	};
 
-//	public static final Comparator<ZeppaUser> USER_FINDER_COMPARATOR = new Comparator<ZeppaUser>() {
-//
-//		@Override
-//		public int compare(ZeppaUser lhs, ZeppaUser rhs) {
-//			List<Long> requestIds = ZeppaUserSingleton.getInstance().getUser()
-//					.getFriendRequestIds();
-//			boolean lRequested = requestIds.contains(lhs.getKey().getId());
-//			boolean rRequested = requestIds.contains(rhs.getKey().getId());
-//			if (lRequested && !rRequested) {
-//				return 1;
-//			} else if (!lRequested && rRequested) {
-//				return -1;
-//			} else {
-//				return (lhs.getGivenName() + " " + lhs.getFamilyName())
-//						.compareToIgnoreCase(rhs.getGivenName() + " "
-//								+ rhs.getFamilyName());
-//			}
-//		}
-//
-//	};
-//
-//	public static final Comparator<ZeppaEvent> EVENT_COMPARATOR = new Comparator<ZeppaEvent>() {
-//
-//		@Override
-//		public int compare(ZeppaEvent lhs, ZeppaEvent rhs) {
-//			// TODO Auto-generated method stub
-//			return ((int) (((long) lhs.getStart()) - ((long) rhs.getStart())));
-//
-//		}
-//
-//	};
+	// public static final Comparator<ZeppaUser> USER_FINDER_COMPARATOR = new
+	// Comparator<ZeppaUser>() {
+	//
+	// @Override
+	// public int compare(ZeppaUser lhs, ZeppaUser rhs) {
+	// List<Long> requestIds = ZeppaUserSingleton.getInstance().getUser()
+	// .getFriendRequestIds();
+	// boolean lRequested = requestIds.contains(lhs.getKey().getId());
+	// boolean rRequested = requestIds.contains(rhs.getKey().getId());
+	// if (lRequested && !rRequested) {
+	// return 1;
+	// } else if (!lRequested && rRequested) {
+	// return -1;
+	// } else {
+	// return (lhs.getGivenName() + " " + lhs.getFamilyName())
+	// .compareToIgnoreCase(rhs.getGivenName() + " "
+	// + rhs.getFamilyName());
+	// }
+	// }
+	//
+	// };
+	//
+	// public static final Comparator<ZeppaEvent> EVENT_COMPARATOR = new
+	// Comparator<ZeppaEvent>() {
+	//
+	// @Override
+	// public int compare(ZeppaEvent lhs, ZeppaEvent rhs) {
+	// // TODO Auto-generated method stub
+	// return ((int) (((long) lhs.getStart()) - ((long) rhs.getStart())));
+	//
+	// }
+	//
+	// };
 
 	public static final Comparator<ZeppaNotification> NOTIFICAITON_COMPARATOR = new Comparator<ZeppaNotification>() {
 
@@ -294,21 +297,30 @@ public class Utils {
 
 		StringBuilder builder = new StringBuilder();
 
-		builder.append("(");
-		builder.append(unformatedNumber.substring(1, 4)); // area code
-		builder.append(") ");
-		builder.append(unformatedNumber.substring(4, 7)); // first Three
-		builder.append("-");
-		builder.append(unformatedNumber.substring(7)); // Last four
+		if (unformatedNumber.length() == 11) {
+			builder.append("(");
+			builder.append(unformatedNumber.substring(1, 4)); // area code
+			builder.append(") ");
+			builder.append(unformatedNumber.substring(4, 7)); // first Three
+			builder.append("-");
+			builder.append(unformatedNumber.substring(7)); // Last four
+		} else if (unformatedNumber.length() == 10) {
+			builder.append("(");
+			builder.append(unformatedNumber.substring(0, 3)); // area code
+			builder.append(") ");
+			builder.append(unformatedNumber.substring(3, 6)); // first Three
+			builder.append("-");
+			builder.append(unformatedNumber.substring(6)); // Last four
+		}
 
 		return builder.toString(); // Number in form: (123)456-7890
 	}
 
-	public static String make10DigitNumber(String contactPhoneNumber) {
+	public static String make11DigitNumber(String contactPhoneNumber) {
 		StringBuilder builder = new StringBuilder();
 
 		if (contactPhoneNumber.charAt(0) == '1') {
-			if (contactPhoneNumber.length() == 10) {
+			if (contactPhoneNumber.length() == 11) {
 				Log.d(TAG, "Aleady correctForm: " + contactPhoneNumber);
 				return contactPhoneNumber;
 			} else {

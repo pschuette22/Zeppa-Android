@@ -2,8 +2,6 @@ package com.minook.zeppa.adapter.eventlistadapter;
 
 import java.util.List;
 
-import android.widget.ListView;
-
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;

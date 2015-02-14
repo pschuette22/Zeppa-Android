@@ -12,10 +12,8 @@ import android.widget.LinearLayout;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
-import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.mediator.DefaultEventTagMediator;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
-import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
 import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 

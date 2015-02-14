@@ -136,8 +136,8 @@ public class ZeppaUserSingleton {
 	}
 
 	/**
-	 * Create a new defaultUserInfoMediator at runtime and add it to the minglers
-	 * list
+	 * Create a new defaultUserInfoMediator at runtime and add it to the
+	 * minglers list
 	 * 
 	 * @param userInfo
 	 * @param relationship
@@ -148,7 +148,8 @@ public class ZeppaUserSingleton {
 
 		AbstractZeppaUserMediator mediator = null;
 		try {
-			mediator = getAbstractUserMediatorById(userInfo.getKey().getParent().getId().longValue());
+			mediator = getAbstractUserMediatorById(userInfo.getKey()
+					.getParent().getId().longValue());
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
@@ -207,7 +208,7 @@ public class ZeppaUserSingleton {
 	public boolean hasLoadedInitial() {
 		return hasLoadedInitial;
 	}
-	
+
 	public void setHasLoadedInitial() {
 		this.hasLoadedInitial = true;
 	}
@@ -228,17 +229,17 @@ public class ZeppaUserSingleton {
 		return userMediator.getZeppaCalendarId();
 	}
 
-	private boolean listContainsId(List<Long> list, long id){
+	private boolean listContainsId(List<Long> list, long id) {
 		Iterator<Long> iterator = list.iterator();
-		while(iterator.hasNext()){
-			if(iterator.next().longValue() == id){
+		while (iterator.hasNext()) {
+			if (iterator.next().longValue() == id) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public ArrayList<DefaultUserInfoMediator> getMinglersFrom(List<Long> list) {
 		ArrayList<DefaultUserInfoMediator> minglers = new ArrayList<DefaultUserInfoMediator>();
 
@@ -248,14 +249,14 @@ public class ZeppaUserSingleton {
 		while (iterator.hasNext()) {
 			DefaultUserInfoMediator userInfoMediator = iterator.next();
 			if (userInfoMediator.isMingling()
-					&& listContainsId(list, userInfoMediator.getUserId().longValue())) {
+					&& listContainsId(list, userInfoMediator.getUserId()
+							.longValue())) {
 				minglers.add(userInfoMediator);
 			}
 
 		}
-		
-		Collections.sort(minglers, Utils.USER_COMPARATOR);
 
+		Collections.sort(minglers, Utils.USER_COMPARATOR);
 
 		return minglers;
 	}
@@ -309,7 +310,7 @@ public class ZeppaUserSingleton {
 		}
 
 		Collections.sort(potentialConnectionList, Utils.USER_COMPARATOR);
-		
+
 		return potentialConnectionList;
 	}
 
@@ -334,11 +335,8 @@ public class ZeppaUserSingleton {
 
 	public AbstractZeppaUserMediator getAbstractUserMediatorById(Long userId) {
 
-		try {
-			if (userId.longValue() == userMediator.getUserId().longValue()) {
-				return userMediator;
-			}
-		} catch (NullPointerException e) {
+		if (userId.longValue() == userMediator.getUserId().longValue()) {
+			return userMediator;
 		}
 
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators

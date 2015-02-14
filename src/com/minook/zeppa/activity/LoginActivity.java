@@ -92,15 +92,15 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 						|| (!apiClient.isConnecting() && !apiClient
 								.isConnected())) {
 
-					if (getSharedPreferences(Constants.SHARED_PREFS,
-							MODE_PRIVATE).getString(
-							Constants.LOGGED_IN_ACCOUNT, null) == null) {
+					String loggedInAccount = PrefsManager
+							.getLoggedInEmail(getApplication());
+					if (loggedInAccount == null || loggedInAccount.isEmpty()) {
 						Intent intent = AccountPicker.newChooseAccountIntent(
 								null, null, new String[] { "com.google" },
 								false, null, null, null, null);
 						startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
 					} else if (connectionResult == null) {
-						// No connectioconnectn result, try to connect
+						// No connection result, try to connect
 						apiClient.connect();
 					} else if (connectionResult.hasResolution()) {
 						try {
@@ -143,7 +143,9 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		loadAndLaunch(); // Once the API Client connects, try to launch.
+		if (PrefsManager.getLoggedInEmail(getApplication()) != null) {
+			loadAndLaunch(); // Once the API Client connects, try to launch.
+		}
 	}
 
 	/*

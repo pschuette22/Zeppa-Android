@@ -2,6 +2,7 @@ package com.minook.zeppa.singleton;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,9 +32,10 @@ public class EventTagSingleton {
 
 	public interface OnTagLoadListener {
 		public void onTagsLoaded();
+
 		public void onErrorLoadingTags();
 	}
-	
+
 	private static EventTagSingleton singleton;
 
 	private final String TAG = "EventTagSingleton";
@@ -59,8 +61,8 @@ public class EventTagSingleton {
 			singleton = new EventTagSingleton();
 		return singleton; // return instance
 	}
-	
-	public void restore(){
+
+	public void restore() {
 		singleton = new EventTagSingleton();
 	}
 
@@ -72,12 +74,10 @@ public class EventTagSingleton {
 		tag.setOwnerId(getUserId());
 		return tag;
 	}
-	
-	public void clear(){
+
+	public void clear() {
 		tagMediators.clear();
 	}
-	
-	
 
 	/**
 	 * This method sets an adapter that is waiting for this users tags to load.
@@ -130,14 +130,14 @@ public class EventTagSingleton {
 
 		return null;
 	}
-	
-	public void updateEventTagsForUser(long userId, List<DefaultEventTagMediator> mediators){
-		
+
+	public void updateEventTagsForUser(long userId,
+			List<DefaultEventTagMediator> mediators) {
+
 		List<AbstractEventTagMediator> remove = getTagMediatorsForUser(userId);
 		tagMediators.removeAll(remove);
 		tagMediators.addAll(mediators);
-		
-		
+
 	}
 
 	/**
@@ -164,15 +164,12 @@ public class EventTagSingleton {
 		return result;
 	}
 
-
-
-	public void onMyTagsLoaded(){
+	public void onMyTagsLoaded() {
 		this.hasLoadedTags = true;
-		if(waitingAdapter != null){
+		if (waitingAdapter != null) {
 			waitingAdapter.notifyDataSetChanged();
 		}
 	}
-	
 
 	public List<DefaultEventTagMediator> getDefaultTagsFrom(List<Long> tagIds) {
 		List<AbstractEventTagMediator> abstractMediators = getTagsFrom(tagIds);
@@ -210,28 +207,28 @@ public class EventTagSingleton {
 	 * Setters
 	 */
 
-	public boolean removeEventTagMediator(AbstractEventTagMediator mediator){
+	public boolean removeEventTagMediator(AbstractEventTagMediator mediator) {
 		return tagMediators.remove(mediator);
 	}
-	
-	public void addEventTags(List<AbstractEventTagMediator> tagMediators){
+
+	public void addEventTags(List<AbstractEventTagMediator> tagMediators) {
 		this.tagMediators.addAll(tagMediators);
 	}
-	
-	public void removeEventTagsForUser(long userId){
-		
+
+	public void removeEventTagsForUser(long userId) {
+
 		Iterator<AbstractEventTagMediator> iterator = tagMediators.iterator();
 		List<AbstractEventTagMediator> removalList = new ArrayList<AbstractEventTagMediator>();
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			AbstractEventTagMediator mediator = iterator.next();
-			if(mediator.getUserId().longValue() == userId){
+			if (mediator.getUserId().longValue() == userId) {
 				removalList.add(mediator);
 			}
 		}
-		
+
 		tagMediators.removeAll(removalList);
 	}
-	
+
 	/*
 	 * Private
 	 */
@@ -239,7 +236,6 @@ public class EventTagSingleton {
 	/*
 	 * Loader Methods
 	 */
-
 
 	/**
 	 * This is a blocking call which creates a new event tag in the backedn and
@@ -270,7 +266,10 @@ public class EventTagSingleton {
 		}
 
 		if (tag != null) {
-			return new MyEventTagMediator(tag);
+			AbstractEventTagMediator mediator = new MyEventTagMediator(tag);
+			addEventTags(Arrays.asList(mediator));
+
+			return ((MyEventTagMediator) mediator);
 		} else {
 			return null;
 		}

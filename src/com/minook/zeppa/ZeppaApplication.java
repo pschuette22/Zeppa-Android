@@ -10,14 +10,11 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.deviceinfoendpoint.model.DeviceInfo;
 import com.minook.zeppa.observer.MemoryObserver;
-import com.minook.zeppa.runnable.FetchInitialEventsRunnable;
 import com.minook.zeppa.runnable.FetchInitialMinglersRunnable;
 import com.minook.zeppa.runnable.FetchMyEventTagsRunnable;
 import com.minook.zeppa.runnable.InsertDeviceRunnable;
 import com.minook.zeppa.runnable.SyncZeppaCalendarRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
-import com.minook.zeppa.singleton.EventTagSingleton;
-import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 public class ZeppaApplication extends Application {

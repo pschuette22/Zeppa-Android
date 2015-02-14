@@ -6,8 +6,10 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.CheckedTextView;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.R;
@@ -76,7 +78,7 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 				tagFollow.setFollowerId(ZeppaUserSingleton.getInstance().getUserId());
 
 				Eventtagfollowendpoint.Builder endpointBuilder = new Eventtagfollowendpoint.Builder(
-						new NetHttpTransport(), new JacksonFactory(), credential);
+						AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential);
 				endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 
 				Eventtagfollowendpoint endpoint = (Eventtagfollowendpoint) endpointBuilder

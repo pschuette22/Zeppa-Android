@@ -14,7 +14,6 @@ import com.minook.zeppa.eventtagfollowendpoint.Eventtagfollowendpoint.ListEventT
 import com.minook.zeppa.eventtagfollowendpoint.model.CollectionResponseEventTagFollow;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.mediator.DefaultEventTagMediator;
-import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.EventTagSingleton.OnTagLoadListener;
 
 public class FetchMinglerTagsRunnable extends BaseRunnable {

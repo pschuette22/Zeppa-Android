@@ -17,8 +17,8 @@ import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.adapter.NotificationsAdapter;
 import com.minook.zeppa.singleton.NotificationSingleton;
-import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.singleton.NotificationSingleton.NotificationLoadListener;
+import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 public class ActivityFragment extends Fragment implements OnRefreshListener,
 		NotificationLoadListener {

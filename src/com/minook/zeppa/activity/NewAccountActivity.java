@@ -27,8 +27,6 @@ import com.minook.zeppa.PrefsManager;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
-import com.minook.zeppa.runnable.SyncZeppaCalendarRunnable;
-import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint;
 import com.minook.zeppa.zeppauserendpoint.model.ZeppaUser;
@@ -86,6 +84,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 		String numberString = tMgr.getLine1Number();
 
+		
 		if (numberString == null) {
 			numberField.setVisibility(View.GONE);
 		} else {

@@ -64,7 +64,7 @@ public class FetchInitialNotificationsRunnable extends BaseRunnable {
 						try {
 							if (ZeppaUserSingleton.getInstance()
 									.getAbstractUserMediatorById(
-											notification.getSenderId()) == null) {
+											notification.getSenderId().longValue()) == null) {
 								ZeppaUserInfo info = buildUserInfoEndpoint()
 										.fetchZeppaUserInfoByParentId(
 												notification.getSenderId())
@@ -77,10 +77,10 @@ public class FetchInitialNotificationsRunnable extends BaseRunnable {
 							if (notification.getEventId() != null
 									&& ZeppaEventSingleton.getInstance()
 											.getEventById(
-													notification.getEventId()) == null) {
+													notification.getEventId().longValue()) == null) {
 								ZeppaEvent event = buildEventEndpoint()
 										.getZeppaEvent(
-												notification.getEventId())
+												notification.getEventId().longValue())
 										.execute();
 
 								ListZeppaEventToUserRelationship task = buildEventRelationshipEndpoint()
@@ -106,6 +106,8 @@ public class FetchInitialNotificationsRunnable extends BaseRunnable {
 									.addNotification(notification);
 
 						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (NullPointerException e){
 							e.printStackTrace();
 						}
 

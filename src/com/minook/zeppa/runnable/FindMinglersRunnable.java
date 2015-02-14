@@ -180,7 +180,7 @@ public class FindMinglersRunnable extends BaseRunnable {
 		String number = cursor.getString(cursor
 				.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-		return Utils.make10DigitNumber(number);
+		return Utils.make11DigitNumber(number);
 	}
 
 	private String getEmail(Cursor cursor) {

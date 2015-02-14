@@ -20,7 +20,6 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.PrefsManager;
 import com.minook.zeppa.ZeppaApplication;
-import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.runnable.NotificationReceivedRunnable;
 import com.minook.zeppa.runnable.ThreadManager;

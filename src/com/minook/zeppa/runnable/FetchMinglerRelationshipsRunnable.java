@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.ZeppaApplication;
-import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator.OnMinglerRelationshipsLoadedListener;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppauserinfoendpoint.Zeppauserinfoendpoint;
@@ -17,12 +16,12 @@ import com.minook.zeppa.zeppausertouserrelationshipendpoint.Zeppausertouserrelat
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.model.CollectionResponseZeppaUserToUserRelationship;
 import com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
 
-public class FetchMinglerRelationships extends BaseRunnable {
+public class FetchMinglerRelationshipsRunnable extends BaseRunnable {
 
 	private long userId;
 	private OnMinglerRelationshipsLoadedListener listener;
 
-	public FetchMinglerRelationships(ZeppaApplication application,
+	public FetchMinglerRelationshipsRunnable(ZeppaApplication application,
 			GoogleAccountCredential credential,
 			long userId,
 			OnMinglerRelationshipsLoadedListener listener) {
