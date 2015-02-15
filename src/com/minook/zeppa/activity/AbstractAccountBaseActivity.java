@@ -1,28 +1,15 @@
 package com.minook.zeppa.activity;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -32,11 +19,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;
 import com.minook.zeppa.photoendpoint.model.Photo;
-import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 public abstract class AbstractAccountBaseActivity extends
 		AuthenticatedFragmentActivity implements OnClickListener {

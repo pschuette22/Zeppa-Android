@@ -40,10 +40,7 @@ public class Constants {
 	/*
 	 * ---------------- Preferences -------------------
 	 */ 
-	// Calendar Objects
-	public static final String CAL_NAME_INTERNAL = "Local Zeppa Calendar";
-	public static final String CAL_NAME_DISPLAY = "Zeppa Events";
-
+	
 	// Preferences
 	public static final String SHARED_PREFS = "Zeppa Shared Preferences";
 	public static final String PREFS_VERSION = "Preference Version Code";
