@@ -1,6 +1,5 @@
 gen/
 endpoint-libs/
-libs/
 .google_apis/
 bin/
 assets/
