@@ -6,4 +6,9 @@ assets/
 .settings/
 .classpath
 .project
+<<<<<<< Updated upstream
 proguard-google-api-client.txt
+=======
+proguard-google-api-client.txt
+Constants.java
+>>>>>>> Stashed changes

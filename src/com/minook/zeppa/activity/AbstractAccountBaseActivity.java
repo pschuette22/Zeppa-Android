@@ -142,54 +142,12 @@ public abstract class AbstractAccountBaseActivity extends
 
 			switch (requestCode) {
 
-			case REQ_SELECT_PHOTO:
-
-				Uri uri = data.getData();
-				userImage.setImageURI(uri);
-				try {
-					Bitmap map = MediaStore.Images.Media.getBitmap(
-							this.getContentResolver(), uri);
-					uploadImage(map);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				break;
 
 			}
 		}
 
 	}
 
-	protected void uploadImage(Bitmap map) throws ClientProtocolException,
-			IOException {
-
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost post = new HttpPost(Constants.APP_ENGINE_UPLOAD_URL);
-
-		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		builder.addPart("title", new StringBody("Profile Picture"));
-		builder.addPart("ownerId", new StringBody(""
-				+ ZeppaUserSingleton.getInstance().getUserId()));
-
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			map.compress(CompressFormat.JPEG, 100, bos);
-
-		} catch (Exception e) {
-
-			builder.addPart("image", null);
-		}
-
-		// MultipartEntity entity = new
-		// MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-		// HttpEntity entity = new HttpEntity(null,);
-		// MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-
-	}
 
 	protected void loadAndSetImageInAsync(String imageUrl) {
 		Object[] params = { imageUrl };
