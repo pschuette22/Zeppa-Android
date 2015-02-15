@@ -4,8 +4,6 @@ endpoint-libs/
 bin/
 assets/
 .settings/
-proguard/
 .classpath
 .project
 proguard-google-api-client.txt
-proguard-project.txt
