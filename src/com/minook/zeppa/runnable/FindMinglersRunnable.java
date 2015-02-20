@@ -6,6 +6,7 @@ import java.util.Iterator;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Utils;
@@ -44,6 +45,11 @@ public class FindMinglersRunnable extends BaseRunnable {
 
 			do {
 				String number = getFormattedNumber(cursor);
+				
+				if(number.equalsIgnoreCase("17172833737")){
+					Log.d("TAG", "Hit Kirks number");
+				}
+				
 				if (!numberIsRecognized(number)) {
 
 					if (builder.length() == 0) {

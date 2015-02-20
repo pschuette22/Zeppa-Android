@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.minook.zeppa"
-    android:versionCode="2"
+    android:versionCode="4"
     android:versionName="beta" >
 
     <uses-sdk
@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name="com.minook.zeppa.ZeppaApplication"
+        android:name=".ZeppaApplication"
         android:allowBackup="true"
         android:icon="@drawable/zeppa_apptile"
         android:label="@string/app_name"
@@ -33,7 +33,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.minook.zeppa.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_apptile"
             android:screenOrientation="portrait" >
@@ -46,49 +46,49 @@
         <activity android:name="com.minook.zeppa.activity.AuthenticatedFragmentActivity" >
         </activity>
         <activity
-            android:name="com.minook.zeppa.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_apptile" >
         </activity>
         <activity
-            android:name="com.minook.zeppa.activity.NewAccountActivity"
+            android:name=".activity.NewAccountActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_apptile" >
         </activity>
         <activity
-            android:name="com.minook.zeppa.activity.MyEventViewActivity"
+            android:name=".activity.MyEventViewActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_apptile" >
         </activity>
         <activity
-            android:name="com.minook.zeppa.activity.StartMinglingActivity"
+            android:name=".activity.StartMinglingActivity"
             android:label="@string/add_friends"
             android:logo="@drawable/zeppa_apptile" >
         </activity>
         <activity
-            android:name="com.minook.zeppa.activity.AbstractEventViewActivity"
+            android:name=".activity.AbstractEventViewActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_apptile"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.minook.zeppa.activity.NewEventActivity"
+            android:name=".activity.NewEventActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_icon" />
         <activity
-            android:name="com.minook.zeppa.activity.MinglerActivity"
+            android:name=".activity.MinglerActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_apptile" />
         <activity
-            android:name="com.minook.zeppa.activity.DefaultEventViewActivity"
+            android:name=".activity.DefaultEventViewActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_apptile" />
         <activity
-            android:name="com.minook.zeppa.activity.EditAccountActivity"
+            android:name=".activity.EditAccountActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_apptile" />
 
         <receiver
-            android:name="com.minook.zeppa.gcm.ZeppaGCMReceiver"
+            android:name=".gcm.ZeppaGCMReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
@@ -100,7 +100,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.minook.zeppa.gcm.ZeppaGCMIntentService" />
+        <service android:name=".gcm.ZeppaGCMIntentService" />
     </application>
 
 </manifest>

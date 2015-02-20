@@ -249,13 +249,19 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 
 	}
 
+	/**
+	 * This returns the current list of held event tag mediators for user
+	 * @return held DefaultEventTagMediator's for current user
+	 */
 	public List<AbstractEventTagMediator> getEventTagMediators() {
 		return EventTagSingleton.getInstance().getTagMediatorsForUser(
 				getUserId());
 	}
 
 	/**
-	 * This method starts an AsyncTask to remove the UserToUserRelationship
+	 * This method spins a thread to remove the UserToUserRelationship
+	 * Sets current relationship to null;
+	 * TODO: update ui and notify user if transaction unsuccessful;
 	 * 
 	 * @param credential
 	 */
@@ -273,6 +279,11 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 
 	}
 
+	/**
+	 * Update the UserToUserRelationship from pending to accepted
+	 * @param application
+	 * @param credential
+	 */
 	public void acceptMingleRequest(ZeppaApplication application,
 			GoogleAccountCredential credential) {
 		try {
@@ -284,6 +295,12 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 		}
 	}
 
+	/**
+	 * Create a new UserToUserRelationship to this user and spin thread to insert it.
+	 * TODO: update realtionship and notify of bad response if transaction is unsuccessful
+	 * @param application
+	 * @param credential
+	 */
 	public void sendMingleRequest(ZeppaApplication application,
 			GoogleAccountCredential credential) {
 
@@ -298,13 +315,20 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 
 	}
 
+	/**
+	 * Navigate user to text message conversations to this user
+	 * @param context
+	 */
 	public void sendTextMessage(Context context) {
-		Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-		smsIntent.setType("vnd.android-dir/mms-sms");
-		smsIntent.putExtra("address", getPrimaryPhoneNumber());
+		Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", getPrimaryPhoneNumber(), null));
 		context.startActivity(smsIntent);
 	}
 
+	/**
+	 * Navigate user to default email client writing a message to this user
+	 * @param context
+	 * @param emailSubject
+	 */
 	public void sendEmail(Context context, String emailSubject) {
 		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
 				"mailto", getGmail(), null));

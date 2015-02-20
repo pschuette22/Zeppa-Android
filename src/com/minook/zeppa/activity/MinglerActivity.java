@@ -82,18 +82,32 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		isUpdatingMinglerTags = false;
 		didInitialFetch = false;
 
-		userId = getIntent().getExtras()
-				.getLong(Constants.INTENT_ZEPPA_USER_ID);
+		try {
+			Long temp = getIntent().getExtras().getLong(
+					Constants.INTENT_ZEPPA_USER_ID);
 
-		userMediator = (DefaultUserInfoMediator) ZeppaUserSingleton
-				.getInstance().getAbstractUserMediatorById(userId);
+			if (temp != null && temp.longValue() > 0) {
+				userId = temp.longValue();
+			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (userMediator == null) {
+			userMediator = (DefaultUserInfoMediator) ZeppaUserSingleton
+					.getInstance().getAbstractUserMediatorById(userId);
+
+		}
 		// find UI Elements and hold
 		userImage = (ImageView) findViewById(R.id.useractivity_image);
 		userName = (TextView) findViewById(R.id.useractivity_username);
 		userPhoneNumber = (TextView) findViewById(R.id.useractivity_phonenumber);
 		userGmail = (TextView) findViewById(R.id.useractivity_email);
 		mutualMinglers = (TextView) findViewById(R.id.useractivity_mutualfriends);
+		// Set loading mutual minglers test to loading for the time being
+		mutualMinglers.setText("Loading...");
+
 		eventHolder = (LinearLayout) findViewById(R.id.useractivity_eventholder);
 		tagHolder = (LinearLayout) findViewById(R.id.useractivity_tagholder);
 
@@ -110,8 +124,8 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(false);
 
+		// Set up pull to refresh capability
 		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.mingleractivity_ptr);
-
 		ActionBarPullToRefresh.from(this)
 				.options(Options.create().scrollDistance(.4f).build())
 				.allChildrenArePullable().listener(this)
@@ -129,7 +143,6 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 				eventHolder);
 
 		setUserInfo();
-		mutualMinglers.setText("Loading...");
 		ZeppaEventSingleton.getInstance().registerEventLoadListener(this);
 
 	}
@@ -227,12 +240,15 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 
 	@Override
 	public void onMinglerRelationshipsLoaded() {
+		// Ensure the mutual mingler text is visible if it werent before
 		mutualMinglers.setVisibility(View.VISIBLE);
+		// Set list of current mutual minglers and remove this user
 		List<Long> minglingIds = userMediator.getMinglingWithIds();
 		minglingIds.remove(userMediator.getUserId());
-
 		List<DefaultUserInfoMediator> mutualMingerMediators = ZeppaUserSingleton
 				.getInstance().getMinglersFrom(minglingIds);
+
+		// Set the text of the mutual minglers
 		if (mutualMingerMediators.isEmpty()) {
 			mutualMinglers.setText("No Mutual Mingers");
 		} else if (mutualMingerMediators.size() == 1) {
@@ -243,6 +259,7 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 					+ " Mutual Minglers");
 		}
 
+		// not longer updating mingler relationships
 		isUpdatingMinglerRelationships = false;
 		onEntityTypeUpdateFinished();
 	}

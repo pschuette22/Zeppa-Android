@@ -11,7 +11,7 @@ public class Constants {
 	
 	public static final int VERSION_CODE = 1;
 	public static final int UPDATE_CODE = 0;
-	public static final int BUGFIX_CODE = 1;
+	public static final int BUGFIX_CODE = 3;
 	public static final String APP_RELEASE_CODE = VERSION_CODE + "." + UPDATE_CODE +"." + BUGFIX_CODE;
 	
 

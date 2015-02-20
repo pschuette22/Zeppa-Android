@@ -319,24 +319,21 @@ public class Utils {
 	public static String make11DigitNumber(String contactPhoneNumber) {
 		StringBuilder builder = new StringBuilder();
 
-		if (contactPhoneNumber.charAt(0) == '1') {
-			if (contactPhoneNumber.length() == 11) {
-				Log.d(TAG, "Aleady correctForm: " + contactPhoneNumber);
-				return contactPhoneNumber;
-			} else {
-				contactPhoneNumber = contactPhoneNumber.substring(1);
-			}
-		}
-
-		builder.append("1");
-		for (int i = 0; i < contactPhoneNumber.length(); i++) {
+		for(int i = 0; i < contactPhoneNumber.length(); i++){
 			char c = contactPhoneNumber.charAt(i);
-			if (Character.isDigit(c)) {
+			if(Character.isDigit(c)){
 				builder.append(c);
 			}
 		}
-
-		return builder.toString();
+		
+		String result = builder.toString();
+		// IF already in proper form with country code
+		if(result.charAt(0) == '1' && result.length() > 10){
+			return result;
+		} else {
+			return "1" + result;
+ 		}
+		
 	}
 
 	/**
