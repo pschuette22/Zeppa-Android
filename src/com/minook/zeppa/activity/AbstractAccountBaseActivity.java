@@ -87,6 +87,7 @@ public abstract class AbstractAccountBaseActivity extends
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.accountactivity_image) {
+<<<<<<< Updated upstream
 			 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			 builder.setTitle("To Be Fixed Soon");
 			 builder.setMessage("I haven't put in the ability to store images on the Zeppa backend yet. So, for now, you must set your Google Account (gmail) picture then click 'Update Image' below and your image will update");
@@ -121,17 +122,28 @@ public abstract class AbstractAccountBaseActivity extends
 //			Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 //			photoPickerIntent.setType("image/*");
 //			startActivityForResult(photoPickerIntent, REQ_SELECT_PHOTO);
+=======
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("To Be Fixed Soon");
+			builder.setMessage("I haven't put in the ability to store images on the Zeppa backend yet. So, for now, you must set your Google Account (gmail) picture then click 'Update Image' below and your image will update");
+>>>>>>> Stashed changes
 
-		}
-	}
+			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
-	protected abstract void setInfo();
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					if (which == DialogInterface.BUTTON_POSITIVE) {
+						// Set current Google Account
+						Person currentPerson = Plus.PeopleApi
+								.getCurrentPerson(apiClient);
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == RESULT_OK) {
+						if (currentPerson.getImage().isDataValid()) {
+							imageUrl = currentPerson.getImage().getUrl();
+							imageUrl = trimSizingFromURL(imageUrl);
+							loadAndSetImageInAsync(imageUrl);
+						}
 
+<<<<<<< Updated upstream
 //			switch (requestCode) {
 //
 //			case REQ_SELECT_PHOTO:
@@ -156,7 +168,58 @@ public abstract class AbstractAccountBaseActivity extends
 //				break;
 //
 //			}
+=======
+					}
+
+					dialog.dismiss();
+				}
+			};
+
+			builder.setPositiveButton("Update Image", listener);
+			builder.setNegativeButton("Dismiss", listener);
+
+			builder.show();
+
+			// Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+			// photoPickerIntent.setType("image/*");
+			// startActivityForResult(photoPickerIntent, REQ_SELECT_PHOTO);
+
+>>>>>>> Stashed changes
 		}
+	}
+
+	protected abstract void setInfo();
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		// if (resultCode == RESULT_OK) {
+		//
+		// switch (requestCode) {
+		//
+		// case REQ_SELECT_PHOTO:
+		//
+		// Uri selectedImage = data.getData();
+		// InputStream imageStream;
+		// try {
+		// imageStream = getContentResolver().openInputStream(
+		// selectedImage);
+		// imageBitmap = BitmapFactory.decodeStream(imageStream);
+		// setUserImage();
+		//
+		// new UploadImageTask(imageBitmap).execute();
+		//
+		// } catch (FileNotFoundException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// Toast.makeText(this, "Image Not Found!", Toast.LENGTH_SHORT)
+		// .show();
+		// }
+		//
+		// break;
+		//
+		// }
+		// }
 
 	}
 
@@ -207,6 +270,7 @@ public abstract class AbstractAccountBaseActivity extends
 		return imageUrl;
 	}
 
+<<<<<<< Updated upstream
 //	private class UploadImageTask extends AsyncTask<Void, Void, String> {
 //
 //		private Bitmap map;
@@ -263,5 +327,64 @@ public abstract class AbstractAccountBaseActivity extends
 //		}
 //
 //	}
+=======
+	// private class UploadImageTask extends AsyncTask<Void, Void, String> {
+	//
+	// private Bitmap map;
+	//
+	// public UploadImageTask(Bitmap map) {
+	// this.map = map;
+	// }
+	//
+	// @Override
+	// protected String doInBackground(Void... params) {
+	//
+	// String result = null;
+	// HttpClient httpClient = new DefaultHttpClient();
+	// HttpPost postRequest = new HttpPost("http://"
+	// + Constants.APP_ENGINE_CLIENT_ID + "/upload");
+	//
+	// ByteArrayOutputStream stream = new ByteArrayOutputStream();
+	// map.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+	// byte[] byteArray = stream.toByteArray();
+	// MultipartEntityBuilder entityBuilder = MultipartEntityBuilder
+	// .create();
+	//
+	// try {
+	// entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+	// entityBuilder.addBinaryBody("file", byteArray);
+	//
+	// postRequest.setEntity(entityBuilder.build());
+	//
+	// HttpResponse response = httpClient.execute(postRequest);
+	//
+	// } catch (ClientProtocolException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	//
+	// return result;
+	// }
+	//
+	// @Override
+	// protected void onPostExecute(String result) {
+	// super.onPostExecute(result);
+	//
+	// if (result != null && !result.isEmpty()) {
+	// imageUrl = result;
+	// // TODO: indicate that image is being served
+	// } else {
+	// // TODO: indicate unsuccessful
+	// }
+	//
+	// }
+	//
+	// }
+>>>>>>> Stashed changes
 
 }
