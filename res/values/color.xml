@@ -38,11 +38,11 @@
 
     <!-- Teal -->
     <color name="teal">#0AD2FF</color>
-    <!-- <color name="teal">#49AFE5</color> -->
     <color name="teal_dark">#1FA9FF</color>
     <color name="teal_light">#A6DDFF</color>
     <color name="teal_transparent">#500AD2FF</color>
-
+	<color name="teal_transparent_dark">#501FA9FF</color>
+	
     <!-- Yellow -->
     <color name="yellow">#252500</color>
     <color name="yellow_highlight">#88FEFF14</color>

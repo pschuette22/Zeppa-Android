@@ -1,13 +1,8 @@
 package com.minook.zeppa.fragment;
 
-import android.app.ActionBar;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -19,7 +14,6 @@ import android.widget.TextView;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
-import com.minook.zeppa.activity.EditAccountActivity;
 import com.minook.zeppa.activity.MainActivity;
 import com.minook.zeppa.adapter.eventlistadapter.MyEventsAdapter;
 import com.minook.zeppa.adapter.tagadapter.MyTagAdapter;
@@ -79,16 +73,16 @@ public class AccountFragment extends Fragment implements OnClickListener {
 		tagAdapter = new MyTagAdapter(
 				(AuthenticatedFragmentActivity) getActivity(), tagHolder, null);
 		tagAdapter.drawTags();
-		
+
 		eventAdapter = new MyEventsAdapter(
 				(AuthenticatedFragmentActivity) getActivity(), eventHolder);
+
 		try {
 			eventAdapter.drawEvents();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		
 		return layout;
 	}
 
@@ -96,16 +90,16 @@ public class AccountFragment extends Fragment implements OnClickListener {
 	public void onResume() {
 		super.onResume();
 
-		((MainActivity) getActivity())
-				.setNavigationItem(Constants.NAVIGATION_ACCOUNT_INDEX);
-
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setTitle(R.string.my_profile);
-		setHasOptionsMenu(true);
-
+		MainActivity activity = (MainActivity) getActivity();
+		activity.toolbar.getMenu().clear();
+		activity.toolbar.inflateMenu(R.menu.menu_account);
+		activity.setNavigationItem(Constants.NAVIGATION_ACCOUNT_INDEX);
+		activity.toolbar.setTitle(R.string.my_profile);
+		
+		
 		userMediator.setImageWhenReady(userImage);
 		displayName.setText(userMediator.getDisplayName());
-		
+
 		try {
 			phoneNumber.setText(userMediator.getPrimaryPhoneNumber());
 		} catch (NullPointerException e) {
@@ -114,16 +108,15 @@ public class AccountFragment extends Fragment implements OnClickListener {
 		emailAddress.setText(userMediator.getGmail());
 
 		// Handle tag stuff
-		
-		if(!tagAdapter.tagsAreCurrent()){
+
+		if (!tagAdapter.tagsAreCurrent()) {
 			tagAdapter.notifyDataSetChanged();
 			tagAdapter.drawTags();
 		}
-		
 
 		// Events list
 
-		if(!eventAdapter.isUpToDate()){
+		if (!eventAdapter.isUpToDate()) {
 			eventAdapter.notifyDataSetChanged();
 			try {
 				eventAdapter.drawEvents();
@@ -132,31 +125,6 @@ public class AccountFragment extends Fragment implements OnClickListener {
 			}
 		}
 
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.menu_account, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-
-		switch (item.getItemId()) {
-
-		case R.id.menu_account_edit:
-			Intent editAccount = new Intent(getActivity(),
-					EditAccountActivity.class);
-			startActivity(editAccount);
-			getActivity().overridePendingTransition(R.anim.slide_up_in,
-					R.anim.hold);
-			break;
-
-		}
-
-		return false;
 	}
 
 	@Override
@@ -173,5 +141,6 @@ public class AccountFragment extends Fragment implements OnClickListener {
 		}
 
 	}
+
 
 }

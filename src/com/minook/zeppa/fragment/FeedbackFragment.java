@@ -91,10 +91,10 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onResume() {
 		super.onResume();
-		((MainActivity) getActivity()).setNavigationItem(Constants.NAVIGATION_FEEDBACK_INDEX);
-
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setTitle(R.string.feedback);
+		MainActivity activity = (MainActivity) getActivity();
+		activity.toolbar.getMenu().clear();
+		activity.setNavigationItem(Constants.NAVIGATION_FEEDBACK_INDEX);
+		activity.toolbar.setTitle(R.string.feedback);
 	}
 
 	private boolean fieldsAreOk() {
@@ -131,13 +131,14 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 
 	private class PostFeedbackInAsync extends AsyncTask<Void, Void, Boolean> {
 
-
 		@Override
 		protected Boolean doInBackground(Void... params) {
 
-			GoogleAccountCredential credential = ((AuthenticatedFragmentActivity) getActivity()).getGoogleAccountCredential();
+			GoogleAccountCredential credential = ((AuthenticatedFragmentActivity) getActivity())
+					.getGoogleAccountCredential();
 			Zeppafeedbackendpoint.Builder endpointBuilder = new Zeppafeedbackendpoint.Builder(
-					AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential);
+					AndroidHttp.newCompatibleTransport(),
+					GsonFactory.getDefaultInstance(), credential);
 			endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 
 			Zeppafeedbackendpoint feedbackEndpoint = endpointBuilder.build();

@@ -107,8 +107,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		getActionBar().hide();
+		getSupportActionBar().hide();
 
 		setContentView(R.layout.activity_newevent);
 
@@ -138,7 +137,6 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		LinearLayout tagHolder = (LinearLayout) findViewById(R.id.neweventactivity_taglineholder);
 		tagAdapter = new CreateEventTagAdapter(this, tagHolder);
 		invitesAdapter = new InviteListAdapter(this);
-
 
 		// Set Default Times
 
@@ -310,7 +308,38 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		event.setInvitedUserIds(invitesAdapter.getInvitedUserIds());
 		event.setGuestsMayInvite(guestsCanInviteField.isChecked());
 
-		if (isValidEvent(event)) {
+		if (!isValidEvent(event)) {
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Invalid Event");
+			builder.setMessage("Must include a title, location, and upcoming time/date");
+			builder.setPositiveButton(R.string.dismiss,
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+			builder.show();
+
+		} else if (tagAdapter.getSelectedTagIds() == null
+				|| tagAdapter.getSelectedTagIds().size() == 0) {
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Add Tags");
+			builder.setMessage("Add a few category tags first! This is how Zeppa recommends your events to people you mingle with");
+			builder.setPositiveButton(R.string.dismiss,
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+			builder.show();
+
+		} else {
 
 			ProgressDialog progressDialog = new ProgressDialog(this);
 			progressDialog.setTitle(R.string.posting_event);
@@ -318,9 +347,11 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 					R.string.one_moment));
 			progressDialog.setCancelable(false);
 			progressDialog.show();
-			
+
 			// Make Sure Zeppa Calendar is Synced
-			ThreadManager.execute(new SyncZeppaCalendarRunnable((ZeppaApplication) getApplication(), getGoogleAccountCredential()));
+			ThreadManager.execute(new SyncZeppaCalendarRunnable(
+					(ZeppaApplication) getApplication(),
+					getGoogleAccountCredential()));
 
 			Object[] params = { event, progressDialog };
 
@@ -370,6 +401,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 				}
 
 			}.execute(params);
+
 		}
 
 	}
@@ -544,7 +576,15 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 	private boolean isValidEvent(ZeppaEvent event) {
 		// TODO: build a check in here to make sure fields are correct
-		return true;
+		return isValidTime(event.getStart().longValue(), event.getEnd()
+				.longValue())
+				&& isValidString(event.getTitle())
+				&& (isValidString(event.getDisplayLocation()) || isValidString(event
+						.getMapsLocation()));
+	}
+
+	private boolean isValidString(String string) {
+		return string != null && !string.isEmpty();
 	}
 
 	/*

@@ -205,7 +205,7 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 								.getNotificationTitle(notification))
 				.setContentText(
 						NotificationSingleton.getInstance()
-								.getNotificationMessage(notification));
+								.getNotificationTitle(notification));
 
 		Intent intent = new Intent(application, LoginActivity.class);
 		intent.putExtra(Constants.INTENT_NOTIFICATIONS, Boolean.TRUE);

@@ -134,10 +134,10 @@ public class NotificationSingleton {
 
 		switch (getNotificationTypeOrder(notification)) {
 		case 0:
-			builder.append("Wanna Mingle?");
+			builder.append("New Request To Mingle");
 			break;
 		case 1:
-			builder.append("Mingling");
+			builder.append("Now Mingling");
 			break;
 		case 2:
 			builder.append("New Event Recommendation");
@@ -149,7 +149,7 @@ public class NotificationSingleton {
 			builder.append("Unread Comment");
 			break;
 		case 5:
-			builder.append("Cancelation");
+			builder.append("Event Cancelation");
 			break;
 		case 6:
 			builder.append("Event Updated");
@@ -158,7 +158,7 @@ public class NotificationSingleton {
 			builder.append("New Event Attendee");
 			break;
 		case 8:
-			builder.append("Attendee Left");
+			builder.append("Attendee Left Event");
 			break;
 		case 9:
 			builder.append("Event Reposted");

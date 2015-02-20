@@ -16,6 +16,7 @@ import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.PrefsManager;
@@ -47,8 +48,9 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		getActionBar().hide();
+//		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+//		getActionBar().hide();
+		getSupportActionBar().hide();
 
 		setContentView(R.layout.activity_login);
 		SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
@@ -197,17 +199,19 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	private void loadAndLaunch() {
 
 		executingLaunch = true;
-		new AsyncTask<Void, Void, UserResult>() {
+		Object[] params = { getGoogleAccountCredential() };
+		new AsyncTask<Object, Void, UserResult>() {
 
 			@Override
-			protected UserResult doInBackground(Void... params) {
+			protected UserResult doInBackground(Object... params) {
 
+				GoogleAccountCredential credential = (GoogleAccountCredential) params[0];
 				UserResult resultCode = UserResult.UNKNOWN;
 
 				try {
 					MyZeppaUserMediator mediator = ZeppaUserSingleton
 							.getInstance().fetchLoggedInUserWithBlocking(
-									getGoogleAccountCredential());
+									credential);
 
 					if (mediator == null) {
 						// This should not happen, but just in case
@@ -311,7 +315,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 			}
 
-		}.execute();
+		}.execute(params);
 
 	}
 

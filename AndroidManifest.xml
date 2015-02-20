@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.minook.zeppa"
+<<<<<<< HEAD
     android:versionCode="4"
+=======
+    android:versionCode="5"
+>>>>>>> origin/master
     android:versionName="beta" >
 
     <uses-sdk
@@ -33,59 +37,69 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
+<<<<<<< HEAD
+=======
+            android:name=".activity.AuthenticatedFragmentActivity"
+            android:theme="@style/CustomActionBarTheme" >
+        </activity>
+        <activity
+            android:name=".activity.AccountBaseActivity"
+            android:theme="@style/CustomActionBarTheme" >
+        </activity>
+        <activity
+>>>>>>> origin/master
             android:name=".activity.LoginActivity"
             android:label="@string/app_name"
             android:logo="@drawable/zeppa_apptile"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomActionBarTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.minook.zeppa.activity.AuthenticatedFragmentActivity" >
-        </activity>
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
-            android:logo="@drawable/zeppa_apptile" >
+            android:theme="@style/CustomActionBarTheme" >
         </activity>
         <activity
             android:name=".activity.NewAccountActivity"
             android:label="@string/app_name"
-            android:logo="@drawable/zeppa_apptile" >
+            android:theme="@style/CustomActionBarTheme" >
         </activity>
         <activity
             android:name=".activity.MyEventViewActivity"
             android:label="@string/app_name"
-            android:logo="@drawable/zeppa_apptile" >
+            android:theme="@style/CustomActionBarTheme" >
         </activity>
         <activity
             android:name=".activity.StartMinglingActivity"
             android:label="@string/add_friends"
-            android:logo="@drawable/zeppa_apptile" >
+            android:theme="@style/CustomActionBarTheme" >
         </activity>
         <activity
             android:name=".activity.AbstractEventViewActivity"
             android:label="@string/app_name"
-            android:logo="@drawable/zeppa_apptile"
+            android:theme="@style/CustomActionBarTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.NewEventActivity"
             android:label="@string/app_name"
-            android:logo="@drawable/zeppa_icon" />
+            android:theme="@style/CustomActionBarTheme" />
         <activity
             android:name=".activity.MinglerActivity"
             android:label="@string/app_name"
-            android:logo="@drawable/zeppa_apptile" />
+            android:theme="@style/CustomActionBarTheme" />
         <activity
             android:name=".activity.DefaultEventViewActivity"
             android:label="@string/app_name"
-            android:logo="@drawable/zeppa_apptile" />
+            android:theme="@style/CustomActionBarTheme" />
         <activity
             android:name=".activity.EditAccountActivity"
             android:label="@string/app_name"
-            android:logo="@drawable/zeppa_apptile" />
+            android:theme="@style/CustomActionBarTheme" />
 
         <receiver
             android:name=".gcm.ZeppaGCMReceiver"

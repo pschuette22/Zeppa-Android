@@ -1,6 +1,5 @@
 package com.minook.zeppa.fragment;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip.IconTabProvider;
@@ -22,14 +23,16 @@ import com.minook.zeppa.R;
 import com.minook.zeppa.activity.MainActivity;
 import com.minook.zeppa.activity.NewEventActivity;
 
-public class HomeFragment extends Fragment implements OnPageChangeListener{
+public class HomeFragment extends Fragment implements OnClickListener,
+		OnPageChangeListener {
 
 	private ViewPager mainPager;
 	private PagerSlidingTabStrip tabStrip;
 	private ZeppaViewPagerAdapter zeppaPagerAdapter;
+	private ImageButton addEvent;
 
 	private View layout;
-//	private int currentPage;
+	// private int currentPage;
 
 	// Constant
 	private final int NUM_PAGES = 4;
@@ -38,13 +41,11 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 	 * -------------- OVERRIDE METHODS ------------------- NOTES:
 	 */
 
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		
 		// initialize dynamic variables:
 		layout = inflater.inflate(R.layout.fragment_home, container, false);
 		mainPager = (ViewPager) layout.findViewById(R.id.main_pager);
@@ -62,8 +63,9 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 		tabStrip.setShouldExpand(true);
 		tabStrip.setOnPageChangeListener(this);
 		mainPager.setCurrentItem(1);
+		addEvent = (ImageButton) layout.findViewById(R.id.home_add);
+		addEvent.setOnClickListener(this);
 
-		
 		return layout;
 
 	}
@@ -71,31 +73,19 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 	@Override
 	public void onResume() {
 		super.onResume();
-		((MainActivity) getActivity())
-				.setNavigationItem(Constants.NAVIGATION_HOME_INDEX);
+		MainActivity activity = (MainActivity) getActivity();
+		activity.setNavigationItem(Constants.NAVIGATION_HOME_INDEX);
+		activity.toolbar.getMenu().clear();
 
-		ActionBar actionBar = getActivity().getActionBar();
-		CharSequence titleSequence = zeppaPagerAdapter.getPageTitle(mainPager.getCurrentItem());
-		actionBar.setTitle(titleSequence);
+		CharSequence titleSequence = zeppaPagerAdapter.getPageTitle(mainPager
+				.getCurrentItem());
+		activity.toolbar.setTitle(titleSequence);
 
-		setHasOptionsMenu(true);
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		// TODO: add logic in here handling whether or not there are
-		// notifications
-		inflater.inflate(R.menu.menu_home, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-
-		switch (item.getItemId()) {
-
-		case R.id.action_newevent:
+	public void onClick(View v) {
+		if (v.getId() == R.id.home_add) {
 			Intent toNewEvent = new Intent(getActivity(),
 					NewEventActivity.class);
 
@@ -107,37 +97,32 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 
 			getActivity().overridePendingTransition(R.anim.slide_up_in,
 					R.anim.hold);
-			break;
-
 		}
 
-		return true;
 	}
-	
-	public void setCurrentPageToNotifications(){
+
+	public void setCurrentPageToNotifications() {
 		onPageSelected(3);
 	}
-	
+
 	@Override
 	public void onPageScrollStateChanged(int position) {
 
-		
 	}
 
 	@Override
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onPageSelected(int position) {
-		ActionBar bar = getActivity().getActionBar();
+		MainActivity activity = (MainActivity) getActivity();
 		CharSequence titleSequence = zeppaPagerAdapter.getPageTitle(position);
-		bar.setTitle(titleSequence);
+		activity.toolbar.setTitle(titleSequence);
 	}
-	
-	
+
 	/*
 	 * ----------------- MY METHODS ----------------------- NOTES:
 	 * 
@@ -145,16 +130,17 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 	 * social
 	 */
 
-
 	/*
 	 * --------------- PRIVATE CLASSES --------------------- NOTES:
 	 */
 
-	private class ZeppaViewPagerAdapter extends FragmentPagerAdapter  implements IconTabProvider {
+	private class ZeppaViewPagerAdapter extends FragmentPagerAdapter implements
+			IconTabProvider {
 
 		private String[] tabOptions;
-		 private int[] iconOptions = { R.drawable.ic_tab_calendar,
-		 R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda, R.drawable.ic_tab_activity };
+		private int[] iconOptions = { R.drawable.ic_tab_calendar,
+				R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda,
+				R.drawable.ic_tab_activity };
 
 		private CalendarFragment calendarFragment;
 		private FeedFragment feedFragment;
@@ -168,8 +154,6 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 					.getStringArray(R.array.home_tab_options);
 
 		}
-		
-		
 
 		@Override
 		public void destroyItem(ViewGroup container, int position, Object object) {
@@ -192,11 +176,11 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 				if (watchingFragment == null)
 					watchingFragment = new AgendaFragment();
 				return watchingFragment;
-				
+
 			case 3:
-				if(activityFragment == null)
+				if (activityFragment == null)
 					activityFragment = new ActivityFragment();
-				
+
 				return activityFragment;
 			}
 
@@ -217,10 +201,7 @@ public class HomeFragment extends Fragment implements OnPageChangeListener{
 		public int getPageIconResId(int position) {
 			return iconOptions[position];
 		}
-		
-		
-
-		
 
 	}
+
 }

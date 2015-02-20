@@ -2,18 +2,20 @@ package com.minook.zeppa.fragment;
 
 import java.util.List;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.minook.zeppa.Constants;
@@ -26,13 +28,15 @@ import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton.OnMinglersLoadListener;
 
-public class MinglersFragment extends Fragment implements OnMinglersLoadListener, OnItemClickListener {
+public class MinglersFragment extends Fragment implements OnClickListener,
+		OnMinglersLoadListener, OnItemClickListener {
 
 	// ----------- Global Variables Bank ------------- \\
 	// Private
 	private View layout;
 	private ListView contactList;
 	private MinglerListAdapter adapter;
+	private ImageButton addMinglers;
 
 	// Constant
 
@@ -44,9 +48,10 @@ public class MinglersFragment extends Fragment implements OnMinglersLoadListener
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		layout = inflater.inflate(R.layout.fragment_minglers, container, false);
-		contactList = (ListView) layout.findViewById(R.id.contactsListView);
-
-		setHasOptionsMenu(true);
+		contactList = (ListView) layout.findViewById(R.id.minglers_listview);
+		addMinglers = (ImageButton) layout.findViewById(R.id.minglers_add);
+		addMinglers.setOnClickListener(this);
+		
 
 		return layout;
 	}
@@ -54,19 +59,22 @@ public class MinglersFragment extends Fragment implements OnMinglersLoadListener
 	@Override
 	public void onResume() {
 		super.onResume();
-		((MainActivity) getActivity()).setNavigationItem(Constants.NAVIGATION_MINGLERS_INDEX);
 
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setTitle(R.string.minglers );
+		MainActivity activity = (MainActivity) getActivity();
+		activity.toolbar.getMenu().clear();
+		activity.setNavigationItem(Constants.NAVIGATION_MINGLERS_INDEX);
+		activity.toolbar.setTitle(R.string.minglers);
 	}
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
-		
+
 		List<DefaultUserInfoMediator> friendInfoManagers = ZeppaUserSingleton
 				.getInstance().getMinglerMediators();
-		adapter = new MinglerListAdapter((AuthenticatedFragmentActivity) getActivity(), friendInfoManagers);
+		adapter = new MinglerListAdapter(
+				(AuthenticatedFragmentActivity) getActivity(),
+				friendInfoManagers);
 		contactList.setAdapter(adapter);
 		contactList.setOnItemClickListener(this);
 
@@ -85,38 +93,33 @@ public class MinglersFragment extends Fragment implements OnMinglersLoadListener
 		inflater.inflate(R.menu.menu_minglers, menu);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-
-		switch (item.getItemId()) {
-		case R.id.action_addcontact:
-			Intent toAddFriends = new Intent(getActivity()
-					.getApplicationContext(), StartMinglingActivity.class);
-			startActivity(toAddFriends);
-			getActivity().overridePendingTransition(R.anim.slide_up_in,
-					R.anim.hold);
-
-			return true;
-
-
-		}
-
-		return false;
-	}
 
 	@Override
 	public void onMinglersLoaded() {
 		adapter.notifyDataSetChanged();
-		
+
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Intent intent = adapter.getItem(position).getToUserIntent(getActivity());
+		Intent intent = adapter.getItem(position)
+				.getToUserIntent(getActivity());
 		startActivity(intent);
-		getActivity().overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+		getActivity().overridePendingTransition(R.anim.slide_left_in,
+				R.anim.slide_left_out);
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		if(v.getId() == R.id.minglers_add){
+			Intent toAddFriends = new Intent(getActivity()
+					.getApplicationContext(), StartMinglingActivity.class);
+			startActivity(toAddFriends);
+			getActivity().overridePendingTransition(R.anim.slide_up_in,
+					R.anim.hold);
+		}
 		
 	}
 
