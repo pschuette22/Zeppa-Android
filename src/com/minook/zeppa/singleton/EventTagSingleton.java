@@ -32,7 +32,6 @@ public class EventTagSingleton {
 
 	public interface OnTagLoadListener {
 		public void onTagsLoaded();
-
 		public void onErrorLoadingTags();
 	}
 

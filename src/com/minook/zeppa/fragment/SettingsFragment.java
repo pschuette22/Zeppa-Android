@@ -1,6 +1,5 @@
 package com.minook.zeppa.fragment;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -9,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.PrefsManager;
@@ -32,9 +31,16 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 		OnCheckedChangeListener, OnSyncStateChangedListener {
 
 	private View layout;
+	
+	// Section 1
 	private Switch sendNotificationsSwitch;
 	private Switch ringOnNotificationsSwitch;
 	private Switch vibrateOnNotificationsSwitch;
+	private LinearLayout notificationsSettings;
+	
+	// Section 2
+	private TextView manageIndividualNotifications;
+	private LinearLayout individualNotifictionsHolder;
 	private Switch notifOnMingleRequestSwitch;
 	private Switch notifOnMingleAcceptSwitch;
 	private Switch notifOnEventReccomendationSwitch;
@@ -43,10 +49,17 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 	private Switch notifOnUserJoinSwitch;
 	private Switch notifOnUserLeftSwitch;
 	private Switch notifOnEventCanceledSwitch;
-	private Button logoutButton;
-	private Button deleteButton;
+	
+	// Section 3
+	private TextView manageSyncedCalendars;
 	private LinearLayout calendarSyncHolder;
 	private CalendarSyncStateView calendarSyncStateView;
+	
+	// Section 4
+	private TextView logoutButton;
+	private TextView deleteButton;
+	
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +86,20 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 		vibrateOnNotificationsSwitch.setChecked(PrefsManager.getUserPreference(
 				getActivity().getApplication(), Constants.PN_VIBRARTE_ON));
 		vibrateOnNotificationsSwitch.setOnCheckedChangeListener(this);
-
+		
+		notificationsSettings = (LinearLayout) layout.findViewById(R.id.settingsfragment_notificationssettings);
+		if(PrefsManager.getUserPreference(getActivity().getApplication(), Constants.PUSH_NOTIFICATIONS)){
+			notificationsSettings.setVisibility(View.VISIBLE);
+		} else {
+			notificationsSettings.setVisibility(View.GONE);
+		}
+		
+		manageIndividualNotifications = (TextView) layout.findViewById(R.id.settingsfragment_notificationsbytype);
+		manageIndividualNotifications.setOnClickListener(this);
+		
+		individualNotifictionsHolder = (LinearLayout) layout.findViewById(R.id.settingsfragment_notificationsbytypeholder);
+		individualNotifictionsHolder.setVisibility(View.GONE);
+		
 		notifOnMingleRequestSwitch = (Switch) layout
 				.findViewById(R.id.settingsfragment_minglerequest);
 		notifOnMingleRequestSwitch.setChecked(PrefsManager.getUserPreference(
@@ -123,17 +149,22 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 				getActivity().getApplication(), Constants.PN_EVENT_CANCELED));
 		notifOnEventCanceledSwitch.setOnCheckedChangeListener(this);
 
+		manageSyncedCalendars = (TextView) layout.findViewById(R.id.settingsfragment_syncedcalendars);
+		manageSyncedCalendars.setOnClickListener(this);
+		
 		calendarSyncHolder = (LinearLayout) layout
 				.findViewById(R.id.settingsfragment_synccalendarsholder);
 
 		calendarSyncStateView = new CalendarSyncStateView(getActivity(), this);
 		calendarSyncHolder.addView(calendarSyncStateView);
+		
+		calendarSyncHolder.setVisibility(View.GONE);
 
-		logoutButton = (Button) layout
+		logoutButton = (TextView) layout
 				.findViewById(R.id.settingsfragment_logout);
 		logoutButton.setOnClickListener(this);
 
-		deleteButton = (Button) layout
+		deleteButton = (TextView) layout
 				.findViewById(R.id.settingsfragment_delete);
 		deleteButton.setOnClickListener(this);
 
@@ -143,11 +174,10 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 	@Override
 	public void onResume() {
 		super.onResume();
-		((MainActivity) getActivity())
-				.setNavigationItem(Constants.NAVIGATION_SETTINGS_INDEX);
-
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setTitle(R.string.settings);
+		MainActivity activity = (MainActivity) getActivity();
+		activity.setNavigationItem(Constants.NAVIGATION_SETTINGS_INDEX);
+		activity.toolbar.getMenu().clear();
+		activity.toolbar.setTitle(R.string.settings);
 
 	}
 
@@ -156,6 +186,23 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 
 		switch (v.getId()) {
 
+		case R.id.settingsfragment_notificationsbytype:
+			if(individualNotifictionsHolder.getVisibility() == View.VISIBLE){
+				individualNotifictionsHolder.setVisibility(View.GONE);
+			} else {
+				individualNotifictionsHolder.setVisibility(View.VISIBLE);
+			}
+			break;
+			
+		case R.id.settingsfragment_syncedcalendars:
+			if(calendarSyncHolder.getVisibility() == View.VISIBLE){
+				calendarSyncHolder.setVisibility(View.GONE);
+			} else {
+				calendarSyncHolder.setVisibility(View.VISIBLE);
+			}
+			
+			break;
+		
 		case R.id.settingsfragment_logout:
 			raiseLogoutDialog();
 			break;
@@ -173,6 +220,12 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 		case R.id.settingsfragment_notifications:
 			PrefsManager.setUserPreference(getActivity().getApplication(),
 					Constants.PUSH_NOTIFICATIONS, isChecked);
+			if(isChecked){
+				notificationsSettings.setVisibility(View.VISIBLE);
+			} else {
+				notificationsSettings.setVisibility(View.GONE);
+			}
+			
 			break;
 
 		case R.id.settingsfragment_ring:

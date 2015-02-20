@@ -47,14 +47,16 @@ package com.minook.zeppa.activity;
  Anyone can change the world, it's just a matter of doing it. 
  **/
 
-import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,7 +78,8 @@ import com.minook.zeppa.fragment.SettingsFragment;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
-public class MainActivity extends AuthenticatedFragmentActivity {
+public class MainActivity extends AuthenticatedFragmentActivity implements
+		OnMenuItemClickListener {
 
 	// ----------- Global Variables Bank ------------- \\
 	private final String TAG = getClass().getName();
@@ -86,6 +89,7 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 	private LinearLayout navigationCabinet;
 	private ListView navigationList;
 	private String[] navigationOptions;
+	public Toolbar toolbar;
 	private ActionBarDrawerToggle drawerToggle;
 	private NavigationItemAdapter navListAdapter;
 
@@ -104,33 +108,31 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		ActionBar actionBar = getActionBar();
-
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayShowHomeEnabled(false);
+		getSupportActionBar().hide();
+		toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+		toolbar.setOnMenuItemClickListener(this);
 
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		navigationList = (ListView) findViewById(R.id.navigation_drawer_list);
 		navigationCabinet = (LinearLayout) findViewById(R.id.navigation_cabinet);
 
 		// Options Menu setup
-		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-				R.drawable.ic_menu_navigation, R.string.navigation_open,
-				R.string.navigation_closed) {
+		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+				R.string.navigation_open, R.string.navigation_closed) {
 
 			public void onDrawerClosed(View view) {
 				invalidateOptionsMenu();
-
+				syncState();
 			}
 
 			public void onDrawerOpened(View view) {
-
 				invalidateOptionsMenu();
+				syncState();
 			}
 
 		};
+		drawerToggle.setHomeAsUpIndicator(R.drawable.ic_menu_navigation);
+		drawerToggle.setDrawerIndicatorEnabled(true);
 
 		navigationOptions = getResources().getStringArray(
 				R.array.navigation_options);
@@ -147,7 +149,9 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 		int currentPage = currentPage();
 		if (currentPage < 0) {
 			selectItem(1, false);
-			if(getIntent().getExtras().getBoolean(Constants.INTENT_NOTIFICATIONS));
+			if (getIntent().getExtras().getBoolean(
+					Constants.INTENT_NOTIFICATIONS))
+				;
 
 		} else {
 			selectItem(currentPage, false);
@@ -162,8 +166,7 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
+	public boolean onMenuItemClick(MenuItem item) {
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			// Selected navigation item
 			return true;
@@ -175,7 +178,17 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 			return true;
 		}
 
-		return super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+
+		case R.id.menu_account_edit:
+			Intent editAccount = new Intent(this, EditAccountActivity.class);
+			startActivity(editAccount);
+			overridePendingTransition(R.anim.slide_up_in, R.anim.hold);
+			return true;
+
+		}
+
+		return false;
 	}
 
 	@Override
@@ -392,5 +405,5 @@ public class MainActivity extends AuthenticatedFragmentActivity {
 		}
 
 	}
-	
+
 }

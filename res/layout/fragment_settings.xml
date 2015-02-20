@@ -1,127 +1,266 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/white" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_fragment"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingEnd="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp" >
 
         <Switch
             android:id="@+id/settingsfragment_notifications"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Push Notifications" />
-
-        <Switch
-            android:id="@+id/settingsfragment_vibrate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Vibrate on Notifications" />
-
-        <Switch
-            android:id="@+id/settingsfragment_ring"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Ring on Notifications" />
-
-        <TextView
             style="@style/black_txt16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Push Notifications For:" />
+            android:background="@drawable/background_attribute_clickable"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:text="Push Notifications" />
 
-        <Switch
-            android:id="@+id/settingsfragment_minglerequest"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light" />
+
+        <LinearLayout
+            android:id="@+id/settingsfragment_notificationssettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Mingle Requests" />
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingLeft="20dp"
+            android:paddingStart="20dp"
+            android:paddingTop="5dp" >
 
-        <Switch
-            android:id="@+id/settingsfragment_mingleconfirm"
+            <Switch
+                android:id="@+id/settingsfragment_vibrate"
+                style="@style/black_txt16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_attribute_clickable"
+                android:padding="5dp"
+                android:text="Vibrate on Notifications" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_light" />
+
+            <Switch
+                android:id="@+id/settingsfragment_ring"
+                style="@style/black_txt16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_attribute_clickable"
+                android:padding="5dp"
+                android:text="Ring on Notifications" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_light" />
+
+            <TextView
+                android:id="@+id/settingsfragment_notificationsbytype"
+                style="@style/black_txt16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_attribute_clickable"
+                android:padding="5dp"
+                android:text="Manage Push Notifications" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_light" />
+
+            <LinearLayout
+                android:id="@+id/settingsfragment_notificationsbytypeholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp" >
+
+                <Switch
+                    android:id="@+id/settingsfragment_minglerequest"
+                    style="@style/black_txt14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_attribute_clickable"
+                    android:padding="5dp"
+                    android:text="Mingle Requests" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_light" />
+
+                <Switch
+                    android:id="@+id/settingsfragment_mingleconfirm"
+                    style="@style/black_txt14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_attribute_clickable"
+                    android:padding="5dp"
+                    android:text="Started Mingling" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_light" />
+
+                <Switch
+                    android:id="@+id/settingsfragment_eventrecommendation"
+                    style="@style/black_txt14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_attribute_clickable"
+                    android:padding="5dp"
+                    android:text="Event Recommendations" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_light" />
+
+                <Switch
+                    android:id="@+id/settingsfragment_eventinvited"
+                    style="@style/black_txt14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_attribute_clickable"
+                    android:padding="5dp"
+                    android:text="Event Invites" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_light" />
+
+                <Switch
+                    android:id="@+id/settingsfragment_comments"
+                    style="@style/black_txt14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_attribute_clickable"
+                    android:padding="5dp"
+                    android:text="Comments" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_light" />
+
+                <Switch
+                    android:id="@+id/settingsfragment_cancel"
+                    style="@style/black_txt14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_attribute_clickable"
+                    android:padding="5dp"
+                    android:text="Event Canceled" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_light" />
+
+                <Switch
+                    android:id="@+id/settingsfragment_eventjoin"
+                    style="@style/black_txt14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_attribute_clickable"
+                    android:padding="5dp"
+                    android:text="People Joining Event" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_light" />
+
+                <Switch
+                    android:id="@+id/settingsfragment_eventleave"
+                    style="@style/black_txt14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_attribute_clickable"
+                    android:padding="5dp"
+                    android:text="People Leaving Event" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_light" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/settingsfragment_syncedcalendars"
+            style="@style/black_txt16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Started Mingling" />
+            android:background="@drawable/background_attribute_clickable"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:text="Manage Synced Calendars" />
 
-        <Switch
-            android:id="@+id/settingsfragment_eventrecommendation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Event Recommendations" />
-
-        <Switch
-            android:id="@+id/settingsfragment_eventinvited"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Event Invites" />
-
-        <Switch
-            android:id="@+id/settingsfragment_comments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Comments" />
-
-        <Switch
-            android:id="@+id/settingsfragment_cancel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Event Canceled" />
-
-        <Switch
-            android:id="@+id/settingsfragment_eventjoin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="People Joining Event" />
-
-        <Switch
-            android:id="@+id/settingsfragment_eventleave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="People Leaving Event" />
-
-        <LinearLayout 
-            android:layout_margin="5dp"
-            android:padding="5dp"
+        <LinearLayout
             android:id="@+id/settingsfragment_synccalendarsholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_whitebox_grayoutline"
+            android:layout_margin="5dp"
+            android:animateLayoutChanges="true"
             android:orientation="vertical"
-            />
+            android:paddingBottom="5dp"
+            android:paddingEnd="5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="5dp"
+            android:paddingStart="20dp"/>
 
-        <Button
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light" />
+
+        <TextView
             android:id="@+id/settingsfragment_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/background_button_default"
-            android:gravity="center"
-            android:padding="15dp"
+            android:background="@drawable/background_attribute_clickable"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
             android:text="Logout" />
 
-        <Button
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light" />
+
+        <TextView
             android:id="@+id/settingsfragment_delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/background_button_default"
-            android:gravity="center"
-            android:padding="15dp"
+            android:background="@drawable/background_attribute_clickable"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
             android:text="Delete Zeppa Account" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light" />
     </LinearLayout>
 
 </ScrollView>

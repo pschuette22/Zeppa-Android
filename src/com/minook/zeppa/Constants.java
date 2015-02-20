@@ -10,8 +10,8 @@ public class Constants {
 	 * */
 	
 	public static final int VERSION_CODE = 1;
-	public static final int UPDATE_CODE = 0;
-	public static final int BUGFIX_CODE = 1;
+	public static final int UPDATE_CODE = 1;
+	public static final int BUGFIX_CODE = 0;
 	public static final String APP_RELEASE_CODE = VERSION_CODE + "." + UPDATE_CODE +"." + BUGFIX_CODE;
 	
 
@@ -72,10 +72,11 @@ public class Constants {
 	 * practice
 	 */
 
-	public static final String PROJECT_NUMBER = "9207387879";	
-	public static final String APP_ENGINE_CLIENT_ID = "9207387879.project.googleusercontent.com";
-	public static final String WEB_CLIENT_ID = "9207387879-274c5k1el52drcg0ou6l0josl5klbv8s.apps.googleusercontent.com";
+	public static final String PROJECT_NUMBER = "587859844920";	
+	public static final String APP_ENGINE_CLIENT_ID = "587859844920.project.googleusercontent.com";
+	public static final String WEB_CLIENT_ID = "587859844920-jiqoh8rn4j8d0941vunu4jfdcl2huv4l.apps.googleusercontent.com";
 	public static final String ANDROID_AUDIENCE = "server:client_id:" + WEB_CLIENT_ID;
+	public static final String HTTPPOST_URL = WEB_CLIENT_ID + "/upload";
 
 	
 	/*

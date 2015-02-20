@@ -4,7 +4,7 @@ import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -26,7 +26,7 @@ import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
-public class AuthenticatedFragmentActivity extends FragmentActivity implements
+public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 		ConnectionCallbacks, OnConnectionFailedListener, OnClickListener {
 
 	/*
@@ -155,6 +155,7 @@ public class AuthenticatedFragmentActivity extends FragmentActivity implements
 		String loggedInAccount = PrefsManager.getLoggedInEmail(getApplication());
 		
 		if(loggedInAccount == null){
+			// App Should crash if activity wants a credential and user is not logged in
 			throw new NullPointerException("No Logged In Account");
 		}
 		

@@ -83,7 +83,6 @@ public class EditAccountActivity extends AbstractAccountBaseActivity {
 			numberField.setVisibility(View.GONE);
 		}
 		emailField.setText(myMediator.getGmail());
-		myMediator.setImageWhenReady(userImage);
 
 	}
 

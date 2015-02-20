@@ -12,13 +12,13 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -124,8 +124,8 @@ public abstract class AbstractEventViewActivity extends
 		setHostMediator();
 
 		// UI Elements
-		final ActionBar actionBar = getActionBar();
-		actionBar.setTitle(R.string.title_details);
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setTitle(getResources().getString(R.string.title_details));
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(false);

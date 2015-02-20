@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--
-    	NOTES:
-    		(Oct 17, 2013) - No API level specific customizations have been made yet.
-    		All operating under assumption that minApi = 11 (Android 3.0)
-    		
-    
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
-    </style>
-
     <!-- Application theme -->
-    <style name="ZeppaTheme" parent="@android:style/Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/ZeppaActionBarStyle</item>
-        <item name="android:actionMenuTextAppearance">@style/white_black_txt14sp</item>
+    <style name="ZeppaTheme" parent="Theme.AppCompat.Light">
+        <item name="android:actionBarStyle">@style/CustomActionBarTheme</item>
+        <item name="actionBarStyle">@style/CustomActionBarTheme</item>
     </style>
 
     <!-- Action Bar Style -->
-    <style name="ZeppaActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
-        <item name="android:titleTextStyle">@style/actionbar_text</item>
+    <style name="ZeppaActionBarStyle" parent="">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlHighlight">@color/teal_transparent_dark</item>
+    </style>
+
+    <style name="HeaderBar">
         <item name="android:background">@color/teal</item>
+    </style>
+
+    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <!-- Taken from developer sight, names should be updated at some point -->
+
+    <style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:titleTextStyle">@style/actionbar_text</item>
+        <item name="titleTextStyle">@style/actionbar_text</item>
+        <item name="android:background">@color/teal</item>
+        <item name="background">@color/teal</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlHighlight">@color/teal_transparent_dark</item>
     </style>
 
 </resources>

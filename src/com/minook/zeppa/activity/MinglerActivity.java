@@ -6,10 +6,10 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -66,6 +66,8 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 	private boolean isUpdatingMinglerEvents;
 	private boolean isUpdatingMinglerTags;
 	private boolean didInitialFetch;
+	
+	
 
 	/*
 	 * ------------- Override Methods --------------
@@ -103,7 +105,7 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		userGmail.setOnClickListener(this);
 
 		// action bar
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();	
 		actionBar.setTitle(userMediator.getGivenName() + "'s Profile");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);

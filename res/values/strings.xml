@@ -108,7 +108,7 @@
     <!-- N -->
     <string name="navigation_open">Nav Open</string>
     <string name="navigation_closed">Nav Closed</string>
-    <string name="newtag">Make New Tag</string>
+    <string name="newtag">New Category Tag</string>
     <string name="no">No</string>
     <string name="no_repost">No Repost</string>
     <string name="notifications">Notifications</string>

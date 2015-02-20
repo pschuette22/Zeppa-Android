@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -36,6 +37,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 	private final String TAG = NewAccountActivity.class.getName();
 	private boolean setInfoOnConnect = false;
+	
 
 	@Override
 	protected void onStart() {
@@ -69,7 +71,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 	@Override
 	protected void setInfo() {
-
+		setInfoOnConnect = false;
 		String accountEmail = PrefsManager.getLoggedInEmail(getApplication());
 
 		if (accountEmail == null || accountEmail.isEmpty()) {
@@ -103,8 +105,9 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 			familyNameField.setText(familyName);
 
 			if (currentPerson.getImage().isDataValid()) {
+				
 				imageUrl = currentPerson.getImage().getUrl();
-				loadAndSetImageInAsync(imageUrl);
+				setUserImage();
 			}
 		}
 
