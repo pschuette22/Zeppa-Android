@@ -29,6 +29,8 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity
 	private ListView listView;
 	private PullToRefreshLayout pullToRefreshLayout;
 	private boolean isFetchingPossible;
+	private AlertDialog explainDialog;
+	
 
 	/*
 	 * -------------- Override Methods ---------------------
@@ -55,6 +57,7 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Finding People");
 		builder.setMessage("This takes a bit, especially if you have a lot of contacts. So sit back, relax and enjoy the day");
+		builder.setCancelable(true);
 		builder.setPositiveButton("Dismiss",
 				new DialogInterface.OnClickListener() {
 
@@ -64,7 +67,7 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity
 
 					}
 				});
-		builder.show();
+		explainDialog = builder.show();
 
 		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.startmingling_ptr);
 
@@ -125,7 +128,7 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity
 			pullToRefreshLayout.setRefreshing(true);
 			ZeppaUserSingleton.getInstance().executeFindMinglerTask(
 					(ZeppaApplication) getApplication(),
-					getGoogleAccountCredential());
+					getGoogleAccountCredential(), adapter);
 		}
 	}
 
@@ -161,6 +164,10 @@ public class StartMinglingActivity extends AuthenticatedFragmentActivity
 		}
 		adapter.notifyDataSetChanged();
 
+		if(explainDialog.isShowing()){
+			explainDialog.dismiss();
+		}
+		
 	}
 
 	@Override

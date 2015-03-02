@@ -30,14 +30,11 @@ public class EditAccountActivity extends AbstractAccountBaseActivity {
 		deleteTagAdapter = new DeleteTagAdapter(this, tagHolder);
 		isUpdating = false;
 
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
 		setInfo();
 		deleteTagAdapter.drawTags();
+
 	}
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -73,16 +70,21 @@ public class EditAccountActivity extends AbstractAccountBaseActivity {
 
 	@Override
 	protected void setInfo() {
-		givenNameField.setText(myMediator.getGivenName());
-		familyNameField.setText(myMediator.getFamilyName());
+		givenName = myMediator.getGivenName();
+		givenNameField.setText(givenName);
+		familyName = myMediator.getFamilyName();
+		familyNameField.setText(familyName);
+		imageUrl = myMediator.getUserInfo().getImageUrl();
 		myMediator.setImageWhenReady(userImage);
 		try {
+			userPhoneNumber = myMediator.getUnformattedPhoneNumber();
 			numberField.setText(myMediator.getPrimaryPhoneNumber());
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			numberField.setVisibility(View.GONE);
 		}
-		emailField.setText(myMediator.getGmail());
+		userGmail = myMediator.getGmail();
+		emailField.setText(userGmail);
 
 	}
 
@@ -98,11 +100,12 @@ public class EditAccountActivity extends AbstractAccountBaseActivity {
 			dialog.setCancelable(false);
 			dialog.show();
 
-			String givenName = givenNameField.getText().toString().trim();
-			String familyName = familyNameField.getText().toString().trim();
+			givenName = givenNameField.getText().toString().trim();
+			familyName = familyNameField.getText().toString().trim();
 			GoogleAccountCredential credential = getGoogleAccountCredential();
 
-			Object[] params = { credential, givenName, familyName, dialog };
+			Object[] params = { credential, givenName, familyName, imageUrl,
+					dialog };
 			new AsyncTask<Object, Void, Boolean>() {
 
 				private ProgressDialog dialog;
@@ -112,7 +115,8 @@ public class EditAccountActivity extends AbstractAccountBaseActivity {
 					GoogleAccountCredential credential = (GoogleAccountCredential) params[0];
 					String givenName = (String) params[1];
 					String familyName = (String) params[2];
-					dialog = (ProgressDialog) params[3];
+					String imageUrl = (String) params[3];
+					dialog = (ProgressDialog) params[4];
 
 					return myMediator.updateUserInfoWithBlocking(credential,
 							givenName, familyName, imageUrl, null);
@@ -127,8 +131,8 @@ public class EditAccountActivity extends AbstractAccountBaseActivity {
 					if (result) {
 						Toast.makeText(EditAccountActivity.this,
 								"Updated Account", Toast.LENGTH_SHORT).show();
-						
-						
+						onBackPressed();
+
 					} else {
 						Toast.makeText(EditAccountActivity.this,
 								"Didn't Update Properly", Toast.LENGTH_SHORT)

@@ -14,7 +14,7 @@ import com.minook.zeppa.ZeppaApplication;
 
 public class ZeppaGCMReceiver extends WakefulBroadcastReceiver {
 
-	final private static String TAG = ZeppaGCMReceiver.class.getName();
+//	final private static String TAG = ZeppaGCMReceiver.class.getName();
 
 	/**
 	 * This parameter takes an info object and returns the corresponding</p>

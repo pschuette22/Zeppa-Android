@@ -4765,6 +4765,7 @@ com.minook.zeppa.photoendpoint.model.Photo: java.lang.String imageType
 com.minook.zeppa.photoendpoint.model.Photo: com.minook.zeppa.photoendpoint.model.Key key
 com.minook.zeppa.photoendpoint.model.Photo: java.lang.Long ownerId
 com.minook.zeppa.photoendpoint.model.Photo: java.lang.String title
+com.minook.zeppa.photoendpoint.model.Photo: java.lang.String url
 com.minook.zeppa.zeppaeventendpoint.Zeppaeventendpoint$GetZeppaEvent: java.lang.Long id
 com.minook.zeppa.zeppaeventendpoint.Zeppaeventendpoint$ListZeppaEvent: java.lang.String cursor
 com.minook.zeppa.zeppaeventendpoint.Zeppaeventendpoint$ListZeppaEvent: java.lang.String filter

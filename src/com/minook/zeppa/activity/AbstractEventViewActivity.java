@@ -65,7 +65,7 @@ public abstract class AbstractEventViewActivity extends
 		OnCommentLoadListener, OnEventUpdateListener,
 		OnRelationshipsLoadedListener, OnRefreshListener {
 
-	final private String TAG = getClass().getName();
+//	final private String TAG = getClass().getName();
 
 	private long eventId;
 	protected AbstractZeppaEventMediator eventMediator;

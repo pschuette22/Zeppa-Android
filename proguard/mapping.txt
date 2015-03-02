@@ -21364,11 +21364,12 @@ com.pschuette.android.calendarlibrary.CalendarAdapter -> com.b.a.a.a:
     java.util.List dayViews -> e
     java.util.ArrayList dayList -> d
     int getCount() -> getCount
-    java.lang.Object getItem(int) -> getItem
+    com.pschuette.android.calendarlibrary.Day getItem(int) -> a
     long getItemId(int) -> getItemId
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
     void refreshDays() -> a
     void notifyDatasetChangedForDay(com.pschuette.android.calendarlibrary.Day) -> a
+    java.lang.Object getItem(int) -> getItem
 com.pschuette.android.calendarlibrary.CalendarData -> com.b.a.a.b:
     java.lang.String TAG -> b
     java.lang.String[] SYNC_DATA_PROJECTION -> a

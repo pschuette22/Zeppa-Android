@@ -21,6 +21,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
+import com.minook.zeppa.adapter.MinglerFinderAdapter;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
@@ -40,7 +41,7 @@ public class ZeppaUserSingleton {
 
 	private static ZeppaUserSingleton singleton;
 
-	private final String TAG = getClass().getName();
+	// private final String TAG = getClass().getName();
 
 	private MyZeppaUserMediator userMediator;
 	private List<DefaultUserInfoMediator> heldUserMediators;
@@ -129,10 +130,10 @@ public class ZeppaUserSingleton {
 	}
 
 	public void executeFindMinglerTask(ZeppaApplication application,
-			GoogleAccountCredential credential) {
+			GoogleAccountCredential credential, MinglerFinderAdapter adapter) {
 		lastFindMinglersTaskExecutionDate = new Date();
 		ThreadManager
-				.execute(new FindMinglersRunnable(application, credential));
+				.execute(new FindMinglersRunnable(application, credential, adapter));
 	}
 
 	/**
@@ -163,6 +164,11 @@ public class ZeppaUserSingleton {
 
 	}
 
+	public void addAllDefaultUserInfoMediators(List<DefaultUserInfoMediator> mediators){
+		heldUserMediators.addAll(mediators);
+		
+	}
+	
 	/**
 	 * This method sets the contactLoader view which should be hidden when
 	 * contacts have loaded
@@ -227,6 +233,49 @@ public class ZeppaUserSingleton {
 
 	public String getGoogleCalendarId() {
 		return userMediator.getZeppaCalendarId();
+	}
+
+	public List<String> getRecognizedNumbers() {
+		List<String> numbers = new ArrayList<String>();
+
+		try {
+			numbers.add(userMediator.getUnformattedPhoneNumber());
+		} catch (NullPointerException e){
+			
+		}
+		
+		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
+				.iterator();
+		while (iterator.hasNext()) {
+			try {
+				String number = iterator.next().getUnformattedPhoneNumber();
+				numbers.add(number);
+			} catch (NullPointerException e) {
+				// Number is null
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return numbers;
+	}
+
+	public List<String> getRecognizedEmails() {
+		List<String> emails = new ArrayList<String>();
+
+		emails.add(userMediator.getGmail());
+		
+		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
+				.iterator();
+		while (iterator.hasNext()) {
+			try {
+				emails.add(iterator.next().getGmail());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return emails;
 	}
 
 	private boolean listContainsId(List<Long> list, long id) {

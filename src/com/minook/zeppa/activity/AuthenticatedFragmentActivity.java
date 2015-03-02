@@ -33,7 +33,7 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 	 * --------------- Intent Constants ----------------------
 	 */
 
-	private final String TAG = "AuthenticatedFragmentActivity";
+//	private final String TAG = "AuthenticatedFragmentActivity";
 
 	protected ProgressDialog connectionProgress;
 	protected GoogleApiClient apiClient;
@@ -89,12 +89,13 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 
 	@Override
 	protected void onStop() {
+		super.onStop();
+
+		((ZeppaApplication) getApplication()).removeCurrentActivityIfMatching(this);
 
 		if (apiClient != null && apiClient.isConnected()) {
 			apiClient.disconnect();
 		}
-
-		super.onStop();
 
 	}
 

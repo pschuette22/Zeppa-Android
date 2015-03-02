@@ -23,11 +23,11 @@ public class NotificationSingleton {
 	}
 
 	private static NotificationSingleton singleton;
-	private final String TAG = "NotificationSingleton";
+//	private final String TAG = "NotificationSingleton";
 	private List<ZeppaNotification> notifications;
 	private List<NotificationLoadListener> loadListeners;
 	private boolean hasLoadedInitial;
-	private boolean isFetchingNotifications;
+//	private boolean isFetchingNotifications;
 	private String nextNotificationPageToken;
 	
 	/*
@@ -38,7 +38,7 @@ public class NotificationSingleton {
 		notifications = new ArrayList<ZeppaNotification>();
 		loadListeners = new ArrayList<NotificationLoadListener>();
 		hasLoadedInitial = false;
-		isFetchingNotifications = false;
+//		isFetchingNotifications = false;
 	}
 
 	public static NotificationSingleton getInstance() {

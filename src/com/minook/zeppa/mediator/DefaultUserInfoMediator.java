@@ -3,6 +3,7 @@ package com.minook.zeppa.mediator;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
@@ -320,8 +322,12 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 	 * @param context
 	 */
 	public void sendTextMessage(Context context) {
+		try {
 		Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", getPrimaryPhoneNumber(), null));
 		context.startActivity(smsIntent);
+		} catch (ActivityNotFoundException e){
+			Toast.makeText(context, "Can't send SMS", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	/**

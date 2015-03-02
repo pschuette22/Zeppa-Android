@@ -9,20 +9,18 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
 public class Utils {
-	private static final String TAG = "ZeppaUtils";
+//	private static final String TAG = "ZeppaUtils";
 
 	/*
 	 * encoding methods
@@ -356,6 +354,7 @@ public class Utils {
 
 	}
 
+	@SuppressLint("InflateParams")
 	public static View makeLoaderView(AuthenticatedFragmentActivity context,
 			String text) {
 		View loaderView = context.getLayoutInflater().inflate(

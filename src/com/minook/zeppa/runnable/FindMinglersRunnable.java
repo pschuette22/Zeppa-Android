@@ -1,7 +1,9 @@
 package com.minook.zeppa.runnable;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -11,6 +13,8 @@ import android.util.Log;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
+import com.minook.zeppa.adapter.MinglerFinderAdapter;
+import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppauserinfoendpoint.Zeppauserinfoendpoint;
 import com.minook.zeppa.zeppauserinfoendpoint.Zeppauserinfoendpoint.ListZeppaUserInfo;
@@ -19,10 +23,18 @@ import com.minook.zeppa.zeppauserinfoendpoint.model.ZeppaUserInfo;
 
 public class FindMinglersRunnable extends BaseRunnable {
 
-
+	
+	private List<String> recognizedEmails;
+	private List<String> recognizedNumbers;
+	private MinglerFinderAdapter finderAdapter;
+	
+	
 	public FindMinglersRunnable(ZeppaApplication application,
-			GoogleAccountCredential credential) {
+			GoogleAccountCredential credential, MinglerFinderAdapter finderAdapter) {
 		super(application, credential);
+		recognizedEmails = ZeppaUserSingleton.getInstance().getRecognizedEmails();
+		recognizedNumbers = ZeppaUserSingleton.getInstance().getRecognizedNumbers();
+		this.finderAdapter = finderAdapter;
 	}
 
 	@Override
@@ -152,7 +164,6 @@ public class FindMinglersRunnable extends BaseRunnable {
 
 	private void executeQuery(String filter) {
 
-		boolean valuesDidChange = false;
 		Zeppauserinfoendpoint endpoint = buildUserInfoEndpoint();
 
 		String cursor = null;
@@ -167,14 +178,23 @@ public class FindMinglersRunnable extends BaseRunnable {
 					&& !result.getItems().isEmpty()) {
 
 				Iterator<ZeppaUserInfo> iterator = result.getItems().iterator();
+				
+				List<DefaultUserInfoMediator> mediators = new ArrayList<DefaultUserInfoMediator>();
 				while (iterator.hasNext()) {
-
-					ZeppaUserSingleton.getInstance()
-							.addDefaultZeppaUserMediator(iterator.next(), null);
-
+					DefaultUserInfoMediator mediator = new DefaultUserInfoMediator(iterator.next(), null);
+					recognizedEmails.add(mediator.getGmail());
+					try {
+						recognizedNumbers.add(mediator.getUnformattedPhoneNumber());
+					} catch (NullPointerException e){
+					}
+					mediators.add(mediator);
 				}
 
+				addMediatorsOnUIThread(mediators);
+				
 			}
+			
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -201,8 +221,15 @@ public class FindMinglersRunnable extends BaseRunnable {
 	 * @param phoneNumber
 	 * @return True if recognized
 	 */
-	private synchronized boolean numberIsRecognized(String phoneNumber) {
-		return ZeppaUserSingleton.getInstance().numberIsRecognized(phoneNumber);
+	private boolean numberIsRecognized(String phoneNumber) {
+		Iterator<String> iterator = recognizedNumbers.iterator();
+		
+		while(iterator.hasNext()){
+			if(iterator.next().equalsIgnoreCase(phoneNumber)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -211,11 +238,37 @@ public class FindMinglersRunnable extends BaseRunnable {
 	 * @param email
 	 * @return True if recognized
 	 */
-	private synchronized boolean emailIsRecognized(String email) {
-		return ZeppaUserSingleton.getInstance().emailIsRecognized(email);
+	private boolean emailIsRecognized(String email) {
+		Iterator<String> iterator = recognizedEmails.iterator();
+		while(iterator.hasNext()){
+			if(iterator.next().equalsIgnoreCase(email)){
+				return true;
+			}
+		}
+		return false;
 	}
 
+	
+	/**
+	 * Adds loaded DefaultUserInfoMediators to singleton data on UI thread
+	 * 
+	 * @param mediators, List of mediators to be added
+	 */
+	private void addMediatorsOnUIThread(final List<DefaultUserInfoMediator> mediators){
+		try {
+			application.getCurrentActivity().runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					ZeppaUserSingleton.getInstance().addAllDefaultUserInfoMediators(mediators);
+					finderAdapter.notifyDataSetChanged();
+				}
+
+			});
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
-
-//
-
