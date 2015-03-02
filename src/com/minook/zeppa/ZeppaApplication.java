@@ -19,14 +19,12 @@ import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 public class ZeppaApplication extends Application {
 
-//	private final String TAG = getClass().getName();
+	// private final String TAG = getClass().getName();
 
-	
 	private List<MemoryObserver> memoryObservers;
 	private AuthenticatedFragmentActivity currentActivity;
 	private DeviceInfo currentDeviceInfo;
-	
-	
+
 	/*
 	 * ------------ Override Methods -------------
 	 */
@@ -38,15 +36,11 @@ public class ZeppaApplication extends Application {
 
 	}
 
-
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();
 
 	}
-	
-	
-
 
 	/*
 	 * --------- Private Methods ----------------
@@ -60,6 +54,9 @@ public class ZeppaApplication extends Application {
 		return currentDeviceInfo;
 	}
 
+	public void setCurrentDeviceInfo(DeviceInfo currentDeviceInfo) {
+		this.currentDeviceInfo = currentDeviceInfo;
+	}
 
 	public void registerMemoryObserver(MemoryObserver observer) {
 		memoryObservers.add(observer);
@@ -68,25 +65,21 @@ public class ZeppaApplication extends Application {
 	public void unregisterMemoryObservery(MemoryObserver observer) {
 		memoryObservers.remove(observer);
 	}
-	
-	public void setCurrentActivity(AuthenticatedFragmentActivity activity){
+
+	public void setCurrentActivity(AuthenticatedFragmentActivity activity) {
 		this.currentActivity = activity;
 	}
-	
-	public void removeCurrentActivityIfMatching(AuthenticatedFragmentActivity activity){
-		if(this.currentActivity == activity){
+
+	public void removeCurrentActivityIfMatching(
+			AuthenticatedFragmentActivity activity) {
+		if (this.currentActivity == activity) {
 			this.currentActivity = null;
 		}
 	}
-	
-	public void setCurrentDeviceInfo(DeviceInfo currentDeviceInfo){
-		this.currentDeviceInfo = currentDeviceInfo;
-	}
-	
-	public AuthenticatedFragmentActivity getCurrentActivity(){
+
+	public AuthenticatedFragmentActivity getCurrentActivity() {
 		return currentActivity;
 	}
-	
 
 	/*
 	 * -------------- Setters --------------------
@@ -99,21 +92,23 @@ public class ZeppaApplication extends Application {
 		Long userId = userSingleton.getUserId();
 		// Set shared preferences
 		PrefsManager.setLoggedInUserId(this, userId);
-		PrefsManager.setLoggedInAccountEmail(this, userSingleton.getUserMediator().getGmail());
+		PrefsManager.setLoggedInAccountEmail(this, userSingleton
+				.getUserMediator().getGmail());
 		PrefsManager.setBaseNotificationPreferences(this);
-		
-	
-		ThreadManager.execute(new FetchInitialMinglersRunnable(this, credential, userId));
-		
-		// Load this users event tags
-		ThreadManager.execute(new FetchMyEventTagsRunnable(this, credential, userId));
 
-		ThreadManager.execute(new InsertDeviceRunnable(this, credential, userId));
+		ThreadManager.execute(new FetchInitialMinglersRunnable(this,
+				credential, userId));
+
+		// Load this users event tags
+		ThreadManager.execute(new FetchMyEventTagsRunnable(this, credential,
+				userId));
+
+		ThreadManager
+				.execute(new InsertDeviceRunnable(this, credential, userId));
 
 		ThreadManager.execute(new SyncZeppaCalendarRunnable(this, credential));
 
 	}
-
 
 	/*
 	 * ------------ Memory Management -------------
@@ -170,14 +165,5 @@ public class ZeppaApplication extends Application {
 		}
 	}
 
-	private void onApplicationTerminate() {
-		Iterator<MemoryObserver> iterator = memoryObservers.iterator();
-		while (iterator.hasNext()) {
-			MemoryObserver observer = iterator.next();
-			if (observer.onApplicationTerminate()) {
-				unregisterMemoryObservery(observer);
-			}
-		}
-	}
 
 }

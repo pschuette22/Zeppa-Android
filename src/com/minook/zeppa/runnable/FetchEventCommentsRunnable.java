@@ -69,9 +69,14 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 								.getAbstractUserMediatorById(
 										comment.getCommenterId()) == null) {
 							try {
-								ZeppaUserInfo commenter = iEndpoint.getZeppaUserInfo(comment.getCommenterId()).execute();
-								ZeppaUserSingleton.getInstance().addDefaultZeppaUserMediator(commenter, null);
-							} catch (IOException e){
+								ZeppaUserInfo commenter = iEndpoint
+										.getZeppaUserInfo(
+												comment.getCommenterId())
+										.execute();
+								ZeppaUserSingleton.getInstance()
+										.addDefaultZeppaUserMediator(commenter,
+												null);
+							} catch (IOException e) {
 								e.printStackTrace();
 								remove.add(comment);
 							}
@@ -87,17 +92,22 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 
 					loadedComments.removeAll(remove);
 					result.addAll(result);
-					
-					
 
 				}
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				listener.onErrorLoadingComments();
+				break;
 			}
 
 		} while (commentCursor != null);
+
+		if (!result.isEmpty()) {
+			mediator.addAllComments(result);
+			listener.onCommentsLoaded();
+		}
 
 	}
 }

@@ -22,7 +22,7 @@ import com.minook.zeppa.singleton.ZeppaUserSingleton;
 public abstract class AbstractEventListAdapter extends BaseAdapter implements
 		OnItemClickListener, OnClickListener {
 
-	private final static String TAG = AbstractEventListAdapter.class.getName();
+//	private final static String TAG = AbstractEventListAdapter.class.getName();
 
 	protected AuthenticatedFragmentActivity activity;
 	protected List<AbstractZeppaEventMediator> eventMediators;

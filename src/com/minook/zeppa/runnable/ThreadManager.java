@@ -1,6 +1,5 @@
 package com.minook.zeppa.runnable;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,11 +12,11 @@ public class ThreadManager {
 		executor.execute(runnable);
 	}
 	
-	public static void kill(){
-		List<Runnable> runnable = executor.shutdownNow();
-		
-		// TODO: iterate through and determine if any of these need to be run
-		
-	}
+//	public static void kill(){
+//		List<Runnable> runnable = executor.shutdownNow();
+//		
+//		// TODO: iterate through and determine if any of these need to be run
+//		
+//	}
 	
 }

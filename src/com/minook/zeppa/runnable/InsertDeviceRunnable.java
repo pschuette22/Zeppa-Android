@@ -98,24 +98,4 @@ public class InsertDeviceRunnable extends BaseRunnable {
 		
 	}
 
-	
-
-	
-	
-//	public InsertDeviceTask(ZeppaApplication context, Long userId,
-//			GoogleAccountCredential credential) {
-//		this.context = context;
-//		this.userId = userId;
-//		this.credential = credential;
-//	}
-//
-//	@Override
-//	protected Void doInBackground(Void... params) {
-//
-//
-
-//
-//		return null;
-//	}
-
 }

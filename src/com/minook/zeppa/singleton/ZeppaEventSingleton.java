@@ -38,7 +38,7 @@ public class ZeppaEventSingleton {
 		public void onZeppaEventsLoaded();
 	}
 
-	private final String TAG = ZeppaEventSingleton.class.getName();
+//	private final String TAG = ZeppaEventSingleton.class.getName();
 
 	private static ZeppaEventSingleton singleton;
 

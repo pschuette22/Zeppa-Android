@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -52,7 +51,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	 * -------------- Activity Pieces -------------------
 	 */
 
-	private final String TAG = "NewEventActivity";
+//	private final String TAG = "NewEventActivity";
 
 	// FINAL
 	private final static String PICKER_24HR_ARG = "Picker is 24hr Format";

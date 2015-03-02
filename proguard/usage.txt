@@ -10901,9 +10901,15 @@ com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelati
     178:179:public com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship setUpdated(java.lang.Long)
 com.pschuette.android.calendarlibrary.CalendarAdapter:
     static final int FIRST_DAY_OF_WEEK
+<<<<<<< HEAD
     57:67:public int getPrevMonth()
     71:71:public int getMonth()
     75:75:public int getYear()
+=======
+    57:66:public int getPrevMonth()
+    70:70:public int getMonth()
+    74:74:public int getYear()
+>>>>>>> origin/master
 com.pschuette.android.calendarlibrary.CalendarData:
     50:51:public void setLocalId(java.lang.Long)
     60:61:public void setName(java.lang.String)

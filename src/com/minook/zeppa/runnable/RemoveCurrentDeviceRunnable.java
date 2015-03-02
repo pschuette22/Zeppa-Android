@@ -4,30 +4,34 @@ import java.io.IOException;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.ZeppaApplication;
+import com.minook.zeppa.deviceinfoendpoint.model.DeviceInfo;
 
 public class RemoveCurrentDeviceRunnable extends BaseRunnable {
+
+	private DeviceInfo info;
 
 	public RemoveCurrentDeviceRunnable(ZeppaApplication application,
 			GoogleAccountCredential credential) {
 		super(application, credential);
-		// TODO Auto-generated constructor stub
+		info = application.getCurrentDeviceInfo();
 	}
 
 	@Override
 	public void run() {
 		try {
-			
-			buildDeviceInfoEndpoint().removeDeviceInfo(application.getCurrentDeviceInfo()).execute();
-			application.setCurrentDeviceInfo(null);
-			
-		} catch (IOException e){
+			if (info != null) {
+				buildDeviceInfoEndpoint().removeDeviceInfo(info).execute();
+				application.setCurrentDeviceInfo(null);
+			}
+
+		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (NullPointerException e){
+		} catch (NullPointerException e) {
 			e.printStackTrace();
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

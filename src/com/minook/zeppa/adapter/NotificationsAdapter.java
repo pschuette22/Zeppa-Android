@@ -71,7 +71,20 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ZeppaNotification notification = getItem(position);
+
+		if (convertView == null) {
+			convertView = activity.getLayoutInflater().inflate(
+					R.layout.view_notification_item, parent, false);
+		}
+
+		ZeppaNotification notification;
+		try {
+			notification = getItem(position);
+			
+		} catch (Exception e) {
+			convertView.setVisibility(View.GONE);
+			return convertView;
+		}
 
 		AbstractZeppaUserMediator senderMediator = ZeppaUserSingleton
 				.getInstance().getAbstractUserMediatorById(
@@ -79,26 +92,33 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 		if (senderMediator == null) {
 			Log.wtf("TAG", "No User Found for received Notification");
+			convertView.setVisibility(View.GONE);
+		} else {
+			convertView.setVisibility(View.VISIBLE);
+
+			ImageView userImage = (ImageView) convertView
+					.findViewById(R.id.notificationitem_userimage);
+			TextView text = (TextView) convertView
+					.findViewById(R.id.notificationitem_text);
+			TextView date = (TextView) convertView
+					.findViewById(R.id.notificationitem_date);
+
+			senderMediator.setImageWhenReady(userImage);
+			try {
+				text.setText(NotificationSingleton.getInstance()
+						.getNotificationMessage(notification));
+
+			} catch (StringIndexOutOfBoundsException e) {
+				text.setText("Error Occured");
+			}
+			try {
+				date.setText(Utils.getDisplayDateString(notification
+						.getCreated().longValue()));
+			} catch (StringIndexOutOfBoundsException e) {
+				date.setText("Error Occured");
+			}
+
 		}
-
-		if (convertView == null) {
-			convertView = activity.getLayoutInflater().inflate(
-					R.layout.view_notification_item, parent, false);
-		}
-
-		ImageView userImage = (ImageView) convertView
-				.findViewById(R.id.notificationitem_userimage);
-		TextView text = (TextView) convertView
-				.findViewById(R.id.notificationitem_text);
-		TextView date = (TextView) convertView
-				.findViewById(R.id.notificationitem_date);
-
-		senderMediator.setImageWhenReady(userImage);
-		text.setText(NotificationSingleton.getInstance()
-				.getNotificationMessage(notification));
-
-		date.setText(Utils.getDisplayDateString(notification.getCreated()
-				.longValue()));
 
 		return convertView;
 	}

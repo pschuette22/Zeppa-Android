@@ -44,7 +44,7 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		OnClickListener, OnMinglerRelationshipsLoadedListener,
 		OnTagLoadListener, OnZeppaEventLoadListener, OnRefreshListener {
 
-	private static final String TAG = "UserActivity";
+	// private static final String TAG = "UserActivity";
 
 	private long userId;
 	private ImageView userImage;
@@ -66,8 +66,6 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 	private boolean isUpdatingMinglerEvents;
 	private boolean isUpdatingMinglerTags;
 	private boolean didInitialFetch;
-	
-	
 
 	/*
 	 * ------------- Override Methods --------------
@@ -84,21 +82,25 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		isUpdatingMinglerTags = false;
 		didInitialFetch = false;
 
-		try {
-			Long temp = getIntent().getExtras().getLong(
-					Constants.INTENT_ZEPPA_USER_ID);
+		if (userMediator == null) {
+			try {
+				Long passedUserId = getIntent().getExtras().getLong(
+						Constants.INTENT_ZEPPA_USER_ID);
 
-			if (temp != null && temp.longValue() > 0) {
-				userId = temp.longValue();
+				if (passedUserId != null && passedUserId.longValue() > 0) {
+					userId = passedUserId.longValue();
+				}
+				
+				userMediator = (DefaultUserInfoMediator) ZeppaUserSingleton
+						.getInstance().getAbstractUserMediatorById(userId);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				Toast.makeText(this, "Error fetching Mingler" , Toast.LENGTH_SHORT).show();
+				onBackPressed();
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		if (userMediator == null) {
-			userMediator = (DefaultUserInfoMediator) ZeppaUserSingleton
-					.getInstance().getAbstractUserMediatorById(userId);
+			
 
 		}
 		// find UI Elements and hold
@@ -119,7 +121,7 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		userGmail.setOnClickListener(this);
 
 		// action bar
-		ActionBar actionBar = getSupportActionBar();	
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(userMediator.getGivenName() + "'s Profile");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
@@ -147,18 +149,20 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		setUserInfo();
 		ZeppaEventSingleton.getInstance().registerEventLoadListener(this);
 
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
 		tagAdapter.drawTags();
 		try {
 			friendEventsAdapter.drawEvents();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
+
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		
+//	}
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
