@@ -10901,9 +10901,9 @@ com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelati
     178:179:public com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship setUpdated(java.lang.Long)
 com.pschuette.android.calendarlibrary.CalendarAdapter:
     static final int FIRST_DAY_OF_WEEK
-    53:63:public int getPrevMonth()
-    67:67:public int getMonth()
-    71:71:public int getYear()
+    57:67:public int getPrevMonth()
+    71:71:public int getMonth()
+    75:75:public int getYear()
 com.pschuette.android.calendarlibrary.CalendarData:
     50:51:public void setLocalId(java.lang.Long)
     60:61:public void setName(java.lang.String)
@@ -10917,13 +10917,13 @@ com.pschuette.android.calendarlibrary.CalendarSyncStateAdapter:
     82:85:public void unregisterSyncStateChangeListener(com.pschuette.android.calendarlibrary.CalendarSyncStateAdapter$OnSyncStateChangedListener)
 com.pschuette.android.calendarlibrary.DateTimeInterpreter
 com.pschuette.android.calendarlibrary.Day:
-    71:72:public void setDay(int)
-    79:79:public int getDayOfWeek()
-    83:83:public java.util.Calendar getCalendarDay()
-    92:93:public void addEvent(com.pschuette.android.calendarlibrary.Event)
-    107:108:public void stopFetchingEvents()
-    119:122:public void unregisterOnEventsLoadListener(com.pschuette.android.calendarlibrary.Day$OnEventsLoadListener)
-    130:135:public java.util.Set getColors()
+    69:70:public void setDay(int)
+    77:77:public int getDayOfWeek()
+    81:81:public java.util.Calendar getCalendarDay()
+    90:91:public void addEvent(com.pschuette.android.calendarlibrary.Event)
+    105:106:public void stopFetchingEvents()
+    117:120:public void unregisterOnEventsLoadListener(com.pschuette.android.calendarlibrary.Day$OnEventsLoadListener)
+    128:133:public java.util.Set getColors()
 com.pschuette.android.calendarlibrary.Event:
     private android.graphics.Bitmap image
     private java.lang.String calendarEventId

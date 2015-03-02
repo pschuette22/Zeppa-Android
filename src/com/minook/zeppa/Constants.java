@@ -4,14 +4,10 @@ package com.minook.zeppa;
 
 public class Constants {
 	
-	/*
-	 * Software versions. Update with release
-	 * Current release: 1.0.0
-	 * */
 	
 	public static final int VERSION_CODE = 1;
 	public static final int UPDATE_CODE = 1;
-	public static final int BUGFIX_CODE = 0;
+	public static final int BUGFIX_CODE = 1;
 
 	public static final String APP_RELEASE_CODE = VERSION_CODE + "." + UPDATE_CODE +"." + BUGFIX_CODE;
 	
