@@ -332,7 +332,9 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 		private final String[] PROJECTION = { Instances.EVENT_ID, // 0
 				Instances.BEGIN, // 1
 				Instances.END, // 2
-				Instances.SELF_ATTENDEE_STATUS, Instances.TITLE };
+				Instances.SELF_ATTENDEE_STATUS, // 3
+				Instances.TITLE, // 4
+				Instances.OWNER_ACCOUNT }; // 5
 
 		public DetermineAndSetConflictStatus(Context context, ImageView image) {
 			this.image = image;
@@ -359,22 +361,35 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 				do {
 					// if(c.getInt(3) == )
 
-					long start = c.getLong(1) - fiveMinBuffer;
-					long end = c.getLong(2) + fiveMinBuffer;
+					String eventName = c.getString(4);
+//					String ownerAccount = c.getString(5);
+					long start = c.getLong(1);
+					long end = c.getLong(2);
 
-					long eventEnd = getEndInMillis();
-
-					if (start > temp) {
-						status = ConflictStatus.PARTIAL;
-						break;
-					} else if (end >= eventEnd) {
-						status = ConflictStatus.COMPLETE;
-						break;
+					if (eventName.equals(getTitle())
+							&& event.getEnd().longValue() == end
+							&& event.getStart().longValue() == start) {
+						// Currently evaluating this item in cursor.
+						// TODO: refresh calendar
 					} else {
-						status = ConflictStatus.PARTIAL;
-						temp = end;
-					}
 
+						long startWithBuffer = start - fiveMinBuffer;
+						long endWithBuffer = end + fiveMinBuffer;
+
+						long eventEnd = getEndInMillis();
+
+						if (startWithBuffer > temp) {
+							status = ConflictStatus.PARTIAL;
+							break;
+						} else if (endWithBuffer >= eventEnd) {
+							status = ConflictStatus.COMPLETE;
+							break;
+						} else {
+							status = ConflictStatus.PARTIAL;
+							temp = end;
+						}
+
+					}
 				} while (c.moveToNext());
 
 				// There were no breaks in the schedule

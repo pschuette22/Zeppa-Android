@@ -67,6 +67,10 @@ public class InviteListAdapter extends BaseAdapter implements OnClickListener {
 		convertView.setOnClickListener(this);
 		return convertView;
 	}
+	
+	public int getInvitedUsersCount(){
+		return getInvitedUserIds().size();
+	}
 
 	public List<Long> getInvitedUserIds() {
 		return invitedUserIds;

@@ -20,16 +20,18 @@ public class NotificationSingleton {
 
 	public interface NotificationLoadListener {
 		public void onNotificationsLoaded();
+
+		public void onNotificationDataChanged();
 	}
 
 	private static NotificationSingleton singleton;
-//	private final String TAG = "NotificationSingleton";
+	// private final String TAG = "NotificationSingleton";
 	private List<ZeppaNotification> notifications;
 	private List<NotificationLoadListener> loadListeners;
 	private boolean hasLoadedInitial;
-//	private boolean isFetchingNotifications;
+	// private boolean isFetchingNotifications;
 	private String nextNotificationPageToken;
-	
+
 	/*
 	 * Instance Handlers
 	 */
@@ -38,7 +40,7 @@ public class NotificationSingleton {
 		notifications = new ArrayList<ZeppaNotification>();
 		loadListeners = new ArrayList<NotificationLoadListener>();
 		hasLoadedInitial = false;
-//		isFetchingNotifications = false;
+		// isFetchingNotifications = false;
 	}
 
 	public static NotificationSingleton getInstance() {
@@ -46,45 +48,49 @@ public class NotificationSingleton {
 			singleton = new NotificationSingleton();
 		return singleton;
 	}
-	
-	public void restore(){
+
+	public void restore() {
 		singleton = new NotificationSingleton();
 	}
-	
-	public void clear(){
+
+	public void clear() {
 		notifications.clear();
 	}
-	
-	public void removeNotificationsForEvent(long eventId){
-		
+
+	public void removeNotificationsForEvent(long eventId) {
+
 		List<ZeppaNotification> remove = new ArrayList<ZeppaNotification>();
 		Iterator<ZeppaNotification> iterator = notifications.iterator();
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			ZeppaNotification notification = iterator.next();
-			if(notification.getEventId() != null && notification.getEventId().longValue() == eventId){
+			if (notification.getEventId() != null
+					&& notification.getEventId().longValue() == eventId) {
 				remove.add(notification);
 			}
 		}
 		notifications.removeAll(remove);
+		onNotificationDataChanged();
 	}
 
-	public void removeNotification(long notificationId){
-		
+	public void removeNotification(long notificationId) {
+
 		ZeppaNotification notification = null;
 		Iterator<ZeppaNotification> iterator = notifications.iterator();
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			ZeppaNotification n = iterator.next();
-			if(n.getId().longValue() == notificationId){
+			if (n.getId().longValue() == notificationId) {
 				notification = n;
 				break;
 			}
 		}
-		
-		if(notification != null){
+
+		if (notification != null) {
 			notifications.remove(notification);
 		}
+		onNotificationDataChanged();
+
 	}
-	
+
 	/*
 	 * Getters
 	 */
@@ -97,11 +103,26 @@ public class NotificationSingleton {
 		return hasLoadedInitial;
 	}
 
-	public void onLoadedNotifications(){
+	public void onLoadedNotifications() {
 		hasLoadedInitial = true;
 		notifyObservers();
 	}
-	
+
+	public ZeppaNotification getNotificationById(long notificationId) {
+
+		Iterator<ZeppaNotification> iterator = notifications.iterator();
+
+		while (iterator.hasNext()) {
+			ZeppaNotification notification = iterator.next();
+			if (notification.getId().longValue() == notificationId) {
+				return notification;
+			}
+
+		}
+
+		return null;
+	}
+
 	public int getNotificationTypeOrder(ZeppaNotification notification) {
 		String type = notification.getType();
 		if (type.equals("MINGLE_REQUEST")) {
@@ -127,6 +148,24 @@ public class NotificationSingleton {
 		} else {
 			return -1;
 		}
+	}
+
+	public int getUnseenNotificationCount() {
+		int count = 0;
+		try {
+			Iterator<ZeppaNotification> iterator = notifications.iterator();
+			while (iterator.hasNext()) {
+				ZeppaNotification notification = iterator.next();
+				if (notification.getHasSeen() != null
+						&& !notification.getHasSeen().booleanValue()) {
+					count++;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return count;
 	}
 
 	public String getNotificationTitle(ZeppaNotification notification) {
@@ -169,8 +208,6 @@ public class NotificationSingleton {
 		return builder.toString();
 	}
 
-	
-	
 	public String getNotificationMessage(ZeppaNotification notification) {
 		StringBuilder builder = new StringBuilder();
 
@@ -232,7 +269,6 @@ public class NotificationSingleton {
 	 * Setters
 	 */
 
-
 	public void registerOnLoadListener(NotificationLoadListener listener) {
 		if (!loadListeners.contains(listener)) {
 			this.loadListeners.add(listener);
@@ -265,7 +301,6 @@ public class NotificationSingleton {
 		}
 	}
 
-	
 	// public void addAllNotifications(List<ZeppaNotification> notifications) {
 	//
 	// notifications.removeAll(notifications);
@@ -324,13 +359,14 @@ public class NotificationSingleton {
 		}
 
 	}
-	
-	
 
 	/*
 	 * Private
 	 */
 
+	/**
+	 * Notification data has changed, List should redraw itself
+	 */
 	public void notifyObservers() {
 		Iterator<NotificationLoadListener> listeners = loadListeners.iterator();
 
@@ -345,6 +381,25 @@ public class NotificationSingleton {
 		}
 	}
 
+	/**
+	 * notification data changed. This is when the notification list has not
+	 * changed but at least one notification's data has. ie when a notification
+	 * updates its hasSeen property
+	 */
+	public void onNotificationDataChanged() {
+		Iterator<NotificationLoadListener> listeners = loadListeners.iterator();
+
+		while (listeners.hasNext()) {
+			NotificationLoadListener listener = listeners.next();
+
+			try {
+				listener.onNotificationDataChanged();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
 
 	/**
 	 * This method loads the initial instances of notifications the user should
@@ -353,14 +408,12 @@ public class NotificationSingleton {
 	 * @param credential
 	 * @param userId
 	 */
-	public void fetchNotifications(ZeppaApplication application, 
+	public void fetchNotifications(ZeppaApplication application,
 			GoogleAccountCredential credential, Long userId) {
 
-		
-		ThreadManager.execute(new FetchInitialNotificationsRunnable(application, credential, userId, nextNotificationPageToken));
-		
-		
-	}
+		ThreadManager.execute(new FetchInitialNotificationsRunnable(
+				application, credential, userId, nextNotificationPageToken));
 
+	}
 
 }

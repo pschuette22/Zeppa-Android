@@ -157,6 +157,20 @@ public class MainActivity extends AuthenticatedFragmentActivity implements
 			selectItem(currentPage, false);
 		}
 
+		// if (!PrefsManager.getUserPreference(getApplication(),
+		// Constants.SC_NAVIGATIONBAR)) {
+		// new ShowcaseView.Builder(this)
+		// .setContentTitle("Navigation List")
+		// .setContentText(
+		// "This is how you get between main pages of the app")
+		// .hideOnTouchOutside()
+		// .setTarget(new ViewTarget((new
+		// AppCompatReflector(this)).getHomeButton()))
+		// .build();
+		// PrefsManager.setUserPreference(getApplication(),
+		// Constants.SC_NAVIGATIONBAR, true);
+		// }
+
 	}
 
 	@Override
@@ -327,7 +341,6 @@ public class MainActivity extends AuthenticatedFragmentActivity implements
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Log.d("TAG", "Making Naviagtion View " + position);
 			if (position == 0) {
 
 				convertView = getLayoutInflater().inflate(

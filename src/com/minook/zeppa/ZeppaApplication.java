@@ -12,7 +12,7 @@ import com.minook.zeppa.deviceinfoendpoint.model.DeviceInfo;
 import com.minook.zeppa.observer.MemoryObserver;
 import com.minook.zeppa.runnable.FetchInitialMinglersRunnable;
 import com.minook.zeppa.runnable.FetchMyEventTagsRunnable;
-import com.minook.zeppa.runnable.InsertDeviceRunnable;
+import com.minook.zeppa.runnable.LoginDeviceRunnable;
 import com.minook.zeppa.runnable.SyncZeppaCalendarRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
@@ -36,6 +36,8 @@ public class ZeppaApplication extends Application {
 
 	}
 
+	
+	
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();
@@ -70,12 +72,7 @@ public class ZeppaApplication extends Application {
 		this.currentActivity = activity;
 	}
 
-	public void removeCurrentActivityIfMatching(
-			AuthenticatedFragmentActivity activity) {
-		if (this.currentActivity == activity) {
-			this.currentActivity = null;
-		}
-	}
+	
 
 	public AuthenticatedFragmentActivity getCurrentActivity() {
 		return currentActivity;
@@ -104,7 +101,7 @@ public class ZeppaApplication extends Application {
 				userId));
 
 		ThreadManager
-				.execute(new InsertDeviceRunnable(this, credential, userId));
+				.execute(new LoginDeviceRunnable(this, credential, userId));
 
 		ThreadManager.execute(new SyncZeppaCalendarRunnable(this, credential));
 

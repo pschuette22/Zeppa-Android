@@ -131,7 +131,7 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 				view = (CheckedTextView) params[2];
 
 				Eventtagfollowendpoint.Builder endpointBuilder = new Eventtagfollowendpoint.Builder(
-						new NetHttpTransport(), new JacksonFactory(), credential);
+						AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential);
 				endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
 
 				Eventtagfollowendpoint endpoint = (Eventtagfollowendpoint) endpointBuilder
@@ -142,6 +142,9 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 					endpoint.removeEventTagFollow(myFollow.getKey().getId()).execute();
 					return true;
 				} catch (IOException e) {
+					e.printStackTrace();
+					return false;
+				} catch (NullPointerException e){
 					e.printStackTrace();
 					return false;
 				}

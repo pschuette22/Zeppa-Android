@@ -34,9 +34,9 @@
                     android:layout_marginRight="5dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="7dp"
-                    android:background="@drawable/background_contact_picture"
                     android:contentDescription="@string/contdesc_contactimage"
                     android:padding="1dp"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/default_user_image" />
 
                 <LinearLayout
@@ -63,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_phone_image"
-                        android:drawablePadding="5dp"
+                        android:drawablePadding="4dp"
                         android:drawableStart="@drawable/ic_phone_image" />
 
                     <TextView
@@ -72,7 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_mail_image"
-                        android:drawablePadding="5dp"
+                        android:drawablePadding="4dp"
                         android:drawableStart="@drawable/ic_mail_image" />
                 </LinearLayout>
             </RelativeLayout>

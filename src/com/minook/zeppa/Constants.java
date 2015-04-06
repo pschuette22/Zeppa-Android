@@ -3,12 +3,12 @@ package com.minook.zeppa;
 public class Constants {
 
 	/*
-	 * Software versions. Update with release Current release: 1.0.0
+	 * Software versions. Update with release in form: <version>.<update>.<bugfix>
 	 */
 
 	public static final int VERSION_CODE = 1;
 	public static final int UPDATE_CODE = 2;
-	public static final int BUGFIX_CODE = 0;
+	public static final int BUGFIX_CODE = 1;
 
 	public static final String APP_RELEASE_CODE = VERSION_CODE + "."
 			+ UPDATE_CODE + "." + BUGFIX_CODE;
@@ -58,7 +58,17 @@ public class Constants {
 	public static final String PN_EVENT_JOINED = "-EventJoinNotification";
 	public static final String PN_EVENT_LEFT = "-EventLeaveNotification";
 	public static final String PN_EVENT_CANCELED = "-EventCanceledNotification";
+	
+	// Showcase preferences
+	
+	public static final String SC_NAVIGATIONBAR = "-ShowCaseNavigationBar";
 
+	
+	// Intent Extras
+		public static final String EXTRA_NOTIFICATIONID = "NotificationId";
+		
+	
+	
 	/*
 	 * App Engine constants Verify it is safe to hold them here/ considered best
 	 * practice

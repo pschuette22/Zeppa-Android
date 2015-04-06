@@ -195,6 +195,7 @@ public class ZeppaEventSingleton {
 
 	public void onFinishLoading() {
 		isLoadingEvents = false;
+		Collections.sort(eventMediators);
 		notifyObservers();
 	}
 

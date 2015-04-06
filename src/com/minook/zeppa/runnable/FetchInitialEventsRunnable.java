@@ -44,7 +44,7 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 		Integer limit = Integer.valueOf(25);
 
 		do {
-
+ 
 			try {
 				ListZeppaEvent listEventsTask = endpoint.listZeppaEvent();
 
@@ -87,7 +87,7 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 		Zeppaeventtouserrelationshipendpoint rEndpoint = buildEventRelationshipEndpoint();
 		Zeppauserinfoendpoint iEndpoint = buildUserInfoEndpoint();
 
-		filter = "userId == " + userId + " && isAttending == " + Boolean.TRUE;
+		filter = "userId == " + userId + " && isAttending == " + Boolean.TRUE + " && expires > " + System.currentTimeMillis();
 		// Know cursor is null at this point
 
 		do {

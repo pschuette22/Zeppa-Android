@@ -63,6 +63,7 @@ public abstract class AbstractAccountBaseActivity extends
 
 	// Connection Progress
 	protected ProgressDialog connectionProgress;
+	private ProgressDialog postProgress;
 
 	// User Info
 	protected String profileId;
@@ -110,7 +111,6 @@ public abstract class AbstractAccountBaseActivity extends
 	public void onClick(View v) {
 		if (v.getId() == R.id.accountactivity_image) {
 
-
 			Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 			photoPickerIntent.setType("image/*");
 			startActivityForResult(photoPickerIntent, REQ_SELECT_PHOTO);
@@ -150,7 +150,7 @@ public abstract class AbstractAccountBaseActivity extends
 
 					builder.append("-" + System.currentTimeMillis());
 
-					ProgressDialog postProgress = new ProgressDialog(this);
+					postProgress = new ProgressDialog(this);
 					postProgress.setIndeterminate(true);
 					postProgress.setTitle("Uploading Image");
 					postProgress.setMessage("One moment please...");
@@ -245,7 +245,7 @@ public abstract class AbstractAccountBaseActivity extends
 
 				HttpClient client = new DefaultHttpClient();
 				HttpGet get = new HttpGet(
-						"http://2-dot-zeppa-cloud-1821.appspot.com/getuploadurl");
+						"http://zeppa-cloud-1821.appspot.com/getuploadurl");
 				HttpResponse response = client.execute(get);
 
 				BufferedReader reader = new BufferedReader(
@@ -314,6 +314,8 @@ public abstract class AbstractAccountBaseActivity extends
 				e.printStackTrace();
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 

@@ -32,9 +32,9 @@
                 android:id="@+id/eventview_hostimage"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:background="@drawable/background_contact_picture"
                 android:contentDescription="@string/contdesc_contactimage"
                 android:padding="1dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/default_user_image" />
 
             <TextView

@@ -38,6 +38,8 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 	protected ProgressDialog connectionProgress;
 	protected GoogleApiClient apiClient;
 	protected ConnectionResult connectionResult;
+	
+	private boolean isCurrentlyActive;
 
 	// Request Codes
 	protected final int REQUEST_ACCOUNT_PICKER = 3;
@@ -65,6 +67,24 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 		connectionProgress.setCancelable(false);
 	}
 
+	
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		isCurrentlyActive = false;
+	}
+
+
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		isCurrentlyActive = true;
+	}
+
+
+
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -78,8 +98,8 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 		}
 
 		((ZeppaApplication) getApplication()).setCurrentActivity(this);
+		
 		String heldAccountName = PrefsManager.getLoggedInEmail(getApplication());
-
 		if (heldAccountName != null && !heldAccountName.isEmpty()) {
 			initializeApiClient(heldAccountName);
 			apiClient.connect();
@@ -91,7 +111,6 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 	protected void onStop() {
 		super.onStop();
 
-		((ZeppaApplication) getApplication()).removeCurrentActivityIfMatching(this);
 
 		if (apiClient != null && apiClient.isConnected()) {
 			apiClient.disconnect();
@@ -152,7 +171,6 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 
 		GoogleAccountCredential credential = GoogleAccountCredential
 				.usingAudience(this, Constants.ANDROID_AUDIENCE);
-
 		String loggedInAccount = PrefsManager.getLoggedInEmail(getApplication());
 		
 		if(loggedInAccount == null){
@@ -254,6 +272,10 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public boolean isCurrentlyActive(){
+		return isCurrentlyActive;
 	}
 
 }

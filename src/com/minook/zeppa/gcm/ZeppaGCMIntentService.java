@@ -62,13 +62,19 @@ public class ZeppaGCMIntentService extends IntentService implements
 			if (intent.getAction().equals(
 					"com.google.android.c2dm.intent.REGISTRATION")) {
 				Log.d(TAG, "Successfully registered GCM");
+				// Release the wake lock provided by the WakefulBroadcastReceiver.
+				ZeppaGCMReceiver.completeWakefulIntent(intent);
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR
 					.equals(messageType)) {
 				Log.d(TAG, "Message Type Error");
+				// Release the wake lock provided by the WakefulBroadcastReceiver.
+				ZeppaGCMReceiver.completeWakefulIntent(intent);
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
 					.equals(messageType)) {
 				Log.d(TAG, "Message Type Deleted");
 				// If it's a regular GCM message, do some work.
+				// Release the wake lock provided by the WakefulBroadcastReceiver.
+				ZeppaGCMReceiver.completeWakefulIntent(intent);
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
 					.equals(messageType)) {
 				// This loop represents the service doing some work
@@ -115,15 +121,12 @@ public class ZeppaGCMIntentService extends IntentService implements
 							"fromUserId"));
 					try {
 
-						DefaultUserInfoMediator mediator = (DefaultUserInfoMediator) ZeppaUserSingleton
-								.getInstance().getAbstractUserMediatorById(
-										userId);
-						mediator.setUserRelationship(null);
+						ZeppaUserSingleton.getInstance().removeHeldMediatorById(userId);
 						ZeppaEventSingleton.getInstance()
 								.removeMediatorsForUser(userId);
 						EventTagSingleton.getInstance().removeEventTagsForUser(
 								userId);
-
+						
 						ZeppaUserSingleton.getInstance().notifyObservers();
 						ZeppaEventSingleton.getInstance().notifyObservers();
 						NotificationSingleton.getInstance().notifyObservers();
@@ -131,12 +134,13 @@ public class ZeppaGCMIntentService extends IntentService implements
 					} catch (NullPointerException e) {
 						e.printStackTrace();
 					}
+				} else {
+					Log.d(TAG, "Notification Was Not Handled");
 				}
 
 			}
 		}
-		// Release the wake lock provided by the WakefulBroadcastReceiver.
-		ZeppaGCMReceiver.completeWakefulIntent(intent);
+		
 
 	}
 
@@ -218,6 +222,9 @@ public class ZeppaGCMIntentService extends IntentService implements
 						(ZeppaApplication) getApplication(), credential,
 						notificationId.longValue(), PrefsManager
 								.getLoggedInUserId(getApplication())));
+				
+				// Release the wake lock provided by the WakefulBroadcastReceiver.
+				ZeppaGCMReceiver.completeWakefulIntent(intent);
 
 			}
 

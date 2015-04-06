@@ -11,23 +11,27 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
-import com.minook.zeppa.activity.AbstractEventViewActivity;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.activity.DefaultEventViewActivity;
 import com.minook.zeppa.activity.MinglerActivity;
 import com.minook.zeppa.activity.MyEventViewActivity;
 import com.minook.zeppa.activity.StartMinglingActivity;
+import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
+import com.minook.zeppa.mediator.MyZeppaEventMediator;
 import com.minook.zeppa.runnable.RemoveNotificationRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
+import com.minook.zeppa.runnable.UpdateNotificationRunnable;
 import com.minook.zeppa.singleton.NotificationSingleton;
+import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
@@ -80,7 +84,7 @@ public class NotificationsAdapter extends BaseAdapter implements
 		ZeppaNotification notification;
 		try {
 			notification = getItem(position);
-			
+
 		} catch (Exception e) {
 			convertView.setVisibility(View.GONE);
 			return convertView;
@@ -95,6 +99,16 @@ public class NotificationsAdapter extends BaseAdapter implements
 			convertView.setVisibility(View.GONE);
 		} else {
 			convertView.setVisibility(View.VISIBLE);
+
+			RelativeLayout background = (RelativeLayout) convertView
+					.findViewById(R.id.notificationitem_background);
+			if (notification.getHasSeen() != null && notification.getHasSeen()) {
+				background
+						.setBackgroundResource(R.drawable.background_notification_seen);
+			} else {
+				background
+						.setBackgroundResource(R.drawable.background_notification_unseen);
+			}
 
 			ImageView userImage = (ImageView) convertView
 					.findViewById(R.id.notificationitem_userimage);
@@ -137,6 +151,12 @@ public class NotificationsAdapter extends BaseAdapter implements
 			long arg3) {
 		// TODO Auto-generated method stub
 		ZeppaNotification notification = getItem(position);
+
+		notification.setHasSeen(Boolean.TRUE);
+		UpdateNotificationRunnable updateRunnable = new UpdateNotificationRunnable(
+				(ZeppaApplication) activity.getApplication(),
+				activity.getGoogleAccountCredential(), notification);
+		ThreadManager.execute(updateRunnable);
 
 		Intent intent = null;
 		switch (NotificationSingleton.getInstance().getNotificationTypeOrder(
@@ -185,7 +205,15 @@ public class NotificationsAdapter extends BaseAdapter implements
 			break;
 		case 4: // Post Comment
 			// TODO: Determine if this is my event or another
-			intent = new Intent(activity, AbstractEventViewActivity.class);
+			AbstractZeppaEventMediator mediator = ZeppaEventSingleton
+					.getInstance().getEventById(
+							notification.getEventId().longValue());
+
+			intent = new Intent(
+					activity,
+					(mediator instanceof MyZeppaEventMediator) ? MyEventViewActivity.class
+							: DefaultEventViewActivity.class);
+
 			intent.putExtra(Constants.INTENT_ZEPPA_EVENT_ID,
 					notification.getEventId());
 			activity.startActivity(intent);
@@ -195,9 +223,6 @@ public class NotificationsAdapter extends BaseAdapter implements
 
 		case 5: // Event Canceled
 			// TODO: delete notification and notify Dataset changed
-			Toast toast = Toast.makeText(activity, "Event Was Canceled...",
-					Toast.LENGTH_LONG);
-			toast.show();
 			// Perhaps send them to the calendar and show the opened time slot?
 			break;
 

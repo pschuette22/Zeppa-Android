@@ -8,13 +8,11 @@ import java.util.List;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.MinglerFinderAdapter;
-import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppauserinfoendpoint.Zeppauserinfoendpoint;
 import com.minook.zeppa.zeppauserinfoendpoint.Zeppauserinfoendpoint.ListZeppaUserInfo;
@@ -58,9 +56,6 @@ public class FindMinglersRunnable extends BaseRunnable {
 			do {
 				String number = getFormattedNumber(cursor);
 				
-				if(number.equalsIgnoreCase("17172833737")){
-					Log.d("TAG", "Hit Kirks number");
-				}
 				
 				if (!numberIsRecognized(number)) {
 
@@ -179,18 +174,19 @@ public class FindMinglersRunnable extends BaseRunnable {
 
 				Iterator<ZeppaUserInfo> iterator = result.getItems().iterator();
 				
-				List<DefaultUserInfoMediator> mediators = new ArrayList<DefaultUserInfoMediator>();
+				List<ZeppaUserInfo> uniqueInfoItems = new ArrayList<ZeppaUserInfo>();
 				while (iterator.hasNext()) {
-					DefaultUserInfoMediator mediator = new DefaultUserInfoMediator(iterator.next(), null);
-					recognizedEmails.add(mediator.getGmail());
-					try {
-						recognizedNumbers.add(mediator.getUnformattedPhoneNumber());
-					} catch (NullPointerException e){
+					ZeppaUserInfo info = iterator.next();
+					recognizedEmails.add(info.getGoogleAccountEmail());
+					
+					if(info.getPrimaryUnformattedNumber() != null && !info.getPrimaryUnformattedNumber().isEmpty()){
+						recognizedNumbers.add(info.getPrimaryUnformattedNumber());
 					}
-					mediators.add(mediator);
+					
+					uniqueInfoItems.add(info);
 				}
 
-				addMediatorsOnUIThread(mediators);
+				addMediatorsOnUIThread(uniqueInfoItems);
 				
 			}
 			
@@ -254,13 +250,20 @@ public class FindMinglersRunnable extends BaseRunnable {
 	 * 
 	 * @param mediators, List of mediators to be added
 	 */
-	private void addMediatorsOnUIThread(final List<DefaultUserInfoMediator> mediators){
+	private void addMediatorsOnUIThread(final List<ZeppaUserInfo> userInfoList){
 		try {
 			application.getCurrentActivity().runOnUiThread(new Runnable() {
 
 				@Override
 				public void run() {
-					ZeppaUserSingleton.getInstance().addAllDefaultUserInfoMediators(mediators);
+					ZeppaUserSingleton singleton = ZeppaUserSingleton.getInstance();
+					
+					Iterator<ZeppaUserInfo> iterator = userInfoList.iterator();
+					while(iterator.hasNext()){
+						singleton.addDefaultZeppaUserMediator(iterator.next(), null);
+						
+					}
+					
 					finderAdapter.notifyDataSetChanged();
 				}
 

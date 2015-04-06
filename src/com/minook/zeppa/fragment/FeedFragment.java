@@ -112,6 +112,12 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void onDestroy() {
+		ZeppaEventSingleton.getInstance().unregisterEventLoadListener(this);
+		super.onDestroy();
+	}
 
 	@Override
 	public void onResume() {

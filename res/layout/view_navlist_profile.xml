@@ -3,34 +3,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_navitem_alt"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
-    
-    <ImageView 
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp" >
+
+    <ImageView
         android:id="@+id/navigation_profile_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_margin="7dp"
-        android:background="@drawable/background_contact_picture"
-        android:src="@drawable/default_user_image"
-        android:padding="1dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        />
-    
+        android:layout_margin="7dp"
+        android:padding="1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_user_image" />
+
     <TextView
-        android:layout_toRightOf="@id/navigation_profile_image"
-        android:layout_toEndOf="@id/navigation_profile_image"
         android:id="@+id/navigation_profile_name"
+        style="@style/black_txt16sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_centerVertical="true"
         android:layout_marginBottom="7dp"
-        android:layout_marginRight="4dp"
         android:layout_marginEnd="4dp"
-        style="@style/black_txt16sp"
-        android:layout_centerVertical="true"  
-        />
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="7dp"
+        android:layout_toEndOf="@id/navigation_profile_image"
+        android:layout_toRightOf="@id/navigation_profile_image" />
 
 </RelativeLayout>

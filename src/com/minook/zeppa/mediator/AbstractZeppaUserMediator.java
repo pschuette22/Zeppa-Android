@@ -119,7 +119,9 @@ public abstract class AbstractZeppaUserMediator  implements Comparable<AbstractZ
 		Iterator<ImageView> iterator = setOnImageLoad.iterator();
 		while (iterator.hasNext()) {
 			try {
-				iterator.next().setImageBitmap(userImage);
+				ImageView imageView = iterator.next();
+				imageView.setImageBitmap(userImage);
+				imageView.invalidate();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -27,7 +27,7 @@ public class ActivityFragment extends Fragment implements OnRefreshListener,
 	private View loaderView;
 	private PullToRefreshLayout pullToRefreshLayout;
 	private ListView activityList;
-	private NotificationsAdapter notifictionsAdapter;
+	private NotificationsAdapter notificationsAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,10 +52,10 @@ public class ActivityFragment extends Fragment implements OnRefreshListener,
 			activityList.addHeaderView(loaderView);
 		}
 
-		notifictionsAdapter = new NotificationsAdapter(
+		notificationsAdapter = new NotificationsAdapter(
 				(AuthenticatedFragmentActivity) getActivity());
-		activityList.setAdapter(notifictionsAdapter);
-		activityList.setOnItemClickListener(notifictionsAdapter);
+		activityList.setAdapter(notificationsAdapter);
+		activityList.setOnItemClickListener(notificationsAdapter);
 
 		ActionBarPullToRefresh.from(getActivity())
 				.options(Options.create().scrollDistance(.4f).build())
@@ -70,7 +70,7 @@ public class ActivityFragment extends Fragment implements OnRefreshListener,
 	@Override
 	public void onResume() {
 		super.onResume();
-		notifictionsAdapter.notifyDataSetChanged();
+		notificationsAdapter.notifyDataSetChanged();
 
 	}
 
@@ -104,12 +104,23 @@ public class ActivityFragment extends Fragment implements OnRefreshListener,
 			e.printStackTrace();
 		}
 
-		if (loaderView != null) {
-			activityList.removeHeaderView(loaderView);
-			loaderView = null;
+		try {
+			if (loaderView != null) {
+				activityList.removeHeaderView(loaderView);
+				loaderView = null;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		notifictionsAdapter.notifyDataSetChanged();
+		notificationsAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onNotificationDataChanged() {
+		notificationsAdapter.notifyDataSetChanged();
+
 	}
 
 }

@@ -3,6 +3,7 @@ package com.minook.zeppa.activity;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.Locale;
 
 import android.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -36,6 +38,7 @@ import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.InviteListAdapter;
 import com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter;
+import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.mediator.MyZeppaEventMediator;
 import com.minook.zeppa.runnable.SyncZeppaCalendarRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
@@ -51,7 +54,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	 * -------------- Activity Pieces -------------------
 	 */
 
-//	private final String TAG = "NewEventActivity";
+	// private final String TAG = "NewEventActivity";
 
 	// FINAL
 	private final static String PICKER_24HR_ARG = "Picker is 24hr Format";
@@ -164,6 +167,12 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		addInvitesField.setOnClickListener(this);
 		addLocationField.setOnClickListener(this);
 
+		getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+		setInvitesText();
+
+		
 	}
 
 	@Override
@@ -361,18 +370,10 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 					ZeppaEvent event = (ZeppaEvent) params[0];
 					ProgressDialog dialog = (ProgressDialog) params[1];
 					try {
-						// TODO: update this so user specifies if invites are
-						// available
 
 						event = ZeppaEventSingleton.getInstance()
 								.createZeppaEventWithBlocking(
 										getGoogleAccountCredential(), event);
-
-						MyZeppaEventMediator myMediator = new MyZeppaEventMediator(
-								event);
-
-						ZeppaEventSingleton.getInstance().addMediator(
-								myMediator);
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -390,6 +391,12 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 					super.onPostExecute(result);
 
 					if (result != null) {
+						MyZeppaEventMediator myMediator = new MyZeppaEventMediator(
+								result);
+
+						ZeppaEventSingleton.getInstance().addMediator(
+								myMediator);
+
 						ZeppaEventSingleton.getInstance().notifyObservers();
 						onBackPressed();
 					} else {
@@ -414,6 +421,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
+
 							dialog.dismiss();
 						}
 
@@ -432,7 +440,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 				@Override
 				public void onDismiss(DialogInterface dialog) {
 
-					showInviteViews();
+					setInvitesText();
 				}
 
 			});
@@ -444,15 +452,33 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 	}
 
-	private void showInviteViews() {
-
-		if (invitesAdapter.getCount() > 0) {
-			invitesHolder.removeAllViews();
-
-		}
-
+	private void setInvitesText(){
+		addInvitesField.setText("Manage Invites(" + invitesAdapter.getInvitedUsersCount() + ")" );
 	}
-
+	
+	// private void showInviteViews() {
+	//
+	// invitesHolder.removeAllViews();
+	//
+	// if(invitesAdapter.getInvitedUsersCount() > 0){
+	//
+	// Iterator<Long> iterator = invitesAdapter.getInvitedUserIds().iterator();
+	//
+	// while(iterator.hasNext()){
+	// Long invitedUserId = iterator.next();
+	// AbstractZeppaUserMediator mediator =
+	// ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(invitedUserId);
+	//
+	// if(mediator != null) {
+	//
+	//
+	// }
+	// }
+	//
+	// }
+	//
+	// }
+	//
 	// private void updateInviteViews(){
 	// List<Long> invitedUserIds = invitesAdapter.getInvitedUserManagerIds();
 	//

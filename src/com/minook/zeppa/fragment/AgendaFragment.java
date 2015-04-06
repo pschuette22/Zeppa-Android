@@ -41,11 +41,11 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		layout = inflater.inflate(R.layout.fragment_watching, container, false);
+		layout = inflater.inflate(R.layout.fragment_agenda, container, false);
 
-		agendaList = (ListView) layout.findViewById(R.id.watchingListView);
+		agendaList = (ListView) layout.findViewById(R.id.agendaListView);
 		pullToRefreshLayout = (PullToRefreshLayout) layout
-				.findViewById(R.id.watchingfragment_ptr);
+				.findViewById(R.id.agendafragment_ptr);
 
 		alAdapter = new AgendaListAdapter(
 				(AuthenticatedFragmentActivity) getActivity());
@@ -66,13 +66,12 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 		agendaList.setAdapter(alAdapter);
 		agendaList.setOnItemClickListener(alAdapter);
 
-
 		return layout;
 	}
 
 	@Override
 	public void onRefreshStarted(View view) {
-
+		alAdapter.notifyDataSetChanged();
 		pullToRefreshLayout.setRefreshComplete();
 	}
 
@@ -82,11 +81,7 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 		alAdapter.notifyDataSetChanged();
 	}
 
-	@Override
-	public void onDestroy() {
-		ZeppaEventSingleton.getInstance().unregisterEventLoadListener(this);
-		super.onDestroy();
-	}
+
 
 	@Override
 	public void onZeppaEventsLoaded() {

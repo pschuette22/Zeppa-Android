@@ -318,6 +318,15 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 
 	}
 
+	public long getMinglerId(){
+		try {
+			return userMediator.getUserId().longValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
 	private void onEntityTypeUpdateFinished() {
 
 		if (isUpdatingMinglerEvents || isUpdatingMinglerRelationships

@@ -98,6 +98,8 @@ public class AccountFragment extends Fragment implements OnClickListener {
 		
 		
 		userMediator.setImageWhenReady(userImage);
+		userImage.invalidate();
+		
 		displayName.setText(userMediator.getDisplayName());
 
 		try {

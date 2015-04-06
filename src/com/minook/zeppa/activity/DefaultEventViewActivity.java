@@ -57,19 +57,15 @@ public class DefaultEventViewActivity extends AbstractEventViewActivity
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
-
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
+	protected void onDestroy() {
 		if (eventMediator instanceof DefaultZeppaEventMediator) {
 			((DefaultZeppaEventMediator) eventMediator)
 					.unregisterAttendanceStatusChangeListener();
 		}
+
+		super.onDestroy();
 	}
+
 
 	@Override
 	protected void setEventTagAdapter() {
@@ -186,7 +182,7 @@ public class DefaultEventViewActivity extends AbstractEventViewActivity
 					.onJoinButtonClicked(this);
 			onAttendanceChanged();
 			eventMediator.convertQuickActionBar(this, barView);
-			
+
 			return;
 		case R.id.quickaction_text:
 			((DefaultZeppaEventMediator) eventMediator)

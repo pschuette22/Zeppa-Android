@@ -319,52 +319,310 @@ android.support.v4.app.NavUtils:
     307:308:private NavUtils()
 android.support.v4.app.NavUtilsJB:
     23:23:NavUtilsJB()
-android.support.v4.app.NotificationBuilderWithActions
-android.support.v4.app.NotificationBuilderWithBuilderAccessor
-android.support.v4.app.NotificationCompat
+android.support.v4.app.NotificationCompat:
+    public static final int DEFAULT_ALL
+    public static final int DEFAULT_SOUND
+    public static final int DEFAULT_VIBRATE
+    public static final int DEFAULT_LIGHTS
+    public static final int STREAM_DEFAULT
+    public static final int FLAG_SHOW_LIGHTS
+    public static final int FLAG_ONGOING_EVENT
+    public static final int FLAG_INSISTENT
+    public static final int FLAG_ONLY_ALERT_ONCE
+    public static final int FLAG_AUTO_CANCEL
+    public static final int FLAG_NO_CLEAR
+    public static final int FLAG_FOREGROUND_SERVICE
+    public static final int FLAG_HIGH_PRIORITY
+    public static final int FLAG_LOCAL_ONLY
+    public static final int FLAG_GROUP_SUMMARY
+    public static final int PRIORITY_DEFAULT
+    public static final int PRIORITY_LOW
+    public static final int PRIORITY_MIN
+    public static final int PRIORITY_HIGH
+    public static final int PRIORITY_MAX
+    public static final java.lang.String EXTRA_TITLE
+    public static final java.lang.String EXTRA_TITLE_BIG
+    public static final java.lang.String EXTRA_TEXT
+    public static final java.lang.String EXTRA_SUB_TEXT
+    public static final java.lang.String EXTRA_INFO_TEXT
+    public static final java.lang.String EXTRA_SUMMARY_TEXT
+    public static final java.lang.String EXTRA_BIG_TEXT
+    public static final java.lang.String EXTRA_SMALL_ICON
+    public static final java.lang.String EXTRA_LARGE_ICON
+    public static final java.lang.String EXTRA_LARGE_ICON_BIG
+    public static final java.lang.String EXTRA_PROGRESS
+    public static final java.lang.String EXTRA_PROGRESS_MAX
+    public static final java.lang.String EXTRA_PROGRESS_INDETERMINATE
+    public static final java.lang.String EXTRA_SHOW_CHRONOMETER
+    public static final java.lang.String EXTRA_SHOW_WHEN
+    public static final java.lang.String EXTRA_PICTURE
+    public static final java.lang.String EXTRA_TEXT_LINES
+    public static final java.lang.String EXTRA_TEMPLATE
+    public static final java.lang.String EXTRA_PEOPLE
+    public static final java.lang.String EXTRA_BACKGROUND_IMAGE_URI
+    public static final java.lang.String EXTRA_MEDIA_SESSION
+    public static final java.lang.String EXTRA_COMPACT_ACTIONS
+    public static final int COLOR_DEFAULT
+    public static final int VISIBILITY_PUBLIC
+    public static final int VISIBILITY_PRIVATE
+    public static final int VISIBILITY_SECRET
+    public static final java.lang.String CATEGORY_CALL
+    public static final java.lang.String CATEGORY_MESSAGE
+    public static final java.lang.String CATEGORY_EMAIL
+    public static final java.lang.String CATEGORY_EVENT
+    public static final java.lang.String CATEGORY_PROMO
+    public static final java.lang.String CATEGORY_ALARM
+    public static final java.lang.String CATEGORY_PROGRESS
+    public static final java.lang.String CATEGORY_SOCIAL
+    public static final java.lang.String CATEGORY_ERROR
+    public static final java.lang.String CATEGORY_TRANSPORT
+    public static final java.lang.String CATEGORY_SYSTEM
+    public static final java.lang.String CATEGORY_SERVICE
+    public static final java.lang.String CATEGORY_RECOMMENDATION
+    public static final java.lang.String CATEGORY_STATUS
+    41:2904:public NotificationCompat()
+    3235:3244:private static android.app.Notification[] getNotificationArrayFromBundle(android.os.Bundle,java.lang.String)
+    3253:3253:public static android.os.Bundle getExtras(android.app.Notification)
+    3261:3261:public static int getActionCount(android.app.Notification)
+    3271:3271:public static android.support.v4.app.NotificationCompat$Action getAction(android.app.Notification,int)
+    3280:3280:public static java.lang.String getCategory(android.app.Notification)
+    3290:3290:public static boolean getLocalOnly(android.app.Notification)
+    3298:3298:public static java.lang.String getGroup(android.app.Notification)
+    3308:3308:public static boolean isGroupSummary(android.app.Notification)
+    3324:3324:public static java.lang.String getSortKey(android.app.Notification)
+    41:41:static synthetic android.app.Notification[] access$500(android.os.Bundle,java.lang.String)
 android.support.v4.app.NotificationCompat$1
-android.support.v4.app.NotificationCompat$Action
-android.support.v4.app.NotificationCompat$Action$1
+android.support.v4.app.NotificationCompat$Action:
+    1791:1792:public NotificationCompat$Action(int,java.lang.CharSequence,android.app.PendingIntent)
+    1795:1801:private NotificationCompat$Action(int,java.lang.CharSequence,android.app.PendingIntent,android.os.Bundle,android.support.v4.app.RemoteInput[])
+    1772:1772:static synthetic android.os.Bundle access$300(android.support.v4.app.NotificationCompat$Action)
+    1772:1772:synthetic NotificationCompat$Action(int,java.lang.CharSequence,android.app.PendingIntent,android.os.Bundle,android.support.v4.app.RemoteInput[],android.support.v4.app.NotificationCompat$1)
+android.support.v4.app.NotificationCompat$Action$1:
+    2140:2140:public android.support.v4.app.NotificationCompat$Action build(int,java.lang.CharSequence,android.app.PendingIntent,android.os.Bundle,android.support.v4.app.RemoteInputCompatBase$RemoteInput[])
+    2146:2146:public android.support.v4.app.NotificationCompat$Action[] newArray(int)
+    2135:2135:public bridge synthetic android.support.v4.app.NotificationCompatBase$Action[] newArray(int)
+    2135:2135:public bridge synthetic android.support.v4.app.NotificationCompatBase$Action build(int,java.lang.CharSequence,android.app.PendingIntent,android.os.Bundle,android.support.v4.app.RemoteInputCompatBase$RemoteInput[])
 android.support.v4.app.NotificationCompat$Action$Builder
 android.support.v4.app.NotificationCompat$Action$Extender
 android.support.v4.app.NotificationCompat$Action$WearableExtender
-android.support.v4.app.NotificationCompat$BigPictureStyle
-android.support.v4.app.NotificationCompat$BigTextStyle
-android.support.v4.app.NotificationCompat$Builder
+android.support.v4.app.NotificationCompat$BigPictureStyle:
+    1603:1605:public NotificationCompat$BigPictureStyle(android.support.v4.app.NotificationCompat$Builder)
+    1612:1613:public android.support.v4.app.NotificationCompat$BigPictureStyle setBigContentTitle(java.lang.CharSequence)
+    1620:1622:public android.support.v4.app.NotificationCompat$BigPictureStyle setSummaryText(java.lang.CharSequence)
+    1629:1630:public android.support.v4.app.NotificationCompat$BigPictureStyle bigPicture(android.graphics.Bitmap)
+    1637:1639:public android.support.v4.app.NotificationCompat$BigPictureStyle bigLargeIcon(android.graphics.Bitmap)
+android.support.v4.app.NotificationCompat$BigTextStyle:
+    1670:1672:public NotificationCompat$BigTextStyle(android.support.v4.app.NotificationCompat$Builder)
+    1679:1680:public android.support.v4.app.NotificationCompat$BigTextStyle setBigContentTitle(java.lang.CharSequence)
+    1687:1689:public android.support.v4.app.NotificationCompat$BigTextStyle setSummaryText(java.lang.CharSequence)
+    1697:1698:public android.support.v4.app.NotificationCompat$BigTextStyle bigText(java.lang.CharSequence)
+android.support.v4.app.NotificationCompat$Builder:
+    private static final int MAX_CHARSEQUENCE_LENGTH
+    921:922:public android.support.v4.app.NotificationCompat$Builder setWhen(long)
+    930:931:public android.support.v4.app.NotificationCompat$Builder setShowWhen(boolean)
+    946:947:public android.support.v4.app.NotificationCompat$Builder setUsesChronometer(boolean)
+    973:975:public android.support.v4.app.NotificationCompat$Builder setSmallIcon(int,int)
+    1004:1005:public android.support.v4.app.NotificationCompat$Builder setSubText(java.lang.CharSequence)
+    1014:1015:public android.support.v4.app.NotificationCompat$Builder setNumber(int)
+    1022:1023:public android.support.v4.app.NotificationCompat$Builder setContentInfo(java.lang.CharSequence)
+    1031:1034:public android.support.v4.app.NotificationCompat$Builder setProgress(int,int,boolean)
+    1041:1042:public android.support.v4.app.NotificationCompat$Builder setContent(android.widget.RemoteViews)
+    1066:1067:public android.support.v4.app.NotificationCompat$Builder setDeleteIntent(android.app.PendingIntent)
+    1089:1091:public android.support.v4.app.NotificationCompat$Builder setFullScreenIntent(android.app.PendingIntent,boolean)
+    1099:1100:public android.support.v4.app.NotificationCompat$Builder setTicker(java.lang.CharSequence)
+    1109:1111:public android.support.v4.app.NotificationCompat$Builder setTicker(java.lang.CharSequence,android.widget.RemoteViews)
+    1118:1119:public android.support.v4.app.NotificationCompat$Builder setLargeIcon(android.graphics.Bitmap)
+    1148:1150:public android.support.v4.app.NotificationCompat$Builder setSound(android.net.Uri,int)
+    1165:1166:public android.support.v4.app.NotificationCompat$Builder setVibrate(long[])
+    1196:1197:public android.support.v4.app.NotificationCompat$Builder setOngoing(boolean)
+    1227:1228:public android.support.v4.app.NotificationCompat$Builder setLocalOnly(boolean)
+    1239:1240:public android.support.v4.app.NotificationCompat$Builder setCategory(java.lang.String)
+    1287:1288:public android.support.v4.app.NotificationCompat$Builder setPriority(int)
+    1314:1315:public android.support.v4.app.NotificationCompat$Builder addPerson(java.lang.String)
+    1330:1331:public android.support.v4.app.NotificationCompat$Builder setGroup(java.lang.String)
+    1342:1343:public android.support.v4.app.NotificationCompat$Builder setGroupSummary(boolean)
+    1359:1360:public android.support.v4.app.NotificationCompat$Builder setSortKey(java.lang.String)
+    1371:1378:public android.support.v4.app.NotificationCompat$Builder addExtras(android.os.Bundle)
+    1394:1395:public android.support.v4.app.NotificationCompat$Builder setExtras(android.os.Bundle)
+    1409:1412:public android.os.Bundle getExtras()
+    1432:1433:public android.support.v4.app.NotificationCompat$Builder addAction(int,java.lang.CharSequence,android.app.PendingIntent)
+    1451:1452:public android.support.v4.app.NotificationCompat$Builder addAction(android.support.v4.app.NotificationCompat$Action)
+    1464:1470:public android.support.v4.app.NotificationCompat$Builder setStyle(android.support.v4.app.NotificationCompat$Style)
+    1481:1482:public android.support.v4.app.NotificationCompat$Builder setColor(int)
+    1493:1494:public android.support.v4.app.NotificationCompat$Builder setVisibility(int)
+    1506:1507:public android.support.v4.app.NotificationCompat$Builder setPublicVersion(android.app.Notification)
+    1515:1516:public android.support.v4.app.NotificationCompat$Builder extend(android.support.v4.app.NotificationCompat$Extender)
+    1524:1524:public android.app.Notification getNotification()
 android.support.v4.app.NotificationCompat$CarExtender
 android.support.v4.app.NotificationCompat$CarExtender$UnreadConversation
 android.support.v4.app.NotificationCompat$CarExtender$UnreadConversation$1
 android.support.v4.app.NotificationCompat$CarExtender$UnreadConversation$Builder
 android.support.v4.app.NotificationCompat$Extender
-android.support.v4.app.NotificationCompat$InboxStyle
-android.support.v4.app.NotificationCompat$NotificationCompatImpl
-android.support.v4.app.NotificationCompat$NotificationCompatImplApi20
-android.support.v4.app.NotificationCompat$NotificationCompatImplApi21
-android.support.v4.app.NotificationCompat$NotificationCompatImplBase
-android.support.v4.app.NotificationCompat$NotificationCompatImplGingerbread
-android.support.v4.app.NotificationCompat$NotificationCompatImplHoneycomb
-android.support.v4.app.NotificationCompat$NotificationCompatImplIceCreamSandwich
-android.support.v4.app.NotificationCompat$NotificationCompatImplJellybean
-android.support.v4.app.NotificationCompat$NotificationCompatImplKitKat
-android.support.v4.app.NotificationCompat$Style
+android.support.v4.app.NotificationCompat$InboxStyle:
+    1732:1734:public NotificationCompat$InboxStyle(android.support.v4.app.NotificationCompat$Builder)
+    1741:1742:public android.support.v4.app.NotificationCompat$InboxStyle setBigContentTitle(java.lang.CharSequence)
+    1749:1751:public android.support.v4.app.NotificationCompat$InboxStyle setSummaryText(java.lang.CharSequence)
+    1758:1759:public android.support.v4.app.NotificationCompat$InboxStyle addLine(java.lang.CharSequence)
+android.support.v4.app.NotificationCompat$NotificationCompatImpl:
+    public abstract android.os.Bundle getExtras(android.app.Notification)
+    public abstract int getActionCount(android.app.Notification)
+    public abstract android.support.v4.app.NotificationCompat$Action getAction(android.app.Notification,int)
+    public abstract android.support.v4.app.NotificationCompat$Action[] getActionsFromParcelableArrayList(java.util.ArrayList)
+    public abstract java.util.ArrayList getParcelableArrayListForActions(android.support.v4.app.NotificationCompat$Action[])
+    public abstract java.lang.String getCategory(android.app.Notification)
+    public abstract boolean getLocalOnly(android.app.Notification)
+    public abstract java.lang.String getGroup(android.app.Notification)
+    public abstract boolean isGroupSummary(android.app.Notification)
+    public abstract java.lang.String getSortKey(android.app.Notification)
+    public abstract android.os.Bundle getBundleForUnreadConversation(android.support.v4.app.NotificationCompatBase$UnreadConversation)
+    public abstract android.support.v4.app.NotificationCompatBase$UnreadConversation getUnreadConversationFromBundle(android.os.Bundle,android.support.v4.app.NotificationCompatBase$UnreadConversation$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+android.support.v4.app.NotificationCompat$NotificationCompatImplApi20:
+    705:705:public android.support.v4.app.NotificationCompat$Action getAction(android.app.Notification,int)
+    712:712:public android.support.v4.app.NotificationCompat$Action[] getActionsFromParcelableArrayList(java.util.ArrayList)
+    719:719:public java.util.ArrayList getParcelableArrayListForActions(android.support.v4.app.NotificationCompat$Action[])
+    724:724:public boolean getLocalOnly(android.app.Notification)
+    729:729:public java.lang.String getGroup(android.app.Notification)
+    734:734:public boolean isGroupSummary(android.app.Notification)
+    739:739:public java.lang.String getSortKey(android.app.Notification)
+android.support.v4.app.NotificationCompat$NotificationCompatImplApi21:
+    760:760:public java.lang.String getCategory(android.app.Notification)
+    765:765:public android.os.Bundle getBundleForUnreadConversation(android.support.v4.app.NotificationCompatBase$UnreadConversation)
+    772:772:public android.support.v4.app.NotificationCompatBase$UnreadConversation getUnreadConversationFromBundle(android.os.Bundle,android.support.v4.app.NotificationCompatBase$UnreadConversation$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+android.support.v4.app.NotificationCompat$NotificationCompatImplBase:
+    477:477:public android.os.Bundle getExtras(android.app.Notification)
+    482:482:public int getActionCount(android.app.Notification)
+    487:487:public android.support.v4.app.NotificationCompat$Action getAction(android.app.Notification,int)
+    493:493:public android.support.v4.app.NotificationCompat$Action[] getActionsFromParcelableArrayList(java.util.ArrayList)
+    498:498:public java.util.ArrayList getParcelableArrayListForActions(android.support.v4.app.NotificationCompat$Action[])
+    503:503:public java.lang.String getCategory(android.app.Notification)
+    508:508:public boolean getLocalOnly(android.app.Notification)
+    513:513:public java.lang.String getGroup(android.app.Notification)
+    518:518:public boolean isGroupSummary(android.app.Notification)
+    523:523:public java.lang.String getSortKey(android.app.Notification)
+    528:528:public android.os.Bundle getBundleForUnreadConversation(android.support.v4.app.NotificationCompatBase$UnreadConversation)
+    535:535:public android.support.v4.app.NotificationCompatBase$UnreadConversation getUnreadConversationFromBundle(android.os.Bundle,android.support.v4.app.NotificationCompatBase$UnreadConversation$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+android.support.v4.app.NotificationCompat$NotificationCompatImplJellybean:
+    590:590:public android.os.Bundle getExtras(android.app.Notification)
+    595:595:public int getActionCount(android.app.Notification)
+    600:600:public android.support.v4.app.NotificationCompat$Action getAction(android.app.Notification,int)
+    607:607:public android.support.v4.app.NotificationCompat$Action[] getActionsFromParcelableArrayList(java.util.ArrayList)
+    614:614:public java.util.ArrayList getParcelableArrayListForActions(android.support.v4.app.NotificationCompat$Action[])
+    619:619:public boolean getLocalOnly(android.app.Notification)
+    624:624:public java.lang.String getGroup(android.app.Notification)
+    629:629:public boolean isGroupSummary(android.app.Notification)
+    634:634:public java.lang.String getSortKey(android.app.Notification)
+android.support.v4.app.NotificationCompat$NotificationCompatImplKitKat:
+    654:654:public android.os.Bundle getExtras(android.app.Notification)
+    659:659:public int getActionCount(android.app.Notification)
+    664:664:public android.support.v4.app.NotificationCompat$Action getAction(android.app.Notification,int)
+    670:670:public boolean getLocalOnly(android.app.Notification)
+    675:675:public java.lang.String getGroup(android.app.Notification)
+    680:680:public boolean isGroupSummary(android.app.Notification)
+    685:685:public java.lang.String getSortKey(android.app.Notification)
+android.support.v4.app.NotificationCompat$Style:
+    android.support.v4.app.NotificationCompat$Builder mBuilder
+    1558:1564:public void setBuilder(android.support.v4.app.NotificationCompat$Builder)
+    1567:1571:public android.app.Notification build()
 android.support.v4.app.NotificationCompat$WearableExtender
-android.support.v4.app.NotificationCompatApi20
-android.support.v4.app.NotificationCompatApi20$Builder
-android.support.v4.app.NotificationCompatApi21
-android.support.v4.app.NotificationCompatApi21$Builder
-android.support.v4.app.NotificationCompatBase
-android.support.v4.app.NotificationCompatBase$Action
-android.support.v4.app.NotificationCompatBase$Action$Factory
+android.support.v4.app.NotificationCompatApi20:
+    30:31:NotificationCompatApi20()
+    118:118:public static android.support.v4.app.NotificationCompatBase$Action getAction(android.app.Notification,int,android.support.v4.app.NotificationCompatBase$Action$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    124:126:private static android.support.v4.app.NotificationCompatBase$Action getActionCompatFromAction(android.app.Notification$Action,android.support.v4.app.NotificationCompatBase$Action$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    132:142:private static android.app.Notification$Action getActionFromActionCompat(android.support.v4.app.NotificationCompatBase$Action)
+    155:163:public static android.support.v4.app.NotificationCompatBase$Action[] getActionsFromParcelableArrayList(java.util.ArrayList,android.support.v4.app.NotificationCompatBase$Action$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    173:180:public static java.util.ArrayList getParcelableArrayListForActions(android.support.v4.app.NotificationCompatBase$Action[])
+    184:184:public static boolean getLocalOnly(android.app.Notification)
+    188:188:public static java.lang.String getGroup(android.app.Notification)
+    192:192:public static boolean isGroupSummary(android.app.Notification)
+    196:196:public static java.lang.String getSortKey(android.app.Notification)
+android.support.v4.app.NotificationCompatApi21:
+    public static final java.lang.String CATEGORY_CALL
+    public static final java.lang.String CATEGORY_MESSAGE
+    public static final java.lang.String CATEGORY_EMAIL
+    public static final java.lang.String CATEGORY_EVENT
+    public static final java.lang.String CATEGORY_PROMO
+    public static final java.lang.String CATEGORY_ALARM
+    public static final java.lang.String CATEGORY_PROGRESS
+    public static final java.lang.String CATEGORY_SOCIAL
+    public static final java.lang.String CATEGORY_ERROR
+    public static final java.lang.String CATEGORY_TRANSPORT
+    public static final java.lang.String CATEGORY_SYSTEM
+    public static final java.lang.String CATEGORY_SERVICE
+    public static final java.lang.String CATEGORY_RECOMMENDATION
+    public static final java.lang.String CATEGORY_STATUS
+    private static final java.lang.String KEY_AUTHOR
+    private static final java.lang.String KEY_TEXT
+    private static final java.lang.String KEY_MESSAGES
+    private static final java.lang.String KEY_REMOTE_INPUT
+    private static final java.lang.String KEY_ON_REPLY
+    private static final java.lang.String KEY_ON_READ
+    private static final java.lang.String KEY_PARTICIPANTS
+    private static final java.lang.String KEY_TIMESTAMP
+    29:55:NotificationCompatApi21()
+    124:124:public static java.lang.String getCategory(android.app.Notification)
+    128:152:static android.os.Bundle getBundleForUnreadConversation(android.support.v4.app.NotificationCompatBase$UnreadConversation)
+    158:195:static android.support.v4.app.NotificationCompatBase$UnreadConversation getUnreadConversationFromBundle(android.os.Bundle,android.support.v4.app.NotificationCompatBase$UnreadConversation$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    205:205:private static android.app.RemoteInput fromCompatRemoteInput(android.support.v4.app.RemoteInputCompatBase$RemoteInput)
+    216:216:private static android.support.v4.app.RemoteInputCompatBase$RemoteInput toCompatRemoteInput(android.app.RemoteInput,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+android.support.v4.app.NotificationCompatBase:
+    22:38:NotificationCompatBase()
+android.support.v4.app.NotificationCompatBase$Action:
+    24:31:public NotificationCompatBase$Action()
+android.support.v4.app.NotificationCompatBase$Action$Factory:
+    public abstract android.support.v4.app.NotificationCompatBase$Action build(int,java.lang.CharSequence,android.app.PendingIntent,android.os.Bundle,android.support.v4.app.RemoteInputCompatBase$RemoteInput[])
+    public abstract android.support.v4.app.NotificationCompatBase$Action[] newArray(int)
 android.support.v4.app.NotificationCompatBase$UnreadConversation
 android.support.v4.app.NotificationCompatBase$UnreadConversation$Factory
 android.support.v4.app.NotificationCompatExtras
-android.support.v4.app.NotificationCompatGingerbread
-android.support.v4.app.NotificationCompatHoneycomb
-android.support.v4.app.NotificationCompatIceCreamSandwich
-android.support.v4.app.NotificationCompatJellybean
-android.support.v4.app.NotificationCompatJellybean$Builder
-android.support.v4.app.NotificationCompatKitKat
-android.support.v4.app.NotificationCompatKitKat$Builder
+android.support.v4.app.NotificationCompatGingerbread:
+    23:23:NotificationCompatGingerbread()
+android.support.v4.app.NotificationCompatHoneycomb:
+    25:25:NotificationCompatHoneycomb()
+android.support.v4.app.NotificationCompatIceCreamSandwich:
+    25:25:NotificationCompatIceCreamSandwich()
+android.support.v4.app.NotificationCompatJellybean:
+    public static final java.lang.String TAG
+    static final java.lang.String EXTRA_LOCAL_ONLY
+    static final java.lang.String EXTRA_ACTION_EXTRAS
+    static final java.lang.String EXTRA_REMOTE_INPUTS
+    static final java.lang.String EXTRA_GROUP_KEY
+    static final java.lang.String EXTRA_GROUP_SUMMARY
+    static final java.lang.String EXTRA_SORT_KEY
+    static final java.lang.String EXTRA_USE_SIDE_CHANNEL
+    private static final java.lang.String KEY_ICON
+    private static final java.lang.String KEY_TITLE
+    private static final java.lang.String KEY_ACTION_INTENT
+    private static final java.lang.String KEY_EXTRAS
+    private static final java.lang.String KEY_REMOTE_INPUTS
+    private static java.lang.Class sActionClass
+    private static java.lang.reflect.Field sActionsField
+    private static java.lang.reflect.Field sActionIconField
+    private static java.lang.reflect.Field sActionTitleField
+    private static java.lang.reflect.Field sActionIntentField
+    private static boolean sActionsAccessFailed
+    33:64:NotificationCompatJellybean()
+    247:253:public static android.support.v4.app.NotificationCompatBase$Action readAction(android.support.v4.app.NotificationCompatBase$Action$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory,int,java.lang.CharSequence,android.app.PendingIntent,android.os.Bundle)
+    268:271:public static int getActionCount(android.app.Notification)
+    277:299:public static android.support.v4.app.NotificationCompatBase$Action getAction(android.app.Notification,int,android.support.v4.app.NotificationCompatBase$Action$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    303:314:private static java.lang.Object[] getActionObjectsLocked(android.app.Notification)
+    318:337:private static boolean ensureActionReflectionReadyLocked()
+    344:352:public static android.support.v4.app.NotificationCompatBase$Action[] getActionsFromParcelableArrayList(java.util.ArrayList,android.support.v4.app.NotificationCompatBase$Action$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    358:358:private static android.support.v4.app.NotificationCompatBase$Action getActionFromBundle(android.os.Bundle,android.support.v4.app.NotificationCompatBase$Action$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    370:377:public static java.util.ArrayList getParcelableArrayListForActions(android.support.v4.app.NotificationCompatBase$Action[])
+    381:388:private static android.os.Bundle getBundleForAction(android.support.v4.app.NotificationCompatBase$Action)
+    392:392:public static boolean getLocalOnly(android.app.Notification)
+    396:396:public static java.lang.String getGroup(android.app.Notification)
+    400:400:public static boolean isGroupSummary(android.app.Notification)
+    404:404:public static java.lang.String getSortKey(android.app.Notification)
+android.support.v4.app.NotificationCompatKitKat:
+    30:31:NotificationCompatKitKat()
+    119:119:public static android.os.Bundle getExtras(android.app.Notification)
+    123:123:public static int getActionCount(android.app.Notification)
+    129:136:public static android.support.v4.app.NotificationCompatBase$Action getAction(android.app.Notification,int,android.support.v4.app.NotificationCompatBase$Action$Factory,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    141:141:public static boolean getLocalOnly(android.app.Notification)
+    145:145:public static java.lang.String getGroup(android.app.Notification)
+    149:149:public static boolean isGroupSummary(android.app.Notification)
+    153:153:public static java.lang.String getSortKey(android.app.Notification)
 android.support.v4.app.NotificationCompatSideChannelService
 android.support.v4.app.NotificationCompatSideChannelService$1
 android.support.v4.app.NotificationCompatSideChannelService$NotificationSideChannelStub
@@ -381,18 +639,56 @@ android.support.v4.app.NotificationManagerCompat$SideChannelManager$ListenerReco
 android.support.v4.app.NotificationManagerCompat$Task
 android.support.v4.app.NotificationManagerCompatEclair
 android.support.v4.app.NotificationManagerCompatIceCreamSandwich
-android.support.v4.app.RemoteInput
-android.support.v4.app.RemoteInput$1
+android.support.v4.app.RemoteInput:
+    private static final java.lang.String TAG
+    public static final java.lang.String RESULTS_CLIP_LABEL
+    public static final java.lang.String EXTRA_RESULTS_DATA
+    44:50:RemoteInput(java.lang.String,java.lang.CharSequence,java.lang.CharSequence[],boolean,android.os.Bundle)
+    188:188:public static android.os.Bundle getResultsFromIntent(android.content.Intent)
+    204:205:public static void addResultsToIntent(android.support.v4.app.RemoteInput[],android.content.Intent,android.os.Bundle)
+android.support.v4.app.RemoteInput$1:
+    268:268:public android.support.v4.app.RemoteInput build(java.lang.String,java.lang.CharSequence,java.lang.CharSequence[],boolean,android.os.Bundle)
+    273:273:public android.support.v4.app.RemoteInput[] newArray(int)
+    263:263:public bridge synthetic android.support.v4.app.RemoteInputCompatBase$RemoteInput[] newArray(int)
+    263:263:public bridge synthetic android.support.v4.app.RemoteInputCompatBase$RemoteInput build(java.lang.String,java.lang.CharSequence,java.lang.CharSequence[],boolean,android.os.Bundle)
 android.support.v4.app.RemoteInput$Builder
-android.support.v4.app.RemoteInput$Impl
-android.support.v4.app.RemoteInput$ImplApi20
-android.support.v4.app.RemoteInput$ImplBase
-android.support.v4.app.RemoteInput$ImplJellybean
-android.support.v4.app.RemoteInputCompatApi20
-android.support.v4.app.RemoteInputCompatBase
-android.support.v4.app.RemoteInputCompatBase$RemoteInput
-android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory
-android.support.v4.app.RemoteInputCompatJellybean
+android.support.v4.app.RemoteInput$Impl:
+    public abstract android.os.Bundle getResultsFromIntent(android.content.Intent)
+    public abstract void addResultsToIntent(android.support.v4.app.RemoteInput[],android.content.Intent,android.os.Bundle)
+android.support.v4.app.RemoteInput$ImplApi20:
+    243:243:public android.os.Bundle getResultsFromIntent(android.content.Intent)
+    248:249:public void addResultsToIntent(android.support.v4.app.RemoteInput[],android.content.Intent,android.os.Bundle)
+android.support.v4.app.RemoteInput$ImplBase:
+    218:219:public android.os.Bundle getResultsFromIntent(android.content.Intent)
+    224:225:public void addResultsToIntent(android.support.v4.app.RemoteInput[],android.content.Intent,android.os.Bundle)
+android.support.v4.app.RemoteInput$ImplJellybean:
+    231:231:public android.os.Bundle getResultsFromIntent(android.content.Intent)
+    236:237:public void addResultsToIntent(android.support.v4.app.RemoteInput[],android.content.Intent,android.os.Bundle)
+android.support.v4.app.RemoteInputCompatApi20:
+    23:23:RemoteInputCompatApi20()
+    26:35:static android.support.v4.app.RemoteInputCompatBase$RemoteInput[] toCompat(android.app.RemoteInput[],android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    56:56:static android.os.Bundle getResultsFromIntent(android.content.Intent)
+    61:62:static void addResultsToIntent(android.support.v4.app.RemoteInputCompatBase$RemoteInput[],android.content.Intent,android.os.Bundle)
+android.support.v4.app.RemoteInputCompatBase:
+    21:23:RemoteInputCompatBase()
+android.support.v4.app.RemoteInputCompatBase$RemoteInput:
+    23:30:public RemoteInputCompatBase$RemoteInput()
+android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory:
+    public abstract android.support.v4.app.RemoteInputCompatBase$RemoteInput build(java.lang.String,java.lang.CharSequence,java.lang.CharSequence[],boolean,android.os.Bundle)
+    public abstract android.support.v4.app.RemoteInputCompatBase$RemoteInput[] newArray(int)
+android.support.v4.app.RemoteInputCompatJellybean:
+    public static final java.lang.String RESULTS_CLIP_LABEL
+    public static final java.lang.String EXTRA_RESULTS_DATA
+    private static final java.lang.String KEY_RESULT_KEY
+    private static final java.lang.String KEY_LABEL
+    private static final java.lang.String KEY_CHOICES
+    private static final java.lang.String KEY_ALLOW_FREE_FORM_INPUT
+    private static final java.lang.String KEY_EXTRAS
+    24:24:RemoteInputCompatJellybean()
+    39:39:static android.support.v4.app.RemoteInputCompatBase$RemoteInput fromBundle(android.os.Bundle,android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    58:65:static android.support.v4.app.RemoteInputCompatBase$RemoteInput[] fromBundleArray(android.os.Bundle[],android.support.v4.app.RemoteInputCompatBase$RemoteInput$Factory)
+    80:91:static android.os.Bundle getResultsFromIntent(android.content.Intent)
+    96:106:static void addResultsToIntent(android.support.v4.app.RemoteInputCompatBase$RemoteInput[],android.content.Intent,android.os.Bundle)
 android.support.v4.app.ServiceCompat
 android.support.v4.app.ShareCompat
 android.support.v4.app.ShareCompat$IntentBuilder
@@ -3745,6 +4041,54 @@ com.fasterxml.jackson.core.util.TextBuffer:
     428:440:public void append(char)
     483:515:public void append(java.lang.String,int,int)
 com.fasterxml.jackson.core.util.VersionUtil
+com.github.amlcurran.showcaseview.AnimationFactory
+com.github.amlcurran.showcaseview.AnimationFactory$AnimationEndListener
+com.github.amlcurran.showcaseview.AnimationFactory$AnimationStartListener
+com.github.amlcurran.showcaseview.AnimatorAnimationFactory
+com.github.amlcurran.showcaseview.AnimatorAnimationFactory$1
+com.github.amlcurran.showcaseview.AnimatorAnimationFactory$2
+com.github.amlcurran.showcaseview.ApiUtils
+com.github.amlcurran.showcaseview.Calculator
+com.github.amlcurran.showcaseview.NewShowcaseDrawer
+com.github.amlcurran.showcaseview.OnShowcaseEventListener
+com.github.amlcurran.showcaseview.OnShowcaseEventListener$1
+com.github.amlcurran.showcaseview.R
+com.github.amlcurran.showcaseview.R$attr
+com.github.amlcurran.showcaseview.R$dimen
+com.github.amlcurran.showcaseview.R$drawable
+com.github.amlcurran.showcaseview.R$id
+com.github.amlcurran.showcaseview.R$layout
+com.github.amlcurran.showcaseview.R$string
+com.github.amlcurran.showcaseview.R$style
+com.github.amlcurran.showcaseview.R$styleable
+com.github.amlcurran.showcaseview.ShotStateStore
+com.github.amlcurran.showcaseview.ShowcaseAreaCalculator
+com.github.amlcurran.showcaseview.ShowcaseDrawer
+com.github.amlcurran.showcaseview.ShowcaseView
+com.github.amlcurran.showcaseview.ShowcaseView$1
+com.github.amlcurran.showcaseview.ShowcaseView$2
+com.github.amlcurran.showcaseview.ShowcaseView$3
+com.github.amlcurran.showcaseview.ShowcaseView$4
+com.github.amlcurran.showcaseview.ShowcaseView$Builder
+com.github.amlcurran.showcaseview.ShowcaseView$CalculateTextOnPreDraw
+com.github.amlcurran.showcaseview.ShowcaseView$UpdateOnGlobalLayout
+com.github.amlcurran.showcaseview.ShowcaseViewApi
+com.github.amlcurran.showcaseview.StandardShowcaseDrawer
+com.github.amlcurran.showcaseview.TextDrawer
+com.github.amlcurran.showcaseview.targets.ActionBarReflector
+com.github.amlcurran.showcaseview.targets.ActionBarViewWrapper
+com.github.amlcurran.showcaseview.targets.ActionItemTarget
+com.github.amlcurran.showcaseview.targets.ActionViewTarget
+com.github.amlcurran.showcaseview.targets.ActionViewTarget$Type
+com.github.amlcurran.showcaseview.targets.AppCompatReflector
+com.github.amlcurran.showcaseview.targets.PointTarget
+com.github.amlcurran.showcaseview.targets.Reflector
+com.github.amlcurran.showcaseview.targets.Reflector$ActionBarType
+com.github.amlcurran.showcaseview.targets.ReflectorFactory
+com.github.amlcurran.showcaseview.targets.SherlockReflector
+com.github.amlcurran.showcaseview.targets.Target
+com.github.amlcurran.showcaseview.targets.Target$1
+com.github.amlcurran.showcaseview.targets.ViewTarget
 com.google.ads.AdRequest
 com.google.ads.AdRequest$ErrorCode
 com.google.ads.AdRequest$Gender
@@ -9370,28 +9714,24 @@ com.minook.zeppa.R$string
 com.minook.zeppa.R$style
 com.minook.zeppa.R$styleable
 com.minook.zeppa.Utils:
-    private static final java.lang.String TAG
-    24:24:public Utils()
-    31:40:public static java.lang.String encodeListString(java.util.List)
-    44:53:public static java.lang.String encodeListLong(java.util.ArrayList)
+    22:22:public Utils()
+    29:38:public static java.lang.String encodeListString(java.util.List)
+    42:51:public static java.lang.String encodeListLong(java.util.ArrayList)
 com.minook.zeppa.ZeppaApplication:
-    65:66:public void registerMemoryObserver(com.minook.zeppa.observer.MemoryObserver)
-    77:80:public void removeCurrentActivityIfMatching(com.minook.zeppa.activity.AuthenticatedFragmentActivity)
-    174:181:private void onApplicationTerminate()
+    64:65:public void registerMemoryObserver(com.minook.zeppa.observer.MemoryObserver)
 com.minook.zeppa.activity.AbstractAccountBaseActivity:
     protected android.graphics.drawable.Drawable loadedImage
     protected java.lang.String profileId
-    protected com.minook.zeppa.photoendpoint.model.Photo displayPhoto
     private static final int REQ_SELECT_PHOTO
     protected abstract void setInfo()
 com.minook.zeppa.activity.AbstractEventViewActivity:
-    310:312:public void onEventUpdate(com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent)
-    316:319:public void onErrorLoadingRelationships()
-    323:325:public void onErrorUpdatingEvent()
-    329:331:public void onErrorLoadingComments()
+    315:317:public void onEventUpdate(com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent)
+    321:324:public void onErrorLoadingRelationships()
+    328:330:public void onErrorUpdatingEvent()
+    334:336:public void onErrorLoadingComments()
 com.minook.zeppa.activity.AuthenticatedFragmentActivity$Error
 com.minook.zeppa.activity.MinglerActivity:
-    private static final java.lang.String TAG
+    323:326:public long getMinglerId()
 com.minook.zeppa.activity.NewEventActivity:
     private static final java.lang.String PICKER_24HR_ARG
     private static final java.lang.String PICKER_HOUR
@@ -9399,6 +9739,7 @@ com.minook.zeppa.activity.NewEventActivity:
     private static final java.lang.String PICKER_DAY
     private static final java.lang.String PICKER_MONTH
     private static final java.lang.String PICKER_YEAR
+com.minook.zeppa.activity.NotificationDispatchActivity
 com.minook.zeppa.adapter.eventlistadapter.AbstractEventLayoutAdapter:
     protected abstract java.util.List getCurrentEventMediators()
     protected abstract void setEventMediators()
@@ -9424,7 +9765,6 @@ com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint:
     public static final java.lang.String DEFAULT_BASE_URL
     104:105:public Deviceinfoendpoint(com.google.api.client.http.HttpTransport,com.google.api.client.json.JsonFactory,com.google.api.client.http.HttpRequestInitializer)
     130:132:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$GetDeviceInfo getDeviceInfo(java.lang.Long)
-    532:534:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$UpdateDeviceInfo updateDeviceInfo(com.minook.zeppa.deviceinfoendpoint.model.DeviceInfo)
 com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$Builder:
     660:660:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$Builder setHttpRequestInitializer(com.google.api.client.http.HttpRequestInitializer)
     670:670:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$Builder setSuppressPatternChecks(boolean)
@@ -9492,7 +9832,22 @@ com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$RemoveDeviceInfo:
     1:1:public bridge synthetic com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setFields(java.lang.String)
     1:1:public bridge synthetic com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setQuotaUser(java.lang.String)
     1:1:public bridge synthetic com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setOauthToken(java.lang.String)
-com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$UpdateDeviceInfo
+com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$UpdateDeviceInfo:
+    private static final java.lang.String REST_PATH
+    559:559:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$UpdateDeviceInfo setAlt(java.lang.String)
+    564:564:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$UpdateDeviceInfo setFields(java.lang.String)
+    569:569:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$UpdateDeviceInfo setKey(java.lang.String)
+    574:574:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$UpdateDeviceInfo setOauthToken(java.lang.String)
+    579:579:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$UpdateDeviceInfo setPrettyPrint(java.lang.Boolean)
+    584:584:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$UpdateDeviceInfo setQuotaUser(java.lang.String)
+    589:589:public com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint$UpdateDeviceInfo setUserIp(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setAlt(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setPrettyPrint(java.lang.Boolean)
+    1:1:public bridge synthetic com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setUserIp(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setKey(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setFields(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setQuotaUser(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setOauthToken(java.lang.String)
 com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest:
     57:57:public java.lang.String getAlt()
     62:63:public com.minook.zeppa.deviceinfoendpoint.DeviceinfoendpointRequest setAlt(java.lang.String)
@@ -9524,9 +9879,7 @@ com.minook.zeppa.deviceinfoendpoint.model.DeviceInfo:
     155:155:public com.minook.zeppa.deviceinfoendpoint.model.Key getKey()
     162:163:public com.minook.zeppa.deviceinfoendpoint.model.DeviceInfo setKey(com.minook.zeppa.deviceinfoendpoint.model.Key)
     170:170:public java.lang.Long getLastLogin()
-    177:178:public com.minook.zeppa.deviceinfoendpoint.model.DeviceInfo setLastLogin(java.lang.Long)
     185:185:public java.lang.Boolean getLoggedIn()
-    192:193:public com.minook.zeppa.deviceinfoendpoint.model.DeviceInfo setLoggedIn(java.lang.Boolean)
     200:200:public java.lang.Long getOwnerId()
     215:215:public java.lang.String getPhoneType()
     245:245:public java.lang.Integer getUpdate()
@@ -9895,9 +10248,8 @@ com.minook.zeppa.eventtagfollowendpoint.model.Key:
     171:171:public com.minook.zeppa.eventtagfollowendpoint.model.Key getParent()
     178:179:public com.minook.zeppa.eventtagfollowendpoint.model.Key setParent(com.minook.zeppa.eventtagfollowendpoint.model.Key)
 com.minook.zeppa.fragment.HomeFragment:
-    105:106:public void setCurrentPageToNotifications()
+    134:135:public void setCurrentPageToNotifications()
 com.minook.zeppa.fragment.InviteFragment
-com.minook.zeppa.fragment.TimePickerFragment
 com.minook.zeppa.gcm.ZeppaGCMReceiver:
     28:39:public static void unregister(com.minook.zeppa.ZeppaApplication)
 com.minook.zeppa.gcm.ZeppaGCMUtils:
@@ -9924,9 +10276,9 @@ com.minook.zeppa.mediator.AbstractZeppaUserMediator:
     public abstract java.lang.String getGmail()
     45:47:public void imageUpdated()
 com.minook.zeppa.mediator.DefaultUserInfoMediator:
-    108:108:public boolean isHasLoadedInitialTags()
-    246:250:public void convertNotificationsListAdapter(android.view.View)
-    257:257:public java.util.List getEventTagMediators()
+    110:110:public boolean isHasLoadedInitialTags()
+    248:252:public void convertNotificationsListAdapter(android.view.View)
+    259:259:public java.util.List getEventTagMediators()
 com.minook.zeppa.mediator.DefaultZeppaEventMediator:
     private java.util.List minglerRelationships
     171:171:public java.util.List getUsedTagMediators()
@@ -9941,22 +10293,88 @@ com.minook.zeppa.mediator.MyZeppaEventMediator:
     82:82:public boolean isHostedByCurrentUser()
 com.minook.zeppa.mediator.MyZeppaUserMediator:
     85:85:public java.lang.String getZeppaCalendarId()
-    89:89:public com.minook.zeppa.zeppauserendpoint.model.ZeppaUserInfo getUserInfo()
 com.minook.zeppa.observer.MemoryObserver:
     public abstract boolean onApplicationTerminate()
-com.minook.zeppa.photoendpoint.Photoendpoint
-com.minook.zeppa.photoendpoint.Photoendpoint$Builder
-com.minook.zeppa.photoendpoint.Photoendpoint$GetPhoto
-com.minook.zeppa.photoendpoint.Photoendpoint$InsertPhoto
-com.minook.zeppa.photoendpoint.Photoendpoint$ListPhoto
-com.minook.zeppa.photoendpoint.Photoendpoint$RemovePhoto
-com.minook.zeppa.photoendpoint.Photoendpoint$UpdatePhoto
-com.minook.zeppa.photoendpoint.PhotoendpointRequest
-com.minook.zeppa.photoendpoint.PhotoendpointRequestInitializer
-com.minook.zeppa.photoendpoint.PhotoendpointScopes
-com.minook.zeppa.photoendpoint.model.CollectionResponsePhoto
-com.minook.zeppa.photoendpoint.model.Key
-com.minook.zeppa.photoendpoint.model.Photo
+com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint:
+    public static final java.lang.String DEFAULT_ROOT_URL
+    public static final java.lang.String DEFAULT_SERVICE_PATH
+    public static final java.lang.String DEFAULT_BASE_URL
+    104:105:public Photoinfoendpoint(com.google.api.client.http.HttpTransport,com.google.api.client.json.JsonFactory,com.google.api.client.http.HttpRequestInitializer)
+    130:132:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$GetPhotoInfo getPhotoInfo(java.lang.Long)
+    309:311:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$ListPhotoInfo listPhotoInfo()
+    425:427:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$RemovePhotoInfo removePhotoInfo(java.lang.Long)
+com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$Builder:
+    569:569:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$Builder setHttpRequestInitializer(com.google.api.client.http.HttpRequestInitializer)
+    579:579:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$Builder setSuppressPatternChecks(boolean)
+    584:584:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$Builder setSuppressRequiredParameterChecks(boolean)
+    589:589:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$Builder setSuppressAllChecks(boolean)
+    599:599:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$Builder setPhotoinfoendpointRequestInitializer(com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequestInitializer)
+    1:1:public bridge synthetic com.google.api.client.googleapis.services.json.AbstractGoogleJsonClient$Builder setHttpRequestInitializer(com.google.api.client.http.HttpRequestInitializer)
+    1:1:public bridge synthetic com.google.api.client.googleapis.services.json.AbstractGoogleJsonClient build()
+    1:1:public bridge synthetic com.google.api.client.googleapis.services.json.AbstractGoogleJsonClient$Builder setSuppressAllChecks(boolean)
+    1:1:public bridge synthetic com.google.api.client.googleapis.services.json.AbstractGoogleJsonClient$Builder setSuppressRequiredParameterChecks(boolean)
+    1:1:public bridge synthetic com.google.api.client.googleapis.services.json.AbstractGoogleJsonClient$Builder setSuppressPatternChecks(boolean)
+com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$GetPhotoInfo
+com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$InsertPhotoInfo:
+    private static final java.lang.String REST_PATH
+    260:260:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$InsertPhotoInfo setAlt(java.lang.String)
+    265:265:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$InsertPhotoInfo setFields(java.lang.String)
+    270:270:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$InsertPhotoInfo setKey(java.lang.String)
+    275:275:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$InsertPhotoInfo setOauthToken(java.lang.String)
+    280:280:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$InsertPhotoInfo setPrettyPrint(java.lang.Boolean)
+    285:285:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$InsertPhotoInfo setQuotaUser(java.lang.String)
+    290:290:public com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$InsertPhotoInfo setUserIp(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setAlt(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setPrettyPrint(java.lang.Boolean)
+    1:1:public bridge synthetic com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setUserIp(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setKey(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setFields(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setQuotaUser(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setOauthToken(java.lang.String)
+com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$ListPhotoInfo
+com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint$RemovePhotoInfo
+com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest:
+    57:57:public java.lang.String getAlt()
+    62:63:public com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setAlt(java.lang.String)
+    74:74:public java.lang.String getFields()
+    79:80:public com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setFields(java.lang.String)
+    95:95:public java.lang.String getKey()
+    103:104:public com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setKey(java.lang.String)
+    115:115:public java.lang.String getOauthToken()
+    120:121:public com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setOauthToken(java.lang.String)
+    132:132:public java.lang.Boolean getPrettyPrint()
+    137:138:public com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setPrettyPrint(java.lang.Boolean)
+    153:153:public java.lang.String getQuotaUser()
+    161:162:public com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setQuotaUser(java.lang.String)
+    177:177:public java.lang.String getUserIp()
+    185:186:public com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setUserIp(java.lang.String)
+    201:201:public com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequest setRequestHeaders(com.google.api.client.http.HttpHeaders)
+    1:1:public bridge synthetic com.google.api.client.googleapis.services.json.AbstractGoogleJsonClientRequest setRequestHeaders(com.google.api.client.http.HttpHeaders)
+com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointRequestInitializer
+com.minook.zeppa.photoinfoendpoint.PhotoinfoendpointScopes
+com.minook.zeppa.photoinfoendpoint.model.CollectionResponsePhotoInfo
+com.minook.zeppa.photoinfoendpoint.model.Key:
+    80:80:public java.lang.String getAppId()
+    87:88:public com.minook.zeppa.photoinfoendpoint.model.Key setAppId(java.lang.String)
+    95:95:public java.lang.Boolean getComplete()
+    102:103:public com.minook.zeppa.photoinfoendpoint.model.Key setComplete(java.lang.Boolean)
+    110:110:public java.lang.Long getId()
+    117:118:public com.minook.zeppa.photoinfoendpoint.model.Key setId(java.lang.Long)
+    125:125:public java.lang.String getKind()
+    132:133:public com.minook.zeppa.photoinfoendpoint.model.Key setKind(java.lang.String)
+    140:140:public java.lang.String getName()
+    147:148:public com.minook.zeppa.photoinfoendpoint.model.Key setName(java.lang.String)
+    155:155:public java.lang.String getNamespace()
+    162:163:public com.minook.zeppa.photoinfoendpoint.model.Key setNamespace(java.lang.String)
+    170:170:public com.minook.zeppa.photoinfoendpoint.model.Key getParent()
+    177:178:public com.minook.zeppa.photoinfoendpoint.model.Key setParent(com.minook.zeppa.photoinfoendpoint.model.Key)
+com.minook.zeppa.photoinfoendpoint.model.PhotoInfo:
+    68:68:public java.lang.String getBlobKey()
+    83:83:public java.lang.Long getId()
+    90:91:public com.minook.zeppa.photoinfoendpoint.model.PhotoInfo setId(java.lang.Long)
+    98:98:public com.minook.zeppa.photoinfoendpoint.model.Key getKey()
+    105:106:public com.minook.zeppa.photoinfoendpoint.model.PhotoInfo setKey(com.minook.zeppa.photoinfoendpoint.model.Key)
+    113:113:public java.lang.String getOwnerEmail()
 com.minook.zeppa.runnable.BaseRunnable:
     public abstract void run()
     43:52:protected void notifyEventObservers()
@@ -9980,26 +10398,28 @@ com.minook.zeppa.runnable.RequestMingleRunnable
 com.minook.zeppa.runnable.RequestMingleRunnable$1
 com.minook.zeppa.runnable.RequestMingleRunnable$2
 com.minook.zeppa.runnable.ThreadManager:
-    7:7:public ThreadManager()
-    17:21:public static void kill()
+    6:6:public ThreadManager()
 com.minook.zeppa.singleton.EventTagSingleton:
     78:79:public void clear()
     174:186:public java.util.List getDefaultTagsFrom(java.util.List)
     290:311:public boolean deleteEventTag(com.minook.zeppa.eventtagendpoint.model.EventTag,com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential)
 com.minook.zeppa.singleton.NotificationSingleton:
-    55:56:public void clear()
-    279:323:public boolean doPushNotification(android.content.Context,com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification)
+    57:58:public void clear()
+    113:123:public com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification getNotificationById(long)
+    314:358:public boolean doPushNotification(android.content.Context,com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification)
 com.minook.zeppa.singleton.ZeppaEventSingleton:
     94:95:public void clear()
     107:108:public void setLastUpdateCallTime(long)
     111:111:public long getLastUpdateCallTime()
     116:116:public void onLowMemory()
 com.minook.zeppa.singleton.ZeppaUserSingleton:
-    80:81:public void clear()
-    85:85:public void onLowMemory()
-    217:217:public java.util.Date getLastMinglerFinderTaskExecutionDate()
-    229:229:public java.lang.String getGoogleCalendarId()
-    265:271:public java.util.List getAllFriendZeppaIds()
+    81:82:public void clear()
+    86:86:public void onLowMemory()
+    263:263:public java.util.Date getLastMinglerFinderTaskExecutionDate()
+    275:275:public java.lang.String getGoogleCalendarId()
+    354:360:public java.util.List getAllFriendZeppaIds()
+    461:475:public boolean emailIsRecognized(java.lang.String)
+    480:503:public boolean numberIsRecognized(java.lang.String)
 com.minook.zeppa.zeppaeventendpoint.Zeppaeventendpoint:
     public static final java.lang.String DEFAULT_ROOT_URL
     public static final java.lang.String DEFAULT_SERVICE_PATH
@@ -10363,7 +10783,6 @@ com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint:
     public static final java.lang.String DEFAULT_BASE_URL
     104:105:public Zeppanotificationendpoint(com.google.api.client.http.HttpTransport,com.google.api.client.json.JsonFactory,com.google.api.client.http.HttpRequestInitializer)
     233:235:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$InsertZeppaNotification insertZeppaNotification(com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification)
-    548:550:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$UpdateZeppaNotification updateZeppaNotification(com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification)
 com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$Builder:
     676:676:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$Builder setHttpRequestInitializer(com.google.api.client.http.HttpRequestInitializer)
     686:686:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$Builder setSuppressPatternChecks(boolean)
@@ -10437,7 +10856,22 @@ com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$RemoveZeppa
     1:1:public bridge synthetic com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setFields(java.lang.String)
     1:1:public bridge synthetic com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setQuotaUser(java.lang.String)
     1:1:public bridge synthetic com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setOauthToken(java.lang.String)
-com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$UpdateZeppaNotification
+com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$UpdateZeppaNotification:
+    private static final java.lang.String REST_PATH
+    575:575:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$UpdateZeppaNotification setAlt(java.lang.String)
+    580:580:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$UpdateZeppaNotification setFields(java.lang.String)
+    585:585:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$UpdateZeppaNotification setKey(java.lang.String)
+    590:590:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$UpdateZeppaNotification setOauthToken(java.lang.String)
+    595:595:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$UpdateZeppaNotification setPrettyPrint(java.lang.Boolean)
+    600:600:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$UpdateZeppaNotification setQuotaUser(java.lang.String)
+    605:605:public com.minook.zeppa.zeppanotificationendpoint.Zeppanotificationendpoint$UpdateZeppaNotification setUserIp(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setAlt(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setPrettyPrint(java.lang.Boolean)
+    1:1:public bridge synthetic com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setUserIp(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setKey(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setFields(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setQuotaUser(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setOauthToken(java.lang.String)
 com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest:
     57:57:public java.lang.String getAlt()
     62:63:public com.minook.zeppa.zeppanotificationendpoint.ZeppanotificationendpointRequest setAlt(java.lang.String)
@@ -10481,8 +10915,6 @@ com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification:
     148:149:public com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification setExpires(java.lang.Long)
     156:156:public java.lang.String getExtraMessage()
     163:164:public com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification setExtraMessage(java.lang.String)
-    171:171:public java.lang.Boolean getHasSeen()
-    178:179:public com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification setHasSeen(java.lang.Boolean)
     193:194:public com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification setId(java.lang.Long)
     208:209:public com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification setKey(com.minook.zeppa.zeppanotificationendpoint.model.Key)
     223:224:public com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification setRecipientId(java.lang.Long)
@@ -10497,7 +10929,6 @@ com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint:
     public static final java.lang.String DEFAULT_SERVICE_PATH
     public static final java.lang.String DEFAULT_BASE_URL
     104:105:public Zeppauserendpoint(com.google.api.client.http.HttpTransport,com.google.api.client.json.JsonFactory,com.google.api.client.http.HttpRequestInitializer)
-    205:207:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser getZeppaUser(java.lang.Long)
     384:386:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$ListZeppaUser listZeppaUser()
 com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$Builder:
     751:751:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$Builder setHttpRequestInitializer(com.google.api.client.http.HttpRequestInitializer)
@@ -10526,7 +10957,26 @@ com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$FetchCurrentZeppaUser:
     1:1:public bridge synthetic com.minook.zeppa.zeppauserendpoint.ZeppauserendpointRequest setFields(java.lang.String)
     1:1:public bridge synthetic com.minook.zeppa.zeppauserendpoint.ZeppauserendpointRequest setQuotaUser(java.lang.String)
     1:1:public bridge synthetic com.minook.zeppa.zeppauserendpoint.ZeppauserendpointRequest setOauthToken(java.lang.String)
-com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser
+com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser:
+    private static final java.lang.String REST_PATH
+    233:233:public com.google.api.client.http.HttpResponse executeUsingHead()
+    238:238:public com.google.api.client.http.HttpRequest buildHttpRequestUsingHead()
+    243:243:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser setAlt(java.lang.String)
+    248:248:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser setFields(java.lang.String)
+    253:253:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser setKey(java.lang.String)
+    258:258:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser setOauthToken(java.lang.String)
+    263:263:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser setPrettyPrint(java.lang.Boolean)
+    268:268:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser setQuotaUser(java.lang.String)
+    273:273:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser setUserIp(java.lang.String)
+    283:283:public java.lang.Long getUserId()
+    287:288:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$GetZeppaUser setUserId(java.lang.Long)
+    1:1:public bridge synthetic com.minook.zeppa.zeppauserendpoint.ZeppauserendpointRequest setAlt(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppauserendpoint.ZeppauserendpointRequest setPrettyPrint(java.lang.Boolean)
+    1:1:public bridge synthetic com.minook.zeppa.zeppauserendpoint.ZeppauserendpointRequest setUserIp(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppauserendpoint.ZeppauserendpointRequest setKey(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppauserendpoint.ZeppauserendpointRequest setFields(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppauserendpoint.ZeppauserendpointRequest setQuotaUser(java.lang.String)
+    1:1:public bridge synthetic com.minook.zeppa.zeppauserendpoint.ZeppauserendpointRequest setOauthToken(java.lang.String)
 com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$InsertZeppaUser:
     private static final java.lang.String REST_PATH
     335:335:public com.minook.zeppa.zeppauserendpoint.Zeppauserendpoint$InsertZeppaUser setAlt(java.lang.String)
@@ -10901,9 +11351,9 @@ com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelati
     178:179:public com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship setUpdated(java.lang.Long)
 com.pschuette.android.calendarlibrary.CalendarAdapter:
     static final int FIRST_DAY_OF_WEEK
-    57:66:public int getPrevMonth()
-    70:70:public int getMonth()
-    74:74:public int getYear()
+    59:68:public int getPrevMonth()
+    72:72:public int getMonth()
+    76:76:public int getYear()
 com.pschuette.android.calendarlibrary.CalendarData:
     50:51:public void setLocalId(java.lang.Long)
     60:61:public void setName(java.lang.String)
@@ -10914,16 +11364,18 @@ com.pschuette.android.calendarlibrary.CalendarData:
 com.pschuette.android.calendarlibrary.CalendarProvider
 com.pschuette.android.calendarlibrary.CalendarProvider$DatabaseHelper
 com.pschuette.android.calendarlibrary.CalendarSyncStateAdapter:
-    82:85:public void unregisterSyncStateChangeListener(com.pschuette.android.calendarlibrary.CalendarSyncStateAdapter$OnSyncStateChangedListener)
+    97:100:public void unregisterSyncStateChangeListener(com.pschuette.android.calendarlibrary.CalendarSyncStateAdapter$OnSyncStateChangedListener)
 com.pschuette.android.calendarlibrary.DateTimeInterpreter
 com.pschuette.android.calendarlibrary.Day:
-    69:70:public void setDay(int)
-    77:77:public int getDayOfWeek()
-    81:81:public java.util.Calendar getCalendarDay()
-    90:91:public void addEvent(com.pschuette.android.calendarlibrary.Event)
-    105:106:public void stopFetchingEvents()
-    117:120:public void unregisterOnEventsLoadListener(com.pschuette.android.calendarlibrary.Day$OnEventsLoadListener)
-    128:133:public java.util.Set getColors()
+    private android.view.View hasEventsIndicatorView
+    73:74:public void setDay(int)
+    81:81:public int getDayOfWeek()
+    85:85:public java.util.Calendar getCalendarDay()
+    89:90:public void setHasEventsIndicatorView(android.view.View)
+    98:99:public void addEvent(com.pschuette.android.calendarlibrary.Event)
+    113:114:public void stopFetchingEvents()
+    125:128:public void unregisterOnEventsLoadListener(com.pschuette.android.calendarlibrary.Day$OnEventsLoadListener)
+    136:141:public java.util.Set getColors()
 com.pschuette.android.calendarlibrary.Event:
     private android.graphics.Bitmap image
     private java.lang.String calendarEventId
@@ -10939,8 +11391,8 @@ com.pschuette.android.calendarlibrary.Event:
     175:178:public java.lang.String getStartDate(java.lang.String)
     187:190:public java.lang.String getEndDate(java.lang.String)
 com.pschuette.android.calendarlibrary.ExtendedCalendarView:
-    47:51:public ExtendedCalendarView(android.content.Context,android.util.AttributeSet,com.pschuette.android.calendarlibrary.DayAdapter$EventItemClickListener)
-    55:59:public ExtendedCalendarView(android.content.Context,android.util.AttributeSet,int,com.pschuette.android.calendarlibrary.DayAdapter$EventItemClickListener)
+    48:53:public ExtendedCalendarView(android.content.Context,android.util.AttributeSet,com.pschuette.android.calendarlibrary.DayAdapter$EventItemClickListener)
+    57:62:public ExtendedCalendarView(android.content.Context,android.util.AttributeSet,int,com.pschuette.android.calendarlibrary.DayAdapter$EventItemClickListener)
 com.pschuette.android.calendarlibrary.MainActivity
 com.pschuette.android.calendarlibrary.MonthView:
     33:36:public MonthView(android.content.Context,com.pschuette.android.calendarlibrary.CalendarAdapter,android.util.AttributeSet)
@@ -10994,6 +11446,1730 @@ javax.annotation.meta.TypeQualifierDefault
 javax.annotation.meta.TypeQualifierNickname
 javax.annotation.meta.TypeQualifierValidator
 javax.annotation.meta.When
+org.apache.http.ConnectionClosedException:
+    private static final long serialVersionUID
+org.apache.http.Consts:
+    public static final int CR
+    public static final int LF
+    public static final int SP
+    public static final int HT
+    48:49:private Consts()
+org.apache.http.ContentTooLongException
+org.apache.http.ExceptionLogger
+org.apache.http.ExceptionLogger$1
+org.apache.http.ExceptionLogger$2
+org.apache.http.HttpConnection:
+    public abstract int getSocketTimeout()
+    public abstract org.apache.http.HttpConnectionMetrics getMetrics()
+org.apache.http.HttpConnectionFactory
+org.apache.http.HttpConnectionMetrics
+org.apache.http.HttpEntity:
+    public abstract void consumeContent()
+org.apache.http.HttpException:
+    private static final long serialVersionUID
+org.apache.http.HttpHeaders
+org.apache.http.HttpHost:
+    private static final long serialVersionUID
+    public static final java.lang.String DEFAULT_SCHEME_NAME
+    108:126:public static org.apache.http.HttpHost create(java.lang.String)
+    135:136:public HttpHost(java.lang.String)
+    191:192:public HttpHost(java.net.InetAddress,int)
+    203:204:public HttpHost(java.net.InetAddress)
+    212:219:public HttpHost(org.apache.http.HttpHost)
+org.apache.http.HttpInetConnection:
+    public abstract java.net.InetAddress getLocalAddress()
+    public abstract int getLocalPort()
+org.apache.http.HttpMessage:
+    public abstract org.apache.http.Header getLastHeader(java.lang.String)
+    public abstract void setHeader(org.apache.http.Header)
+    public abstract void removeHeader(org.apache.http.Header)
+org.apache.http.HttpRequestFactory
+org.apache.http.HttpResponse:
+    public abstract void setStatusLine(org.apache.http.StatusLine)
+    public abstract void setStatusLine(org.apache.http.ProtocolVersion,int)
+    public abstract void setStatusLine(org.apache.http.ProtocolVersion,int,java.lang.String)
+    public abstract void setStatusCode(int)
+    public abstract void setReasonPhrase(java.lang.String)
+    public abstract java.util.Locale getLocale()
+    public abstract void setLocale(java.util.Locale)
+org.apache.http.HttpResponseFactory:
+    public abstract org.apache.http.HttpResponse newHttpResponse(org.apache.http.ProtocolVersion,int,org.apache.http.protocol.HttpContext)
+org.apache.http.HttpServerConnection
+org.apache.http.HttpStatus
+org.apache.http.HttpVersion:
+    private static final long serialVersionUID
+    public static final java.lang.String HTTP
+org.apache.http.MalformedChunkCodingException:
+    private static final long serialVersionUID
+org.apache.http.MessageConstraintException:
+    private static final long serialVersionUID
+org.apache.http.MethodNotSupportedException
+org.apache.http.NoHttpResponseException:
+    private static final long serialVersionUID
+org.apache.http.ParseException:
+    private static final long serialVersionUID
+org.apache.http.ProtocolException:
+    private static final long serialVersionUID
+org.apache.http.ProtocolVersion:
+    private static final long serialVersionUID
+    225:225:public final boolean greaterEquals(org.apache.http.ProtocolVersion)
+org.apache.http.TruncatedChunkException:
+    private static final long serialVersionUID
+org.apache.http.UnsupportedHttpVersionException
+org.apache.http.annotation.Experimental
+org.apache.http.annotation.GuardedBy
+org.apache.http.annotation.Immutable
+org.apache.http.annotation.NotThreadSafe
+org.apache.http.annotation.Obsolete
+org.apache.http.annotation.ThreadSafe
+org.apache.http.auth.AUTH
+org.apache.http.auth.AuthScheme:
+    public abstract java.lang.String getParameter(java.lang.String)
+org.apache.http.auth.AuthSchemeRegistry:
+    92:94:public void unregister(java.lang.String)
+    126:126:public java.util.List getSchemeNames()
+    136:141:public void setItems(java.util.Map)
+org.apache.http.auth.AuthScope:
+    public static final int ANY_PORT
+    147:148:public AuthScope(org.apache.http.HttpHost)
+    161:162:public AuthScope(java.lang.String,int,java.lang.String)
+    173:174:public AuthScope(java.lang.String,int)
+    180:187:public AuthScope(org.apache.http.auth.AuthScope)
+    195:195:public org.apache.http.HttpHost getOrigin()
+    202:202:public java.lang.String getHost()
+    209:209:public int getPort()
+    216:216:public java.lang.String getRealm()
+    223:223:public java.lang.String getScheme()
+org.apache.http.auth.AuthState:
+    135:135:public boolean hasAuthOptions()
+    159:160:public void invalidate()
+    167:167:public boolean isValid()
+    179:184:public void setAuthScheme(org.apache.http.auth.AuthScheme)
+    195:196:public void setCredentials(org.apache.http.auth.Credentials)
+    207:207:public org.apache.http.auth.AuthScope getAuthScope()
+    219:220:public void setAuthScope(org.apache.http.auth.AuthScope)
+org.apache.http.auth.AuthenticationException:
+    private static final long serialVersionUID
+org.apache.http.auth.BasicUserPrincipal:
+    private static final long serialVersionUID
+org.apache.http.auth.InvalidCredentialsException:
+    private static final long serialVersionUID
+org.apache.http.auth.KerberosCredentials:
+    private static final long serialVersionUID
+    53:55:public KerberosCredentials(org.ietf.jgss.GSSCredential)
+org.apache.http.auth.MalformedChallengeException:
+    private static final long serialVersionUID
+    68:69:public MalformedChallengeException(java.lang.String,java.lang.Throwable)
+org.apache.http.auth.NTCredentials:
+    private static final long serialVersionUID
+    64:86:public NTCredentials(java.lang.String)
+    102:111:public NTCredentials(java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+org.apache.http.auth.NTUserPrincipal:
+    private static final long serialVersionUID
+    54:71:public NTUserPrincipal(java.lang.String,java.lang.String)
+org.apache.http.auth.UsernamePasswordCredentials:
+    private static final long serialVersionUID
+    77:81:public UsernamePasswordCredentials(java.lang.String,java.lang.String)
+    89:89:public java.lang.String getUserName()
+org.apache.http.auth.params.AuthPNames
+org.apache.http.auth.params.AuthParamBean
+org.apache.http.auth.params.AuthParams
+org.apache.http.client.AuthCache:
+    public abstract void clear()
+org.apache.http.client.CircularRedirectException:
+    private static final long serialVersionUID
+    66:67:public CircularRedirectException(java.lang.String,java.lang.Throwable)
+org.apache.http.client.ClientProtocolException:
+    private static final long serialVersionUID
+    56:58:public ClientProtocolException(java.lang.String,java.lang.Throwable)
+org.apache.http.client.CookieStore:
+    public abstract void clear()
+org.apache.http.client.CredentialsProvider:
+    public abstract void setCredentials(org.apache.http.auth.AuthScope,org.apache.http.auth.Credentials)
+    public abstract void clear()
+org.apache.http.client.HttpClient:
+    public abstract org.apache.http.conn.ClientConnectionManager getConnectionManager()
+    public abstract org.apache.http.HttpResponse execute(org.apache.http.client.methods.HttpUriRequest,org.apache.http.protocol.HttpContext)
+    public abstract org.apache.http.HttpResponse execute(org.apache.http.HttpHost,org.apache.http.HttpRequest)
+    public abstract org.apache.http.HttpResponse execute(org.apache.http.HttpHost,org.apache.http.HttpRequest,org.apache.http.protocol.HttpContext)
+    public abstract java.lang.Object execute(org.apache.http.client.methods.HttpUriRequest,org.apache.http.client.ResponseHandler)
+    public abstract java.lang.Object execute(org.apache.http.client.methods.HttpUriRequest,org.apache.http.client.ResponseHandler,org.apache.http.protocol.HttpContext)
+    public abstract java.lang.Object execute(org.apache.http.HttpHost,org.apache.http.HttpRequest,org.apache.http.client.ResponseHandler)
+    public abstract java.lang.Object execute(org.apache.http.HttpHost,org.apache.http.HttpRequest,org.apache.http.client.ResponseHandler,org.apache.http.protocol.HttpContext)
+org.apache.http.client.HttpResponseException
+org.apache.http.client.NonRepeatableRequestException:
+    private static final long serialVersionUID
+org.apache.http.client.RedirectException:
+    private static final long serialVersionUID
+    67:68:public RedirectException(java.lang.String,java.lang.Throwable)
+org.apache.http.client.ResponseHandler
+org.apache.http.client.ServiceUnavailableRetryStrategy
+org.apache.http.client.config.AuthSchemes
+org.apache.http.client.config.CookieSpecs
+org.apache.http.client.config.RequestConfig:
+    122:122:public boolean isExpectContinueEnabled()
+    132:132:public org.apache.http.HttpHost getProxy()
+    147:147:public java.net.InetAddress getLocalAddress()
+    164:164:public boolean isStaleConnectionCheckEnabled()
+    185:185:public boolean isRedirectsEnabled()
+    219:219:public int getMaxRedirects()
+    229:229:public boolean isAuthenticationEnabled()
+    267:267:public int getConnectionRequestTimeout()
+    282:282:public int getConnectTimeout()
+    298:298:public int getSocketTimeout()
+    310:310:public boolean isDecompressionEnabled()
+    346:346:public static org.apache.http.client.config.RequestConfig$Builder copy(org.apache.http.client.config.RequestConfig)
+org.apache.http.client.config.RequestConfig$Builder:
+    478:479:public org.apache.http.client.config.RequestConfig$Builder setDecompressionEnabled(boolean)
+org.apache.http.client.entity.DecompressingEntity
+org.apache.http.client.entity.DeflateDecompressingEntity
+org.apache.http.client.entity.DeflateDecompressingEntity$1
+org.apache.http.client.entity.DeflateInputStream
+org.apache.http.client.entity.DeflateInputStream$DeflateStream
+org.apache.http.client.entity.EntityBuilder
+org.apache.http.client.entity.GzipCompressingEntity
+org.apache.http.client.entity.GzipDecompressingEntity
+org.apache.http.client.entity.GzipDecompressingEntity$1
+org.apache.http.client.entity.InputStreamFactory
+org.apache.http.client.entity.LazyDecompressingInputStream
+org.apache.http.client.entity.UrlEncodedFormEntity:
+    60:63:public UrlEncodedFormEntity(java.util.List,java.lang.String)
+    91:92:public UrlEncodedFormEntity(java.util.List)
+    104:105:public UrlEncodedFormEntity(java.lang.Iterable)
+org.apache.http.client.methods.AbortableHttpRequest:
+    public abstract void abort()
+org.apache.http.client.methods.AbstractExecutionAwareRequest:
+    122:123:public void completed()
+    131:136:public void reset()
+org.apache.http.client.methods.HttpDelete:
+    public static final java.lang.String METHOD_NAME
+    60:62:public HttpDelete(java.net.URI)
+org.apache.http.client.methods.HttpExecutionAware
+org.apache.http.client.methods.HttpGet:
+    public static final java.lang.String METHOD_NAME
+org.apache.http.client.methods.HttpHead:
+    public static final java.lang.String METHOD_NAME
+org.apache.http.client.methods.HttpOptions:
+    public static final java.lang.String METHOD_NAME
+    68:70:public HttpOptions(java.net.URI)
+    86:97:public java.util.Set getAllowedMethods(org.apache.http.HttpResponse)
+org.apache.http.client.methods.HttpPatch
+org.apache.http.client.methods.HttpPost:
+    public static final java.lang.String METHOD_NAME
+    67:69:public HttpPost(java.net.URI)
+org.apache.http.client.methods.HttpPut:
+    public static final java.lang.String METHOD_NAME
+    59:61:public HttpPut(java.net.URI)
+org.apache.http.client.methods.HttpRequestBase:
+    112:112:public void started()
+    121:122:public void releaseConnection()
+org.apache.http.client.methods.HttpRequestWrapper
+org.apache.http.client.methods.HttpRequestWrapper$1
+org.apache.http.client.methods.HttpRequestWrapper$HttpEntityEnclosingRequestWrapper
+org.apache.http.client.methods.HttpTrace:
+    public static final java.lang.String METHOD_NAME
+    62:64:public HttpTrace(java.net.URI)
+org.apache.http.client.methods.HttpUriRequest:
+    public abstract void abort()
+org.apache.http.client.methods.RequestBuilder:
+    89:92:RequestBuilder(java.lang.String,java.net.URI)
+    95:98:RequestBuilder(java.lang.String,java.lang.String)
+    105:106:public static org.apache.http.client.methods.RequestBuilder create(java.lang.String)
+    110:110:public static org.apache.http.client.methods.RequestBuilder get()
+    117:117:public static org.apache.http.client.methods.RequestBuilder get(java.net.URI)
+    124:124:public static org.apache.http.client.methods.RequestBuilder get(java.lang.String)
+    128:128:public static org.apache.http.client.methods.RequestBuilder head()
+    135:135:public static org.apache.http.client.methods.RequestBuilder head(java.net.URI)
+    142:142:public static org.apache.http.client.methods.RequestBuilder head(java.lang.String)
+    149:149:public static org.apache.http.client.methods.RequestBuilder patch()
+    156:156:public static org.apache.http.client.methods.RequestBuilder patch(java.net.URI)
+    163:163:public static org.apache.http.client.methods.RequestBuilder patch(java.lang.String)
+    167:167:public static org.apache.http.client.methods.RequestBuilder post()
+    174:174:public static org.apache.http.client.methods.RequestBuilder post(java.net.URI)
+    181:181:public static org.apache.http.client.methods.RequestBuilder post(java.lang.String)
+    185:185:public static org.apache.http.client.methods.RequestBuilder put()
+    192:192:public static org.apache.http.client.methods.RequestBuilder put(java.net.URI)
+    199:199:public static org.apache.http.client.methods.RequestBuilder put(java.lang.String)
+    203:203:public static org.apache.http.client.methods.RequestBuilder delete()
+    210:210:public static org.apache.http.client.methods.RequestBuilder delete(java.net.URI)
+    217:217:public static org.apache.http.client.methods.RequestBuilder delete(java.lang.String)
+    221:221:public static org.apache.http.client.methods.RequestBuilder trace()
+    228:228:public static org.apache.http.client.methods.RequestBuilder trace(java.net.URI)
+    235:235:public static org.apache.http.client.methods.RequestBuilder trace(java.lang.String)
+    239:239:public static org.apache.http.client.methods.RequestBuilder options()
+    246:246:public static org.apache.http.client.methods.RequestBuilder options(java.net.URI)
+    253:253:public static org.apache.http.client.methods.RequestBuilder options(java.lang.String)
+    330:331:public org.apache.http.client.methods.RequestBuilder setCharset(java.nio.charset.Charset)
+    338:338:public java.nio.charset.Charset getCharset()
+    342:342:public java.lang.String getMethod()
+    346:346:public org.apache.http.ProtocolVersion getVersion()
+    350:351:public org.apache.http.client.methods.RequestBuilder setVersion(org.apache.http.ProtocolVersion)
+    355:355:public java.net.URI getUri()
+    364:365:public org.apache.http.client.methods.RequestBuilder setUri(java.lang.String)
+    369:369:public org.apache.http.Header getFirstHeader(java.lang.String)
+    373:373:public org.apache.http.Header getLastHeader(java.lang.String)
+    377:377:public org.apache.http.Header[] getHeaders(java.lang.String)
+    381:385:public org.apache.http.client.methods.RequestBuilder addHeader(org.apache.http.Header)
+    389:393:public org.apache.http.client.methods.RequestBuilder addHeader(java.lang.String,java.lang.String)
+    397:401:public org.apache.http.client.methods.RequestBuilder removeHeader(org.apache.http.Header)
+    405:414:public org.apache.http.client.methods.RequestBuilder removeHeaders(java.lang.String)
+    418:422:public org.apache.http.client.methods.RequestBuilder setHeader(org.apache.http.Header)
+    426:430:public org.apache.http.client.methods.RequestBuilder setHeader(java.lang.String,java.lang.String)
+    434:434:public org.apache.http.HttpEntity getEntity()
+    438:439:public org.apache.http.client.methods.RequestBuilder setEntity(org.apache.http.HttpEntity)
+    443:443:public java.util.List getParameters()
+    448:453:public org.apache.http.client.methods.RequestBuilder addParameter(org.apache.http.NameValuePair)
+    457:457:public org.apache.http.client.methods.RequestBuilder addParameter(java.lang.String,java.lang.String)
+    461:464:public varargs org.apache.http.client.methods.RequestBuilder addParameters(org.apache.http.NameValuePair[])
+    468:468:public org.apache.http.client.config.RequestConfig getConfig()
+    472:473:public org.apache.http.client.methods.RequestBuilder setConfig(org.apache.http.client.config.RequestConfig)
+org.apache.http.client.params.AllClientPNames
+org.apache.http.client.params.AuthPolicy
+org.apache.http.client.params.ClientPNames
+org.apache.http.client.params.ClientParamBean
+org.apache.http.client.params.CookiePolicy
+org.apache.http.client.params.HttpClientParamConfig:
+    49:50:private HttpClientParamConfig()
+org.apache.http.client.params.HttpClientParams:
+    46:47:private HttpClientParams()
+    56:59:public static void setRedirecting(org.apache.http.params.HttpParams,boolean)
+    68:71:public static void setAuthenticating(org.apache.http.params.HttpParams,boolean)
+    74:80:public static java.lang.String getCookiePolicy(org.apache.http.params.HttpParams)
+    84:86:public static void setCookiePolicy(org.apache.http.params.HttpParams,java.lang.String)
+    94:96:public static void setConnectionManagerTimeout(org.apache.http.params.HttpParams,long)
+org.apache.http.client.protocol.ClientContext
+org.apache.http.client.protocol.ClientContextConfigurer
+org.apache.http.client.protocol.HttpClientContext:
+    public static final java.lang.String HTTP_ROUTE
+    public static final java.lang.String REDIRECT_LOCATIONS
+    public static final java.lang.String COOKIESPEC_REGISTRY
+    public static final java.lang.String COOKIE_SPEC
+    public static final java.lang.String COOKIE_ORIGIN
+    public static final java.lang.String COOKIE_STORE
+    public static final java.lang.String CREDS_PROVIDER
+    public static final java.lang.String AUTH_CACHE
+    public static final java.lang.String TARGET_AUTH_STATE
+    public static final java.lang.String PROXY_AUTH_STATE
+    public static final java.lang.String USER_TOKEN
+    public static final java.lang.String AUTHSCHEME_REGISTRY
+    public static final java.lang.String REQUEST_CONFIG
+    147:147:public static org.apache.http.client.protocol.HttpClientContext create()
+    164:164:public java.util.List getRedirectLocations()
+    172:173:public void setCookieStore(org.apache.http.client.CookieStore)
+    193:194:public void setCookieSpecRegistry(org.apache.http.config.Lookup)
+    201:202:public void setAuthSchemeRegistry(org.apache.http.config.Lookup)
+    209:210:public void setCredentialsProvider(org.apache.http.client.CredentialsProvider)
+    229:229:public java.lang.Object getUserToken(java.lang.Class)
+    233:233:public java.lang.Object getUserToken()
+    237:238:public void setUserToken(java.lang.Object)
+    246:247:public void setRequestConfig(org.apache.http.client.config.RequestConfig)
+org.apache.http.client.protocol.RequestAcceptEncoding
+org.apache.http.client.protocol.RequestClientConnControl:
+    private static final java.lang.String PROXY_CONN_DIRECTIVE
+org.apache.http.client.protocol.RequestExpectContinue
+org.apache.http.client.protocol.ResponseAuthCache
+org.apache.http.client.protocol.ResponseAuthCache$1
+org.apache.http.client.protocol.ResponseContentEncoding
+org.apache.http.client.protocol.ResponseContentEncoding$1
+org.apache.http.client.protocol.ResponseContentEncoding$2
+org.apache.http.client.utils.CloneUtils:
+    77:77:public static java.lang.Object clone(java.lang.Object)
+    83:84:private CloneUtils()
+org.apache.http.client.utils.DateUtils:
+    public static final java.lang.String PATTERN_RFC1123
+    public static final java.lang.String PATTERN_RFC1036
+    public static final java.lang.String PATTERN_ASCTIME
+    96:96:public static java.util.Date parseDate(java.lang.String)
+    158:158:public static java.lang.String formatDate(java.util.Date)
+    175:178:public static java.lang.String formatDate(java.util.Date,java.lang.String)
+    187:188:public static void clearThreadLocal()
+    191:192:private DateUtils()
+org.apache.http.client.utils.DateUtils$DateFormatHolder:
+    200:200:DateUtils$DateFormatHolder()
+    245:246:public static void clearThreadLocal()
+org.apache.http.client.utils.HttpClientUtils
+org.apache.http.client.utils.Idn
+org.apache.http.client.utils.JdkIdn
+org.apache.http.client.utils.Punycode
+org.apache.http.client.utils.Rfc3492Idn
+org.apache.http.client.utils.URIBuilder:
+    81:83:public URIBuilder(java.lang.String)
+    106:106:public java.nio.charset.Charset getCharset()
+    227:227:public org.apache.http.client.utils.URIBuilder setUserInfo(java.lang.String,java.lang.String)
+    264:268:public org.apache.http.client.utils.URIBuilder removeQuery()
+    282:286:public org.apache.http.client.utils.URIBuilder setQuery(java.lang.String)
+    300:309:public org.apache.http.client.utils.URIBuilder setParameters(java.util.List)
+    344:355:public varargs org.apache.http.client.utils.URIBuilder setParameters(org.apache.http.NameValuePair[])
+    367:374:public org.apache.http.client.utils.URIBuilder addParameter(java.lang.String,java.lang.String)
+    386:401:public org.apache.http.client.utils.URIBuilder setParameter(java.lang.String,java.lang.String)
+    427:431:public org.apache.http.client.utils.URIBuilder setCustomQuery(java.lang.String)
+    448:448:public boolean isAbsolute()
+    455:455:public boolean isOpaque()
+    459:459:public java.lang.String getScheme()
+    471:471:public int getPort()
+    487:487:public java.lang.String getFragment()
+org.apache.http.client.utils.URIUtils:
+    86:112:public static java.net.URI createURI(java.lang.String,java.lang.String,int,java.lang.String,java.lang.String,java.lang.String)
+    166:166:public static java.net.URI rewriteURI(java.net.URI,org.apache.http.HttpHost)
+    211:227:public static java.net.URI rewriteURIForRoute(java.net.URI,org.apache.http.conn.routing.RouteInfo)
+    241:241:public static java.net.URI resolve(java.net.URI,java.lang.String)
+    433:456:public static java.net.URI resolve(java.net.URI,org.apache.http.HttpHost,java.util.List)
+    462:463:private URIUtils()
+org.apache.http.client.utils.URLEncodedUtils:
+    public static final java.lang.String CONTENT_TYPE
+    private static final char QP_SEP_A
+    private static final char QP_SEP_S
+    private static final java.lang.String NAME_VALUE_SEPARATOR
+    private static final int RADIX
+    64:64:public URLEncodedUtils()
+    91:95:public static java.util.List parse(java.net.URI,java.lang.String)
+    147:155:public static boolean isEncoded(org.apache.http.HttpEntity)
+    178:179:public static void parse(java.util.List,java.util.Scanner,java.lang.String)
+    205:220:public static void parse(java.util.List,java.util.Scanner,java.lang.String,java.lang.String)
+    255:260:public static varargs java.util.List parse(java.lang.String,java.nio.charset.Charset,char[])
+    322:322:public static java.lang.String format(java.util.List,java.lang.String)
+    340:353:public static java.lang.String format(java.util.List,char,java.lang.String)
+    585:588:private static java.lang.String decodeFormFields(java.lang.String,java.lang.String)
+    617:620:private static java.lang.String encodeFormFields(java.lang.String,java.lang.String)
+org.apache.http.concurrent.BasicFuture
+org.apache.http.concurrent.FutureCallback
+org.apache.http.config.ConnectionConfig
+org.apache.http.config.ConnectionConfig$Builder
+org.apache.http.config.MessageConstraints:
+    78:78:public static org.apache.http.config.MessageConstraints lineLen(int)
+    86:87:public static org.apache.http.config.MessageConstraints$Builder copy(org.apache.http.config.MessageConstraints)
+org.apache.http.config.Registry
+org.apache.http.config.RegistryBuilder
+org.apache.http.config.SocketConfig
+org.apache.http.config.SocketConfig$Builder
+org.apache.http.conn.BasicEofSensorWatcher
+org.apache.http.conn.BasicManagedEntity:
+    114:115:public void consumeContent()
+org.apache.http.conn.ClientConnectionManager:
+    public abstract void closeIdleConnections(long,java.util.concurrent.TimeUnit)
+    public abstract void closeExpiredConnections()
+org.apache.http.conn.ConnectTimeoutException:
+    private static final long serialVersionUID
+    77:85:public varargs ConnectTimeoutException(java.io.IOException,org.apache.http.HttpHost,java.net.InetAddress[])
+    91:91:public org.apache.http.HttpHost getHost()
+org.apache.http.conn.ConnectionPoolTimeoutException:
+    private static final long serialVersionUID
+org.apache.http.conn.ConnectionRequest
+org.apache.http.conn.EofSensorInputStream:
+    91:91:boolean isSelfClosed()
+    95:95:java.io.InputStream getWrappedStream()
+org.apache.http.conn.HttpClientConnectionManager
+org.apache.http.conn.HttpClientConnectionOperator
+org.apache.http.conn.HttpConnectionFactory
+org.apache.http.conn.HttpHostConnectException
+org.apache.http.conn.HttpInetSocketAddress:
+    private static final long serialVersionUID
+org.apache.http.conn.HttpRoutedConnection:
+    public abstract boolean isSecure()
+    public abstract javax.net.ssl.SSLSession getSSLSession()
+org.apache.http.conn.ManagedClientConnection:
+    public abstract boolean isSecure()
+    public abstract javax.net.ssl.SSLSession getSSLSession()
+    public abstract boolean isMarkedReusable()
+    public abstract java.lang.Object getState()
+org.apache.http.conn.ManagedHttpClientConnection:
+    public abstract java.lang.String getId()
+    public abstract void bind(java.net.Socket)
+    public abstract java.net.Socket getSocket()
+org.apache.http.conn.MultihomePlainSocketFactory
+org.apache.http.conn.OperatedClientConnection:
+    public abstract org.apache.http.HttpHost getTargetHost()
+org.apache.http.conn.UnsupportedSchemeException:
+    private static final long serialVersionUID
+org.apache.http.conn.params.ConnConnectionPNames
+org.apache.http.conn.params.ConnConnectionParamBean
+org.apache.http.conn.params.ConnManagerPNames
+org.apache.http.conn.params.ConnManagerParamBean
+org.apache.http.conn.params.ConnManagerParams:
+    public static final int DEFAULT_MAX_TOTAL_CONNECTIONS
+    46:46:public ConnManagerParams()
+    63:64:public static long getTimeout(org.apache.http.params.HttpParams)
+org.apache.http.conn.params.ConnPerRouteBean:
+    public static final int DEFAULT_MAX_CONNECTIONS_PER_ROUTE
+    68:68:public int getDefaultMax()
+    75:75:public int getDefaultMaxPerRoute()
+    84:87:public void setMaxForRoute(org.apache.http.conn.routing.HttpRoute,int)
+    100:105:public void setMaxForRoutes(java.util.Map)
+org.apache.http.conn.params.ConnRoutePNames
+org.apache.http.conn.params.ConnRouteParamBean
+org.apache.http.conn.params.ConnRouteParams:
+    64:66:private ConnRouteParams()
+    102:104:public static void setDefaultProxy(org.apache.http.params.HttpParams,org.apache.http.HttpHost)
+    140:142:public static void setForcedRoute(org.apache.http.params.HttpParams,org.apache.http.conn.routing.HttpRoute)
+    173:175:public static void setLocalAddress(org.apache.http.params.HttpParams,java.net.InetAddress)
+org.apache.http.conn.routing.HttpRoute:
+    155:157:public HttpRoute(org.apache.http.HttpHost,java.net.InetAddress,org.apache.http.HttpHost,boolean,org.apache.http.conn.routing.RouteInfo$TunnelType,org.apache.http.conn.routing.RouteInfo$LayerType)
+    213:214:public HttpRoute(org.apache.http.HttpHost,org.apache.http.HttpHost)
+    227:227:public final java.net.InetSocketAddress getLocalSocketAddress()
+    254:254:public final org.apache.http.conn.routing.RouteInfo$TunnelType getTunnelType()
+    264:264:public final org.apache.http.conn.routing.RouteInfo$LayerType getLayerType()
+org.apache.http.conn.routing.HttpRouteDirector:
+    public static final int UNREACHABLE
+    public static final int COMPLETE
+    public static final int CONNECT_TARGET
+    public static final int CONNECT_PROXY
+    public static final int TUNNEL_TARGET
+    public static final int TUNNEL_PROXY
+    public static final int LAYER_PROTOCOL
+org.apache.http.conn.routing.RouteInfo:
+    public abstract org.apache.http.conn.routing.RouteInfo$TunnelType getTunnelType()
+    public abstract org.apache.http.conn.routing.RouteInfo$LayerType getLayerType()
+org.apache.http.conn.routing.RouteTracker:
+    237:237:public final org.apache.http.conn.routing.RouteInfo$TunnelType getTunnelType()
+    247:247:public final org.apache.http.conn.routing.RouteInfo$LayerType getLayerType()
+org.apache.http.conn.scheme.LayeredSocketFactoryAdaptor
+org.apache.http.conn.scheme.PlainSocketFactory:
+    70:72:public PlainSocketFactory(org.apache.http.conn.scheme.HostNameResolver)
+org.apache.http.conn.scheme.Scheme:
+    163:170:public final org.apache.http.conn.scheme.SocketFactory getSocketFactory()
+org.apache.http.conn.scheme.SchemeRegistry:
+    137:141:public final org.apache.http.conn.scheme.Scheme unregister(java.lang.String)
+    150:150:public final java.util.List getSchemeNames()
+    160:165:public void setItems(java.util.Map)
+org.apache.http.conn.scheme.SchemeSocketFactoryAdaptor:
+    80:80:public org.apache.http.conn.scheme.SocketFactory getFactory()
+org.apache.http.conn.scheme.SocketFactoryAdaptor
+org.apache.http.conn.socket.ConnectionSocketFactory
+org.apache.http.conn.socket.LayeredConnectionSocketFactory
+org.apache.http.conn.socket.PlainConnectionSocketFactory
+org.apache.http.conn.ssl.AbstractVerifier:
+    217:217:public static boolean acceptableCountryWildcard(java.lang.String)
+    221:226:public static java.lang.String[] getCNs(java.security.cert.X509Certificate)
+    247:249:public static java.lang.String[] getDNSSubjectAlts(java.security.cert.X509Certificate)
+org.apache.http.conn.ssl.DefaultHostnameVerifier:
+    static final int DNS_NAME_TYPE
+    static final int IP_ADDRESS_TYPE
+    73:75:public DefaultHostnameVerifier(org.apache.http.conn.util.PublicSuffixMatcher)
+    78:79:public DefaultHostnameVerifier()
+    216:216:static boolean matchIdentity(java.lang.String,java.lang.String,org.apache.http.conn.util.PublicSuffixMatcher)
+    220:220:static boolean matchIdentity(java.lang.String,java.lang.String)
+    229:229:static boolean matchIdentityStrict(java.lang.String,java.lang.String)
+org.apache.http.conn.ssl.NoopHostnameVerifier
+org.apache.http.conn.ssl.PrivateKeyDetails
+org.apache.http.conn.ssl.PrivateKeyStrategy
+org.apache.http.conn.ssl.SSLConnectionSocketFactory
+org.apache.http.conn.ssl.SSLContextBuilder
+org.apache.http.conn.ssl.SSLContextBuilder$KeyManagerDelegate
+org.apache.http.conn.ssl.SSLContextBuilder$TrustManagerDelegate
+org.apache.http.conn.ssl.SSLContexts:
+    46:46:public SSLContexts()
+    78:80:public static javax.net.ssl.SSLContext createSystemDefault()
+    90:90:public static org.apache.http.conn.ssl.SSLContextBuilder custom()
+org.apache.http.conn.ssl.SSLInitializationException:
+    private static final long serialVersionUID
+org.apache.http.conn.ssl.SSLSocketFactory:
+    public static final java.lang.String TLS
+    public static final java.lang.String SSL
+    public static final java.lang.String SSLV2
+    174:177:private static java.lang.String[] split(java.lang.String)
+    190:190:public static org.apache.http.conn.ssl.SSLSocketFactory getSystemSocketFactory()
+    212:219:public SSLSocketFactory(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,org.apache.http.conn.scheme.HostNameResolver)
+    233:240:public SSLSocketFactory(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,org.apache.http.conn.ssl.TrustStrategy,org.apache.http.conn.ssl.X509HostnameVerifier)
+    253:260:public SSLSocketFactory(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,org.apache.http.conn.ssl.X509HostnameVerifier)
+    267:272:public SSLSocketFactory(java.security.KeyStore,java.lang.String,java.security.KeyStore)
+    278:282:public SSLSocketFactory(java.security.KeyStore,java.lang.String)
+    287:291:public SSLSocketFactory(java.security.KeyStore)
+    300:304:public SSLSocketFactory(org.apache.http.conn.ssl.TrustStrategy,org.apache.http.conn.ssl.X509HostnameVerifier)
+    312:316:public SSLSocketFactory(org.apache.http.conn.ssl.TrustStrategy)
+    319:320:public SSLSocketFactory(javax.net.ssl.SSLContext)
+    324:330:public SSLSocketFactory(javax.net.ssl.SSLContext,org.apache.http.conn.scheme.HostNameResolver)
+    349:351:public SSLSocketFactory(javax.net.ssl.SSLContext,java.lang.String[],java.lang.String[],org.apache.http.conn.ssl.X509HostnameVerifier)
+    359:360:public SSLSocketFactory(javax.net.ssl.SSLSocketFactory,org.apache.http.conn.ssl.X509HostnameVerifier)
+    454:456:public void setHostnameVerifier(org.apache.http.conn.ssl.X509HostnameVerifier)
+    459:459:public org.apache.http.conn.ssl.X509HostnameVerifier getHostnameVerifier()
+org.apache.http.conn.ssl.TrustSelfSignedStrategy
+org.apache.http.conn.ssl.TrustStrategy
+org.apache.http.conn.ssl.X509HostnameVerifier:
+    public abstract void verify(java.lang.String,java.security.cert.X509Certificate)
+org.apache.http.conn.util.InetAddressUtils:
+    private static final java.lang.String IPV4_BASIC_PATTERN_STRING
+    private static final char COLON_CHAR
+    private static final int MAX_COLON_COUNT
+    42:43:private InetAddressUtils()
+    84:84:public static boolean isIPv4MappedIPv64Address(java.lang.String)
+org.apache.http.conn.util.PublicSuffixList
+org.apache.http.conn.util.PublicSuffixListParser
+org.apache.http.conn.util.PublicSuffixMatcher:
+    54:68:public PublicSuffixMatcher(java.util.Collection,java.util.Collection)
+    114:118:public boolean matches(java.lang.String)
+org.apache.http.conn.util.PublicSuffixMatcherLoader
+org.apache.http.cookie.ClientCookie:
+    public static final java.lang.String VERSION_ATTR
+    public static final java.lang.String PATH_ATTR
+    public static final java.lang.String DOMAIN_ATTR
+    public static final java.lang.String MAX_AGE_ATTR
+    public static final java.lang.String SECURE_ATTR
+    public static final java.lang.String COMMENT_ATTR
+    public static final java.lang.String EXPIRES_ATTR
+    public static final java.lang.String PORT_ATTR
+    public static final java.lang.String COMMENTURL_ATTR
+    public static final java.lang.String DISCARD_ATTR
+org.apache.http.cookie.Cookie:
+    public abstract java.lang.String getComment()
+    public abstract java.lang.String getCommentURL()
+    public abstract boolean isPersistent()
+org.apache.http.cookie.CookieIdentityComparator:
+    private static final long serialVersionUID
+org.apache.http.cookie.CookiePathComparator:
+    private static final long serialVersionUID
+org.apache.http.cookie.CookiePriorityComparator
+org.apache.http.cookie.CookieRestrictionViolationException:
+    private static final long serialVersionUID
+org.apache.http.cookie.CookieSpecRegistry:
+    87:89:public void unregister(java.lang.String)
+    125:125:public org.apache.http.cookie.CookieSpec getCookieSpec(java.lang.String)
+    138:138:public java.util.List getSpecNames()
+    148:153:public void setItems(java.util.Map)
+org.apache.http.cookie.MalformedCookieException:
+    private static final long serialVersionUID
+    69:70:public MalformedCookieException(java.lang.String,java.lang.Throwable)
+org.apache.http.cookie.SM
+org.apache.http.cookie.SetCookie:
+    public abstract void setValue(java.lang.String)
+org.apache.http.cookie.params.CookieSpecPNames
+org.apache.http.cookie.params.CookieSpecParamBean
+org.apache.http.entity.AbstractHttpEntity:
+    protected static final int OUTPUT_BUFFER_SIZE
+    193:193:public void consumeContent()
+org.apache.http.entity.ByteArrayEntity
+org.apache.http.entity.ContentLengthStrategy:
+    public static final int IDENTITY
+    public static final int CHUNKED
+org.apache.http.entity.ContentProducer
+org.apache.http.entity.ContentType:
+    private static final long serialVersionUID
+    131:140:public java.lang.String getParameter(java.lang.String)
+    209:209:public static org.apache.http.entity.ContentType create(java.lang.String,java.lang.String)
+    248:250:public static varargs org.apache.http.entity.ContentType create(java.lang.String,org.apache.http.NameValuePair[])
+    265:273:public static org.apache.http.entity.ContentType parse(java.lang.String)
+    315:329:public static org.apache.http.entity.ContentType getLenient(org.apache.http.HttpEntity)
+    345:346:public static org.apache.http.entity.ContentType getOrDefault(org.apache.http.HttpEntity)
+    360:361:public static org.apache.http.entity.ContentType getLenientOrDefault(org.apache.http.HttpEntity)
+    372:372:public org.apache.http.entity.ContentType withCharset(java.nio.charset.Charset)
+    385:385:public org.apache.http.entity.ContentType withCharset(java.lang.String)
+    397:416:public varargs org.apache.http.entity.ContentType withParameters(org.apache.http.NameValuePair[])
+org.apache.http.entity.EntityTemplate
+org.apache.http.entity.FileEntity
+org.apache.http.entity.HttpEntityWrapper:
+    111:112:public void consumeContent()
+org.apache.http.entity.InputStreamEntity
+org.apache.http.entity.SerializableEntity
+org.apache.http.entity.StringEntity:
+    96:102:public StringEntity(java.lang.String,java.lang.String,java.lang.String)
+    118:119:public StringEntity(java.lang.String,java.lang.String)
+    134:135:public StringEntity(java.lang.String,java.nio.charset.Charset)
+    148:149:public StringEntity(java.lang.String)
+org.apache.http.entity.mime.AbstractMultipartForm:
+    118:119:public AbstractMultipartForm(java.lang.String,java.lang.String)
+    122:122:public java.lang.String getSubType()
+    126:126:public java.nio.charset.Charset getCharset()
+org.apache.http.entity.mime.Header:
+    68:68:public java.util.List getFields()
+    84:92:public java.util.List getFields(java.lang.String)
+    97:106:public int removeFields(java.lang.String)
+    110:133:public void setField(org.apache.http.entity.mime.MinimalField)
+org.apache.http.entity.mime.HttpMultipart
+org.apache.http.entity.mime.HttpMultipart$1
+org.apache.http.entity.mime.MIME:
+    public static final java.lang.String CONTENT_TYPE
+    public static final java.lang.String CONTENT_TRANSFER_ENC
+    public static final java.lang.String CONTENT_DISPOSITION
+    public static final java.lang.String ENC_8BIT
+    public static final java.lang.String ENC_BINARY
+    38:38:public MIME()
+org.apache.http.entity.mime.MultipartEntity
+org.apache.http.entity.mime.MultipartEntityBuilder:
+    private static final java.lang.String DEFAULT_SUBTYPE
+    83:84:public org.apache.http.entity.mime.MultipartEntityBuilder setLaxMode()
+    88:89:public org.apache.http.entity.mime.MultipartEntityBuilder setStrictMode()
+    98:99:public org.apache.http.entity.mime.MultipartEntityBuilder setCharset(java.nio.charset.Charset)
+    121:121:public org.apache.http.entity.mime.MultipartEntityBuilder addTextBody(java.lang.String,java.lang.String,org.apache.http.entity.ContentType)
+    126:126:public org.apache.http.entity.mime.MultipartEntityBuilder addTextBody(java.lang.String,java.lang.String)
+    131:131:public org.apache.http.entity.mime.MultipartEntityBuilder addBinaryBody(java.lang.String,byte[],org.apache.http.entity.ContentType,java.lang.String)
+    136:136:public org.apache.http.entity.mime.MultipartEntityBuilder addBinaryBody(java.lang.String,byte[])
+    141:141:public org.apache.http.entity.mime.MultipartEntityBuilder addBinaryBody(java.lang.String,java.io.File,org.apache.http.entity.ContentType,java.lang.String)
+    146:146:public org.apache.http.entity.mime.MultipartEntityBuilder addBinaryBody(java.lang.String,java.io.File)
+    152:152:public org.apache.http.entity.mime.MultipartEntityBuilder addBinaryBody(java.lang.String,java.io.InputStream,org.apache.http.entity.ContentType,java.lang.String)
+    156:156:public org.apache.http.entity.mime.MultipartEntityBuilder addBinaryBody(java.lang.String,java.io.InputStream)
+org.apache.http.entity.mime.MultipartFormEntity:
+    56:56:org.apache.http.entity.mime.AbstractMultipartForm getMultipart()
+    85:89:public void consumeContent()
+org.apache.http.entity.mime.content.AbstractContentBody:
+    57:58:public AbstractContentBody(java.lang.String)
+    64:64:public org.apache.http.entity.ContentType getContentType()
+    72:77:public java.lang.String getMediaType()
+    82:87:public java.lang.String getSubType()
+org.apache.http.entity.mime.content.ByteArrayBody:
+    87:88:public ByteArrayBody(byte[],java.lang.String)
+org.apache.http.entity.mime.content.ContentDescriptor:
+    public abstract java.lang.String getMediaType()
+    public abstract java.lang.String getSubType()
+org.apache.http.entity.mime.content.FileBody
+org.apache.http.entity.mime.content.InputStreamBody
+org.apache.http.entity.mime.content.StringBody
+org.apache.http.impl.AbstractHttpClientConnection:
+    320:320:public org.apache.http.HttpConnectionMetrics getMetrics()
+org.apache.http.impl.AbstractHttpServerConnection
+org.apache.http.impl.BHttpConnectionBase
+org.apache.http.impl.ConnSupport
+org.apache.http.impl.DefaultBHttpClientConnection
+org.apache.http.impl.DefaultBHttpClientConnectionFactory
+org.apache.http.impl.DefaultBHttpServerConnection
+org.apache.http.impl.DefaultBHttpServerConnectionFactory
+org.apache.http.impl.DefaultHttpClientConnection
+org.apache.http.impl.DefaultHttpRequestFactory
+org.apache.http.impl.DefaultHttpResponseFactory:
+    81:85:public org.apache.http.HttpResponse newHttpResponse(org.apache.http.ProtocolVersion,int,org.apache.http.protocol.HttpContext)
+org.apache.http.impl.DefaultHttpServerConnection
+org.apache.http.impl.HttpConnectionMetricsImpl:
+    public static final java.lang.String REQUEST_COUNT
+    public static final java.lang.String RESPONSE_COUNT
+    public static final java.lang.String SENT_BYTES_COUNT
+    public static final java.lang.String RECEIVED_BYTES_COUNT
+    private java.util.Map metricsCache
+    72:75:public long getReceivedBytesCount()
+    81:84:public long getSentBytesCount()
+    90:90:public long getRequestCount()
+    99:99:public long getResponseCount()
+    108:131:public java.lang.Object getMetric(java.lang.String)
+    135:139:public void setMetric(java.lang.String,java.lang.Object)
+    143:152:public void reset()
+org.apache.http.impl.NoConnectionReuseStrategy
+org.apache.http.impl.SocketHttpClientConnection:
+    165:168:public java.net.InetAddress getLocalAddress()
+    173:176:public int getLocalPort()
+    210:217:public int getSocketTimeout()
+org.apache.http.impl.SocketHttpServerConnection
+org.apache.http.impl.auth.AuthSchemeBase:
+    71:73:public AuthSchemeBase(org.apache.http.auth.ChallengeState)
+    158:158:public org.apache.http.auth.ChallengeState getChallengeState()
+org.apache.http.impl.auth.BasicScheme:
+    private static final long serialVersionUID
+    79:80:public BasicScheme(org.apache.http.auth.ChallengeState)
+    200:220:public static org.apache.http.Header authenticate(org.apache.http.auth.Credentials,java.lang.String,boolean)
+org.apache.http.impl.auth.DigestScheme:
+    private static final long serialVersionUID
+    private static final int QOP_UNKNOWN
+    private static final int QOP_MISSING
+    private static final int QOP_AUTH_INT
+    private static final int QOP_AUTH
+    123:124:public DigestScheme(org.apache.http.auth.ChallengeState)
+    185:186:public void overrideParamter(java.lang.String,java.lang.String)
+    445:445:java.lang.String getCnonce()
+    449:449:java.lang.String getA1()
+    453:453:java.lang.String getA2()
+org.apache.http.impl.auth.GGSSchemeBase:
+    92:93:GGSSchemeBase(boolean)
+    105:105:protected byte[] generateGSSToken(byte[],org.ietf.jgss.Oid,java.lang.String)
+org.apache.http.impl.auth.HttpAuthenticator:
+    178:226:public void generateAuthResponse(org.apache.http.HttpRequest,org.apache.http.auth.AuthState,org.apache.http.protocol.HttpContext)
+    229:230:private void ensureAuthScheme(org.apache.http.auth.AuthScheme)
+    238:241:private org.apache.http.Header doAuth(org.apache.http.auth.AuthScheme,org.apache.http.auth.Credentials,org.apache.http.HttpRequest,org.apache.http.protocol.HttpContext)
+org.apache.http.impl.auth.KerberosScheme:
+    private static final java.lang.String KERBEROS_OID
+    57:58:public KerberosScheme(boolean)
+    107:108:public java.lang.String getParameter(java.lang.String)
+org.apache.http.impl.auth.KerberosSchemeFactory:
+    59:62:public KerberosSchemeFactory(boolean)
+    69:69:public boolean isStripPort()
+    73:73:public boolean isUseCanonicalHostname()
+org.apache.http.impl.auth.NTLMEngineException:
+    private static final long serialVersionUID
+org.apache.http.impl.auth.NTLMEngineImpl:
+    protected static final int FLAG_REQUEST_UNICODE_ENCODING
+    protected static final int FLAG_REQUEST_TARGET
+    protected static final int FLAG_REQUEST_SIGN
+    protected static final int FLAG_REQUEST_SEAL
+    protected static final int FLAG_REQUEST_LAN_MANAGER_KEY
+    protected static final int FLAG_REQUEST_NTLMv1
+    protected static final int FLAG_DOMAIN_PRESENT
+    protected static final int FLAG_WORKSTATION_PRESENT
+    protected static final int FLAG_REQUEST_ALWAYS_SIGN
+    protected static final int FLAG_REQUEST_NTLM2_SESSION
+    protected static final int FLAG_REQUEST_VERSION
+    protected static final int FLAG_TARGETINFO_PRESENT
+    protected static final int FLAG_REQUEST_128BIT_KEY_EXCH
+    protected static final int FLAG_REQUEST_EXPLICIT_KEY_EXCH
+    protected static final int FLAG_REQUEST_56BIT_ENCRYPTION
+    124:131:static java.lang.String getResponseFor(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+    52:52:static synthetic int access$1200(byte[],int)
+org.apache.http.impl.auth.NTLMEngineImpl$HMACMD5:
+    1632:1633:void update(byte[],int,int)
+org.apache.http.impl.auth.NTLMEngineImpl$NTLMMessage:
+    863:863:protected int getPreambleLength()
+    873:876:protected byte readByte(int)
+    889:889:protected int readUShort(int)
+org.apache.http.impl.auth.NTLMEngineImpl$Type1Message:
+    985:998:NTLMEngineImpl$Type1Message(java.lang.String,java.lang.String)
+org.apache.http.impl.auth.NTLMScheme:
+    88:88:public java.lang.String getParameter(java.lang.String)
+org.apache.http.impl.auth.NegotiateScheme
+org.apache.http.impl.auth.NegotiateSchemeFactory
+org.apache.http.impl.auth.RFC2617Scheme:
+    private static final long serialVersionUID
+    78:81:public RFC2617Scheme(org.apache.http.auth.ChallengeState)
+    93:94:public RFC2617Scheme()
+    159:161:private void writeObject(java.io.ObjectOutputStream)
+    165:170:private void readObject(java.io.ObjectInputStream)
+    173:173:private void readObjectNoData()
+org.apache.http.impl.auth.SPNegoScheme:
+    private static final java.lang.String SPNEGO_OID
+    58:59:public SPNegoScheme(boolean)
+    108:109:public java.lang.String getParameter(java.lang.String)
+org.apache.http.impl.auth.SPNegoSchemeFactory:
+    59:62:public SPNegoSchemeFactory(boolean)
+    69:69:public boolean isStripPort()
+    73:73:public boolean isUseCanonicalHostname()
+org.apache.http.impl.auth.SpnegoTokenGenerator
+org.apache.http.impl.auth.UnsupportedDigestAlgorithmException:
+    private static final long serialVersionUID
+    67:68:public UnsupportedDigestAlgorithmException(java.lang.String,java.lang.Throwable)
+org.apache.http.impl.bootstrap.HttpServer
+org.apache.http.impl.bootstrap.HttpServer$Status
+org.apache.http.impl.bootstrap.RequestListener
+org.apache.http.impl.bootstrap.SSLServerSetupHandler
+org.apache.http.impl.bootstrap.ServerBootstrap
+org.apache.http.impl.bootstrap.ThreadFactoryImpl
+org.apache.http.impl.bootstrap.Worker
+org.apache.http.impl.client.AIMDBackoffManager
+org.apache.http.impl.client.AbstractAuthenticationHandler
+org.apache.http.impl.client.AbstractHttpClient:
+    420:420:protected org.apache.http.client.RedirectHandler createRedirectHandler()
+    432:432:protected org.apache.http.client.AuthenticationHandler createTargetAuthenticationHandler()
+    444:444:protected org.apache.http.client.AuthenticationHandler createProxyAuthenticationHandler()
+    478:479:public synchronized void setParams(org.apache.http.params.HttpParams)
+    506:507:public synchronized void setAuthSchemes(org.apache.http.auth.AuthSchemeRegistry)
+    514:515:public synchronized void setConnectionBackoffStrategy(org.apache.http.client.ConnectionBackoffStrategy)
+    529:530:public synchronized void setBackoffManager(org.apache.http.client.BackoffManager)
+    533:534:public synchronized void setCookieSpecs(org.apache.http.cookie.CookieSpecRegistry)
+    545:546:public synchronized void setReuseStrategy(org.apache.http.ConnectionReuseStrategy)
+    558:559:public synchronized void setKeepAliveStrategy(org.apache.http.conn.ConnectionKeepAliveStrategy)
+    578:578:public final synchronized org.apache.http.client.RedirectHandler getRedirectHandler()
+    586:587:public synchronized void setRedirectHandler(org.apache.http.client.RedirectHandler)
+    603:604:public synchronized void setRedirectStrategy(org.apache.http.client.RedirectStrategy)
+    611:611:public final synchronized org.apache.http.client.AuthenticationHandler getTargetAuthenticationHandler()
+    619:620:public synchronized void setTargetAuthenticationHandler(org.apache.http.client.AuthenticationHandler)
+    636:637:public synchronized void setTargetAuthenticationStrategy(org.apache.http.client.AuthenticationStrategy)
+    644:644:public final synchronized org.apache.http.client.AuthenticationHandler getProxyAuthenticationHandler()
+    652:653:public synchronized void setProxyAuthenticationHandler(org.apache.http.client.AuthenticationHandler)
+    669:670:public synchronized void setProxyAuthenticationStrategy(org.apache.http.client.AuthenticationStrategy)
+    680:681:public synchronized void setCookieStore(org.apache.http.client.CookieStore)
+    691:692:public synchronized void setCredentialsProvider(org.apache.http.client.CredentialsProvider)
+    713:714:public synchronized void setUserTokenHandler(org.apache.http.client.UserTokenHandler)
+    744:744:public synchronized int getResponseInterceptorCount()
+    748:748:public synchronized org.apache.http.HttpResponseInterceptor getResponseInterceptor(int)
+    752:752:public synchronized org.apache.http.HttpRequestInterceptor getRequestInterceptor(int)
+    756:756:public synchronized int getRequestInterceptorCount()
+    760:762:public synchronized void addResponseInterceptor(org.apache.http.HttpResponseInterceptor)
+    765:767:public synchronized void addResponseInterceptor(org.apache.http.HttpResponseInterceptor,int)
+    770:772:public synchronized void clearResponseInterceptors()
+    775:777:public synchronized void removeResponseInterceptorByClass(java.lang.Class)
+    780:782:public synchronized void addRequestInterceptor(org.apache.http.HttpRequestInterceptor)
+    785:787:public synchronized void addRequestInterceptor(org.apache.http.HttpRequestInterceptor,int)
+    790:792:public synchronized void clearRequestInterceptors()
+    795:797:public synchronized void removeRequestInterceptorByClass(java.lang.Class)
+    907:907:protected org.apache.http.client.RequestDirector createClientRequestDirector(org.apache.http.protocol.HttpRequestExecutor,org.apache.http.conn.ClientConnectionManager,org.apache.http.ConnectionReuseStrategy,org.apache.http.conn.ConnectionKeepAliveStrategy,org.apache.http.conn.routing.HttpRoutePlanner,org.apache.http.protocol.HttpProcessor,org.apache.http.client.HttpRequestRetryHandler,org.apache.http.client.RedirectHandler,org.apache.http.client.AuthenticationHandler,org.apache.http.client.AuthenticationHandler,org.apache.http.client.UserTokenHandler,org.apache.http.params.HttpParams)
+    939:939:protected org.apache.http.client.RequestDirector createClientRequestDirector(org.apache.http.protocol.HttpRequestExecutor,org.apache.http.conn.ClientConnectionManager,org.apache.http.ConnectionReuseStrategy,org.apache.http.conn.ConnectionKeepAliveStrategy,org.apache.http.conn.routing.HttpRoutePlanner,org.apache.http.protocol.HttpProcessor,org.apache.http.client.HttpRequestRetryHandler,org.apache.http.client.RedirectStrategy,org.apache.http.client.AuthenticationHandler,org.apache.http.client.AuthenticationHandler,org.apache.http.client.UserTokenHandler,org.apache.http.params.HttpParams)
+org.apache.http.impl.client.AbstractResponseHandler
+org.apache.http.impl.client.AuthenticationStrategyAdaptor:
+    68:70:public AuthenticationStrategyAdaptor(org.apache.http.client.AuthenticationHandler)
+org.apache.http.impl.client.AutoRetryHttpClient
+org.apache.http.impl.client.BasicAuthCache:
+    157:158:public void clear()
+org.apache.http.impl.client.BasicCookieStore:
+    private static final long serialVersionUID
+    93:98:public synchronized void addCookies(org.apache.http.cookie.Cookie[])
+    140:141:public synchronized void clear()
+org.apache.http.impl.client.BasicCredentialsProvider:
+    60:62:public void setCredentials(org.apache.http.auth.AuthScope,org.apache.http.auth.Credentials)
+    104:105:public void clear()
+org.apache.http.impl.client.BasicResponseHandler
+org.apache.http.impl.client.ClientParamsStack:
+    116:120:public ClientParamsStack(org.apache.http.impl.client.ClientParamsStack)
+    139:143:public ClientParamsStack(org.apache.http.impl.client.ClientParamsStack,org.apache.http.params.HttpParams,org.apache.http.params.HttpParams,org.apache.http.params.HttpParams,org.apache.http.params.HttpParams)
+    152:152:public final org.apache.http.params.HttpParams getApplicationParams()
+    161:161:public final org.apache.http.params.HttpParams getClientParams()
+    170:170:public final org.apache.http.params.HttpParams getRequestParams()
+    179:179:public final org.apache.http.params.HttpParams getOverrideParams()
+    246:246:public boolean removeParameter(java.lang.String)
+    266:266:public org.apache.http.params.HttpParams copy()
+org.apache.http.impl.client.Clock
+org.apache.http.impl.client.CloseableHttpClient:
+    71:71:public org.apache.http.client.methods.CloseableHttpResponse execute(org.apache.http.HttpHost,org.apache.http.HttpRequest,org.apache.http.protocol.HttpContext)
+    117:117:public org.apache.http.client.methods.CloseableHttpResponse execute(org.apache.http.HttpHost,org.apache.http.HttpRequest)
+    139:139:public java.lang.Object execute(org.apache.http.client.methods.HttpUriRequest,org.apache.http.client.ResponseHandler)
+    163:164:public java.lang.Object execute(org.apache.http.client.methods.HttpUriRequest,org.apache.http.client.ResponseHandler,org.apache.http.protocol.HttpContext)
+    190:190:public java.lang.Object execute(org.apache.http.HttpHost,org.apache.http.HttpRequest,org.apache.http.client.ResponseHandler)
+    218:238:public java.lang.Object execute(org.apache.http.HttpHost,org.apache.http.HttpRequest,org.apache.http.client.ResponseHandler,org.apache.http.protocol.HttpContext)
+    55:55:public bridge synthetic org.apache.http.HttpResponse execute(org.apache.http.HttpHost,org.apache.http.HttpRequest,org.apache.http.protocol.HttpContext)
+    55:55:public bridge synthetic org.apache.http.HttpResponse execute(org.apache.http.HttpHost,org.apache.http.HttpRequest)
+    55:55:public bridge synthetic org.apache.http.HttpResponse execute(org.apache.http.client.methods.HttpUriRequest,org.apache.http.protocol.HttpContext)
+org.apache.http.impl.client.ContentEncodingHttpClient
+org.apache.http.impl.client.DecompressingHttpClient
+org.apache.http.impl.client.DefaultBackoffStrategy
+org.apache.http.impl.client.DefaultHttpClient:
+    137:138:public DefaultHttpClient(org.apache.http.conn.ClientConnectionManager)
+    142:143:public DefaultHttpClient(org.apache.http.params.HttpParams)
+org.apache.http.impl.client.DefaultHttpRequestRetryHandler:
+    173:173:public boolean isRequestSentRetryEnabled()
+    180:180:public int getRetryCount()
+org.apache.http.impl.client.DefaultProxyAuthenticationHandler
+org.apache.http.impl.client.DefaultRedirectHandler
+org.apache.http.impl.client.DefaultRedirectStrategy:
+    public static final java.lang.String REDIRECT_LOCATIONS
+org.apache.http.impl.client.DefaultRedirectStrategyAdaptor:
+    53:55:public DefaultRedirectStrategyAdaptor(org.apache.http.client.RedirectHandler)
+org.apache.http.impl.client.DefaultRequestDirector:
+    219:226:public DefaultRequestDirector(org.apache.http.protocol.HttpRequestExecutor,org.apache.http.conn.ClientConnectionManager,org.apache.http.ConnectionReuseStrategy,org.apache.http.conn.ConnectionKeepAliveStrategy,org.apache.http.conn.routing.HttpRoutePlanner,org.apache.http.protocol.HttpProcessor,org.apache.http.client.HttpRequestRetryHandler,org.apache.http.client.RedirectHandler,org.apache.http.client.AuthenticationHandler,org.apache.http.client.AuthenticationHandler,org.apache.http.client.UserTokenHandler,org.apache.http.params.HttpParams)
+    244:251:public DefaultRequestDirector(org.apache.commons.logging.Log,org.apache.http.protocol.HttpRequestExecutor,org.apache.http.conn.ClientConnectionManager,org.apache.http.ConnectionReuseStrategy,org.apache.http.conn.ConnectionKeepAliveStrategy,org.apache.http.conn.routing.HttpRoutePlanner,org.apache.http.protocol.HttpProcessor,org.apache.http.client.HttpRequestRetryHandler,org.apache.http.client.RedirectStrategy,org.apache.http.client.AuthenticationHandler,org.apache.http.client.AuthenticationHandler,org.apache.http.client.UserTokenHandler,org.apache.http.params.HttpParams)
+org.apache.http.impl.client.DefaultServiceUnavailableRetryStrategy
+org.apache.http.impl.client.DefaultTargetAuthenticationHandler
+org.apache.http.impl.client.EntityEnclosingRequestWrapper$EntityWrapper:
+    99:101:public void consumeContent()
+org.apache.http.impl.client.FutureRequestExecutionMetrics
+org.apache.http.impl.client.FutureRequestExecutionMetrics$DurationCounter
+org.apache.http.impl.client.FutureRequestExecutionService
+org.apache.http.impl.client.HttpClientBuilder
+org.apache.http.impl.client.HttpClientBuilder$1
+org.apache.http.impl.client.HttpClientBuilder$2
+org.apache.http.impl.client.HttpClients
+org.apache.http.impl.client.HttpRequestFutureTask
+org.apache.http.impl.client.HttpRequestTaskCallable
+org.apache.http.impl.client.IdleConnectionEvictor
+org.apache.http.impl.client.IdleConnectionEvictor$1
+org.apache.http.impl.client.IdleConnectionEvictor$DefaultThreadFactory
+org.apache.http.impl.client.InternalHttpClient
+org.apache.http.impl.client.InternalHttpClient$1
+org.apache.http.impl.client.LaxRedirectStrategy
+org.apache.http.impl.client.MinimalHttpClient
+org.apache.http.impl.client.MinimalHttpClient$1
+org.apache.http.impl.client.NoopUserTokenHandler
+org.apache.http.impl.client.NullBackoffStrategy
+org.apache.http.impl.client.ProxyClient
+org.apache.http.impl.client.RedirectLocations:
+    77:87:public boolean remove(java.net.URI)
+    98:98:public java.util.List getAll()
+org.apache.http.impl.client.RequestWrapper:
+    105:107:public void setMethod(java.lang.String)
+    118:119:public void setProtocolVersion(org.apache.http.ProtocolVersion)
+    146:146:public void abort()
+org.apache.http.impl.client.StandardHttpRequestRetryHandler
+org.apache.http.impl.client.SystemClock
+org.apache.http.impl.client.SystemDefaultCredentialsProvider
+org.apache.http.impl.client.SystemDefaultHttpClient
+org.apache.http.impl.client.TunnelRefusedException:
+    private static final long serialVersionUID
+org.apache.http.impl.conn.AbstractClientConnAdapter:
+    133:136:protected final void assertNotAborted()
+    187:189:public int getSocketTimeout()
+    193:195:public org.apache.http.HttpConnectionMetrics getMetrics()
+    243:245:public java.net.InetAddress getLocalAddress()
+    249:251:public int getLocalPort()
+    267:269:public boolean isSecure()
+    273:273:public void bind(java.net.Socket)
+    277:282:public java.net.Socket getSocket()
+    352:357:public java.lang.Object removeAttribute(java.lang.String)
+org.apache.http.impl.conn.AbstractPooledConnAdapter:
+    71:71:public java.lang.String getId()
+    105:108:protected final void assertAttached()
+    180:182:public java.lang.Object getState()
+org.apache.http.impl.conn.BasicClientConnectionManager:
+    public static final java.lang.String MISUSE_MESSAGE
+    238:246:public void closeExpiredConnections()
+    249:262:public void closeIdleConnections(long,java.util.concurrent.TimeUnit)
+org.apache.http.impl.conn.BasicHttpClientConnectionManager
+org.apache.http.impl.conn.BasicHttpClientConnectionManager$1
+org.apache.http.impl.conn.CPool
+org.apache.http.impl.conn.CPoolEntry
+org.apache.http.impl.conn.CPoolProxy
+org.apache.http.impl.conn.ConnectionShutdownException:
+    private static final long serialVersionUID
+org.apache.http.impl.conn.DefaultClientConnection:
+    97:97:public java.lang.String getId()
+    101:101:public final org.apache.http.HttpHost getTargetHost()
+    230:231:public void bind(java.net.Socket)
+    285:285:public java.lang.Object removeAttribute(java.lang.String)
+org.apache.http.impl.conn.DefaultClientConnectionOperator:
+    122:129:public DefaultClientConnectionOperator(org.apache.http.conn.scheme.SchemeRegistry,org.apache.http.conn.DnsResolver)
+org.apache.http.impl.conn.DefaultHttpClientConnectionOperator
+org.apache.http.impl.conn.DefaultHttpResponseParser:
+    100:104:public DefaultHttpResponseParser(org.apache.http.io.SessionInputBuffer,org.apache.http.message.LineParser,org.apache.http.HttpResponseFactory,org.apache.http.config.MessageConstraints)
+    117:118:public DefaultHttpResponseParser(org.apache.http.io.SessionInputBuffer,org.apache.http.config.MessageConstraints)
+    128:129:public DefaultHttpResponseParser(org.apache.http.io.SessionInputBuffer)
+org.apache.http.impl.conn.DefaultHttpResponseParserFactory
+org.apache.http.impl.conn.DefaultManagedHttpClientConnection
+org.apache.http.impl.conn.DefaultProxyRoutePlanner
+org.apache.http.impl.conn.DefaultResponseParser
+org.apache.http.impl.conn.DefaultRoutePlanner
+org.apache.http.impl.conn.HttpConnPool
+org.apache.http.impl.conn.HttpConnPool$InternalConnFactory
+org.apache.http.impl.conn.IdleConnectionHandler:
+    75:82:public void add(org.apache.http.HttpConnection,long,java.util.concurrent.TimeUnit)
+    93:98:public boolean remove(org.apache.http.HttpConnection)
+    117:138:public void closeIdleConnections(long)
+    142:161:public void closeExpiredConnections()
+org.apache.http.impl.conn.IdleConnectionHandler$TimeValues
+org.apache.http.impl.conn.InMemoryDnsResolver
+org.apache.http.impl.conn.LoggingInputStream
+org.apache.http.impl.conn.LoggingManagedHttpClientConnection
+org.apache.http.impl.conn.LoggingOutputStream
+org.apache.http.impl.conn.LoggingSessionInputBuffer:
+    75:76:public LoggingSessionInputBuffer(org.apache.http.io.SessionInputBuffer,org.apache.http.impl.conn.Wire)
+    99:103:public int read(byte[])
+    107:112:public java.lang.String readLine()
+org.apache.http.impl.conn.LoggingSessionOutputBuffer:
+    69:70:public LoggingSessionOutputBuffer(org.apache.http.io.SessionOutputBuffer,org.apache.http.impl.conn.Wire)
+    87:91:public void write(byte[])
+org.apache.http.impl.conn.ManagedClientConnectionImpl:
+    87:87:public java.lang.String getId()
+    170:171:public int getSocketTimeout()
+    175:176:public org.apache.http.HttpConnectionMetrics getMetrics()
+    213:214:public java.net.InetAddress getLocalAddress()
+    218:219:public int getLocalPort()
+    233:234:public boolean isSecure()
+    238:238:public void bind(java.net.Socket)
+    242:243:public java.net.Socket getSocket()
+    257:261:public java.lang.Object getAttribute(java.lang.String)
+    266:270:public java.lang.Object removeAttribute(java.lang.String)
+    275:279:public void setAttribute(java.lang.String,java.lang.Object)
+    406:407:public java.lang.Object getState()
+org.apache.http.impl.conn.ManagedHttpClientConnectionFactory
+org.apache.http.impl.conn.PoolingClientConnectionManager
+org.apache.http.impl.conn.PoolingClientConnectionManager$1
+org.apache.http.impl.conn.PoolingHttpClientConnectionManager
+org.apache.http.impl.conn.PoolingHttpClientConnectionManager$1
+org.apache.http.impl.conn.PoolingHttpClientConnectionManager$ConfigData
+org.apache.http.impl.conn.PoolingHttpClientConnectionManager$InternalConnectionFactory
+org.apache.http.impl.conn.ProxySelectorRoutePlanner:
+    104:104:public java.net.ProxySelector getProxySelector()
+    114:115:public void setProxySelector(java.net.ProxySelector)
+org.apache.http.impl.conn.SchemeRegistryFactory:
+    42:42:public SchemeRegistryFactory()
+    82:87:public static org.apache.http.conn.scheme.SchemeRegistry createSystemDefault()
+org.apache.http.impl.conn.SingleClientConnManager
+org.apache.http.impl.conn.SingleClientConnManager$1
+org.apache.http.impl.conn.SingleClientConnManager$ConnAdapter
+org.apache.http.impl.conn.SingleClientConnManager$PoolEntry
+org.apache.http.impl.conn.SystemDefaultRoutePlanner
+org.apache.http.impl.conn.SystemDefaultRoutePlanner$1
+org.apache.http.impl.conn.Wire:
+    97:99:public void output(java.io.InputStream)
+    103:105:public void input(java.io.InputStream)
+    143:145:public void output(java.lang.String)
+    149:151:public void input(java.lang.String)
+org.apache.http.impl.conn.tsccm.AbstractConnPool:
+    protected int numConnections
+    protected java.util.Set issuedConnections
+    protected java.lang.ref.ReferenceQueue refQueue
+    99:99:public void enableConnectionGC()
+    124:124:public final org.apache.http.impl.conn.tsccm.BasicPoolEntry getEntry(org.apache.http.conn.routing.HttpRoute,java.lang.Object,long,java.util.concurrent.TimeUnit)
+    public abstract org.apache.http.impl.conn.tsccm.PoolEntryRequest requestPoolEntry(org.apache.http.conn.routing.HttpRoute,java.lang.Object)
+    public abstract void freeEntry(org.apache.http.impl.conn.tsccm.BasicPoolEntry,boolean,long,java.util.concurrent.TimeUnit)
+    153:153:public void handleReference(java.lang.ref.Reference)
+    protected abstract void handleLostEntry(org.apache.http.conn.routing.HttpRoute)
+    167:175:public void closeIdleConnections(long,java.util.concurrent.TimeUnit)
+    178:184:public void closeExpiredConnections()
+    public abstract void deleteClosedConnections()
+org.apache.http.impl.conn.tsccm.BasicPoolEntry:
+    57:62:public BasicPoolEntry(org.apache.http.conn.ClientConnectionOperator,org.apache.http.conn.routing.HttpRoute,java.lang.ref.ReferenceQueue)
+    72:73:public BasicPoolEntry(org.apache.http.conn.ClientConnectionOperator,org.apache.http.conn.routing.HttpRoute)
+    107:107:protected final org.apache.http.impl.conn.tsccm.BasicPoolEntryRef getWeakRef()
+    119:119:public long getCreated()
+    126:126:public long getUpdated()
+    133:133:public long getExpiry()
+    137:137:public long getValidUntil()
+org.apache.http.impl.conn.tsccm.BasicPoolEntryRef
+org.apache.http.impl.conn.tsccm.ConnPoolByRoute:
+    142:142:protected java.util.concurrent.locks.Lock getLock()
+    256:263:public int getConnectionsInPool(org.apache.http.conn.routing.HttpRoute)
+    268:272:public int getConnectionsInPool()
+    627:642:protected void handleLostEntry(org.apache.http.conn.routing.HttpRoute)
+    691:704:public void deleteClosedConnections()
+    715:738:public void closeIdleConnections(long,java.util.concurrent.TimeUnit)
+    742:761:public void closeExpiredConnections()
+    812:818:public void setMaxTotalConnections(int)
+    825:825:public int getMaxTotalConnections()
+org.apache.http.impl.conn.tsccm.RouteSpecificPool:
+    83:94:public RouteSpecificPool(org.apache.http.conn.routing.HttpRoute,int)
+    164:164:public final int getEntryCount()
+org.apache.http.impl.conn.tsccm.RouteSpecificPool$1
+org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager:
+    307:307:public int getConnectionsInPool(org.apache.http.conn.routing.HttpRoute)
+    319:319:public int getConnectionsInPool()
+    323:327:public void closeIdleConnections(long,java.util.concurrent.TimeUnit)
+    330:332:public void closeExpiredConnections()
+    338:338:public int getMaxTotal()
+    345:346:public void setMaxTotal(int)
+    352:352:public int getDefaultMaxPerRoute()
+    359:360:public void setDefaultMaxPerRoute(int)
+    366:366:public int getMaxForRoute(org.apache.http.conn.routing.HttpRoute)
+    373:374:public void setMaxForRoute(org.apache.http.conn.routing.HttpRoute,int)
+org.apache.http.impl.conn.tsccm.WaitingThread:
+    92:92:public final java.util.concurrent.locks.Condition getCondition()
+    104:104:public final org.apache.http.impl.conn.tsccm.RouteSpecificPool getPool()
+    115:115:public final java.lang.Thread getThread()
+org.apache.http.impl.cookie.AbstractCookieSpec:
+    70:73:protected AbstractCookieSpec(java.util.HashMap)
+    94:97:public void registerAttribHandler(java.lang.String,org.apache.http.cookie.CookieAttributeHandler)
+    120:123:protected org.apache.http.cookie.CookieAttributeHandler getAttribHandler(java.lang.String)
+org.apache.http.impl.cookie.BasicClientCookie:
+    private static final long serialVersionUID
+    private java.util.Date creationDate
+    92:93:public void setValue(java.lang.String)
+    105:105:public java.lang.String getComment()
+    127:127:public java.lang.String getCommentURL()
+    173:173:public boolean isPersistent()
+    311:311:public java.util.Date getCreationDate()
+    318:319:public void setCreationDate(java.util.Date)
+    339:339:public boolean removeAttribute(java.lang.String)
+org.apache.http.impl.cookie.BasicClientCookie2:
+    private static final long serialVersionUID
+    71:71:public java.lang.String getCommentURL()
+    86:86:public boolean isPersistent()
+org.apache.http.impl.cookie.BrowserCompatSpec:
+    103:104:public BrowserCompatSpec(java.lang.String[])
+org.apache.http.impl.cookie.BrowserCompatSpecFactory:
+    68:69:public BrowserCompatSpecFactory(java.lang.String[])
+org.apache.http.impl.cookie.CookieSpecBase:
+    61:62:protected CookieSpecBase(java.util.HashMap)
+org.apache.http.impl.cookie.DateParseException
+org.apache.http.impl.cookie.DateUtils
+org.apache.http.impl.cookie.DefaultCookieSpec:
+    62:66:DefaultCookieSpec(org.apache.http.impl.cookie.RFC2965Spec,org.apache.http.impl.cookie.RFC2109Spec,org.apache.http.impl.cookie.NetscapeDraftSpec)
+    99:100:public DefaultCookieSpec()
+org.apache.http.impl.cookie.DefaultCookieSpecProvider
+org.apache.http.impl.cookie.DefaultCookieSpecProvider$1
+org.apache.http.impl.cookie.DefaultCookieSpecProvider$CompatibilityLevel
+org.apache.http.impl.cookie.IgnoreSpecProvider
+org.apache.http.impl.cookie.LaxExpiresHandler
+org.apache.http.impl.cookie.LaxMaxAgeHandler
+org.apache.http.impl.cookie.NetscapeDraftHeaderParser:
+    private static final char PARAM_DELIMITER
+org.apache.http.impl.cookie.NetscapeDraftSpec:
+    protected static final java.lang.String EXPIRES_PATTERN
+org.apache.http.impl.cookie.NetscapeDraftSpecProvider
+org.apache.http.impl.cookie.PublicSuffixDomainFilter
+org.apache.http.impl.cookie.PublicSuffixFilter
+org.apache.http.impl.cookie.PublicSuffixListParser
+org.apache.http.impl.cookie.RFC2109SpecProvider
+org.apache.http.impl.cookie.RFC2965SpecProvider
+org.apache.http.impl.cookie.RFC6265CookieSpecBase
+org.apache.http.impl.cookie.RFC6265CookieSpecProvider
+org.apache.http.impl.cookie.RFC6265CookieSpecProvider$1
+org.apache.http.impl.cookie.RFC6265CookieSpecProvider$2
+org.apache.http.impl.cookie.RFC6265CookieSpecProvider$CompatibilityLevel
+org.apache.http.impl.cookie.RFC6265LaxSpec
+org.apache.http.impl.cookie.RFC6265StrictSpec
+org.apache.http.impl.entity.DisallowIdentityContentLengthStrategy
+org.apache.http.impl.execchain.BackoffStrategyExec
+org.apache.http.impl.execchain.ClientExecChain
+org.apache.http.impl.execchain.ConnectionHolder
+org.apache.http.impl.execchain.HttpResponseProxy
+org.apache.http.impl.execchain.MainClientExec
+org.apache.http.impl.execchain.MinimalClientExec
+org.apache.http.impl.execchain.ProtocolExec
+org.apache.http.impl.execchain.RedirectExec
+org.apache.http.impl.execchain.RequestAbortedException
+org.apache.http.impl.execchain.RequestEntityProxy
+org.apache.http.impl.execchain.ResponseEntityProxy
+org.apache.http.impl.execchain.RetryExec
+org.apache.http.impl.execchain.ServiceUnavailableRetryExec
+org.apache.http.impl.execchain.TunnelRefusedException
+org.apache.http.impl.io.AbstractMessageParser:
+    private static final int HEAD_LINE
+    private static final int HEADERS
+    112:118:public AbstractMessageParser(org.apache.http.io.SessionInputBuffer,org.apache.http.message.LineParser,org.apache.http.config.MessageConstraints)
+org.apache.http.impl.io.AbstractMessageWriter:
+    92:96:public AbstractMessageWriter(org.apache.http.io.SessionOutputBuffer,org.apache.http.message.LineFormatter)
+org.apache.http.impl.io.AbstractSessionInputBuffer:
+    130:130:public int capacity()
+    144:144:public int available()
+    219:222:public int read(byte[])
+    388:393:public java.lang.String readLine()
+org.apache.http.impl.io.AbstractSessionOutputBuffer:
+    89:103:protected AbstractSessionOutputBuffer(java.io.OutputStream,int,java.nio.charset.Charset,int,java.nio.charset.CodingErrorAction,java.nio.charset.CodingErrorAction)
+    139:139:public int capacity()
+    153:153:public int available()
+org.apache.http.impl.io.ChunkedInputStream:
+    private static final int CHUNK_LEN
+    private static final int CHUNK_DATA
+    private static final int CHUNK_CRLF
+    private static final int CHUNK_INVALID
+    private static final int BUFFER_SIZE
+    327:327:public org.apache.http.Header[] getFooters()
+org.apache.http.impl.io.ChunkedOutputStream:
+    75:76:public ChunkedOutputStream(org.apache.http.io.SessionOutputBuffer,int)
+org.apache.http.impl.io.ContentLengthInputStream:
+    private static final int BUFFER_SIZE
+org.apache.http.impl.io.DefaultHttpRequestParser
+org.apache.http.impl.io.DefaultHttpRequestParserFactory
+org.apache.http.impl.io.DefaultHttpRequestWriter
+org.apache.http.impl.io.DefaultHttpRequestWriterFactory
+org.apache.http.impl.io.DefaultHttpResponseParser:
+    103:107:public DefaultHttpResponseParser(org.apache.http.io.SessionInputBuffer,org.apache.http.message.LineParser,org.apache.http.HttpResponseFactory,org.apache.http.config.MessageConstraints)
+    115:116:public DefaultHttpResponseParser(org.apache.http.io.SessionInputBuffer,org.apache.http.config.MessageConstraints)
+    122:123:public DefaultHttpResponseParser(org.apache.http.io.SessionInputBuffer)
+org.apache.http.impl.io.DefaultHttpResponseParserFactory
+org.apache.http.impl.io.DefaultHttpResponseWriter
+org.apache.http.impl.io.DefaultHttpResponseWriterFactory
+org.apache.http.impl.io.HttpRequestParser
+org.apache.http.impl.io.HttpResponseParser
+org.apache.http.impl.io.HttpResponseWriter
+org.apache.http.impl.io.HttpTransportMetricsImpl:
+    49:49:public long getBytesTransferred()
+    53:54:public void setBytesTransferred(long)
+    62:63:public void reset()
+org.apache.http.impl.io.SessionInputBufferImpl
+org.apache.http.impl.io.SessionOutputBufferImpl
+org.apache.http.impl.pool.BasicConnFactory
+org.apache.http.impl.pool.BasicConnPool
+org.apache.http.impl.pool.BasicPoolEntry
+org.apache.http.io.BufferInfo:
+    public abstract int capacity()
+    public abstract int available()
+org.apache.http.io.HttpMessageParserFactory
+org.apache.http.io.HttpMessageWriterFactory
+org.apache.http.io.HttpTransportMetrics:
+    public abstract long getBytesTransferred()
+    public abstract void reset()
+org.apache.http.io.SessionInputBuffer:
+    public abstract int read(byte[])
+    public abstract java.lang.String readLine()
+org.apache.http.io.SessionOutputBuffer:
+    public abstract void write(byte[])
+org.apache.http.message.AbstractHttpMessage:
+    87:87:public org.apache.http.Header getLastHeader(java.lang.String)
+    112:113:public void setHeader(org.apache.http.Header)
+    131:132:public void removeHeader(org.apache.http.Header)
+org.apache.http.message.BasicHeader:
+    private static final long serialVersionUID
+org.apache.http.message.BasicHeaderIterator
+org.apache.http.message.BasicHeaderValueFormatter:
+    public static final java.lang.String SEPARATORS
+    public static final java.lang.String UNSAFE_CHARS
+    92:92:public static java.lang.String formatElements(org.apache.http.HeaderElement[],boolean,org.apache.http.message.HeaderValueFormatter)
+    102:118:public org.apache.http.util.CharArrayBuffer formatElements(org.apache.http.util.CharArrayBuffer,org.apache.http.HeaderElement[],boolean)
+    130:139:protected int estimateElementsLen(org.apache.http.HeaderElement[])
+    159:159:public static java.lang.String formatHeaderElement(org.apache.http.HeaderElement,boolean,org.apache.http.message.HeaderValueFormatter)
+    245:245:public static java.lang.String formatParameters(org.apache.http.NameValuePair[],boolean,org.apache.http.message.HeaderValueFormatter)
+    311:311:public static java.lang.String formatNameValuePair(org.apache.http.NameValuePair,boolean,org.apache.http.message.HeaderValueFormatter)
+org.apache.http.message.BasicHeaderValueParser:
+    private static final char PARAM_DELIMITER
+    private static final char ELEM_DELIMITER
+    129:134:public static org.apache.http.HeaderElement parseHeaderElement(java.lang.String,org.apache.http.message.HeaderValueParser)
+    182:187:public static org.apache.http.NameValuePair[] parseParameters(java.lang.String,org.apache.http.message.HeaderValueParser)
+    223:228:public static org.apache.http.NameValuePair parseNameValuePair(java.lang.String,org.apache.http.message.HeaderValueParser)
+    263:287:public org.apache.http.NameValuePair parseNameValuePair(org.apache.http.util.CharArrayBuffer,org.apache.http.message.ParserCursor,char[])
+org.apache.http.message.BasicHttpEntityEnclosingRequest
+org.apache.http.message.BasicHttpRequest:
+    58:62:public BasicHttpRequest(java.lang.String,java.lang.String)
+org.apache.http.message.BasicHttpResponse:
+    90:97:public BasicHttpResponse(org.apache.http.StatusLine)
+    112:120:public BasicHttpResponse(org.apache.http.ProtocolVersion,int,java.lang.String)
+    149:149:public java.util.Locale getLocale()
+    155:159:public void setStatusLine(org.apache.http.StatusLine)
+    164:169:public void setStatusLine(org.apache.http.ProtocolVersion,int)
+    175:180:public void setStatusLine(org.apache.http.ProtocolVersion,int,java.lang.String)
+    185:189:public void setStatusCode(int)
+    194:196:public void setReasonPhrase(java.lang.String)
+    206:208:public void setLocale(java.util.Locale)
+org.apache.http.message.BasicLineFormatter:
+    103:103:public static java.lang.String formatProtocolVersion(org.apache.http.ProtocolVersion,org.apache.http.message.LineFormatter)
+    158:158:public static java.lang.String formatRequestLine(org.apache.http.RequestLine,org.apache.http.message.LineFormatter)
+    214:214:public static java.lang.String formatStatusLine(org.apache.http.StatusLine,org.apache.http.message.LineFormatter)
+    272:272:public static java.lang.String formatHeader(org.apache.http.Header,org.apache.http.message.LineFormatter)
+org.apache.http.message.BasicLineParser:
+    105:110:public static org.apache.http.ProtocolVersion parseProtocolVersion(java.lang.String,org.apache.http.message.LineParser)
+    256:261:public static org.apache.http.RequestLine parseRequestLine(java.lang.String,org.apache.http.message.LineParser)
+    279:317:public org.apache.http.RequestLine parseRequestLine(org.apache.http.util.CharArrayBuffer,org.apache.http.message.ParserCursor)
+    336:336:protected org.apache.http.RequestLine createRequestLine(java.lang.String,java.lang.String,org.apache.http.ProtocolVersion)
+    344:349:public static org.apache.http.StatusLine parseStatusLine(java.lang.String,org.apache.http.message.LineParser)
+    429:433:public static org.apache.http.Header parseHeader(java.lang.String,org.apache.http.message.LineParser)
+org.apache.http.message.BasicNameValuePair:
+    private static final long serialVersionUID
+org.apache.http.message.BasicRequestLine:
+    private static final long serialVersionUID
+org.apache.http.message.BasicStatusLine:
+    private static final long serialVersionUID
+org.apache.http.message.BasicTokenIterator:
+    public static final java.lang.String HTTP_SEPARATORS
+org.apache.http.message.BufferedHeader:
+    private static final long serialVersionUID
+org.apache.http.message.HeaderGroup:
+    private static final long serialVersionUID
+    90:94:public void removeHeader(org.apache.http.Header)
+    147:161:public org.apache.http.Header getCondensedHeader(java.lang.String)
+    221:228:public org.apache.http.Header getLastHeader(java.lang.String)
+    296:298:public org.apache.http.message.HeaderGroup copy()
+org.apache.http.message.HeaderValueFormatter
+org.apache.http.message.HeaderValueParser:
+    public abstract org.apache.http.NameValuePair[] parseParameters(org.apache.http.util.CharArrayBuffer,org.apache.http.message.ParserCursor)
+    public abstract org.apache.http.NameValuePair parseNameValuePair(org.apache.http.util.CharArrayBuffer,org.apache.http.message.ParserCursor)
+org.apache.http.message.LineFormatter:
+    public abstract org.apache.http.util.CharArrayBuffer appendProtocolVersion(org.apache.http.util.CharArrayBuffer,org.apache.http.ProtocolVersion)
+    public abstract org.apache.http.util.CharArrayBuffer formatStatusLine(org.apache.http.util.CharArrayBuffer,org.apache.http.StatusLine)
+org.apache.http.message.LineParser:
+    public abstract org.apache.http.ProtocolVersion parseProtocolVersion(org.apache.http.util.CharArrayBuffer,org.apache.http.message.ParserCursor)
+    public abstract org.apache.http.RequestLine parseRequestLine(org.apache.http.util.CharArrayBuffer,org.apache.http.message.ParserCursor)
+org.apache.http.message.ParserCursor:
+    62:62:public int getLowerBound()
+org.apache.http.message.TokenParser:
+    public static final char CR
+    public static final char LF
+    public static final char SP
+    public static final char HT
+    public static final char DQUOTE
+    public static final char ESCAPE
+org.apache.http.params.AbstractHttpParams:
+    84:88:public double getDoubleParameter(java.lang.String,double)
+    93:94:public org.apache.http.params.HttpParams setDoubleParameter(java.lang.String,double)
+    114:114:public boolean isParameterTrue(java.lang.String)
+    119:119:public boolean isParameterFalse(java.lang.String)
+    132:132:public java.util.Set getNames()
+org.apache.http.params.BasicHttpParams:
+    private static final long serialVersionUID
+    83:87:public boolean removeParameter(java.lang.String)
+    98:101:public void setParameters(java.lang.String[],java.lang.Object)
+    115:115:public boolean isParameterSet(java.lang.String)
+    129:129:public boolean isParameterSetLocally(java.lang.String)
+    136:137:public void clear()
+    151:153:public org.apache.http.params.HttpParams copy()
+    192:192:public java.util.Set getNames()
+org.apache.http.params.CoreConnectionPNames
+org.apache.http.params.CoreProtocolPNames
+org.apache.http.params.DefaultedHttpParams
+org.apache.http.params.HttpAbstractParamBean
+org.apache.http.params.HttpConnectionParamBean
+org.apache.http.params.HttpConnectionParams:
+    44:45:private HttpConnectionParams()
+    94:96:public static void setSoReuseaddr(org.apache.http.params.HttpParams,boolean)
+    129:130:public static int getSocketBufferSize(org.apache.http.params.HttpParams)
+    164:166:public static void setLinger(org.apache.http.params.HttpParams,int)
+    226:227:public static boolean getSoKeepalive(org.apache.http.params.HttpParams)
+    239:241:public static void setSoKeepalive(org.apache.http.params.HttpParams,boolean)
+org.apache.http.params.HttpParamConfig:
+    45:46:private HttpParamConfig()
+    49:49:public static org.apache.http.config.SocketConfig getSocketConfig(org.apache.http.params.HttpParams)
+    66:68:public static org.apache.http.config.ConnectionConfig getConnectionConfig(org.apache.http.params.HttpParams)
+org.apache.http.params.HttpParams:
+    public abstract org.apache.http.params.HttpParams copy()
+    public abstract boolean removeParameter(java.lang.String)
+    public abstract double getDoubleParameter(java.lang.String,double)
+    public abstract org.apache.http.params.HttpParams setDoubleParameter(java.lang.String,double)
+    public abstract boolean isParameterTrue(java.lang.String)
+    public abstract boolean isParameterFalse(java.lang.String)
+org.apache.http.params.HttpParamsNames
+org.apache.http.params.HttpProtocolParamBean
+org.apache.http.params.HttpProtocolParams:
+    49:50:private HttpProtocolParams()
+    76:78:public static void setHttpElementCharset(org.apache.http.params.HttpParams,java.lang.String)
+    88:94:public static java.lang.String getContentCharset(org.apache.http.params.HttpParams)
+    144:145:public static java.lang.String getUserAgent(org.apache.http.params.HttpParams)
+    167:168:public static boolean useExpectContinue(org.apache.http.params.HttpParams)
+    178:180:public static void setUseExpectContinue(org.apache.http.params.HttpParams,boolean)
+    190:196:public static java.nio.charset.CodingErrorAction getMalformedInputAction(org.apache.http.params.HttpParams)
+    207:209:public static void setMalformedInputAction(org.apache.http.params.HttpParams,java.nio.charset.CodingErrorAction)
+    219:225:public static java.nio.charset.CodingErrorAction getUnmappableInputAction(org.apache.http.params.HttpParams)
+    236:238:public static void setUnmappableInputAction(org.apache.http.params.HttpParams,java.nio.charset.CodingErrorAction)
+org.apache.http.params.SyncBasicHttpParams:
+    private static final long serialVersionUID
+    51:51:public synchronized boolean removeParameter(java.lang.String)
+    66:66:public synchronized boolean isParameterSet(java.lang.String)
+    71:71:public synchronized boolean isParameterSetLocally(java.lang.String)
+    76:77:public synchronized void setParameters(java.lang.String[],java.lang.Object)
+    81:82:public synchronized void clear()
+org.apache.http.pool.AbstractConnPool
+org.apache.http.pool.AbstractConnPool$1
+org.apache.http.pool.AbstractConnPool$2
+org.apache.http.pool.AbstractConnPool$3
+org.apache.http.pool.AbstractConnPool$4
+org.apache.http.pool.ConnFactory
+org.apache.http.pool.ConnPool
+org.apache.http.pool.ConnPoolControl
+org.apache.http.pool.PoolEntry:
+    104:105:public PoolEntry(java.lang.String,java.lang.Object,java.lang.Object)
+    108:108:public java.lang.String getId()
+    120:120:public long getCreated()
+    127:127:public long getValidityDeadline()
+    135:135:public long getValidUnit()
+    139:139:public java.lang.Object getState()
+    147:147:public synchronized long getUpdated()
+    public abstract void close()
+    public abstract boolean isClosed()
+org.apache.http.pool.PoolEntryCallback
+org.apache.http.pool.PoolEntryFuture
+org.apache.http.pool.PoolStats
+org.apache.http.pool.RouteSpecificPool
+org.apache.http.protocol.BasicHttpContext:
+    82:83:public java.lang.Object removeAttribute(java.lang.String)
+    90:91:public void clear()
+org.apache.http.protocol.BasicHttpProcessor:
+    71:75:public void addRequestInterceptor(org.apache.http.HttpRequestInterceptor,int)
+    79:83:public void addResponseInterceptor(org.apache.http.HttpResponseInterceptor,int)
+    86:93:public void removeRequestInterceptorByClass(java.lang.Class)
+    96:103:public void removeResponseInterceptorByClass(java.lang.Class)
+    110:111:public final void addInterceptor(org.apache.http.HttpRequestInterceptor,int)
+    125:126:public void clearRequestInterceptors()
+    140:141:public final void addInterceptor(org.apache.http.HttpResponseInterceptor,int)
+    155:156:public void clearResponseInterceptors()
+    176:187:public void setInterceptors(java.util.List)
+    193:195:public void clearInterceptors()
+    234:236:public org.apache.http.protocol.BasicHttpProcessor copy()
+org.apache.http.protocol.ChainBuilder
+org.apache.http.protocol.DefaultedHttpContext:
+    64:64:public java.lang.Object removeAttribute(java.lang.String)
+    72:72:public org.apache.http.protocol.HttpContext getDefaults()
+org.apache.http.protocol.ExecutionContext
+org.apache.http.protocol.HTTP:
+    public static final int CR
+    public static final int LF
+    public static final int SP
+    public static final int HT
+    public static final java.lang.String TRANSFER_ENCODING
+    public static final java.lang.String CONTENT_LEN
+    public static final java.lang.String CONTENT_TYPE
+    public static final java.lang.String CONTENT_ENCODING
+    public static final java.lang.String EXPECT_DIRECTIVE
+    public static final java.lang.String CONN_DIRECTIVE
+    public static final java.lang.String TARGET_HOST
+    public static final java.lang.String USER_AGENT
+    public static final java.lang.String DATE_HEADER
+    public static final java.lang.String SERVER_HEADER
+    public static final java.lang.String EXPECT_CONTINUE
+    public static final java.lang.String CONN_CLOSE
+    public static final java.lang.String CONN_KEEP_ALIVE
+    public static final java.lang.String CHUNK_CODING
+    public static final java.lang.String IDENTITY_CODING
+    public static final java.lang.String UTF_8
+    public static final java.lang.String UTF_16
+    public static final java.lang.String US_ASCII
+    public static final java.lang.String ASCII
+    public static final java.lang.String ISO_8859_1
+    public static final java.lang.String DEFAULT_CONTENT_CHARSET
+    public static final java.lang.String DEFAULT_PROTOCOL_CHARSET
+    public static final java.lang.String OCTET_STREAM_TYPE
+    public static final java.lang.String PLAIN_TEXT_TYPE
+    public static final java.lang.String CHARSET_PARAM
+    public static final java.lang.String DEFAULT_CONTENT_TYPE
+    132:133:private HTTP()
+org.apache.http.protocol.HttpContext:
+    public static final java.lang.String RESERVED_PREFIX
+    public abstract java.lang.Object removeAttribute(java.lang.String)
+org.apache.http.protocol.HttpCoreContext:
+    public static final java.lang.String HTTP_CONNECTION
+    public static final java.lang.String HTTP_REQUEST
+    public static final java.lang.String HTTP_RESPONSE
+    public static final java.lang.String HTTP_TARGET_HOST
+    public static final java.lang.String HTTP_REQ_SENT
+    78:78:public static org.apache.http.protocol.HttpCoreContext create()
+    114:114:public java.lang.Object removeAttribute(java.lang.String)
+    127:127:public org.apache.http.HttpConnection getConnection(java.lang.Class)
+    144:144:public org.apache.http.HttpResponse getResponse()
+    148:149:public void setTargetHost(org.apache.http.HttpHost)
+org.apache.http.protocol.HttpDateGenerator
+org.apache.http.protocol.HttpExpectationVerifier
+org.apache.http.protocol.HttpProcessorBuilder
+org.apache.http.protocol.HttpRequestExecutor:
+    public static final int DEFAULT_WAIT_FOR_CONTINUE
+org.apache.http.protocol.HttpRequestHandler
+org.apache.http.protocol.HttpRequestHandlerMapper
+org.apache.http.protocol.HttpRequestHandlerRegistry
+org.apache.http.protocol.HttpRequestHandlerResolver
+org.apache.http.protocol.HttpRequestInterceptorList
+org.apache.http.protocol.HttpResponseInterceptorList
+org.apache.http.protocol.HttpService
+org.apache.http.protocol.HttpService$HttpRequestHandlerResolverAdapter
+org.apache.http.protocol.ImmutableHttpProcessor:
+    76:89:public ImmutableHttpProcessor(java.util.List,java.util.List)
+    98:117:public ImmutableHttpProcessor(org.apache.http.protocol.HttpRequestInterceptorList,org.apache.http.protocol.HttpResponseInterceptorList)
+    120:121:public varargs ImmutableHttpProcessor(org.apache.http.HttpRequestInterceptor[])
+    124:125:public varargs ImmutableHttpProcessor(org.apache.http.HttpResponseInterceptor[])
+org.apache.http.protocol.RequestConnControl
+org.apache.http.protocol.RequestDate
+org.apache.http.protocol.ResponseConnControl
+org.apache.http.protocol.ResponseContent
+org.apache.http.protocol.ResponseDate
+org.apache.http.protocol.ResponseServer
+org.apache.http.protocol.SyncBasicHttpContext
+org.apache.http.protocol.UriHttpRequestHandlerMapper
+org.apache.http.protocol.UriPatternMatcher
+org.apache.http.ssl.PrivateKeyDetails
+org.apache.http.ssl.PrivateKeyStrategy
+org.apache.http.ssl.SSLContextBuilder
+org.apache.http.ssl.SSLContextBuilder$KeyManagerDelegate
+org.apache.http.ssl.SSLContextBuilder$TrustManagerDelegate
+org.apache.http.ssl.SSLContexts
+org.apache.http.ssl.SSLInitializationException
+org.apache.http.ssl.TrustStrategy
+org.apache.http.util.Args:
+    32:32:public Args()
+    47:50:public static void check(boolean,java.lang.String,java.lang.Object)
+    107:110:public static long positive(long,java.lang.String)
+org.apache.http.util.Asserts:
+    30:30:public Asserts()
+    39:42:public static varargs void check(boolean,java.lang.String,java.lang.Object[])
+    45:48:public static void check(boolean,java.lang.String,java.lang.Object)
+    57:60:public static void notEmpty(java.lang.CharSequence,java.lang.String)
+    63:66:public static void notBlank(java.lang.CharSequence,java.lang.String)
+org.apache.http.util.ByteArrayBuffer:
+    private static final long serialVersionUID
+    234:241:public void ensureCapacity(int)
+    263:267:public void setLength(int)
+    313:329:public int indexOf(byte,int,int)
+    345:345:public int indexOf(byte)
+org.apache.http.util.CharArrayBuffer:
+    private static final long serialVersionUID
+    143:147:public void append(org.apache.http.util.CharArrayBuffer)
+    229:230:public void append(java.lang.Object)
+    245:249:public char[] toCharArray()
+    283:283:public int capacity()
+    324:328:public void setLength(int)
+    347:347:public boolean isFull()
+org.apache.http.util.CharsetUtils:
+    34:34:public CharsetUtils()
+    48:54:public static java.nio.charset.Charset get(java.lang.String)
+org.apache.http.util.EncodingUtils:
+    57:62:public static java.lang.String getString(byte[],int,int,java.lang.String)
+    77:78:public static java.lang.String getString(byte[],java.lang.String)
+    141:142:private EncodingUtils()
+org.apache.http.util.EntityUtils:
+    53:54:private EntityUtils()
+    67:70:public static void consumeQuietly(org.apache.http.HttpEntity)
+    106:109:public static void updateEntity(org.apache.http.HttpResponse,org.apache.http.HttpEntity)
+    157:168:public static java.lang.String getContentCharSet(org.apache.http.HttpEntity)
+    185:193:public static java.lang.String getContentMimeType(org.apache.http.HttpEntity)
+    214:252:public static java.lang.String toString(org.apache.http.HttpEntity,java.nio.charset.Charset)
+    273:273:public static java.lang.String toString(org.apache.http.HttpEntity,java.lang.String)
+    291:291:public static java.lang.String toString(org.apache.http.HttpEntity)
+org.apache.http.util.ExceptionUtils
+org.apache.http.util.LangUtils:
+    public static final int HASH_SEED
+    public static final int HASH_OFFSET
+    43:44:private LangUtils()
+org.apache.http.util.NetUtils
+org.apache.http.util.TextUtils:
+    33:33:public TextUtils()
+org.apache.http.util.VersionInfo:
+    public static final java.lang.String UNAVAILABLE
+    public static final java.lang.String VERSION_PROPERTY_FILE
+    public static final java.lang.String PROPERTY_MODULE
+    public static final java.lang.String PROPERTY_RELEASE
+    public static final java.lang.String PROPERTY_TIMESTAMP
+    107:107:public final java.lang.String getPackage()
+    117:117:public final java.lang.String getModule()
+    137:137:public final java.lang.String getTimestamp()
+    149:149:public final java.lang.String getClassloader()
+    199:208:public static org.apache.http.util.VersionInfo[] loadVersionInfo(java.lang.String[],java.lang.ClassLoader)
+org.apache.james.mime4j_.MimeException
+org.apache.james.mime4j_.MimeIOException
+org.apache.james.mime4j_.codec.Base64InputStream
+org.apache.james.mime4j_.codec.Base64OutputStream
+org.apache.james.mime4j_.codec.ByteQueue
+org.apache.james.mime4j_.codec.CodecUtil
+org.apache.james.mime4j_.codec.DecoderUtil
+org.apache.james.mime4j_.codec.EncoderUtil
+org.apache.james.mime4j_.codec.EncoderUtil$Encoding
+org.apache.james.mime4j_.codec.EncoderUtil$Usage
+org.apache.james.mime4j_.codec.QuotedPrintableEncoder
+org.apache.james.mime4j_.codec.QuotedPrintableInputStream
+org.apache.james.mime4j_.codec.QuotedPrintableOutputStream
+org.apache.james.mime4j_.codec.UnboundedFifoByteBuffer
+org.apache.james.mime4j_.codec.UnboundedFifoByteBuffer$1
+org.apache.james.mime4j_.descriptor.BodyDescriptor
+org.apache.james.mime4j_.descriptor.ContentDescriptor
+org.apache.james.mime4j_.descriptor.DefaultBodyDescriptor
+org.apache.james.mime4j_.descriptor.MaximalBodyDescriptor
+org.apache.james.mime4j_.descriptor.MutableBodyDescriptor
+org.apache.james.mime4j_.field.AbstractField
+org.apache.james.mime4j_.field.AddressListField
+org.apache.james.mime4j_.field.AddressListField$1
+org.apache.james.mime4j_.field.ContentDispositionField
+org.apache.james.mime4j_.field.ContentDispositionField$1
+org.apache.james.mime4j_.field.ContentTransferEncodingField
+org.apache.james.mime4j_.field.ContentTransferEncodingField$1
+org.apache.james.mime4j_.field.ContentTypeField
+org.apache.james.mime4j_.field.ContentTypeField$1
+org.apache.james.mime4j_.field.DateTimeField
+org.apache.james.mime4j_.field.DateTimeField$1
+org.apache.james.mime4j_.field.DefaultFieldParser
+org.apache.james.mime4j_.field.DelegatingFieldParser
+org.apache.james.mime4j_.field.FieldName
+org.apache.james.mime4j_.field.FieldParser
+org.apache.james.mime4j_.field.Fields
+org.apache.james.mime4j_.field.MailboxField
+org.apache.james.mime4j_.field.MailboxField$1
+org.apache.james.mime4j_.field.MailboxListField
+org.apache.james.mime4j_.field.MailboxListField$1
+org.apache.james.mime4j_.field.ParseException
+org.apache.james.mime4j_.field.ParsedField
+org.apache.james.mime4j_.field.UnstructuredField
+org.apache.james.mime4j_.field.UnstructuredField$1
+org.apache.james.mime4j_.field.address.Address
+org.apache.james.mime4j_.field.address.AddressList
+org.apache.james.mime4j_.field.address.Builder
+org.apache.james.mime4j_.field.address.Builder$ChildNodeIterator
+org.apache.james.mime4j_.field.address.DomainList
+org.apache.james.mime4j_.field.address.Group
+org.apache.james.mime4j_.field.address.Mailbox
+org.apache.james.mime4j_.field.address.MailboxList
+org.apache.james.mime4j_.field.address.parser.ASTaddr_spec
+org.apache.james.mime4j_.field.address.parser.ASTaddress
+org.apache.james.mime4j_.field.address.parser.ASTaddress_list
+org.apache.james.mime4j_.field.address.parser.ASTangle_addr
+org.apache.james.mime4j_.field.address.parser.ASTdomain
+org.apache.james.mime4j_.field.address.parser.ASTgroup_body
+org.apache.james.mime4j_.field.address.parser.ASTlocal_part
+org.apache.james.mime4j_.field.address.parser.ASTmailbox
+org.apache.james.mime4j_.field.address.parser.ASTname_addr
+org.apache.james.mime4j_.field.address.parser.ASTphrase
+org.apache.james.mime4j_.field.address.parser.ASTroute
+org.apache.james.mime4j_.field.address.parser.AddressListParser
+org.apache.james.mime4j_.field.address.parser.AddressListParser$JJCalls
+org.apache.james.mime4j_.field.address.parser.AddressListParser$LookaheadSuccess
+org.apache.james.mime4j_.field.address.parser.AddressListParserConstants
+org.apache.james.mime4j_.field.address.parser.AddressListParserTokenManager
+org.apache.james.mime4j_.field.address.parser.AddressListParserTreeConstants
+org.apache.james.mime4j_.field.address.parser.AddressListParserVisitor
+org.apache.james.mime4j_.field.address.parser.BaseNode
+org.apache.james.mime4j_.field.address.parser.JJTAddressListParserState
+org.apache.james.mime4j_.field.address.parser.Node
+org.apache.james.mime4j_.field.address.parser.ParseException
+org.apache.james.mime4j_.field.address.parser.SimpleCharStream
+org.apache.james.mime4j_.field.address.parser.SimpleNode
+org.apache.james.mime4j_.field.address.parser.Token
+org.apache.james.mime4j_.field.address.parser.TokenMgrError
+org.apache.james.mime4j_.field.contentdisposition.parser.ContentDispositionParser
+org.apache.james.mime4j_.field.contentdisposition.parser.ContentDispositionParserConstants
+org.apache.james.mime4j_.field.contentdisposition.parser.ContentDispositionParserTokenManager
+org.apache.james.mime4j_.field.contentdisposition.parser.ParseException
+org.apache.james.mime4j_.field.contentdisposition.parser.SimpleCharStream
+org.apache.james.mime4j_.field.contentdisposition.parser.Token
+org.apache.james.mime4j_.field.contentdisposition.parser.TokenMgrError
+org.apache.james.mime4j_.field.contenttype.parser.ContentTypeParser
+org.apache.james.mime4j_.field.contenttype.parser.ContentTypeParserConstants
+org.apache.james.mime4j_.field.contenttype.parser.ContentTypeParserTokenManager
+org.apache.james.mime4j_.field.contenttype.parser.ParseException
+org.apache.james.mime4j_.field.contenttype.parser.SimpleCharStream
+org.apache.james.mime4j_.field.contenttype.parser.Token
+org.apache.james.mime4j_.field.contenttype.parser.TokenMgrError
+org.apache.james.mime4j_.field.datetime.DateTime
+org.apache.james.mime4j_.field.datetime.parser.DateTimeParser
+org.apache.james.mime4j_.field.datetime.parser.DateTimeParser$Date
+org.apache.james.mime4j_.field.datetime.parser.DateTimeParser$Time
+org.apache.james.mime4j_.field.datetime.parser.DateTimeParserConstants
+org.apache.james.mime4j_.field.datetime.parser.DateTimeParserTokenManager
+org.apache.james.mime4j_.field.datetime.parser.ParseException
+org.apache.james.mime4j_.field.datetime.parser.SimpleCharStream
+org.apache.james.mime4j_.field.datetime.parser.Token
+org.apache.james.mime4j_.field.datetime.parser.TokenMgrError
+org.apache.james.mime4j_.field.language.parser.ContentLanguageParser
+org.apache.james.mime4j_.field.language.parser.ContentLanguageParserConstants
+org.apache.james.mime4j_.field.language.parser.ContentLanguageParserTokenManager
+org.apache.james.mime4j_.field.language.parser.ParseException
+org.apache.james.mime4j_.field.language.parser.SimpleCharStream
+org.apache.james.mime4j_.field.language.parser.Token
+org.apache.james.mime4j_.field.language.parser.TokenMgrError
+org.apache.james.mime4j_.field.language.parser.copy.ContentLanguageParser
+org.apache.james.mime4j_.field.language.parser.copy.ContentLanguageParserConstants
+org.apache.james.mime4j_.field.language.parser.copy.ContentLanguageParserTokenManager
+org.apache.james.mime4j_.field.language.parser.copy.ParseException
+org.apache.james.mime4j_.field.language.parser.copy.SimpleCharStream
+org.apache.james.mime4j_.field.language.parser.copy.Token
+org.apache.james.mime4j_.field.language.parser.copy.TokenMgrError
+org.apache.james.mime4j_.field.mimeversion.parser.MimeVersionParser
+org.apache.james.mime4j_.field.mimeversion.parser.MimeVersionParserConstants
+org.apache.james.mime4j_.field.mimeversion.parser.MimeVersionParserTokenManager
+org.apache.james.mime4j_.field.mimeversion.parser.ParseException
+org.apache.james.mime4j_.field.mimeversion.parser.SimpleCharStream
+org.apache.james.mime4j_.field.mimeversion.parser.Token
+org.apache.james.mime4j_.field.mimeversion.parser.TokenMgrError
+org.apache.james.mime4j_.field.structured.parser.ParseException
+org.apache.james.mime4j_.field.structured.parser.SimpleCharStream
+org.apache.james.mime4j_.field.structured.parser.StructuredFieldParser
+org.apache.james.mime4j_.field.structured.parser.StructuredFieldParserConstants
+org.apache.james.mime4j_.field.structured.parser.StructuredFieldParserTokenManager
+org.apache.james.mime4j_.field.structured.parser.Token
+org.apache.james.mime4j_.field.structured.parser.TokenMgrError
+org.apache.james.mime4j_.io.BufferedLineReaderInputStream
+org.apache.james.mime4j_.io.EOLConvertingInputStream
+org.apache.james.mime4j_.io.LimitedInputStream
+org.apache.james.mime4j_.io.LineNumberInputStream
+org.apache.james.mime4j_.io.LineNumberSource
+org.apache.james.mime4j_.io.LineReaderInputStream
+org.apache.james.mime4j_.io.LineReaderInputStreamAdaptor
+org.apache.james.mime4j_.io.MaxHeaderLimitException
+org.apache.james.mime4j_.io.MaxLineLimitException
+org.apache.james.mime4j_.io.MimeBoundaryInputStream
+org.apache.james.mime4j_.io.PositionInputStream
+org.apache.james.mime4j_.message.BinaryBody
+org.apache.james.mime4j_.message.Body
+org.apache.james.mime4j_.message.BodyCopier
+org.apache.james.mime4j_.message.BodyFactory
+org.apache.james.mime4j_.message.BodyPart
+org.apache.james.mime4j_.message.Disposable
+org.apache.james.mime4j_.message.Entity
+org.apache.james.mime4j_.message.Header
+org.apache.james.mime4j_.message.Header$1
+org.apache.james.mime4j_.message.Message
+org.apache.james.mime4j_.message.MessageBuilder
+org.apache.james.mime4j_.message.MessageWriter
+org.apache.james.mime4j_.message.Multipart
+org.apache.james.mime4j_.message.SimpleContentHandler
+org.apache.james.mime4j_.message.SingleBody
+org.apache.james.mime4j_.message.StorageBinaryBody
+org.apache.james.mime4j_.message.StorageTextBody
+org.apache.james.mime4j_.message.StringTextBody
+org.apache.james.mime4j_.message.TextBody
+org.apache.james.mime4j_.parser.AbstractContentHandler
+org.apache.james.mime4j_.parser.AbstractEntity
+org.apache.james.mime4j_.parser.ContentHandler
+org.apache.james.mime4j_.parser.EntityStateMachine
+org.apache.james.mime4j_.parser.EntityStates
+org.apache.james.mime4j_.parser.Event
+org.apache.james.mime4j_.parser.Field
+org.apache.james.mime4j_.parser.MimeEntity
+org.apache.james.mime4j_.parser.MimeEntityConfig
+org.apache.james.mime4j_.parser.MimeParseEventException
+org.apache.james.mime4j_.parser.MimeStreamParser
+org.apache.james.mime4j_.parser.MimeTokenStream
+org.apache.james.mime4j_.parser.RawEntity
+org.apache.james.mime4j_.parser.RawField
+org.apache.james.mime4j_.parser.RecursionMode
+org.apache.james.mime4j_.storage.AbstractStorageProvider
+org.apache.james.mime4j_.storage.CipherStorageProvider
+org.apache.james.mime4j_.storage.CipherStorageProvider$CipherStorage
+org.apache.james.mime4j_.storage.CipherStorageProvider$CipherStorageOutputStream
+org.apache.james.mime4j_.storage.DefaultStorageProvider
+org.apache.james.mime4j_.storage.MemoryStorageProvider
+org.apache.james.mime4j_.storage.MemoryStorageProvider$MemoryStorage
+org.apache.james.mime4j_.storage.MemoryStorageProvider$MemoryStorageOutputStream
+org.apache.james.mime4j_.storage.MultiReferenceStorage
+org.apache.james.mime4j_.storage.Storage
+org.apache.james.mime4j_.storage.StorageOutputStream
+org.apache.james.mime4j_.storage.StorageProvider
+org.apache.james.mime4j_.storage.TempFileStorageProvider
+org.apache.james.mime4j_.storage.TempFileStorageProvider$TempFileStorage
+org.apache.james.mime4j_.storage.TempFileStorageProvider$TempFileStorageOutputStream
+org.apache.james.mime4j_.storage.ThresholdStorageProvider
+org.apache.james.mime4j_.storage.ThresholdStorageProvider$ThresholdStorage
+org.apache.james.mime4j_.storage.ThresholdStorageProvider$ThresholdStorageOutputStream
+org.apache.james.mime4j_.util.ByteArrayBuffer
+org.apache.james.mime4j_.util.ByteSequence
+org.apache.james.mime4j_.util.CharsetUtil
+org.apache.james.mime4j_.util.CharsetUtil$Charset
+org.apache.james.mime4j_.util.ContentUtil
+org.apache.james.mime4j_.util.EmptyByteSequence
+org.apache.james.mime4j_.util.MimeUtil
+org.apache.james.mime4j_.util.MimeUtil$1
+org.apache.james.mime4j_.util.MimeUtil$Rfc822DateFormat
+org.apache.james.mime4j_.util.StringArrayMap
+org.apache.james.mime4j_.util.StringArrayMap$1
+org.apache.james.mime4j_.util.StringArrayMap$2
 uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh:
     31:31:public ActionBarPullToRefresh()
 uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh$SetupWizard:

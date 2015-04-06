@@ -2,20 +2,22 @@ package com.minook.zeppa.runnable;
 
 import java.io.IOException;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.PrefsManager;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
+import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.activity.LoginActivity;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
@@ -97,10 +99,11 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 						&& !response.getItems().isEmpty()) {
 					userRelationship = response.getItems().get(0);
 				}
-				
+
+				ZeppaUserSingleton.getInstance().addDefaultZeppaUserMediator(
+						userInfo, userRelationship);
+
 			}
-			
-			
 
 			if (notification.getEventId() != null
 					&& ZeppaEventSingleton.getInstance().getEventById(
@@ -131,18 +134,16 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 				}
 			}
 
-			if(userInfo != null){
-				ZeppaUserSingleton.getInstance().addDefaultZeppaUserMediator(userInfo, userRelationship);
-			} 
-			
-			if(NotificationSingleton.getInstance().getNotificationTypeOrder(notification) <= 1){
-				if(userRelationship == null){
+			if (NotificationSingleton.getInstance().getNotificationTypeOrder(
+					notification) <= 1) {
+				if (userRelationship == null) {
 					ListZeppaUserToUserRelationship relationshipTask = buildZeppaUserToUserRelationshipEndpoint()
 							.listZeppaUserToUserRelationship();
 					relationshipTask.setFilter("(creatorId == " + userId
 							+ "|| creatorId == "
 							+ notification.getSenderId().longValue()
-							+ ") && (subjectId == " + userId + " || subjectId == "
+							+ ") && (subjectId == " + userId
+							+ " || subjectId == "
 							+ notification.getSenderId().longValue() + ")");
 
 					relationshipTask.setLimit(Integer.valueOf(1));
@@ -153,31 +154,52 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 						userRelationship = response.getItems().get(0);
 					}
 				}
-				
-				DefaultUserInfoMediator infoMediator = (DefaultUserInfoMediator) ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(notification.getSenderId());
+
+				DefaultUserInfoMediator infoMediator = (DefaultUserInfoMediator) ZeppaUserSingleton
+						.getInstance().getAbstractUserMediatorById(
+								notification.getSenderId());
 				infoMediator.setUserRelationship(userRelationship);
 			}
-			
-			if(eventMediator != null){
+
+			if (eventMediator != null) {
 				ZeppaEventSingleton.getInstance().addMediator(eventMediator);
 			}
-			
+
+			boolean doPushNotification = true;
+
 			try {
 
-				application.getCurrentActivity().runOnUiThread(new Runnable() {
+				AuthenticatedFragmentActivity currentActivity = application
+						.getCurrentActivity();
 
-					@Override
-					public void run() {
-						
-						application.getCurrentActivity()
-								.onNotificationReceived(notification);
-						NotificationSingleton.getInstance().notifyObservers();
-					}
+				if (currentActivity != null
+						&& !(currentActivity instanceof LoginActivity)
+						&& currentActivity.isCurrentlyActive()) {
 
-				});
+					doPushNotification = false;
+
+					currentActivity.runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+
+							NotificationSingleton.getInstance()
+									.addNotification(notification);
+							application.getCurrentActivity()
+									.onNotificationReceived(notification);
+
+							NotificationSingleton.getInstance()
+									.notifyObservers();
+						}
+
+					});
+				}
 
 			} catch (NullPointerException e) {
 				e.printStackTrace();
+			}
+
+			if (doPushNotification) {
 				pushNotification();
 			}
 
@@ -187,14 +209,21 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 
 	}
 
-	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
+	/**
+	 * This method pushes a notification to the status bar
+	 */
 	private void pushNotification() {
 
 		mNotificationManager = (NotificationManager) application
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		Notification.Builder mBuilder = new Notification.Builder(application)
+		Intent intent = new Intent(application, LoginActivity.class);
+		intent.putExtra(Constants.INTENT_NOTIFICATIONS, Boolean.TRUE);
+		PendingIntent contentIntent = PendingIntent.getActivity(application, 0,
+				intent, 0);
+
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				application)
 				.setSmallIcon(R.drawable.zeppa_icon)
 				.setAutoCancel(true)
 				.setDefaults(Notification.DEFAULT_LIGHTS)
@@ -202,21 +231,20 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 				.setOnlyAlertOnce(true)
 				.setContentTitle(
 						NotificationSingleton.getInstance()
-								.getNotificationTitle(notification))
-				.setContentText(
-						NotificationSingleton.getInstance()
 								.getNotificationTitle(notification));
 
-		Intent intent = new Intent(application, LoginActivity.class);
-		intent.putExtra(Constants.INTENT_NOTIFICATIONS, Boolean.TRUE);
-		PendingIntent contentIntent = PendingIntent.getActivity(application, 0,
-				intent, 0);
-
-		if (intent != null) {
-			mBuilder.setContentIntent(contentIntent);
+		try {
+			String content = NotificationSingleton.getInstance()
+					.getNotificationMessage(notification);
+			mBuilder.setContentText(content);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		if (PrefsManager.getUserPreference(application, Constants.PN_SOUND_ON)) {
+			Uri sound = RingtoneManager
+					.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+			mBuilder.setSound(sound);
 			mBuilder.setDefaults(Notification.DEFAULT_SOUND);
 		}
 
@@ -225,12 +253,8 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 			mBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
 		}
 
-		if (Build.VERSION.SDK_INT >= 16) {
-			mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-		} else {
-			mNotificationManager.notify(NOTIFICATION_ID,
-					mBuilder.getNotification());
-		}
+		mBuilder.setContentIntent(contentIntent);
+		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
 	}
 

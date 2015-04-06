@@ -21,6 +21,7 @@ import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.activity.MainActivity;
 import com.minook.zeppa.runnable.DeleteAccountRunnable;
+import com.minook.zeppa.runnable.LogoutDeviceRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.pschuette.android.calendarlibrary.CalendarData;
@@ -31,13 +32,13 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 		OnCheckedChangeListener, OnSyncStateChangedListener {
 
 	private View layout;
-	
+
 	// Section 1
 	private Switch sendNotificationsSwitch;
 	private Switch ringOnNotificationsSwitch;
 	private Switch vibrateOnNotificationsSwitch;
 	private LinearLayout notificationsSettings;
-	
+
 	// Section 2
 	private TextView manageIndividualNotifications;
 	private LinearLayout individualNotifictionsHolder;
@@ -49,17 +50,15 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 	private Switch notifOnUserJoinSwitch;
 	private Switch notifOnUserLeftSwitch;
 	private Switch notifOnEventCanceledSwitch;
-	
+
 	// Section 3
 	private TextView manageSyncedCalendars;
 	private LinearLayout calendarSyncHolder;
 	private CalendarSyncStateView calendarSyncStateView;
-	
+
 	// Section 4
 	private TextView logoutButton;
 	private TextView deleteButton;
-	
-	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,20 +85,24 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 		vibrateOnNotificationsSwitch.setChecked(PrefsManager.getUserPreference(
 				getActivity().getApplication(), Constants.PN_VIBRARTE_ON));
 		vibrateOnNotificationsSwitch.setOnCheckedChangeListener(this);
-		
-		notificationsSettings = (LinearLayout) layout.findViewById(R.id.settingsfragment_notificationssettings);
-		if(PrefsManager.getUserPreference(getActivity().getApplication(), Constants.PUSH_NOTIFICATIONS)){
+
+		notificationsSettings = (LinearLayout) layout
+				.findViewById(R.id.settingsfragment_notificationssettings);
+		if (PrefsManager.getUserPreference(getActivity().getApplication(),
+				Constants.PUSH_NOTIFICATIONS)) {
 			notificationsSettings.setVisibility(View.VISIBLE);
 		} else {
 			notificationsSettings.setVisibility(View.GONE);
 		}
-		
-		manageIndividualNotifications = (TextView) layout.findViewById(R.id.settingsfragment_notificationsbytype);
+
+		manageIndividualNotifications = (TextView) layout
+				.findViewById(R.id.settingsfragment_notificationsbytype);
 		manageIndividualNotifications.setOnClickListener(this);
-		
-		individualNotifictionsHolder = (LinearLayout) layout.findViewById(R.id.settingsfragment_notificationsbytypeholder);
+
+		individualNotifictionsHolder = (LinearLayout) layout
+				.findViewById(R.id.settingsfragment_notificationsbytypeholder);
 		individualNotifictionsHolder.setVisibility(View.GONE);
-		
+
 		notifOnMingleRequestSwitch = (Switch) layout
 				.findViewById(R.id.settingsfragment_minglerequest);
 		notifOnMingleRequestSwitch.setChecked(PrefsManager.getUserPreference(
@@ -149,15 +152,16 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 				getActivity().getApplication(), Constants.PN_EVENT_CANCELED));
 		notifOnEventCanceledSwitch.setOnCheckedChangeListener(this);
 
-		manageSyncedCalendars = (TextView) layout.findViewById(R.id.settingsfragment_syncedcalendars);
+		manageSyncedCalendars = (TextView) layout
+				.findViewById(R.id.settingsfragment_syncedcalendars);
 		manageSyncedCalendars.setOnClickListener(this);
-		
+
 		calendarSyncHolder = (LinearLayout) layout
 				.findViewById(R.id.settingsfragment_synccalendarsholder);
 
 		calendarSyncStateView = new CalendarSyncStateView(getActivity(), this);
 		calendarSyncHolder.addView(calendarSyncStateView);
-		
+
 		calendarSyncHolder.setVisibility(View.GONE);
 
 		logoutButton = (TextView) layout
@@ -187,22 +191,22 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 		switch (v.getId()) {
 
 		case R.id.settingsfragment_notificationsbytype:
-			if(individualNotifictionsHolder.getVisibility() == View.VISIBLE){
+			if (individualNotifictionsHolder.getVisibility() == View.VISIBLE) {
 				individualNotifictionsHolder.setVisibility(View.GONE);
 			} else {
 				individualNotifictionsHolder.setVisibility(View.VISIBLE);
 			}
 			break;
-			
+
 		case R.id.settingsfragment_syncedcalendars:
-			if(calendarSyncHolder.getVisibility() == View.VISIBLE){
+			if (calendarSyncHolder.getVisibility() == View.VISIBLE) {
 				calendarSyncHolder.setVisibility(View.GONE);
 			} else {
 				calendarSyncHolder.setVisibility(View.VISIBLE);
 			}
-			
+
 			break;
-		
+
 		case R.id.settingsfragment_logout:
 			raiseLogoutDialog();
 			break;
@@ -220,12 +224,12 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 		case R.id.settingsfragment_notifications:
 			PrefsManager.setUserPreference(getActivity().getApplication(),
 					Constants.PUSH_NOTIFICATIONS, isChecked);
-			if(isChecked){
+			if (isChecked) {
 				notificationsSettings.setVisibility(View.VISIBLE);
 			} else {
 				notificationsSettings.setVisibility(View.GONE);
 			}
-			
+
 			break;
 
 		case R.id.settingsfragment_ring:
@@ -347,6 +351,18 @@ public class SettingsFragment extends Fragment implements OnClickListener,
 
 			if (which == DialogInterface.BUTTON_POSITIVE) {
 
+				// 
+				try {
+					LogoutDeviceRunnable logoutRunnable = new LogoutDeviceRunnable((ZeppaApplication) getActivity()
+						.getApplication(),
+						((AuthenticatedFragmentActivity) getActivity())
+								.getGoogleAccountCredential());
+					
+					ThreadManager.execute(logoutRunnable);
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+				
 				((AuthenticatedFragmentActivity) getActivity()).logout();
 			}
 

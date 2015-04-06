@@ -12,8 +12,8 @@
         android:layout_height="76dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/background_contact_picture"
         android:padding="1dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/default_user_image" />
 
     <TextView

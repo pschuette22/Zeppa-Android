@@ -2,8 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="3dp"
-    android:background="@drawable/background_notification" >
+    android:background="@drawable/background_notification_seen"
+    android:id="@+id/notificationitem_background"
+    android:padding="3dp" >
 
     <ImageView
         android:id="@+id/notificationitem_userimage"
@@ -12,9 +13,9 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/background_contact_picture"
         android:contentDescription="@string/contdesc_userimage"
         android:padding="1dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/default_user_image" />
 
     <TextView

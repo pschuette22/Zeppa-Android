@@ -65,6 +65,9 @@ public class PrefsManager {
 
 	public static void setBaseNotificationPreferences(Context context) {
 
+		/*
+		 * Set Push Notifications
+		 * */
 		if (!containsUserPreference(context, Constants.PUSH_NOTIFICATIONS)) {
 			setUserPreference(context, Constants.PUSH_NOTIFICATIONS, true);
 		}
@@ -109,6 +112,13 @@ public class PrefsManager {
 			setUserPreference(context, Constants.PN_EVENT_CANCELED, true);
 		}
 
+		/*
+		 * Set Showcase Preferences 
+		 */
+		if(!containsUserPreference(context, Constants.SC_NAVIGATIONBAR)) {
+			setUserPreference(context, Constants.SC_NAVIGATIONBAR, false);
+		}
+		
 	}
 
 }

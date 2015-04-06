@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableLeft="@drawable/cancel_icon"
+            android:drawableStart="@drawable/cancel_icon"
             android:gravity="center"
             android:text="@string/cancel" />
 
@@ -26,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableLeft="@drawable/done_icon"
+            android:drawableStart="@drawable/done_icon"
             android:gravity="center"
             android:text="@string/done" />
     </LinearLayout>
@@ -57,11 +59,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="3dp"
-                    android:paddingBottom="-5dp"
-                    android:paddingTop="-5dp"
+                    android:layout_marginStart="3dp"
                     android:spinnerMode="dropdown" />
 
                 <EditText
@@ -70,21 +72,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_toLeftOf="@id/neweventactivity_eventscope"
+                    android:layout_toStartOf="@id/neweventactivity_eventscope"
                     android:hint="@string/event_title"
                     android:inputType="textCapWords"
-                    android:lines="1"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingTop="3dp" />
+                    android:lines="1" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp" >
 
@@ -92,6 +91,7 @@
                     android:id="@+id/neweventactivity_exactlocation"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:background="@drawable/background_fragimg"
@@ -103,11 +103,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_margin="4dp"
                     android:layout_toLeftOf="@id/neweventactivity_exactlocation"
+                    android:layout_toStartOf="@id/neweventactivity_exactlocation"
                     android:hint="@string/location_short"
-                    android:inputType="textCapWords"
-                    android:padding="3dp" />
+                    android:inputType="textCapWords" />
             </RelativeLayout>
 
             <TextView
@@ -115,7 +116,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/from"
@@ -134,6 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginLeft="2dp"
                     android:paddingBottom="3dp"
                     android:paddingLeft="3dp"
@@ -202,16 +205,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
                 android:hint="@string/desciption_newevent"
-                android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
-                android:padding="3dp" />
+                android:inputType="textCapSentences|textAutoCorrect|textMultiLine" />
 
             <LinearLayout
                 android:id="@+id/neweventactivity_taglineholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
+                android:animateLayoutChanges="false"
                 android:orientation="vertical" />
 
             <RelativeLayout
@@ -244,11 +246,8 @@
                     android:hint="@string/newtag"
                     android:inputType="textCapWords"
                     android:lines="1"
-                    android:maxLength="25"
-                    android:minWidth="200dp"
-                    android:paddingBottom="2dp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp" />
+                    android:maxLength="20"
+                    android:minWidth="200dp" />
             </RelativeLayout>
 
             <TextView
@@ -259,9 +258,10 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/background_listitem_default"
                 android:gravity="center"
-                android:padding="3dp"
+                android:paddingBottom="3dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
+                android:paddingTop="3dp"
                 android:text="@string/add_invites" />
 
             <LinearLayout

@@ -20,7 +20,7 @@ public class FetchMinglerTagsRunnable extends BaseRunnable {
 
 	private long userId;
 	private long minglerId;
-	private OnTagLoadListener listener;
+//	private OnTagLoadListener listener;
 
 	public FetchMinglerTagsRunnable(ZeppaApplication application,
 			GoogleAccountCredential credential, long userId, long minglerId,
@@ -28,7 +28,7 @@ public class FetchMinglerTagsRunnable extends BaseRunnable {
 		super(application, credential);
 		this.userId = userId;
 		this.minglerId = minglerId;
-		this.listener = listener;
+//		this.listener = listener;
 	}
 
 	@Override

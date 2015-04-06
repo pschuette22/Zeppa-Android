@@ -60,7 +60,6 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/background_contact_picture"
                     android:contentDescription="@string/contdesc_contactimage"
                     android:scaleType="centerCrop"
                     android:src="@drawable/default_user_image" />

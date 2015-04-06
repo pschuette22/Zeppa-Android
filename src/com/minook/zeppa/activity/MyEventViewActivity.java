@@ -168,7 +168,7 @@ public class MyEventViewActivity extends AbstractEventViewActivity {
 		super.onNotificationReceived(notification);
 
 		if (notification.getType().equals("USER_JOINED")
-				|| notification.getType().equals("USER_LEFT")) {
+				|| notification.getType().equals("USER_LEAVING")) {
 			startFetchEventExtrasThread();
 		}
 	}

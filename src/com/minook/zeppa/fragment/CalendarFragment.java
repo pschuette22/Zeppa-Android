@@ -1,5 +1,9 @@
 package com.minook.zeppa.fragment;
 
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,7 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import com.minook.zeppa.R;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.pschuette.android.calendarlibrary.DayAdapter.EventItemClickListener;
@@ -19,26 +25,37 @@ import com.pschuette.android.calendarlibrary.Event;
 import com.pschuette.android.calendarlibrary.ExtendedCalendarView;
 
 public class CalendarFragment extends Fragment implements
-		EventItemClickListener {
+		EventItemClickListener, OnRefreshListener {
 
 	private static final String TAG = CalendarFragment.class.getName();
+
+	private View view;
 	private ExtendedCalendarView calendar;
+	private PullToRefreshLayout pullToRefreshLayout;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
+		view = inflater.inflate(R.layout.fragment_calendar, container, false);
 		calendar = new ExtendedCalendarView(getActivity(), this);
-		return calendar;
-
-	}
-
-	@Override
-	public void onResume() {
 		calendar.drawCalendarAndDayDetails();
 
-		super.onResume();
+		FrameLayout frame = (FrameLayout) view
+				.findViewById(R.id.calendarfragment_frame);
+
+		frame.addView(calendar);
+
+		pullToRefreshLayout = (PullToRefreshLayout) view
+				.findViewById(R.id.calendarfragment_ptr);
+		ActionBarPullToRefresh.from(getActivity())
+				.options(Options.create().scrollDistance(.4f).build())
+				.allChildrenArePullable().listener(this)
+				.setup(pullToRefreshLayout);
+
+		return view;
+
 	}
 
 	@Override
@@ -61,6 +78,12 @@ public class CalendarFragment extends Fragment implements
 			startActivity(calIntent);
 		}
 
+	}
+
+	@Override
+	public void onRefreshStarted(View view) {
+		calendar.onRefreshStarted();
+		pullToRefreshLayout.setRefreshing(false);
 	}
 
 }

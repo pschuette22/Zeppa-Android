@@ -65,7 +65,7 @@ public abstract class AbstractEventViewActivity extends
 		OnCommentLoadListener, OnEventUpdateListener,
 		OnRelationshipsLoadedListener, OnRefreshListener {
 
-//	final private String TAG = getClass().getName();
+	// final private String TAG = getClass().getName();
 
 	private long eventId;
 	protected AbstractZeppaEventMediator eventMediator;
@@ -195,10 +195,7 @@ public abstract class AbstractEventViewActivity extends
 		super.onConnected(connectionHint);
 
 		startFetchEventExtrasThread();
-		ThreadManager.execute(new FetchCommentsRunnable(
-				(ZeppaApplication) getApplication(),
-				getGoogleAccountCredential(), eventMediator, commentAdapter
-						.getLatestCommentPostTime().longValue()));
+		fetchEventComments();
 
 	}
 
@@ -227,8 +224,16 @@ public abstract class AbstractEventViewActivity extends
 	@Override
 	protected void onStop() {
 		super.onStop();
+
+	}
+
+	@Override
+	protected void onDestroy() {
+
 		eventMediator.unregisterCommentLoadListener();
 		eventMediator.unregisterOnRelationshipsLoadedListener(this);
+
+		super.onDestroy();
 	}
 
 	@Override
@@ -337,10 +342,7 @@ public abstract class AbstractEventViewActivity extends
 				&& notification.getEventId().longValue() == eventMediator
 						.getEventId().longValue() && isConnected()) {
 
-			ThreadManager.execute(new FetchCommentsRunnable(
-					(ZeppaApplication) getApplication(),
-					getGoogleAccountCredential(), eventMediator, commentAdapter
-							.getLatestCommentPostTime()));
+			fetchEventComments();
 
 		} else {
 			super.onNotificationReceived(notification);
@@ -351,6 +353,7 @@ public abstract class AbstractEventViewActivity extends
 	@Override
 	public void onRefreshStarted(View view) {
 		startFetchEventExtrasThread();
+		fetchEventComments();
 	}
 
 	protected void setEventInfo() {
@@ -498,6 +501,18 @@ public abstract class AbstractEventViewActivity extends
 		eventMediator.loadEventRelationships(
 				(ZeppaApplication) getApplication(),
 				getGoogleAccountCredential(), this);
+
+	}
+
+	/**
+	 * Start thread to fetch event comments
+	 */
+	protected void fetchEventComments() {
+
+		ThreadManager.execute(new FetchCommentsRunnable(
+				(ZeppaApplication) getApplication(),
+				getGoogleAccountCredential(), eventMediator, commentAdapter
+						.getLatestCommentPostTime().longValue()));
 
 	}
 

@@ -47,8 +47,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-//		getActionBar().hide();
+
 		getSupportActionBar().hide();
 
 		setContentView(R.layout.activity_login);
@@ -195,6 +194,10 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		return true;
 	}
 
+	/**
+	 * Attempt to retrieve logged in user's ZeppaUser object and, if successful,
+	 * launch into main activity
+	 */
 	private void loadAndLaunch() {
 
 		executingLaunch = true;
@@ -208,15 +211,30 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 				UserResult resultCode = UserResult.UNKNOWN;
 
 				try {
-					MyZeppaUserMediator mediator = ZeppaUserSingleton
-							.getInstance().fetchLoggedInUserWithBlocking(
-									credential);
+
+					MyZeppaUserMediator mediator = null;
+
+					// try to fetch by logged in user id if held
+					Long loggedInUserId = PrefsManager
+							.getLoggedInUserId(getApplicationContext());
+					if (loggedInUserId > 0) {
+						mediator = ZeppaUserSingleton.getInstance()
+								.fetchLoggedInUserByIdWithBlocking(credential,
+										loggedInUserId);
+
+					}
+
+					// try to fetch user by authed email.
+					if (mediator == null) {
+						mediator = ZeppaUserSingleton.getInstance()
+								.fetchLoggedInUserWithBlocking(credential);
+					}
 
 					if (mediator == null) {
-						// This should not happen, but just in case
+						// Happens if user deleted account from another device
 						resultCode = UserResult.CREATE_NEW_USER;
-
 					} else {
+						// Success
 						resultCode = UserResult.FETCH_SUCCESS;
 					}
 

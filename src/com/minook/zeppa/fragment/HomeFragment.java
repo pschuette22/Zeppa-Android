@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip.IconTabProvider;
@@ -19,14 +20,26 @@ import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.MainActivity;
 import com.minook.zeppa.activity.NewEventActivity;
+import com.minook.zeppa.singleton.NotificationSingleton;
+import com.minook.zeppa.singleton.NotificationSingleton.NotificationLoadListener;
 
 public class HomeFragment extends Fragment implements OnClickListener,
-		OnPageChangeListener {
+		OnPageChangeListener, NotificationLoadListener {
 
 	private ViewPager mainPager;
 	private PagerSlidingTabStrip tabStrip;
 	private ZeppaViewPagerAdapter zeppaPagerAdapter;
 	private ImageButton addEvent;
+	private TextView notificationCount;
+	
+	
+	/*
+	 * Child fragments of the home fragment
+	 */
+	private CalendarFragment calendarFragment;
+	private FeedFragment feedFragment;
+	private AgendaFragment watchingFragment;
+	private ActivityFragment activityFragment;
 
 	private View layout;
 	// private int currentPage;
@@ -62,9 +75,24 @@ public class HomeFragment extends Fragment implements OnClickListener,
 		mainPager.setCurrentItem(1);
 		addEvent = (ImageButton) layout.findViewById(R.id.home_add);
 		addEvent.setOnClickListener(this);
+		notificationCount = (TextView) layout
+				.findViewById(R.id.notificationcount);
 
 		return layout;
 
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		NotificationSingleton.getInstance().registerOnLoadListener(this);
+
+	}
+
+	@Override
+	public void onDestroy() {
+		NotificationSingleton.getInstance().unregisterOnLoadListener(this);
+		super.onDestroy();
 	}
 
 	@Override
@@ -77,6 +105,10 @@ public class HomeFragment extends Fragment implements OnClickListener,
 		CharSequence titleSequence = zeppaPagerAdapter.getPageTitle(mainPager
 				.getCurrentItem());
 		activity.toolbar.setTitle(titleSequence);
+
+		if (notificationCount != null) {
+			setNotificationCount();
+		}
 
 	}
 
@@ -120,12 +152,43 @@ public class HomeFragment extends Fragment implements OnClickListener,
 		activity.toolbar.setTitle(titleSequence);
 	}
 
+	@Override
+	public void onNotificationsLoaded() {
+		setNotificationCount();
+
+	}
+
+	@Override
+	public void onNotificationDataChanged() {
+		setNotificationCount();
+
+	}
+
 	/*
 	 * ----------------- MY METHODS ----------------------- NOTES:
 	 * 
 	 * stop the trend of using a computer as a substitute for being active and
 	 * social
 	 */
+
+	protected void setNotificationCount() {
+		int count = NotificationSingleton.getInstance()
+				.getUnseenNotificationCount();
+
+		if (count <= 0) {
+			notificationCount.setVisibility(View.GONE);
+		} else {
+			notificationCount.setVisibility(View.VISIBLE);
+
+			if (count < 99) {
+				notificationCount.setText(count + "");
+			} else {
+				notificationCount.setText("99+");
+			}
+
+		}
+
+	}
 
 	/*
 	 * --------------- PRIVATE CLASSES --------------------- NOTES:
@@ -139,10 +202,7 @@ public class HomeFragment extends Fragment implements OnClickListener,
 				R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda,
 				R.drawable.ic_tab_activity };
 
-		private CalendarFragment calendarFragment;
-		private FeedFragment feedFragment;
-		private AgendaFragment watchingFragment;
-		private ActivityFragment activityFragment;
+		
 
 		public ZeppaViewPagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -154,7 +214,9 @@ public class HomeFragment extends Fragment implements OnClickListener,
 
 		@Override
 		public void destroyItem(ViewGroup container, int position, Object object) {
-			super.destroyItem(container, position, object);
+//			super.destroyItem(container, position, object);
+			
+			
 		}
 
 		@Override

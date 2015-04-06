@@ -37,3 +37,6 @@
 # Needed by google-api-client-android when linking against an older platform version
 
 -dontwarn com.google.api.client.googleapis.extensions.android.**
+
+# Needed to upload images via HTTP multipart request
+-dontwarn org.apache.**

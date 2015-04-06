@@ -91,8 +91,8 @@ public abstract class AbstractZeppaEventMediator implements
 	@Override
 	public int compareTo(AbstractZeppaEventMediator another) {
 
-		long compare = another.getEndInMillis().longValue()
-				- getEndInMillis().longValue();
+		long compare = getEndInMillis().longValue()
+				- another.getEndInMillis().longValue();
 
 		return (int) compare;
 	}
@@ -190,10 +190,10 @@ public abstract class AbstractZeppaEventMediator implements
 
 	}
 
-	public List<ZeppaEventToUserRelationship> getEventRelationships(){
+	public List<ZeppaEventToUserRelationship> getEventRelationships() {
 		return relationships;
 	}
-	
+
 	public void setEventRelationships(
 			List<ZeppaEventToUserRelationship> relationships) {
 		this.hasLoadedRelationships = true;

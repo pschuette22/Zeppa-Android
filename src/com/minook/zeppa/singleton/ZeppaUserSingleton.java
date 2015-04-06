@@ -111,11 +111,7 @@ public class ZeppaUserSingleton {
 			return userMediator;
 		}
 
-		Zeppauserendpoint.Builder builder = new Zeppauserendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		builder = CloudEndpointUtils.updateBuilder(builder);
-		Zeppauserendpoint endpoint = builder.build();
+		Zeppauserendpoint endpoint = buildZeppaUserEndpoint(credential);
 
 		ZeppaUser zeppaUser = endpoint.fetchCurrentZeppaUser().execute();
 
@@ -129,11 +125,32 @@ public class ZeppaUserSingleton {
 
 	}
 
+	public MyZeppaUserMediator fetchLoggedInUserByIdWithBlocking(
+			GoogleAccountCredential credential, long userId) throws IOException {
+		// If mediator already exists, return it. Called erroneously
+		if (userMediator != null) {
+			return userMediator;
+		}
+
+		// build endpoint and execute get task
+		Zeppauserendpoint endpoint = buildZeppaUserEndpoint(credential);
+		ZeppaUser user = endpoint.getZeppaUser(userId).execute();
+
+		// if returned null object, return null
+		if (user == null) {
+			return null;
+		}
+		// if valid ZeppaUser object returned, create new mediator instance
+		MyZeppaUserMediator mediator = new MyZeppaUserMediator(user);
+		this.userMediator = mediator;
+		return mediator;
+	}
+
 	public void executeFindMinglerTask(ZeppaApplication application,
 			GoogleAccountCredential credential, MinglerFinderAdapter adapter) {
 		lastFindMinglersTaskExecutionDate = new Date();
-		ThreadManager
-				.execute(new FindMinglersRunnable(application, credential, adapter));
+		ThreadManager.execute(new FindMinglersRunnable(application, credential,
+				adapter));
 	}
 
 	/**
@@ -151,8 +168,14 @@ public class ZeppaUserSingleton {
 		try {
 			mediator = getAbstractUserMediatorById(userInfo.getKey()
 					.getParent().getId().longValue());
+			if (mediator != null && mediator instanceof DefaultUserInfoMediator) {
+				((DefaultUserInfoMediator) mediator)
+						.setUserRelationship(relationship);
+				return;
+			}
 		} catch (NullPointerException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
+			return;
 		}
 
 		if (mediator == null) {
@@ -164,11 +187,28 @@ public class ZeppaUserSingleton {
 
 	}
 
-	public void addAllDefaultUserInfoMediators(List<DefaultUserInfoMediator> mediators){
-		heldUserMediators.addAll(mediators);
-		
+	public void removeHeldMediatorById(Long userId) {
+
+		if (heldUserMediators == null || heldUserMediators.isEmpty()) {
+			return;
+		}
+
+		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
+				.iterator();
+		DefaultUserInfoMediator result = null;
+		while (iterator.hasNext()) {
+			DefaultUserInfoMediator mediator = iterator.next();
+			if (mediator.getUserId().longValue() == userId.longValue()) {
+				result = mediator;
+			}
+		}
+
+		if (result != null) {
+			heldUserMediators.remove(result);
+		}
+
 	}
-	
+
 	/**
 	 * This method sets the contactLoader view which should be hidden when
 	 * contacts have loaded
@@ -240,10 +280,10 @@ public class ZeppaUserSingleton {
 
 		try {
 			numbers.add(userMediator.getUnformattedPhoneNumber());
-		} catch (NullPointerException e){
-			
+		} catch (NullPointerException e) {
+
 		}
-		
+
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
 				.iterator();
 		while (iterator.hasNext()) {
@@ -264,7 +304,7 @@ public class ZeppaUserSingleton {
 		List<String> emails = new ArrayList<String>();
 
 		emails.add(userMediator.getGmail());
-		
+
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
 				.iterator();
 		while (iterator.hasNext()) {
@@ -382,10 +422,20 @@ public class ZeppaUserSingleton {
 		return pendingRequests;
 	}
 
+	/**
+	 * Iterator through all held users and return the mediator holding one with a matching identifier
+	 * @param userId
+	 * @return AbstractUserMediator with matching identifier or null
+	 */
+	
 	public AbstractZeppaUserMediator getAbstractUserMediatorById(Long userId) {
 
-		if (userId.longValue() == userMediator.getUserId().longValue()) {
-			return userMediator;
+		try {
+			if (userId.longValue() == userMediator.getUserId().longValue()) {
+				return userMediator;
+			}
+		} catch (NullPointerException e) {
+			// userMediator is not set yet
 		}
 
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
@@ -393,6 +443,7 @@ public class ZeppaUserSingleton {
 
 		while (iterator.hasNext()) {
 			DefaultUserInfoMediator userInfoMediator = iterator.next();
+			
 			if (userInfoMediator.getUserId().longValue() == userId.longValue()) {
 				return userInfoMediator;
 			}
@@ -451,4 +502,16 @@ public class ZeppaUserSingleton {
 
 		return false;
 	}
+
+	private Zeppauserendpoint buildZeppaUserEndpoint(
+			GoogleAccountCredential credential) {
+		Zeppauserendpoint.Builder builder = new Zeppauserendpoint.Builder(
+				AndroidHttp.newCompatibleTransport(),
+				GsonFactory.getDefaultInstance(), credential);
+		builder = CloudEndpointUtils.updateBuilder(builder);
+		Zeppauserendpoint endpoint = builder.build();
+
+		return endpoint;
+	}
+
 }
