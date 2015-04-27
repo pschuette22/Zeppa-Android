@@ -2,13 +2,4 @@ gen/
 endpoint-libs/
 .google_apis/
 bin/
-assets/
 .settings/
-.classpath
-.project
-Constants.java
-project.properties
-proguard-project.txt
-proguard-google-api-client.txt
-lint.xml
-.project
