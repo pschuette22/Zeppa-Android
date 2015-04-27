@@ -54,6 +54,8 @@ import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.runnable.FetchCommentsRunnable;
 import com.minook.zeppa.runnable.SendEventInvitesRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
+import com.minook.zeppa.runnable.UpdateNotificationRunnable;
+import com.minook.zeppa.singleton.NotificationSingleton;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
@@ -196,6 +198,7 @@ public abstract class AbstractEventViewActivity extends
 
 		startFetchEventExtrasThread();
 		fetchEventComments();
+		setSeenAllNotificationsForEvent();
 
 	}
 
@@ -344,6 +347,12 @@ public abstract class AbstractEventViewActivity extends
 
 			fetchEventComments();
 
+			// Set notification as has seen
+			notification.setHasSeen(Boolean.TRUE);
+			ThreadManager.execute(new UpdateNotificationRunnable(
+					(ZeppaApplication) getApplication(),
+					getGoogleAccountCredential(), notification));
+
 		} else {
 			super.onNotificationReceived(notification);
 		}
@@ -427,6 +436,31 @@ public abstract class AbstractEventViewActivity extends
 		builder.setNegativeButton("Dismiss", listener);
 		builder.setPositiveButton("Send Invites", listener);
 		builder.show();
+
+	}
+
+	private void setSeenAllNotificationsForEvent() {
+		List<ZeppaNotification> eventNotifications = NotificationSingleton
+				.getInstance().getNotificationsForEvent(
+						eventMediator.getEventId().longValue());
+
+		if (!eventNotifications.isEmpty()) {
+
+			Iterator<ZeppaNotification> iterator = eventNotifications
+					.iterator();
+			while (iterator.hasNext()) {
+
+				ZeppaNotification notification = iterator.next();
+				if (!notification.getHasSeen().booleanValue()) {
+					notification.setHasSeen(Boolean.TRUE);
+					ThreadManager.execute(new UpdateNotificationRunnable(
+							(ZeppaApplication) getApplication(),
+							getGoogleAccountCredential(), notification));
+				}
+
+			}
+
+		}
 
 	}
 

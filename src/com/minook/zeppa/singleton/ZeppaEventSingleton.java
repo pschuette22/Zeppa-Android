@@ -59,7 +59,7 @@ public class ZeppaEventSingleton {
 	/**
 	 * 
 	 * Private Constructor. Cannot be called outside of singleton. This prevents
-	 * multiple instances from being called
+	 * multiple instances from being created
 	 * 
 	 */
 	private ZeppaEventSingleton() {
@@ -473,18 +473,19 @@ public class ZeppaEventSingleton {
 		lastUpdateCallTime = Long.valueOf(System.currentTimeMillis());
 	}
 
-	public void fetchMoreEvents(ZeppaApplication application,
+	public boolean fetchMoreEvents(ZeppaApplication application,
 			GoogleAccountCredential credential) {
 
 		if (isLoadingEvents || !isMoreEvents) {
-			return;
+			return false;
 		}
 
 		isLoadingEvents = true;
 		ThreadManager.execute(new FetchMoreEventsRunnable(application,
 				credential, ZeppaUserSingleton.getInstance().getUserId()
 						.longValue(), nextRelationshipPageToken));
-
+		
+		return true;
 	}
 
 }

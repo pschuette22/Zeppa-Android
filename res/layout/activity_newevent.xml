@@ -96,7 +96,7 @@
                     android:layout_centerVertical="true"
                     android:background="@drawable/background_fragimg"
                     android:contentDescription="@string/contdesc_addexactlocation"
-                    android:src="@drawable/ic_menu_location" />
+                    android:src="@drawable/ic_location" />
 
                 <EditText
                     android:id="@+id/neweventactivity_shortlocation"

@@ -32,6 +32,15 @@ public class CalendarFragment extends Fragment implements
 	private View view;
 	private ExtendedCalendarView calendar;
 	private PullToRefreshLayout pullToRefreshLayout;
+	private FrameLayout frame;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		calendar = new ExtendedCalendarView(getActivity(), this);
+
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,16 +48,12 @@ public class CalendarFragment extends Fragment implements
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		view = inflater.inflate(R.layout.fragment_calendar, container, false);
-		calendar = new ExtendedCalendarView(getActivity(), this);
-		calendar.drawCalendarAndDayDetails();
 
-		FrameLayout frame = (FrameLayout) view
-				.findViewById(R.id.calendarfragment_frame);
-
-		frame.addView(calendar);
+		frame = (FrameLayout) view.findViewById(R.id.calendarfragment_frame);
 
 		pullToRefreshLayout = (PullToRefreshLayout) view
 				.findViewById(R.id.calendarfragment_ptr);
+
 		ActionBarPullToRefresh.from(getActivity())
 				.options(Options.create().scrollDistance(.4f).build())
 				.allChildrenArePullable().listener(this)
@@ -56,6 +61,27 @@ public class CalendarFragment extends Fragment implements
 
 		return view;
 
+	}
+
+	@Override
+	public void onStart() {
+
+		if (frame.getChildCount() == 0) {
+			calendar.drawCalendarAndDayDetails();
+
+			frame.addView(calendar);
+		}
+
+		super.onStart();
+	}
+
+	@Override
+	public void onDestroyView() {
+
+		frame.removeView(calendar);
+		pullToRefreshLayout.removeView(frame);
+
+		super.onDestroyView();
 	}
 
 	@Override

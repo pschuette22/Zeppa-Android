@@ -28,11 +28,13 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 	private AgendaListAdapter alAdapter;
 	private View loaderView;
 
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ZeppaEventSingleton.getInstance().registerEventLoadListener(this);
+
+		alAdapter = new AgendaListAdapter(
+				(AuthenticatedFragmentActivity) getActivity());
 
 	}
 
@@ -47,26 +49,37 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 		pullToRefreshLayout = (PullToRefreshLayout) layout
 				.findViewById(R.id.agendafragment_ptr);
 
-		alAdapter = new AgendaListAdapter(
-				(AuthenticatedFragmentActivity) getActivity());
-
-
 		ActionBarPullToRefresh.from(getActivity())
 				.options(Options.create().scrollDistance(.4f).build())
 				.allChildrenArePullable().listener(this)
 				.setup(pullToRefreshLayout);
 
-		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial()) {
+		return layout;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+
+		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial()
+				&& agendaList.getHeaderViewsCount() == 0) {
 			loaderView = Utils.makeLoaderView(
 					(AuthenticatedFragmentActivity) getActivity(),
 					"Finding Activities...");
 			agendaList.addHeaderView(loaderView);
 		}
-		
+
 		agendaList.setAdapter(alAdapter);
 		agendaList.setOnItemClickListener(alAdapter);
 
-		return layout;
+	}
+
+	@Override
+	public void onDestroyView() {
+
+		pullToRefreshLayout.removeView(agendaList);
+
+		super.onDestroyView();
 	}
 
 	@Override
@@ -81,17 +94,15 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 		alAdapter.notifyDataSetChanged();
 	}
 
-
-
 	@Override
 	public void onZeppaEventsLoaded() {
-		
+
 		if (loaderView != null) {
 			loaderView.setVisibility(View.GONE);
 			agendaList.removeHeaderView(loaderView);
 			loaderView = null;
 		}
-		
+
 		pullToRefreshLayout.setRefreshing(false);
 		alAdapter.notifyDataSetChanged();
 

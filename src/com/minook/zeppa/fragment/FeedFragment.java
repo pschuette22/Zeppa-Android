@@ -42,16 +42,7 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 
 		@Override
 		public void onScrollStateChanged(AbsListView view, int scrollState) {
-			if ((scrollState == OnScrollListener.SCROLL_STATE_IDLE)
-					&& (feedList.getLastVisiblePosition() == flAdapter
-							.getCount() - 1)) {
-
-				ZeppaEventSingleton.getInstance().fetchMoreEvents(
-						(ZeppaApplication) getActivity().getApplication(),
-						((AuthenticatedFragmentActivity) getActivity())
-								.getGoogleAccountCredential());
-
-			}
+			flAdapter.onScrollStart();
 
 		}
 
@@ -59,9 +50,26 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 		public void onScroll(AbsListView view, int firstVisibleItem,
 				int visibleItemCount, int totalItemCount) {
 
+			flAdapter.onScrollStop();
+
+			if ((firstVisibleItem + visibleItemCount) == totalItemCount) {
+				ZeppaEventSingleton.getInstance().fetchMoreEvents(
+						(ZeppaApplication) getActivity().getApplication(),
+						((AuthenticatedFragmentActivity) getActivity())
+								.getGoogleAccountCredential());
+			}
+
 		}
 
 	};
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		flAdapter = new FeedListAdapter(
+				(AuthenticatedFragmentActivity) getActivity());
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,32 +79,48 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 		layout = inflater.inflate(R.layout.fragment_feed, container, false);
 
 		feedList = (ListView) layout.findViewById(R.id.feedListView);
-		
-		feedList.setOnScrollListener(mScrollListener);
-		
 		pullToRefreshLayout = (PullToRefreshLayout) layout
 				.findViewById(R.id.feedfragment_ptr);
-
-		flAdapter = new FeedListAdapter(
-				(AuthenticatedFragmentActivity) getActivity());
 
 		ActionBarPullToRefresh.from(getActivity())
 				.options(Options.create().scrollDistance(.4f).build())
 				.allChildrenArePullable().listener(this)
 				.setup(pullToRefreshLayout);
 
-		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial()) {
-			loaderView = Utils.makeLoaderView(
-					(AuthenticatedFragmentActivity) getActivity(),
+		ZeppaEventSingleton.getInstance().registerEventLoadListener(this);
+		return layout;
+	}
+
+	// @Override
+	// public void onResume() {
+	// super.onResume();
+	// flAdapter.notifyDataSetChanged();
+	//
+	// }
+
+	@Override
+	public void onStart() {
+		feedList.setOnScrollListener(mScrollListener);
+
+		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial()
+				&& feedList.getHeaderViewsCount() == 0) {
+			loaderView = Utils.makeLoaderView(getActivity(),
 					"Finding Activities...");
 			feedList.addHeaderView(loaderView);
 		}
 
 		feedList.setAdapter(flAdapter);
 		feedList.setOnItemClickListener(flAdapter);
+		super.onStart();
+	}
 
-		ZeppaEventSingleton.getInstance().registerEventLoadListener(this);
-		return layout;
+	@Override
+	public void onDestroyView() {
+
+		pullToRefreshLayout.removeView(feedList);
+		ZeppaEventSingleton.getInstance().unregisterEventLoadListener(this);
+
+		super.onDestroyView();
 	}
 
 	@Override
@@ -112,19 +136,6 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	public void onDestroy() {
-		ZeppaEventSingleton.getInstance().unregisterEventLoadListener(this);
-		super.onDestroy();
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		flAdapter.notifyDataSetChanged();
-
-	}
 
 	@Override
 	public void onZeppaEventsLoaded() {
@@ -138,7 +149,5 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 		flAdapter.notifyDataSetChanged();
 
 	}
-
-	
 
 }

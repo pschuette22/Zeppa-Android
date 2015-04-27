@@ -13,7 +13,6 @@ public class AgendaListAdapter extends FeedListAdapter {
 	}
 
 	
-
 	@Override
 	protected void setEventMediators() {
 		eventMediators = ZeppaEventSingleton.getInstance()
@@ -21,14 +20,10 @@ public class AgendaListAdapter extends FeedListAdapter {
 	}
 
 
-
 	@Override
 	protected List<AbstractZeppaEventMediator> getCurrentEventMediators() {
 		return ZeppaEventSingleton.getInstance().getInterestingEventMediators();
 	}
 
-
-	
-	
 
 }

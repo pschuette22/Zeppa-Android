@@ -8,9 +8,7 @@ import android.widget.CheckedTextView;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.R;
 import com.minook.zeppa.eventtagendpoint.model.EventTag;

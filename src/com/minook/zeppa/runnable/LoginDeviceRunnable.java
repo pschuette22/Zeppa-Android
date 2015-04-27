@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.Constants;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint;
 import com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint.ListDeviceInfo;
@@ -19,13 +20,13 @@ import com.minook.zeppa.gcm.ZeppaGCMUtils;
  * @author DrunkWithFunk21
  * 
  */
-public class InsertDeviceRunnable extends BaseRunnable {
+public class LoginDeviceRunnable extends BaseRunnable {
 
 	
 	private Long userId;
 
 	
-	public InsertDeviceRunnable(ZeppaApplication application,
+	public LoginDeviceRunnable(ZeppaApplication application,
 			GoogleAccountCredential credential, Long userId) {
 		super(application, credential);
 		this.userId = userId;
@@ -69,10 +70,7 @@ public class InsertDeviceRunnable extends BaseRunnable {
 
 			} while (cursor != null);
 
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			return; // If error occurred, don't do anything.
-		}
+		
 
 		// If one of the pulled devices matches this one, don't make it
 		// persistent
@@ -80,22 +78,43 @@ public class InsertDeviceRunnable extends BaseRunnable {
 			Iterator<DeviceInfo> iterator = userDevices.iterator();
 			while (iterator.hasNext()) {
 				DeviceInfo device = iterator.next();
-				if (info.getRegistrationId().trim()
+				
+				// Check to see if device already exists
+				try {
+				if (device.getRegistrationId().trim()
 						.equals(info.getRegistrationId().trim())) {
-					application.setCurrentDeviceInfo(device);
+					
+					setDeviceLoggedinInfo(device);
+					device = endpoint.updateDeviceInfo(device).execute();
+					
+					application.setCurrentDeviceInfo(device);					
+					
+					return;
+				}
+				} catch (NullPointerException e){
+					e.printStackTrace();
 					return;
 				}
 			}
-		}
+		} 
 
-		try { // try to insert device. Exception left unhandled
-
+			setDeviceLoggedinInfo(info);
 			info = endpoint.insertDeviceInfo(info).execute();
 			application.setCurrentDeviceInfo(info);
+		
 		} catch (IOException e) {
 			e.printStackTrace();
+			return; // If error occurred, don't do anything.
 		}
-		
+	}
+	
+	
+	private void setDeviceLoggedinInfo(DeviceInfo info){
+		info.setLoggedIn(Boolean.TRUE);
+		info.setLastLogin(System.currentTimeMillis());
+		info.setVersion(Constants.VERSION_CODE);
+		info.setUpdate(Constants.UPDATE_CODE);
+		info.setBugfix(Constants.BUGFIX_CODE);
 	}
 
 }

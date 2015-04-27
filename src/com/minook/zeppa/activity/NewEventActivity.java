@@ -3,7 +3,6 @@ package com.minook.zeppa.activity;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.Locale;
 
 import android.app.AlertDialog;
@@ -38,7 +37,6 @@ import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.InviteListAdapter;
 import com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter;
-import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.mediator.MyZeppaEventMediator;
 import com.minook.zeppa.runnable.SyncZeppaCalendarRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
@@ -87,7 +85,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	private TextView addNewTagField;
 	private ImageView addLocationField;
 
-	private LinearLayout invitesHolder;
+//	private LinearLayout invitesHolder;
 
 	// Invisible Event Object Variables
 	private Calendar startCalendar;
@@ -123,7 +121,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		endTimeField = (TextView) findViewById(R.id.neweventactivity_endtime);
 		doneButton = (Button) findViewById(R.id.neweventactivity_create);
 		cancelButton = (Button) findViewById(R.id.neweventactivity_cancel);
-		invitesHolder = (LinearLayout) findViewById(R.id.neweventactivity_invitesholder);
+//		invitesHolder = (LinearLayout) findViewById(R.id.neweventactivity_invitesholder);
 		guestsCanInviteField = (CheckBox) findViewById(R.id.neweventactivity_guestmayinvite);
 
 		newTagTextField = (EditText) findViewById(R.id.neweventactivity_tagtext);

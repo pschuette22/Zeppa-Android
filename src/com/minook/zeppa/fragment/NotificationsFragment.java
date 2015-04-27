@@ -20,8 +20,8 @@ import com.minook.zeppa.singleton.NotificationSingleton;
 import com.minook.zeppa.singleton.NotificationSingleton.NotificationLoadListener;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
-public class ActivityFragment extends Fragment implements OnRefreshListener,
-		NotificationLoadListener {
+public class NotificationsFragment extends Fragment implements
+		OnRefreshListener, NotificationLoadListener {
 
 	private View layout;
 	private View loaderView;
@@ -31,8 +31,10 @@ public class ActivityFragment extends Fragment implements OnRefreshListener,
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		NotificationSingleton.getInstance().registerOnLoadListener(this);
+		notificationsAdapter = new NotificationsAdapter(
+				(AuthenticatedFragmentActivity) getActivity());
 	}
 
 	@Override
@@ -45,15 +47,22 @@ public class ActivityFragment extends Fragment implements OnRefreshListener,
 		pullToRefreshLayout = (PullToRefreshLayout) layout
 				.findViewById(R.id.activityfragment_ptr);
 
-		if (!NotificationSingleton.getInstance().hasLoadedInitial()) {
+		NotificationSingleton.getInstance().registerOnLoadListener(this);
+
+		return layout;
+	}
+
+	@Override
+	public void onStart() {
+
+		if (!NotificationSingleton.getInstance().hasLoadedInitial()
+				&& activityList.getHeaderViewsCount() == 0) {
 			loaderView = Utils.makeLoaderView(
 					(AuthenticatedFragmentActivity) getActivity(),
 					"Loading Notifications...");
 			activityList.addHeaderView(loaderView);
 		}
 
-		notificationsAdapter = new NotificationsAdapter(
-				(AuthenticatedFragmentActivity) getActivity());
 		activityList.setAdapter(notificationsAdapter);
 		activityList.setOnItemClickListener(notificationsAdapter);
 
@@ -62,20 +71,12 @@ public class ActivityFragment extends Fragment implements OnRefreshListener,
 				.allChildrenArePullable().listener(this)
 				.setup(pullToRefreshLayout);
 
-		NotificationSingleton.getInstance().registerOnLoadListener(this);
-
-		return layout;
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		notificationsAdapter.notifyDataSetChanged();
-
+		super.onStart();
 	}
 
 	@Override
 	public void onDestroyView() {
+		pullToRefreshLayout.removeView(activityList);
 		NotificationSingleton.getInstance().unregisterOnLoadListener(this);
 		super.onDestroyView();
 	}

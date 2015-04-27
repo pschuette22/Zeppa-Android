@@ -42,6 +42,14 @@ public class AccountFragment extends Fragment implements OnClickListener {
 	/*
 	 * ----------- Override Methods -----------------
 	 */
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		
+	
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,6 +93,8 @@ public class AccountFragment extends Fragment implements OnClickListener {
 
 		return layout;
 	}
+
+	
 
 	@Override
 	public void onResume() {

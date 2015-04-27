@@ -31,15 +31,14 @@ public class HomeFragment extends Fragment implements OnClickListener,
 	private ZeppaViewPagerAdapter zeppaPagerAdapter;
 	private ImageButton addEvent;
 	private TextView notificationCount;
-	
-	
+
 	/*
 	 * Child fragments of the home fragment
 	 */
 	private CalendarFragment calendarFragment;
 	private FeedFragment feedFragment;
 	private AgendaFragment watchingFragment;
-	private ActivityFragment activityFragment;
+	private NotificationsFragment activityFragment;
 
 	private View layout;
 	// private int currentPage;
@@ -52,20 +51,51 @@ public class HomeFragment extends Fragment implements OnClickListener,
 	 */
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+
+		FragmentManager manager = getChildFragmentManager();
+		zeppaPagerAdapter = new ZeppaViewPagerAdapter(manager);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		// initialize dynamic variables:
 		layout = inflater.inflate(R.layout.fragment_home, container, false);
+
 		mainPager = (ViewPager) layout.findViewById(R.id.main_pager);
 
-		FragmentManager manager = getChildFragmentManager();
-		zeppaPagerAdapter = new ZeppaViewPagerAdapter(manager);
-		mainPager.setAdapter(zeppaPagerAdapter);
 		tabStrip = (PagerSlidingTabStrip) layout
 				.findViewById(R.id.home_pager_tabs);
 
+		addEvent = (ImageButton) layout.findViewById(R.id.home_add);
+		notificationCount = (TextView) layout
+				.findViewById(R.id.notificationcount);
+
+		NotificationSingleton.getInstance().registerOnLoadListener(this);
+
+		return layout;
+
+	}
+
+	@Override
+	public void onStart() {
+
+		super.onStart();
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		setNotificationCount();
+
+		addEvent.setOnClickListener(this);
+
+		mainPager.setAdapter(zeppaPagerAdapter);
 		tabStrip.setBackgroundColor(getResources().getColor(R.color.white));
 		tabStrip.setIndicatorColor(getResources().getColor(R.color.teal));
 		tabStrip.setIndicatorHeight(5);
@@ -73,26 +103,13 @@ public class HomeFragment extends Fragment implements OnClickListener,
 		tabStrip.setShouldExpand(true);
 		tabStrip.setOnPageChangeListener(this);
 		mainPager.setCurrentItem(1);
-		addEvent = (ImageButton) layout.findViewById(R.id.home_add);
-		addEvent.setOnClickListener(this);
-		notificationCount = (TextView) layout
-				.findViewById(R.id.notificationcount);
-
-		return layout;
 
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		NotificationSingleton.getInstance().registerOnLoadListener(this);
-
-	}
-
-	@Override
-	public void onDestroy() {
+	public void onDestroyView() {
 		NotificationSingleton.getInstance().unregisterOnLoadListener(this);
-		super.onDestroy();
+		super.onDestroyView();
 	}
 
 	@Override
@@ -105,10 +122,6 @@ public class HomeFragment extends Fragment implements OnClickListener,
 		CharSequence titleSequence = zeppaPagerAdapter.getPageTitle(mainPager
 				.getCurrentItem());
 		activity.toolbar.setTitle(titleSequence);
-
-		if (notificationCount != null) {
-			setNotificationCount();
-		}
 
 	}
 
@@ -171,6 +184,10 @@ public class HomeFragment extends Fragment implements OnClickListener,
 	 * social
 	 */
 
+	/**
+	 * This sets the notification count to the number of notifications that have
+	 * not been seen
+	 */
 	protected void setNotificationCount() {
 		int count = NotificationSingleton.getInstance()
 				.getUnseenNotificationCount();
@@ -202,8 +219,6 @@ public class HomeFragment extends Fragment implements OnClickListener,
 				R.drawable.ic_tab_feed, R.drawable.ic_tab_agenda,
 				R.drawable.ic_tab_activity };
 
-		
-
 		public ZeppaViewPagerAdapter(FragmentManager fm) {
 			super(fm);
 			// TODO Auto-generated constructor stub
@@ -214,9 +229,8 @@ public class HomeFragment extends Fragment implements OnClickListener,
 
 		@Override
 		public void destroyItem(ViewGroup container, int position, Object object) {
-//			super.destroyItem(container, position, object);
-			
-			
+			super.destroyItem(container, position, object);
+
 		}
 
 		@Override
@@ -238,7 +252,7 @@ public class HomeFragment extends Fragment implements OnClickListener,
 
 			case 3:
 				if (activityFragment == null)
-					activityFragment = new ActivityFragment();
+					activityFragment = new NotificationsFragment();
 
 				return activityFragment;
 			}

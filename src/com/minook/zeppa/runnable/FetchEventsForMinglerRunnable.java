@@ -26,8 +26,8 @@ public class FetchEventsForMinglerRunnable extends BaseRunnable {
 
 	@Override
 	public void run() {
-		String filter = "eventHostId == " + minglerId + " && expires > "
-				+ System.currentTimeMillis();
+		String filter = "eventHostId == " + minglerId + " && userId == "
+				+ userId + " && expires > " + System.currentTimeMillis();
 		String cursor = null;
 		Integer limit = Integer.valueOf(25);
 		String ordering = "expires desc";
@@ -71,8 +71,8 @@ public class FetchEventsForMinglerRunnable extends BaseRunnable {
 						}
 
 					}
-					
-					if(response.getItems().size() < limit.intValue()){
+
+					if (response.getItems().size() < limit.intValue()) {
 						cursor = null;
 					} else {
 						cursor = response.getNextPageToken();
@@ -84,17 +84,17 @@ public class FetchEventsForMinglerRunnable extends BaseRunnable {
 				e.printStackTrace();
 			}
 		} while (cursor != null);
-		
+
 		try {
-			application.getCurrentActivity().runOnUiThread(new Runnable(){
+			application.getCurrentActivity().runOnUiThread(new Runnable() {
 
 				@Override
 				public void run() {
 					ZeppaEventSingleton.getInstance().notifyObservers();
 				}
-				
+
 			});
-		} catch (NullPointerException  e){
+		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
 

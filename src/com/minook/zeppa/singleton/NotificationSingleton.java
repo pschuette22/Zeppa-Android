@@ -99,6 +99,22 @@ public class NotificationSingleton {
 		return notifications;
 	}
 
+	public List<ZeppaNotification> getNotificationsForEvent(long eventId){
+		List<ZeppaNotification> result = new ArrayList<ZeppaNotification>();
+		
+		Iterator<ZeppaNotification> iterator = notifications.iterator();
+		while(iterator.hasNext()){
+			ZeppaNotification notification = iterator.next();
+			
+			if(notification.getEventId() != null && notification.getEventId().longValue() == eventId){
+				result.add(notification);
+			}
+			
+		}
+		
+		return result;
+	}
+	
 	public boolean hasLoadedInitial() {
 		return hasLoadedInitial;
 	}

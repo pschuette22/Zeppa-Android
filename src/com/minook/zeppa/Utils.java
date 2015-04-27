@@ -9,13 +9,15 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
+
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification;
 
@@ -355,7 +357,7 @@ public class Utils {
 	}
 
 	@SuppressLint("InflateParams")
-	public static View makeLoaderView(AuthenticatedFragmentActivity context,
+	public static View makeLoaderView(Activity context,
 			String text) {
 		View loaderView = context.getLayoutInflater().inflate(
 				R.layout.view_loaderview, null, false);
