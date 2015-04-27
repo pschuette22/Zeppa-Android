@@ -1,5 +1,4 @@
 gen/
-endpoint-libs/
 .google_apis/
 bin/
 .settings/
