@@ -34,6 +34,10 @@ public abstract class AbstractTagAdapter extends BaseAdapter {
 		super.notifyDataSetChanged();
 	}
 
+	public void setTagHolder(LinearLayout tagHolder){
+		this.tagHolder = tagHolder;
+	}
+	
 	public void verifyDatasetValid() {
 		List<AbstractEventTagMediator> mediators = getCurrentTagMediators();
 

@@ -3,6 +3,8 @@ package com.minook.zeppa.activity;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
@@ -85,7 +87,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	private TextView addNewTagField;
 	private ImageView addLocationField;
 
-//	private LinearLayout invitesHolder;
+	// private LinearLayout invitesHolder;
 
 	// Invisible Event Object Variables
 	private Calendar startCalendar;
@@ -121,7 +123,8 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		endTimeField = (TextView) findViewById(R.id.neweventactivity_endtime);
 		doneButton = (Button) findViewById(R.id.neweventactivity_create);
 		cancelButton = (Button) findViewById(R.id.neweventactivity_cancel);
-//		invitesHolder = (LinearLayout) findViewById(R.id.neweventactivity_invitesholder);
+		// invitesHolder = (LinearLayout)
+		// findViewById(R.id.neweventactivity_invitesholder);
 		guestsCanInviteField = (CheckBox) findViewById(R.id.neweventactivity_guestmayinvite);
 
 		newTagTextField = (EditText) findViewById(R.id.neweventactivity_tagtext);
@@ -135,9 +138,16 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		endCalendar = new GregorianCalendar();
 
 		LinearLayout tagHolder = (LinearLayout) findViewById(R.id.neweventactivity_taglineholder);
-		tagAdapter = new CreateEventTagAdapter(this, tagHolder);
-		invitesAdapter = new InviteListAdapter(this);
 
+		if (tagAdapter == null) {
+			this.tagAdapter = new CreateEventTagAdapter(this, tagHolder);
+		} else {
+			this.tagAdapter.setTagHolder(tagHolder);
+		}
+
+		if (invitesAdapter == null) {
+			invitesAdapter = new InviteListAdapter(this);
+		}
 		// Set Default Times
 
 		setDefaultCalendarTimes(
@@ -170,7 +180,6 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 		setInvitesText();
 
-		
 	}
 
 	@Override
@@ -178,6 +187,8 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		super.onResume();
 		tagAdapter.drawTags();
 	}
+
+	
 
 	// This handles when a user types in the description field
 
@@ -450,10 +461,11 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 	}
 
-	private void setInvitesText(){
-		addInvitesField.setText("Manage Invites(" + invitesAdapter.getInvitedUsersCount() + ")" );
+	private void setInvitesText() {
+		addInvitesField.setText("Manage Invites("
+				+ invitesAdapter.getInvitedUsersCount() + ")");
 	}
-	
+
 	// private void showInviteViews() {
 	//
 	// invitesHolder.removeAllViews();

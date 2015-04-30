@@ -26,7 +26,8 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 
 	public CreateEventTagAdapter(AuthenticatedFragmentActivity activity,
 			LinearLayout tagHolder) {
-		// Pass the activity context and the holder. tagIds is null so all are returned. 
+		// Pass the activity context and the holder. tagIds is null so all are
+		// returned.
 		super(activity, tagHolder, null);
 
 		tagIdsQue = new LinkedList<Long>();
@@ -38,8 +39,8 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 
 		// Get needed variables
 		if (convertView == null)
-			convertView = activity.getLayoutInflater().inflate(R.layout.view_tag_checkable, parent,
-					false);
+			convertView = activity.getLayoutInflater().inflate(
+					R.layout.view_tag_checkable, parent, false);
 
 		MyEventTagMediator tagManager = getItem(position);
 		CheckedTextView textView = (CheckedTextView) convertView
@@ -49,24 +50,21 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 
 		Long tagId = tagManager.getTagId();
 
-		if (tagIdsQue.contains(tagId)) {
-			textView.setChecked(true);
-		} else {
-			textView.setChecked(false);
-		}
+		textView.setChecked(tagQueContains(tagId.longValue()));
 
 		textView.setTag(tagId);
 		textView.setOnClickListener(this);
 
 		return convertView;
 	}
+	
 
 	private void addTagToQue(View view, Long tagId) {
 
-		if(view == null){
+		if (view == null) {
 			view = locateViewByTag(tagId);
 		}
-		
+
 		CheckedTextView textView = (CheckedTextView) view;
 
 		if (tagIdsQue.size() >= 6) {
@@ -105,6 +103,16 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 
 		return view;
 	}
+	
+	private void checkSelectedTags(){
+		Iterator<Long> iterator = getSelectedTagIds().iterator();
+		
+		while(iterator.hasNext()){
+			CheckedTextView v = locateViewByTag(iterator.next());
+			v.setChecked(true);
+		}
+		
+	}
 
 	public List<Long> getSelectedTagIds() {
 		List<Long> usedTags = new ArrayList<Long>();
@@ -119,17 +127,14 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 		return usedTags;
 	}
 
-	
-	
-
 	@Override
 	protected AbstractEventTagMediator getMatchingMediator(String tagText) {
 		AbstractEventTagMediator mediator = super.getMatchingMediator(tagText);
-		
-		if(mediator != null){
+
+		if (mediator != null) {
 			addTagToQue(null, mediator.getTagId());
 		}
-		
+
 		return mediator;
 	}
 
@@ -143,7 +148,7 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 
 			tagIdsQue.add(tagManager.getTagId());
 		}
-		
+
 		super.onTagCreated(tagManager);
 	}
 
@@ -158,6 +163,17 @@ public class CreateEventTagAdapter extends MyTagAdapter implements
 			addTagToQue(v, tagId);
 		}
 
+	}
+
+	private boolean tagQueContains(long tagId) {
+		Iterator<Long> iterator = tagIdsQue.iterator();
+		while (iterator.hasNext()) {
+			if (iterator.next().longValue() == tagId) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }
