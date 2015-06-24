@@ -2,15 +2,14 @@ package com.minook.zeppa;
 
 public class Constants {
 
-
 	/*
-	 * Software versions. Update with release in form: <version>.<update>.<bugfix>
+	 * Software versions. Update with release in form:
+	 * <version>.<update>.<bugfix>
 	 */
 
 	public static final int VERSION_CODE = 1;
 	public static final int UPDATE_CODE = 2;
 	public static final int BUGFIX_CODE = 1;
-
 
 	public static final String APP_RELEASE_CODE = VERSION_CODE + "."
 			+ UPDATE_CODE + "." + BUGFIX_CODE;
@@ -32,7 +31,18 @@ public class Constants {
 	/*
 	 * Debug variables
 	 */
-	public static final boolean IS_DEBUG = true;
+	
+	/*
+	 * LOCAL_RUN is true when running locally 
+	 */
+	// TODO: set appropriate value before deploying
+	public static final boolean LOCAL_RUN = false;
+	
+	/*
+	 * PRODUCTION is true when running on production server
+	 */
+	// TODO: set appropriate value before deploying
+	public static final boolean PRODUCTION = false;
 
 	/*
 	 * ---------------- Preferences -------------------
@@ -60,32 +70,29 @@ public class Constants {
 	public static final String PN_EVENT_JOINED = "-EventJoinNotification";
 	public static final String PN_EVENT_LEFT = "-EventLeaveNotification";
 	public static final String PN_EVENT_CANCELED = "-EventCanceledNotification";
-	
+
 	// Showcase preferences
-	
+
 	public static final String SC_NAVIGATIONBAR = "-ShowCaseNavigationBar";
 
-	
 	// Intent Extras
-		public static final String EXTRA_NOTIFICATIONID = "NotificationId";
-		
-	
-	
+	public static final String EXTRA_NOTIFICATIONID = "NotificationId";
+
 	/*
 	 * App Engine constants Verify it is safe to hold them here/ considered best
 	 * practice
 	 */
 
-	public static final String PROJECT_NUMBER = IS_DEBUG ? "587859844920"
-			: "9207387879";
+	public static final String PROJECT_NUMBER = PRODUCTION ? "9207387879"
+			: "587859844920";
 	public static final String APP_ENGINE_CLIENT_ID = PROJECT_NUMBER
 			+ ".project.googleusercontent.com";
-	public static final String WEB_CLIENT_ID = IS_DEBUG ? "587859844920-jiqoh8rn4j8d0941vunu4jfdcl2huv4l.apps.googleusercontent.com"
-			: "9207387879-274c5k1el52drcg0ou6l0josl5klbv8s.apps.googleusercontent.com";
+	public static final String WEB_CLIENT_ID = PRODUCTION ? "9207387879-274c5k1el52drcg0ou6l0josl5klbv8s.apps.googleusercontent.com"
+			: "587859844920-jiqoh8rn4j8d0941vunu4jfdcl2huv4l.apps.googleusercontent.com";
 	public static final String ANDROID_AUDIENCE = "server:client_id:"
 			+ WEB_CLIENT_ID;
 	public static final String APP_ENGINE_HOSTURL = "http://zeppa-cloud-1821.appspot.com/upload";
-	
+
 	public static final String HTTPUPLOAD_URL = "http://zeppa-cloud-1821.appspot.com/upload";
 	public static final String HTTPSERVE_URL = "http://zeppa-cloud-1821.appspot.com/serve";
 

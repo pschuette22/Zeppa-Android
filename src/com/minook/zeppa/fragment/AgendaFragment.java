@@ -26,7 +26,7 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 	private ListView agendaList;
 	private PullToRefreshLayout pullToRefreshLayout;
 	private AgendaListAdapter alAdapter;
-	private View loaderView;
+//	private View loaderView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,11 +62,14 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 		super.onStart();
 
 		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial()
-				&& agendaList.getHeaderViewsCount() == 0) {
-			loaderView = Utils.makeLoaderView(
-					(AuthenticatedFragmentActivity) getActivity(),
-					"Finding Activities...");
-			agendaList.addHeaderView(loaderView);
+				|| ZeppaEventSingleton.getInstance().isLoadingEvents()) {
+//			loaderView = Utils.makeLoaderView(
+//					(AuthenticatedFragmentActivity) getActivity(),
+//					"Finding Activities...");
+//			agendaList.addHeaderView(loaderView);
+			
+			pullToRefreshLayout.setRefreshing(true);
+			
 		}
 
 		agendaList.setAdapter(alAdapter);
@@ -88,20 +91,42 @@ public class AgendaFragment extends Fragment implements OnRefreshListener,
 		pullToRefreshLayout.setRefreshComplete();
 	}
 
+//	@Override
+//	public void onResume() {
+//		super.onResume();
+//		
+//		if(alAdapter != null)
+//			alAdapter.notifyDataSetChanged();
+//	}
+
 	@Override
 	public void onResume() {
+		// TODO Auto-generated method stub
 		super.onResume();
-		alAdapter.notifyDataSetChanged();
+		
+		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial() || ZeppaEventSingleton.getInstance().isLoadingEvents()) {
+			pullToRefreshLayout.setRefreshing(true);
+			
+		}
 	}
+	
+	@Override
+	public void onPause() {
+		if(pullToRefreshLayout.isRefreshing()){
+			pullToRefreshLayout.setRefreshing(false);
+		}
+		super.onPause();
+	}
+
 
 	@Override
 	public void onZeppaEventsLoaded() {
 
-		if (loaderView != null) {
-			loaderView.setVisibility(View.GONE);
-			agendaList.removeHeaderView(loaderView);
-			loaderView = null;
-		}
+//		if (loaderView != null) {
+//			loaderView.setVisibility(View.GONE);
+//			agendaList.removeHeaderView(loaderView);
+//			loaderView = null;
+//		}
 
 		pullToRefreshLayout.setRefreshing(false);
 		alAdapter.notifyDataSetChanged();

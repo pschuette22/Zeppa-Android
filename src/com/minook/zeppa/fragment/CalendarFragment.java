@@ -71,6 +71,8 @@ public class CalendarFragment extends Fragment implements
 
 			frame.addView(calendar);
 		}
+		
+		
 
 		super.onStart();
 	}

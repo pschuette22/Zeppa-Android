@@ -1,4 +1,4 @@
-  <classpathentry kind="lib" path="libs/google-api-services-zeppaeventendpoint-v1-rev20150424195325-1.18.0-rc.jar" sourcepath="libs-sources/google-api-services-zeppaeventendpoint-v1-rev20150424195325-1.18.0-rc-sources.jar"/>
+  <classpathentry kind="lib" path="libs/google-api-services-zeppaeventendpoint-v1-rev20150620230540-1.18.0-rc.jar" sourcepath="libs-sources/google-api-services-zeppaeventendpoint-v1-rev20150620230540-1.18.0-rc-sources.jar"/>
   <classpathentry kind="lib" path="libs/google-api-client-1.18.0-rc.jar" sourcepath="libs-sources/google-api-client-1.18.0-rc-sources.jar"/>
   <classpathentry kind="lib" path="libs/google-api-client-android-1.18.0-rc.jar" sourcepath="libs-sources/google-api-client-android-1.18.0-rc-sources.jar"/>
   <classpathentry kind="lib" path="libs/google-api-client-appengine-1.18.0-rc.jar" sourcepath="libs-sources/google-api-client-appengine-1.18.0-rc-sources.jar"/>

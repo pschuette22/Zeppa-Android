@@ -1,14 +1,14 @@
 package com.minook.zeppa.adapter.tagadapter;
 
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-
 import com.minook.zeppa.R;
+import com.minook.zeppa.Utils;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 
@@ -34,10 +34,10 @@ public abstract class AbstractTagAdapter extends BaseAdapter {
 		super.notifyDataSetChanged();
 	}
 
-	public void setTagHolder(LinearLayout tagHolder){
+	public void setTagHolder(LinearLayout tagHolder) {
 		this.tagHolder = tagHolder;
 	}
-	
+
 	public void verifyDatasetValid() {
 		List<AbstractEventTagMediator> mediators = getCurrentTagMediators();
 
@@ -68,42 +68,54 @@ public abstract class AbstractTagAdapter extends BaseAdapter {
 		return tagMediators.size();
 	}
 
+	protected abstract boolean didLoadTags();
+
+	@SuppressLint("InflateParams")
 	public void drawTags() {
 
 		tagHolder.removeAllViews();
 
-		if (getCount() > 0) {
+		if (didLoadTags()) {
 
-			LayoutInflater inflater = activity.getLayoutInflater();
-			LinearLayout currentLine = (LinearLayout) inflater.inflate(
-					R.layout.view_tag_line, null, false);
+			if (getCount() > 0) {
 
-			tagHolder.addView(currentLine);
-			currentLine.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.EXACTLY);
-			int lineWidth = activity.getResources().getDisplayMetrics().widthPixels;
-			int tagsWidth = 0;
+				LayoutInflater inflater = activity.getLayoutInflater();
+				LinearLayout currentLine = (LinearLayout) inflater.inflate(
+						R.layout.view_tag_line, null, false);
 
-			for (int i = 0; i < getCount(); i++) {
-				View tagView = getView(i, null, null);
-				tagView.measure(MeasureSpec.UNSPECIFIED,
-						MeasureSpec.UNSPECIFIED);
-				int tagWidth = tagView.getMeasuredWidth();
+				tagHolder.addView(currentLine);
+				currentLine.measure(MeasureSpec.UNSPECIFIED,
+						MeasureSpec.EXACTLY);
+				int lineWidth = activity.getResources().getDisplayMetrics().widthPixels;
+				int tagsWidth = 0;
 
-				if ((lineWidth - tagsWidth) < tagWidth) {
-					currentLine = (LinearLayout) inflater.inflate(
-							R.layout.view_tag_line, null, false);
-					tagHolder.addView(currentLine);
-					tagsWidth = 0;
+				for (int i = 0; i < getCount(); i++) {
+					View tagView = getView(i, null, null);
+					tagView.measure(MeasureSpec.UNSPECIFIED,
+							MeasureSpec.UNSPECIFIED);
+					int tagWidth = tagView.getMeasuredWidth();
+
+					if ((lineWidth - tagsWidth) < tagWidth) {
+						currentLine = (LinearLayout) inflater.inflate(
+								R.layout.view_tag_line, null, false);
+						tagHolder.addView(currentLine);
+						tagsWidth = 0;
+					}
+
+					currentLine.addView(tagView);
+
+					tagsWidth += tagWidth;
+
 				}
-
-				currentLine.addView(tagView);
-
-				tagsWidth += tagWidth;
 
 			}
 
+		} else {
+
+			View loaderView = Utils.makeLoaderView(activity, "Loading Tags...");
+			tagHolder.addView(loaderView);
+			
 		}
 
 	}
-
 }

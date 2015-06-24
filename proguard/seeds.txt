@@ -3371,6 +3371,8 @@ com.minook.zeppa.R$drawable: int ic_activity_filled
 com.minook.zeppa.R$drawable: int ic_agenda_empty
 com.minook.zeppa.R$drawable: int ic_agenda_filled
 com.minook.zeppa.R$drawable: int ic_alarm_white
+com.minook.zeppa.R$drawable: int ic_bell_empty
+com.minook.zeppa.R$drawable: int ic_bell_filled
 com.minook.zeppa.R$drawable: int ic_cab_done_holo_light
 com.minook.zeppa.R$drawable: int ic_calendar_empty
 com.minook.zeppa.R$drawable: int ic_calendar_filled
@@ -3404,7 +3406,6 @@ com.minook.zeppa.R$drawable: int ic_menu_invite
 com.minook.zeppa.R$drawable: int ic_menu_location
 com.minook.zeppa.R$drawable: int ic_menu_manage
 com.minook.zeppa.R$drawable: int ic_menu_month
-com.minook.zeppa.R$drawable: int ic_menu_mylocation
 com.minook.zeppa.R$drawable: int ic_menu_navigation
 com.minook.zeppa.R$drawable: int ic_menu_send
 com.minook.zeppa.R$drawable: int ic_menu_view
@@ -3500,6 +3501,8 @@ com.minook.zeppa.R$id: int activity_chooser_view_content
 com.minook.zeppa.R$id: int activityfragment_ptr
 com.minook.zeppa.R$id: int adjust_height
 com.minook.zeppa.R$id: int adjust_width
+com.minook.zeppa.R$id: int agendaListView
+com.minook.zeppa.R$id: int agendafragment_ptr
 com.minook.zeppa.R$id: int always
 com.minook.zeppa.R$id: int baseview_dayviewholder
 com.minook.zeppa.R$id: int baseview_header
@@ -3736,7 +3739,6 @@ com.minook.zeppa.R$id: int terrain
 com.minook.zeppa.R$id: int textView1
 com.minook.zeppa.R$id: int textview_accounts
 com.minook.zeppa.R$id: int thursday
-com.minook.zeppa.R$id: int timepickerfragment_timepicker
 com.minook.zeppa.R$id: int title
 com.minook.zeppa.R$id: int today_frame
 com.minook.zeppa.R$id: int tuesday
@@ -3749,8 +3751,6 @@ com.minook.zeppa.R$id: int useractivity_mutualfriends
 com.minook.zeppa.R$id: int useractivity_phonenumber
 com.minook.zeppa.R$id: int useractivity_tagholder
 com.minook.zeppa.R$id: int useractivity_username
-com.minook.zeppa.R$id: int watchingListView
-com.minook.zeppa.R$id: int watchingfragment_ptr
 com.minook.zeppa.R$id: int wednesday
 com.minook.zeppa.R$id: int withText
 com.minook.zeppa.R$id: int wrap_content
@@ -3794,6 +3794,7 @@ com.minook.zeppa.R$layout: int default_header
 com.minook.zeppa.R$layout: int event_item
 com.minook.zeppa.R$layout: int fragment_account
 com.minook.zeppa.R$layout: int fragment_activity
+com.minook.zeppa.R$layout: int fragment_agenda
 com.minook.zeppa.R$layout: int fragment_calendar
 com.minook.zeppa.R$layout: int fragment_contact
 com.minook.zeppa.R$layout: int fragment_feed
@@ -3802,8 +3803,6 @@ com.minook.zeppa.R$layout: int fragment_home
 com.minook.zeppa.R$layout: int fragment_minglers
 com.minook.zeppa.R$layout: int fragment_optionslist
 com.minook.zeppa.R$layout: int fragment_settings
-com.minook.zeppa.R$layout: int fragment_timepicker_clock
-com.minook.zeppa.R$layout: int fragment_watching
 com.minook.zeppa.R$layout: int handy
 com.minook.zeppa.R$layout: int hourly_view
 com.minook.zeppa.R$layout: int month_view_days

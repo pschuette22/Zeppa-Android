@@ -9714,9 +9714,9 @@ com.minook.zeppa.R$string
 com.minook.zeppa.R$style
 com.minook.zeppa.R$styleable
 com.minook.zeppa.Utils:
-    22:22:public Utils()
-    29:38:public static java.lang.String encodeListString(java.util.List)
-    42:51:public static java.lang.String encodeListLong(java.util.ArrayList)
+    24:24:public Utils()
+    31:40:public static java.lang.String encodeListString(java.util.List)
+    44:53:public static java.lang.String encodeListLong(java.util.ArrayList)
 com.minook.zeppa.ZeppaApplication:
     64:65:public void registerMemoryObserver(com.minook.zeppa.observer.MemoryObserver)
 com.minook.zeppa.activity.AbstractAccountBaseActivity:
@@ -9725,10 +9725,10 @@ com.minook.zeppa.activity.AbstractAccountBaseActivity:
     private static final int REQ_SELECT_PHOTO
     protected abstract void setInfo()
 com.minook.zeppa.activity.AbstractEventViewActivity:
-    315:317:public void onEventUpdate(com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent)
-    321:324:public void onErrorLoadingRelationships()
-    328:330:public void onErrorUpdatingEvent()
-    334:336:public void onErrorLoadingComments()
+    318:320:public void onEventUpdate(com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent)
+    324:327:public void onErrorLoadingRelationships()
+    331:333:public void onErrorUpdatingEvent()
+    337:339:public void onErrorLoadingComments()
 com.minook.zeppa.activity.AuthenticatedFragmentActivity$Error
 com.minook.zeppa.activity.MinglerActivity:
     323:326:public long getMinglerId()
@@ -9749,14 +9749,17 @@ com.minook.zeppa.adapter.eventlistadapter.AbstractEventListAdapter:
     120:120:protected com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential getCredential()
     124:124:protected java.lang.Long getUserId()
 com.minook.zeppa.adapter.eventlistadapter.AgendaListAdapter:
-    27:27:protected java.util.List getCurrentEventMediators()
+    25:25:protected java.util.List getCurrentEventMediators()
 com.minook.zeppa.adapter.eventlistadapter.FeedListAdapter:
-    18:18:protected java.util.List getCurrentEventMediators()
+    24:24:protected java.util.List getCurrentEventMediators()
 com.minook.zeppa.adapter.eventlistadapter.MinglerEventsAdapter:
     28:28:protected java.util.List getCurrentEventMediators()
 com.minook.zeppa.adapter.tagadapter.AbstractTagAdapter:
     protected boolean hasLoadedTags
-    38:47:public void verifyDatasetValid()
+    42:51:public void verifyDatasetValid()
+com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter:
+    108:115:private void checkSelectedTags()
+com.minook.zeppa.adapter.tagadapter.CreateOriginalTagAdapter
 com.minook.zeppa.adapter.tagadapter.MinglerTagAdapter:
     102:112:public boolean doUpdateAdapter(java.util.List)
 com.minook.zeppa.deviceinfoendpoint.Deviceinfoendpoint:
@@ -10248,8 +10251,7 @@ com.minook.zeppa.eventtagfollowendpoint.model.Key:
     171:171:public com.minook.zeppa.eventtagfollowendpoint.model.Key getParent()
     178:179:public com.minook.zeppa.eventtagfollowendpoint.model.Key setParent(com.minook.zeppa.eventtagfollowendpoint.model.Key)
 com.minook.zeppa.fragment.HomeFragment:
-    134:135:public void setCurrentPageToNotifications()
-com.minook.zeppa.fragment.InviteFragment
+    147:148:public void setCurrentPageToNotifications()
 com.minook.zeppa.gcm.ZeppaGCMReceiver:
     28:39:public static void unregister(com.minook.zeppa.ZeppaApplication)
 com.minook.zeppa.gcm.ZeppaGCMUtils:
@@ -10295,6 +10297,7 @@ com.minook.zeppa.mediator.MyZeppaUserMediator:
     85:85:public java.lang.String getZeppaCalendarId()
 com.minook.zeppa.observer.MemoryObserver:
     public abstract boolean onApplicationTerminate()
+com.minook.zeppa.observer.ScrollStateListener
 com.minook.zeppa.photoinfoendpoint.Photoinfoendpoint:
     public static final java.lang.String DEFAULT_ROOT_URL
     public static final java.lang.String DEFAULT_SERVICE_PATH
@@ -10405,8 +10408,8 @@ com.minook.zeppa.singleton.EventTagSingleton:
     290:311:public boolean deleteEventTag(com.minook.zeppa.eventtagendpoint.model.EventTag,com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential)
 com.minook.zeppa.singleton.NotificationSingleton:
     57:58:public void clear()
-    113:123:public com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification getNotificationById(long)
-    314:358:public boolean doPushNotification(android.content.Context,com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification)
+    129:139:public com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification getNotificationById(long)
+    330:374:public boolean doPushNotification(android.content.Context,com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification)
 com.minook.zeppa.singleton.ZeppaEventSingleton:
     94:95:public void clear()
     107:108:public void setLastUpdateCallTime(long)
@@ -11351,21 +11354,9 @@ com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelati
     178:179:public com.minook.zeppa.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship setUpdated(java.lang.Long)
 com.pschuette.android.calendarlibrary.CalendarAdapter:
     static final int FIRST_DAY_OF_WEEK
-<<<<<<< HEAD
     59:68:public int getPrevMonth()
     72:72:public int getMonth()
     76:76:public int getYear()
-=======
-<<<<<<< HEAD
-    57:67:public int getPrevMonth()
-    71:71:public int getMonth()
-    75:75:public int getYear()
-=======
-    57:66:public int getPrevMonth()
-    70:70:public int getMonth()
-    74:74:public int getYear()
->>>>>>> origin/master
->>>>>>> origin/master
 com.pschuette.android.calendarlibrary.CalendarData:
     50:51:public void setLocalId(java.lang.Long)
     60:61:public void setName(java.lang.String)

@@ -131,7 +131,8 @@ public class MainActivity extends AuthenticatedFragmentActivity implements
 			}
 
 		};
-		drawerToggle.setHomeAsUpIndicator(R.drawable.ic_menu_navigation);
+		
+//		drawerToggle.setHomeAsUpIndicator(R.drawable.ic_menu_navigation);
 		drawerToggle.setDrawerIndicatorEnabled(true);
 
 		navigationOptions = getResources().getStringArray(
@@ -150,8 +151,9 @@ public class MainActivity extends AuthenticatedFragmentActivity implements
 		if (currentPage < 0) {
 			selectItem(1, false);
 			if (getIntent().getExtras().getBoolean(
-					Constants.INTENT_NOTIFICATIONS))
-				;
+					Constants.INTENT_NOTIFICATIONS)){
+				homeFragment.setCurrentPageToNotifications();
+			}
 
 		} else {
 			selectItem(currentPage, false);
@@ -227,6 +229,10 @@ public class MainActivity extends AuthenticatedFragmentActivity implements
 	 * ----------------- MY METHODS ----------------------- NOTES:
 	 */
 
+	/**
+	 * Fetch the index of the currently displayed fragment
+	 * @return index
+	 */
 	private int currentPage() {
 		Fragment current = getSupportFragmentManager().findFragmentById(
 				R.id.content_frame);
@@ -313,7 +319,7 @@ public class MainActivity extends AuthenticatedFragmentActivity implements
 
 			transaction.commit();
 
-			navigationList.setItemChecked(position, true);
+//			navigationList.setItemChecked(position, true);
 
 		}
 

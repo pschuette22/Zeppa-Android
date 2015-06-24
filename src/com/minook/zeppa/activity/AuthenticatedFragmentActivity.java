@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -100,7 +101,7 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 		((ZeppaApplication) getApplication()).setCurrentActivity(this);
 		
 		String heldAccountName = PrefsManager.getLoggedInEmail(getApplication());
-		if (heldAccountName != null && !heldAccountName.isEmpty()) {
+		if (!Constants.LOCAL_RUN && heldAccountName != null && !heldAccountName.isEmpty()) {
 			initializeApiClient(heldAccountName);
 			apiClient.connect();
 		}
@@ -112,7 +113,7 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 		super.onStop();
 
 
-		if (apiClient != null && apiClient.isConnected()) {
+		if (!Constants.LOCAL_RUN && apiClient != null && apiClient.isConnected()) {
 			apiClient.disconnect();
 		}
 
@@ -169,6 +170,10 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 	 */
 	public GoogleAccountCredential getGoogleAccountCredential() throws NullPointerException {
 
+		if(Constants.LOCAL_RUN){
+			return null;
+		}
+		
 		GoogleAccountCredential credential = GoogleAccountCredential
 				.usingAudience(this, Constants.ANDROID_AUDIENCE);
 		String loggedInAccount = PrefsManager.getLoggedInEmail(getApplication());
@@ -228,10 +233,12 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 				String accountName = data
 						.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 				PrefsManager.setLoggedInAccountEmail(getApplication(), accountName);
-				initializeApiClient(accountName);
 
 				connectionProgress.show();
-				apiClient.connect();
+				if(!Constants.LOCAL_RUN){
+					initializeApiClient(accountName);
+					apiClient.connect();
+				}
 			}
 			break;
 
@@ -239,13 +246,14 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 
 			if (resultCode == RESULT_OK) {
 				connectionResult = null;
-				apiClient.connect();
+				if(!Constants.LOCAL_RUN)
+					apiClient.connect();
 			}
 
 			break;
 
 		case REQUEST_RECOVER_AUTH:
-
+			Log.d("TAG", "Recover Auth");
 			break;
 
 		}
@@ -255,12 +263,13 @@ public class AuthenticatedFragmentActivity extends ActionBarActivity implements
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		// Do Nothing
+		connectionProgress.dismiss();
+
 	}
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// Do Nothing
-
 	}
 
 	@Override

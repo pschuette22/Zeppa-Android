@@ -66,7 +66,6 @@ public class DefaultEventViewActivity extends AbstractEventViewActivity
 		super.onDestroy();
 	}
 
-
 	@Override
 	protected void setEventTagAdapter() {
 		tagAdapter = new MinglerTagAdapter(this, tagHolder, hostMediator
@@ -201,13 +200,24 @@ public class DefaultEventViewActivity extends AbstractEventViewActivity
 	public void onNotificationReceived(ZeppaNotification notification) {
 		super.onNotificationReceived(notification);
 
-		if (notification.getType().equalsIgnoreCase("EVENT_CANCELED")
-				&& notification.getEventId().longValue() == eventMediator
-						.getEventId().longValue()) {
+		if (notification.getType().equalsIgnoreCase("EVENT_CANCELED")) {
 
-			onBackPressed();
+			onEventDeleted(notification.getEventId().longValue());
 		}
 
+	}
+
+	public void onEventDeleted(long eventId) {
+		try {
+			if (eventId == eventMediator.getEventId().longValue()) {
+				Toast.makeText(this, "Event was canceled", Toast.LENGTH_SHORT)
+						.show();
+				onBackPressed();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void setInvitesHolderVisibility() {

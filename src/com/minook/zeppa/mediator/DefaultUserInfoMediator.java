@@ -106,7 +106,7 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 		return userInfo.getImageUrl();
 	}
 
-	public boolean isHasLoadedInitialTags() {
+	public boolean hasLoadedInitialTags() {
 		return hasLoadedInitialTags;
 	}
 

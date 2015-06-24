@@ -40,6 +40,7 @@
                 android:background="@color/teal"
                 android:padding="10dp"
                 android:scaleType="centerInside"
+                android:clickable="true"
                 android:src="@drawable/logo_white" />
 
             <ListView

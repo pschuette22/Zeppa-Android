@@ -19261,7 +19261,7 @@ com.minook.zeppa.Utils -> com.minook.zeppa.d:
     java.lang.String formatPhoneNumber(java.lang.String) -> a
     java.lang.String make11DigitNumber(java.lang.String) -> b
     android.graphics.Bitmap loadImageBitmapFromUrl(java.lang.String) -> c
-    android.view.View makeLoaderView(com.minook.zeppa.activity.AuthenticatedFragmentActivity,java.lang.String) -> a
+    android.view.View makeLoaderView(android.app.Activity,java.lang.String) -> a
 com.minook.zeppa.Utils$1 -> com.minook.zeppa.e:
     int compare(com.minook.zeppa.mediator.AbstractZeppaUserMediator,com.minook.zeppa.mediator.AbstractZeppaUserMediator) -> a
     int compare(java.lang.Object,java.lang.Object) -> compare
@@ -19368,8 +19368,9 @@ com.minook.zeppa.activity.AbstractEventViewActivity -> com.minook.zeppa.activity
     void setHostInfo() -> q
     void setAttendingText() -> r
     void showSendInvitesDialog() -> z
-    void showAttendingDialog() -> A
-    void postComment() -> B
+    void setSeenAllNotificationsForEvent() -> A
+    void showAttendingDialog() -> B
+    void postComment() -> C
     void startFetchEventExtrasThread() -> s
     void fetchEventComments() -> t
     void drawComments() -> u
@@ -19486,6 +19487,7 @@ com.minook.zeppa.activity.LoginActivity -> com.minook.zeppa.activity.LoginActivi
     void onClick(android.view.View) -> onClick
     void onConnectionFailed(com.google.android.gms.common.ConnectionResult) -> a
     void onConnected(android.os.Bundle) -> a
+    void onConnectionSuspended(int) -> a
     void onActivityResult(int,int,android.content.Intent) -> onActivityResult
     boolean checkPlayServices() -> k
     void loadAndLaunch() -> l
@@ -19628,14 +19630,13 @@ com.minook.zeppa.activity.NewEventActivity -> com.minook.zeppa.activity.NewEvent
     android.widget.EditText newTagTextField -> z
     android.widget.TextView addNewTagField -> A
     android.widget.ImageView addLocationField -> B
-    android.widget.LinearLayout invitesHolder -> C
-    java.util.Calendar startCalendar -> D
-    java.util.Calendar endCalendar -> E
-    java.lang.String longLocation -> F
-    com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter tagAdapter -> G
-    com.minook.zeppa.adapter.InviteListAdapter invitesAdapter -> O
-    boolean is12HourFormat -> P
-    boolean isStartCalendar -> Q
+    java.util.Calendar startCalendar -> C
+    java.util.Calendar endCalendar -> D
+    java.lang.String longLocation -> E
+    com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter tagAdapter -> F
+    com.minook.zeppa.adapter.InviteListAdapter invitesAdapter -> G
+    boolean is12HourFormat -> O
+    boolean isStartCalendar -> P
     void onCreate(android.os.Bundle) -> onCreate
     void onResume() -> onResume
     void onClick(android.view.View) -> onClick
@@ -19769,7 +19770,12 @@ com.minook.zeppa.adapter.eventlistadapter.AbstractEventListAdapter -> com.minook
 com.minook.zeppa.adapter.eventlistadapter.AgendaListAdapter -> com.minook.zeppa.a.a.c:
     void setEventMediators() -> b
 com.minook.zeppa.adapter.eventlistadapter.FeedListAdapter -> com.minook.zeppa.a.a.d:
+    boolean isScrolling -> a
+    boolean datasetIsStale -> d
     void setEventMediators() -> b
+    void onScrollStart() -> a
+    void onScrollStop() -> c
+    void notifyDataSetChanged() -> notifyDataSetChanged
 com.minook.zeppa.adapter.eventlistadapter.MinglerEventsAdapter -> com.minook.zeppa.a.a.e:
     com.minook.zeppa.mediator.DefaultUserInfoMediator friendMediator -> d
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
@@ -19783,6 +19789,7 @@ com.minook.zeppa.adapter.tagadapter.AbstractTagAdapter -> com.minook.zeppa.a.b.a
     android.widget.LinearLayout tagHolder -> b
     java.util.List tagMediators -> c
     void notifyDataSetChanged() -> notifyDataSetChanged
+    void setTagHolder(android.widget.LinearLayout) -> a
     java.util.List getCurrentTagMediators() -> a
     com.minook.zeppa.mediator.AbstractEventTagMediator getItem(int) -> a
     int getCount() -> getCount
@@ -19799,6 +19806,7 @@ com.minook.zeppa.adapter.tagadapter.CreateEventTagAdapter -> com.minook.zeppa.a.
     com.minook.zeppa.mediator.AbstractEventTagMediator getMatchingMediator(java.lang.String) -> a
     void onTagCreated(com.minook.zeppa.mediator.MyEventTagMediator) -> a
     void onClick(android.view.View) -> onClick
+    boolean tagQueContains(long) -> a
 com.minook.zeppa.adapter.tagadapter.DeleteTagAdapter -> com.minook.zeppa.a.b.c:
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
     void onClick(android.view.View) -> onClick
@@ -20206,23 +20214,11 @@ com.minook.zeppa.fragment.AccountFragment -> com.minook.zeppa.f.a:
     android.widget.TextView addNewTag -> i
     android.widget.EditText newTagText -> aj
     android.widget.LinearLayout eventHolder -> ak
-    android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
-    void onResume() -> r
-    void onClick(android.view.View) -> onClick
-com.minook.zeppa.fragment.ActivityFragment -> com.minook.zeppa.f.b:
-    android.view.View layout -> a
-    android.view.View loaderView -> b
-    uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout pullToRefreshLayout -> c
-    android.widget.ListView activityList -> d
-    com.minook.zeppa.adapter.NotificationsAdapter notificationsAdapter -> e
     void onCreate(android.os.Bundle) -> a
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
     void onResume() -> r
-    void onDestroyView() -> e
-    void onRefreshStarted(android.view.View) -> onRefreshStarted
-    void onNotificationsLoaded() -> a
-    void onNotificationDataChanged() -> N
-com.minook.zeppa.fragment.AgendaFragment -> com.minook.zeppa.f.c:
+    void onClick(android.view.View) -> onClick
+com.minook.zeppa.fragment.AgendaFragment -> com.minook.zeppa.f.b:
     android.view.View layout -> a
     android.widget.ListView agendaList -> b
     uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout pullToRefreshLayout -> c
@@ -20230,36 +20226,42 @@ com.minook.zeppa.fragment.AgendaFragment -> com.minook.zeppa.f.c:
     android.view.View loaderView -> e
     void onCreate(android.os.Bundle) -> a
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
+    void onStart() -> c
+    void onDestroyView() -> e
     void onRefreshStarted(android.view.View) -> onRefreshStarted
     void onResume() -> r
-    void onDestroy() -> t
     void onZeppaEventsLoaded() -> x_
-com.minook.zeppa.fragment.CalendarFragment -> com.minook.zeppa.f.d:
+com.minook.zeppa.fragment.CalendarFragment -> com.minook.zeppa.f.c:
     java.lang.String TAG -> a
     android.view.View view -> b
     com.pschuette.android.calendarlibrary.ExtendedCalendarView calendar -> c
     uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout pullToRefreshLayout -> d
+    android.widget.FrameLayout frame -> e
+    void onCreate(android.os.Bundle) -> a
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
+    void onStart() -> c
+    void onDestroyView() -> e
     void OnEventItemClicked(com.pschuette.android.calendarlibrary.Event) -> a
     void onRefreshStarted(android.view.View) -> onRefreshStarted
-com.minook.zeppa.fragment.FeedFragment -> com.minook.zeppa.f.e:
+com.minook.zeppa.fragment.FeedFragment -> com.minook.zeppa.f.d:
     android.view.View layout -> a
     android.view.View loaderView -> b
     uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout pullToRefreshLayout -> c
     android.widget.ListView feedList -> d
     com.minook.zeppa.adapter.eventlistadapter.FeedListAdapter flAdapter -> e
     android.widget.AbsListView$OnScrollListener mScrollListener -> f
+    void onCreate(android.os.Bundle) -> a
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
+    void onStart() -> c
+    void onDestroyView() -> e
     void onRefreshStarted(android.view.View) -> onRefreshStarted
-    void onResume() -> r
     void onZeppaEventsLoaded() -> x_
-    android.widget.ListView access$0(com.minook.zeppa.fragment.FeedFragment) -> a
-    com.minook.zeppa.adapter.eventlistadapter.FeedListAdapter access$1(com.minook.zeppa.fragment.FeedFragment) -> b
-com.minook.zeppa.fragment.FeedFragment$1 -> com.minook.zeppa.f.f:
+    com.minook.zeppa.adapter.eventlistadapter.FeedListAdapter access$0(com.minook.zeppa.fragment.FeedFragment) -> a
+com.minook.zeppa.fragment.FeedFragment$1 -> com.minook.zeppa.f.e:
     com.minook.zeppa.fragment.FeedFragment this$0 -> a
     void onScrollStateChanged(android.widget.AbsListView,int) -> onScrollStateChanged
     void onScroll(android.widget.AbsListView,int,int,int) -> onScroll
-com.minook.zeppa.fragment.FeedbackFragment -> com.minook.zeppa.f.g:
+com.minook.zeppa.fragment.FeedbackFragment -> com.minook.zeppa.f.f:
     android.view.View layout -> a
     android.widget.EditText feedbackSubjectField -> b
     android.widget.EditText feedbackTextField -> c
@@ -20276,16 +20278,16 @@ com.minook.zeppa.fragment.FeedbackFragment -> com.minook.zeppa.f.g:
     android.widget.RatingBar access$0(com.minook.zeppa.fragment.FeedbackFragment) -> a
     java.lang.String access$1(com.minook.zeppa.fragment.FeedbackFragment) -> b
     java.lang.String access$2(com.minook.zeppa.fragment.FeedbackFragment) -> c
-com.minook.zeppa.fragment.FeedbackFragment$1 -> com.minook.zeppa.f.h:
+com.minook.zeppa.fragment.FeedbackFragment$1 -> com.minook.zeppa.f.g:
     com.minook.zeppa.fragment.FeedbackFragment this$0 -> a
     void onClick(android.content.DialogInterface,int) -> onClick
-com.minook.zeppa.fragment.FeedbackFragment$PostFeedbackInAsync -> com.minook.zeppa.f.i:
+com.minook.zeppa.fragment.FeedbackFragment$PostFeedbackInAsync -> com.minook.zeppa.f.h:
     com.minook.zeppa.fragment.FeedbackFragment this$0 -> a
     java.lang.Boolean doInBackground(java.lang.Void[]) -> a
     void onPostExecute(java.lang.Boolean) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.minook.zeppa.fragment.HomeFragment -> com.minook.zeppa.f.j:
+com.minook.zeppa.fragment.HomeFragment -> com.minook.zeppa.f.i:
     android.support.v4.view.ViewPager mainPager -> a
     com.astuetz.viewpager.extensions.PagerSlidingTabStrip tabStrip -> b
     com.minook.zeppa.fragment.HomeFragment$ZeppaViewPagerAdapter zeppaPagerAdapter -> c
@@ -20294,12 +20296,14 @@ com.minook.zeppa.fragment.HomeFragment -> com.minook.zeppa.f.j:
     com.minook.zeppa.fragment.CalendarFragment calendarFragment -> f
     com.minook.zeppa.fragment.FeedFragment feedFragment -> g
     com.minook.zeppa.fragment.AgendaFragment watchingFragment -> h
-    com.minook.zeppa.fragment.ActivityFragment activityFragment -> i
+    com.minook.zeppa.fragment.NotificationsFragment activityFragment -> i
     android.view.View layout -> aj
     int NUM_PAGES -> ak
-    android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
     void onCreate(android.os.Bundle) -> a
-    void onDestroy() -> t
+    android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
+    void onStart() -> c
+    void onViewCreated(android.view.View,android.os.Bundle) -> a
+    void onDestroyView() -> e
     void onResume() -> r
     void onClick(android.view.View) -> onClick
     void onPageScrollStateChanged(int) -> b
@@ -20314,9 +20318,9 @@ com.minook.zeppa.fragment.HomeFragment -> com.minook.zeppa.f.j:
     void access$3(com.minook.zeppa.fragment.HomeFragment,com.minook.zeppa.fragment.FeedFragment) -> a
     com.minook.zeppa.fragment.AgendaFragment access$4(com.minook.zeppa.fragment.HomeFragment) -> c
     void access$5(com.minook.zeppa.fragment.HomeFragment,com.minook.zeppa.fragment.AgendaFragment) -> a
-    com.minook.zeppa.fragment.ActivityFragment access$6(com.minook.zeppa.fragment.HomeFragment) -> d
-    void access$7(com.minook.zeppa.fragment.HomeFragment,com.minook.zeppa.fragment.ActivityFragment) -> a
-com.minook.zeppa.fragment.HomeFragment$ZeppaViewPagerAdapter -> com.minook.zeppa.f.k:
+    com.minook.zeppa.fragment.NotificationsFragment access$6(com.minook.zeppa.fragment.HomeFragment) -> d
+    void access$7(com.minook.zeppa.fragment.HomeFragment,com.minook.zeppa.fragment.NotificationsFragment) -> a
+com.minook.zeppa.fragment.HomeFragment$ZeppaViewPagerAdapter -> com.minook.zeppa.f.j:
     java.lang.String[] tabOptions -> b
     int[] iconOptions -> c
     com.minook.zeppa.fragment.HomeFragment this$0 -> a
@@ -20325,19 +20329,32 @@ com.minook.zeppa.fragment.HomeFragment$ZeppaViewPagerAdapter -> com.minook.zeppa
     int getCount() -> b
     java.lang.CharSequence getPageTitle(int) -> c
     int getPageIconResId(int) -> a_
-com.minook.zeppa.fragment.MinglersFragment -> com.minook.zeppa.f.l:
+com.minook.zeppa.fragment.MinglersFragment -> com.minook.zeppa.f.k:
     android.view.View layout -> a
     android.widget.ListView contactList -> b
     com.minook.zeppa.adapter.MinglerListAdapter adapter -> c
     android.widget.ImageButton addMinglers -> d
+    android.view.View loaderView -> e
+    void onCreate(android.os.Bundle) -> a
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
     void onResume() -> r
-    void onStart() -> c
-    void onStop() -> d
     void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> a
     void onMinglersLoaded() -> y_
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
     void onClick(android.view.View) -> onClick
+com.minook.zeppa.fragment.NotificationsFragment -> com.minook.zeppa.f.l:
+    android.view.View layout -> a
+    android.view.View loaderView -> b
+    uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout pullToRefreshLayout -> c
+    android.widget.ListView activityList -> d
+    com.minook.zeppa.adapter.NotificationsAdapter notificationsAdapter -> e
+    void onCreate(android.os.Bundle) -> a
+    android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
+    void onStart() -> c
+    void onDestroyView() -> e
+    void onRefreshStarted(android.view.View) -> onRefreshStarted
+    void onNotificationsLoaded() -> a
+    void onNotificationDataChanged() -> N
 com.minook.zeppa.fragment.SettingsFragment -> com.minook.zeppa.f.m:
     android.view.View layout -> a
     android.widget.Switch sendNotificationsSwitch -> b
@@ -20886,6 +20903,7 @@ com.minook.zeppa.singleton.NotificationSingleton -> com.minook.zeppa.k.c:
     void removeNotificationsForEvent(long) -> a
     void removeNotification(long) -> b
     java.util.List getNotifications() -> c
+    java.util.List getNotificationsForEvent(long) -> c
     boolean hasLoadedInitial() -> d
     void onLoadedNotifications() -> e
     int getNotificationTypeOrder(com.minook.zeppa.zeppanotificationendpoint.model.ZeppaNotification) -> a
@@ -20935,7 +20953,7 @@ com.minook.zeppa.singleton.ZeppaEventSingleton -> com.minook.zeppa.k.e:
     void removeMediatorsForUser(long) -> c
     boolean relationshipAlreadyHeld(com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship) -> a
     void fetchNewEvents(com.minook.zeppa.ZeppaApplication,com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential,uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout) -> a
-    void fetchMoreEvents(com.minook.zeppa.ZeppaApplication,com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential) -> a
+    boolean fetchMoreEvents(com.minook.zeppa.ZeppaApplication,com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential) -> a
 com.minook.zeppa.singleton.ZeppaEventSingleton$OnZeppaEventLoadListener -> com.minook.zeppa.k.f:
     void onZeppaEventsLoaded() -> x_
 com.minook.zeppa.singleton.ZeppaUserSingleton -> com.minook.zeppa.k.g:

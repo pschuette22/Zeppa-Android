@@ -10,13 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.minook.zeppa.R;
-import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.adapter.NotificationsAdapter;
 import com.minook.zeppa.singleton.NotificationSingleton;
+import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.NotificationSingleton.NotificationLoadListener;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
@@ -24,7 +25,7 @@ public class NotificationsFragment extends Fragment implements
 		OnRefreshListener, NotificationLoadListener {
 
 	private View layout;
-	private View loaderView;
+//	private View loaderView;
 	private PullToRefreshLayout pullToRefreshLayout;
 	private ListView activityList;
 	private NotificationsAdapter notificationsAdapter;
@@ -35,7 +36,9 @@ public class NotificationsFragment extends Fragment implements
 		super.onCreate(savedInstanceState);
 		notificationsAdapter = new NotificationsAdapter(
 				(AuthenticatedFragmentActivity) getActivity());
+
 	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,21 +50,6 @@ public class NotificationsFragment extends Fragment implements
 		pullToRefreshLayout = (PullToRefreshLayout) layout
 				.findViewById(R.id.activityfragment_ptr);
 
-		NotificationSingleton.getInstance().registerOnLoadListener(this);
-
-		return layout;
-	}
-
-	@Override
-	public void onStart() {
-
-		if (!NotificationSingleton.getInstance().hasLoadedInitial()
-				&& activityList.getHeaderViewsCount() == 0) {
-			loaderView = Utils.makeLoaderView(
-					(AuthenticatedFragmentActivity) getActivity(),
-					"Loading Notifications...");
-			activityList.addHeaderView(loaderView);
-		}
 
 		activityList.setAdapter(notificationsAdapter);
 		activityList.setOnItemClickListener(notificationsAdapter);
@@ -70,10 +58,42 @@ public class NotificationsFragment extends Fragment implements
 				.options(Options.create().scrollDistance(.4f).build())
 				.allChildrenArePullable().listener(this)
 				.setup(pullToRefreshLayout);
+		
+		NotificationSingleton.getInstance().registerOnLoadListener(this);
+		
+		return layout;
+	}
+
+	@Override
+	public void onStart() {
+
+		if (!NotificationSingleton.getInstance().hasLoadedInitial()) {
+			pullToRefreshLayout.setRefreshing(true);
+		}
 
 		super.onStart();
 	}
 
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial() || ZeppaEventSingleton.getInstance().isLoadingEvents()) {
+			pullToRefreshLayout.setRefreshing(true);
+			
+		}
+	}
+	
+	@Override
+	public void onPause() {
+		if(pullToRefreshLayout.isRefreshing()){
+			pullToRefreshLayout.setRefreshing(false);
+		}
+		super.onPause();
+	}
+
+	
 	@Override
 	public void onDestroyView() {
 		pullToRefreshLayout.removeView(activityList);
@@ -93,6 +113,7 @@ public class NotificationsFragment extends Fragment implements
 
 		} catch (Exception e) {
 			pullToRefreshLayout.setRefreshing(false);
+			Toast.makeText(getActivity(), "Error Fetching Notifications", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -100,27 +121,20 @@ public class NotificationsFragment extends Fragment implements
 	public void onNotificationsLoaded() {
 
 		try {
-			pullToRefreshLayout.setRefreshing(false);
+			if(pullToRefreshLayout != null)
+				pullToRefreshLayout.setRefreshing(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		try {
-			if (loaderView != null) {
-				activityList.removeHeaderView(loaderView);
-				loaderView = null;
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		notificationsAdapter.notifyDataSetChanged();
+		if(notificationsAdapter != null)
+			notificationsAdapter.notifyDataSetChanged();
 	}
 
 	@Override
 	public void onNotificationDataChanged() {
-		notificationsAdapter.notifyDataSetChanged();
+		if(notificationsAdapter != null)
+			notificationsAdapter.notifyDataSetChanged();
 
 	}
 

@@ -123,6 +123,8 @@ public class HomeFragment extends Fragment implements OnClickListener,
 				.getCurrentItem());
 		activity.toolbar.setTitle(titleSequence);
 
+		setNotificationCount();
+
 	}
 
 	@Override

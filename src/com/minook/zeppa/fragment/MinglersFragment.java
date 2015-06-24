@@ -1,5 +1,7 @@
 package com.minook.zeppa.fragment;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +18,6 @@ import android.widget.ListView;
 
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
-import com.minook.zeppa.Utils;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.activity.MainActivity;
 import com.minook.zeppa.activity.StartMinglingActivity;
@@ -25,7 +26,7 @@ import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton.OnMinglersLoadListener;
 
 public class MinglersFragment extends Fragment implements OnClickListener,
-		OnMinglersLoadListener, OnItemClickListener {
+		OnMinglersLoadListener, OnItemClickListener, OnRefreshListener {
 
 	// ----------- Global Variables Bank ------------- \\
 	// Private
@@ -33,7 +34,8 @@ public class MinglersFragment extends Fragment implements OnClickListener,
 	private ListView contactList;
 	private MinglerListAdapter adapter;
 	private ImageButton addMinglers;
-	private View loaderView;
+	private PullToRefreshLayout pullToRefreshLayout;
+//	private View loaderView;
 	
 	public MinglersFragment(){
 		
@@ -63,9 +65,18 @@ public class MinglersFragment extends Fragment implements OnClickListener,
 		addMinglers = (ImageButton) layout.findViewById(R.id.minglers_add);
 		addMinglers.setOnClickListener(this);
 
+		pullToRefreshLayout = (PullToRefreshLayout) layout
+				.findViewById(R.id.minglersfragment_ptr);
+
+//		ActionBarPullToRefresh.from(getActivity())
+//				.options(Options.create().scrollDistance(.4f).build())
+//				.allChildrenArePullable().listener(this)
+//				.setup(pullToRefreshLayout);
+		
+		
 		if(!ZeppaUserSingleton.getInstance().hasLoadedInitial()){
-			loaderView = Utils.makeLoaderView(getActivity(), "Loading Minglers...");
-			contactList.addHeaderView(loaderView);
+
+			pullToRefreshLayout.setRefreshing(true);
 		}
 
 		
@@ -100,6 +111,7 @@ public class MinglersFragment extends Fragment implements OnClickListener,
 
 	@Override
 	public void onMinglersLoaded() {
+		pullToRefreshLayout.setRefreshing(false);
 		adapter.notifyDataSetChanged();
 
 	}
@@ -124,6 +136,13 @@ public class MinglersFragment extends Fragment implements OnClickListener,
 			getActivity().overridePendingTransition(R.anim.slide_up_in,
 					R.anim.hold);
 		}
+		
+	}
+
+
+	@Override
+	public void onRefreshStarted(View view) {
+		// TODO Auto-generated method stub
 		
 	}
 

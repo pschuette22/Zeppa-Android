@@ -61,11 +61,11 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 	private MinglerEventsAdapter friendEventsAdapter;
 	private DefaultUserInfoMediator userMediator;
 
-	private boolean isUpdating;
-	private boolean isUpdatingMinglerRelationships;
-	private boolean isUpdatingMinglerEvents;
-	private boolean isUpdatingMinglerTags;
-	private boolean didInitialFetch;
+	private boolean isUpdating = false;
+	private boolean isUpdatingMinglerRelationships = false;
+	private boolean isUpdatingMinglerEvents = false;
+	private boolean isUpdatingMinglerTags = false;
+	private boolean didInitialFetch = false;
 
 	/*
 	 * ------------- Override Methods --------------
@@ -76,11 +76,7 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_mingler);
-		isUpdating = false;
-		isUpdatingMinglerRelationships = false;
-		isUpdatingMinglerEvents = false;
-		isUpdatingMinglerTags = false;
-		didInitialFetch = false;
+		
 
 		if (userMediator == null) {
 			try {
@@ -110,7 +106,6 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		userGmail = (TextView) findViewById(R.id.useractivity_email);
 		mutualMinglers = (TextView) findViewById(R.id.useractivity_mutualfriends);
 		// Set loading mutual minglers test to loading for the time being
-		mutualMinglers.setText("Loading...");
 
 		eventHolder = (LinearLayout) findViewById(R.id.useractivity_eventholder);
 		tagHolder = (LinearLayout) findViewById(R.id.useractivity_tagholder);
@@ -135,12 +130,7 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 				.allChildrenArePullable().listener(this)
 				.setup(pullToRefreshLayout);
 
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-
+		
 		tagAdapter = new MinglerTagAdapter(this, tagHolder,
 				userMediator.getUserId(), null);
 		friendEventsAdapter = new MinglerEventsAdapter(userMediator, this,
@@ -155,6 +145,24 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+	}
+	
+	
+	
+
+	@Override
+	protected void onDestroy() {
+		ZeppaEventSingleton.getInstance().unregisterEventLoadListener(this);
+		super.onDestroy();
+	}
+
+
+
+
+	@Override
+	protected void onStart() {
+		super.onStart();
 		
 	}
 
@@ -202,7 +210,7 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 			GoogleAccountCredential credential = getGoogleAccountCredential();
 
 			ZeppaEventSingleton.getInstance().removeMediatorsForUser(
-					userMediator.getUserId().longValue());
+					userMediator.getUserId().longValue(), false);
 			ZeppaEventSingleton.getInstance().notifyObservers();
 			EventTagSingleton.getInstance().removeEventTagsForUser(
 					userMediator.getUserId().longValue());
@@ -351,6 +359,8 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 				(ZeppaApplication) getApplication(),
 				getGoogleAccountCredential(), ZeppaUserSingleton.getInstance()
 						.getUserId().longValue(), userMediator, this));
+		mutualMinglers.setText("Loading...");
+
 
 		isUpdatingMinglerTags = true;
 		ThreadManager.execute(new FetchDefaultTagsForUserRunnable(

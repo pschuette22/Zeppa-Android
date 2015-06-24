@@ -32,7 +32,6 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 	private enum UserResult {
 		FETCH_SUCCESS, CREATE_NEW_USER, NETWORK_FAIL, AUTHORIZATION_FAIL, NOT_FOUND, UNKNOWN
-
 	};
 
 	private boolean signinClicked;
@@ -71,7 +70,10 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 		executingLaunch = false;
 		super.onStart();
 
-		if (apiClient != null && apiClient.isConnecting()) {
+		
+		if(Constants.LOCAL_RUN){
+			// TODO: initialize for local run
+		} else if (apiClient != null && apiClient.isConnecting()) {
 			connectionProgress.show();
 		}
 
@@ -101,7 +103,10 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 						startActivityForResult(intent, REQUEST_ACCOUNT_PICKER);
 					} else if (connectionResult == null) {
 						// No connection result, try to connect
-						apiClient.connect();
+						if (Constants.LOCAL_RUN)
+							loadAndLaunch();
+						else
+							apiClient.connect();
 					} else if (connectionResult.hasResolution()) {
 						try {
 							connectionResult.startResolutionForResult(this,
@@ -129,24 +134,51 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 
-		try {
-			if (signinClicked && result.hasResolution()) {
+		if (result.hasResolution()) {
+
+			try {
 				result.startResolutionForResult(this, resolveConnectionFail);
+
+			} catch (SendIntentException e) {
+				e.printStackTrace();
+				
+				connectionProgress.dismiss();
+				Toast.makeText(this, "Connection Failed", Toast.LENGTH_SHORT)
+						.show();
 			}
-		} catch (SendIntentException e) {
-			e.printStackTrace();
+
+		} else {
+			connectionProgress.dismiss();
+
 			Toast.makeText(this, "Connection Failed", Toast.LENGTH_SHORT)
 					.show();
+			Log.d(TAG,
+					"Connection Failed with Error Code: "
+							+ result.getErrorCode());
 		}
 
 	}
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		if (PrefsManager.getLoggedInEmail(getApplication()) != null) {
+		String loggedInEmail = PrefsManager.getLoggedInEmail(getApplication());
+		if ( loggedInEmail != null && !loggedInEmail.isEmpty()) {
 			loadAndLaunch(); // Once the API Client connects, try to launch.
 		}
 	}
+	
+	
+	@Override
+	public void onConnectionSuspended(int cause) {
+		// TODO Auto-generated method stub
+		super.onConnectionSuspended(cause);
+		
+		connectionProgress.dismiss();
+		Toast.makeText(this, "Connection Issues", Toast.LENGTH_SHORT)
+		.show();
+		
+	}
+	
 
 	/*
 	 * ---------------------- My Methods ---------------------------- NOTES:
@@ -162,7 +194,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 			if (resultCode != RESULT_OK) {
 				signinClicked = false;
 
-			} else if (!apiClient.isConnecting()) {
+			} else if (!Constants.LOCAL_RUN && !apiClient.isConnecting()) {
 				apiClient.connect();
 
 			}
@@ -200,6 +232,10 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 	 */
 	private void loadAndLaunch() {
 
+		if(executingLaunch){
+			return;
+		}
+		
 		executingLaunch = true;
 		Object[] params = { getGoogleAccountCredential() };
 		new AsyncTask<Object, Void, UserResult>() {
@@ -254,6 +290,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 				} catch (Exception ex) {
 					resultCode = UserResult.UNKNOWN;
+					ex.printStackTrace();
 				}
 
 				return resultCode;
@@ -267,9 +304,7 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 					switch (result.ordinal()) {
 					case 0: // Fetch success, launch into app
-						PrefsManager.setLoggedInAccountEmail(getApplication(),
-								getGoogleAccountCredential()
-										.getSelectedAccountName());
+
 						((ZeppaApplication) getApplication())
 								.initialize(getGoogleAccountCredential());
 
@@ -324,9 +359,8 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 				}
 
 				// Dismiss signin dialog
-				if (connectionProgress.isShowing()) {
-					connectionProgress.dismiss();
-				}
+				connectionProgress.dismiss();
+				
 
 				executingLaunch = false;
 

@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/eventtagfollowendpoint/v1/20150424195426/java/1.18.0-rc/minook.com-eventtagfollowendpoint-v1-20150424195426-java-1.18.0-rc-sources.jar", 
-      "path": "minook.com-eventtagfollowendpoint-v1-20150424195426-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/eventtagfollowendpoint/v1/20150620230641/java/1.18.0-rc/minook.com-eventtagfollowendpoint-v1-20150620230641-java-1.18.0-rc-sources.jar", 
+      "path": "minook.com-eventtagfollowendpoint-v1-20150620230641-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2015-04-24 19:54"
+      "timestamp": "2015-06-20 23:06"
     }, 
     {
-      "path": "minook.com-eventtagfollowendpoint-v1-20150424195426-java-1.18.0-rc.jar.properties", 
+      "path": "minook.com-eventtagfollowendpoint-v1-20150620230641-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -675,5 +675,5 @@
   "packagePath": "zeppa", 
   "language_version": "1.18.0-rc", 
   "id": "eventtagfollowendpoint:v1", 
-  "revision": 20150424195426
+  "revision": 20150620230641
 }

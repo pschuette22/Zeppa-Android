@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/deviceinfoendpoint/v1/20150424195317/java/1.18.0-rc/minook.com-deviceinfoendpoint-v1-20150424195317-java-1.18.0-rc-sources.jar", 
-      "path": "minook.com-deviceinfoendpoint-v1-20150424195317-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/deviceinfoendpoint/v1/20150620230535/java/1.18.0-rc/minook.com-deviceinfoendpoint-v1-20150620230535-java-1.18.0-rc-sources.jar", 
+      "path": "minook.com-deviceinfoendpoint-v1-20150620230535-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2015-04-24 19:53"
+      "timestamp": "2015-06-20 23:05"
     }, 
     {
-      "path": "minook.com-deviceinfoendpoint-v1-20150424195317-java-1.18.0-rc.jar.properties", 
+      "path": "minook.com-deviceinfoendpoint-v1-20150620230535-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -675,5 +675,5 @@
   "packagePath": "zeppa", 
   "language_version": "1.18.0-rc", 
   "id": "deviceinfoendpoint:v1", 
-  "revision": 20150424195317
+  "revision": 20150620230535
 }

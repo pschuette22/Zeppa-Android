@@ -20,6 +20,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
+import com.google.api.client.json.gson.GsonFactory;
 import com.minook.zeppa.CloudEndpointUtils;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
@@ -29,6 +30,7 @@ import com.minook.zeppa.runnable.FetchNewEventsRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.zeppaeventendpoint.Zeppaeventendpoint;
 import com.minook.zeppa.zeppaeventendpoint.model.ZeppaEvent;
+import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint;
 import com.minook.zeppa.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
 import com.pschuette.android.calendarlibrary.Event;
 
@@ -38,7 +40,7 @@ public class ZeppaEventSingleton {
 		public void onZeppaEventsLoaded();
 	}
 
-//	private final String TAG = ZeppaEventSingleton.class.getName();
+	// private final String TAG = ZeppaEventSingleton.class.getName();
 
 	private static ZeppaEventSingleton singleton;
 
@@ -139,9 +141,9 @@ public class ZeppaEventSingleton {
 		}
 	}
 
-	public void removeEventById(long eventId) {
+	public boolean removeEventById(long eventId) {
 
-		if (!eventMediators.isEmpty()) {
+		if (eventMediators != null && !eventMediators.isEmpty()) {
 
 			AbstractZeppaEventMediator remove = null;
 			Iterator<AbstractZeppaEventMediator> iterator = eventMediators
@@ -157,12 +159,17 @@ public class ZeppaEventSingleton {
 
 			}
 			if (remove != null) {
-				eventMediators.remove(remove);
+				return eventMediators.remove(remove);
 			}
 		}
 
+		return false;
 	}
 
+	public boolean isLoadingEvents(){
+		return isLoadingEvents;
+	}
+	
 	/*
 	 * ------------ Getters --------------
 	 */
@@ -410,21 +417,43 @@ public class ZeppaEventSingleton {
 
 		return success;
 	}
-	
-	public void removeMediatorsForUser(long userId){
-		Iterator<AbstractZeppaEventMediator> iterator = eventMediators.iterator();
+
+	/**
+	 * This method removes all events that a user has not joined from the
+	 * 
+	 * @param userId
+	 */
+	public void removeMediatorsForUser(long userId, boolean removeJoined) {
+
+		if (eventMediators.isEmpty()) {
+			return;
+		}
+
+		Iterator<AbstractZeppaEventMediator> iterator = eventMediators
+				.iterator();
 		List<AbstractZeppaEventMediator> removalList = new ArrayList<AbstractZeppaEventMediator>();
-		
-		while(iterator.hasNext()){
+
+		while (iterator.hasNext()) {
 			AbstractZeppaEventMediator mediator = iterator.next();
-			if(mediator.getHostId().longValue() == userId && !((DefaultZeppaEventMediator)mediator).isAttending()){
+			if (mediator.getHostId().longValue() == userId) {
+
+				// If you should keep joined and user is attending,continue on
+				// loop
+				if (!removeJoined
+						&& ((DefaultZeppaEventMediator) mediator).isAttending()) {
+					continue;
+				}
+
 				removalList.add(mediator);
-				NotificationSingleton.getInstance().removeNotificationsForEvent(mediator.getEventId().longValue());
+				NotificationSingleton.getInstance()
+						.removeNotificationsForEvent(
+								mediator.getEventId().longValue());
 			}
 		}
-		
-		eventMediators.remove(removalList);
-		
+
+		if (!removalList.isEmpty()) {
+			eventMediators.remove(removalList);
+		}
 	}
 
 	/**
@@ -452,6 +481,32 @@ public class ZeppaEventSingleton {
 		}
 
 		return false;
+	}
+
+	protected Zeppaeventendpoint buildEventEndpoint(
+			GoogleAccountCredential credential) {
+		Zeppaeventendpoint.Builder builder = new Zeppaeventendpoint.Builder(
+				AndroidHttp.newCompatibleTransport(),
+				GsonFactory.getDefaultInstance(), credential);
+		CloudEndpointUtils.updateBuilder(builder);
+		Zeppaeventendpoint endpoint = builder.build();
+
+		return endpoint;
+	}
+
+	/**
+	 * @param credential
+	 * @return
+	 */
+	protected Zeppaeventtouserrelationshipendpoint buildEventRelationshipEndpoint(
+			GoogleAccountCredential credential) {
+		Zeppaeventtouserrelationshipendpoint.Builder builder = new Zeppaeventtouserrelationshipendpoint.Builder(
+				AndroidHttp.newCompatibleTransport(),
+				GsonFactory.getDefaultInstance(), credential);
+		CloudEndpointUtils.updateBuilder(builder);
+		Zeppaeventtouserrelationshipendpoint endpoint = builder.build();
+
+		return endpoint;
 	}
 
 	/*
@@ -484,7 +539,7 @@ public class ZeppaEventSingleton {
 		ThreadManager.execute(new FetchMoreEventsRunnable(application,
 				credential, ZeppaUserSingleton.getInstance().getUserId()
 						.longValue(), nextRelationshipPageToken));
-		
+
 		return true;
 	}
 

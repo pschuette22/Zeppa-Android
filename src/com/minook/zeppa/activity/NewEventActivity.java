@@ -3,8 +3,6 @@ package com.minook.zeppa.activity;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
@@ -74,7 +72,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	private EditText shortLocationField;
 
 	private Spinner eventPrivacyField;
-	private CheckBox guestsCanInviteField;
+	private CheckBox guestsMayInviteField;
 
 	private TextView startDateField;
 	private TextView startTimeField;
@@ -125,7 +123,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		cancelButton = (Button) findViewById(R.id.neweventactivity_cancel);
 		// invitesHolder = (LinearLayout)
 		// findViewById(R.id.neweventactivity_invitesholder);
-		guestsCanInviteField = (CheckBox) findViewById(R.id.neweventactivity_guestmayinvite);
+		guestsMayInviteField = (CheckBox) findViewById(R.id.neweventactivity_guestmayinvite);
 
 		newTagTextField = (EditText) findViewById(R.id.neweventactivity_tagtext);
 		addNewTagField = (TextView) findViewById(R.id.neweventactivity_addnewtag);
@@ -323,7 +321,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		event.setEnd(endCalendar.getTimeInMillis());
 		event.setTagIds(tagAdapter.getSelectedTagIds());
 		event.setInvitedUserIds(invitesAdapter.getInvitedUserIds());
-		event.setGuestsMayInvite(guestsCanInviteField.isChecked());
+		event.setGuestsMayInvite(guestsMayInviteField.isChecked());
 
 		if (!isValidEvent(event)) {
 

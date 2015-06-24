@@ -181,6 +181,12 @@ public class MyTagAdapter extends AbstractTagAdapter {
 		drawTags(); // TODO: just add a single view instead of redrawing the
 					// whole thing
 	}
+	
+	@Override
+	protected boolean didLoadTags(){
+				
+		return EventTagSingleton.getInstance().didLoadInitialTags();
+	}
 
 	protected String trimTag(String originalText) {
 		StringBuilder newText = new StringBuilder();

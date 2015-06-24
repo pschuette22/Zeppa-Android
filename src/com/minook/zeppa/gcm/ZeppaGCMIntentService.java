@@ -1,7 +1,6 @@
 package com.minook.zeppa.gcm;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import android.app.IntentService;
@@ -20,10 +19,9 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.PrefsManager;
 import com.minook.zeppa.ZeppaApplication;
-import com.minook.zeppa.mediator.DefaultUserInfoMediator;
+import com.minook.zeppa.activity.DefaultEventViewActivity;
 import com.minook.zeppa.runnable.NotificationReceivedRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
-import com.minook.zeppa.singleton.EventTagSingleton;
 import com.minook.zeppa.singleton.NotificationSingleton;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
@@ -62,85 +60,143 @@ public class ZeppaGCMIntentService extends IntentService implements
 			if (intent.getAction().equals(
 					"com.google.android.c2dm.intent.REGISTRATION")) {
 				Log.d(TAG, "Successfully registered GCM");
-				// Release the wake lock provided by the WakefulBroadcastReceiver.
+				// Release the wake lock provided by the
+				// WakefulBroadcastReceiver.
 				ZeppaGCMReceiver.completeWakefulIntent(intent);
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR
 					.equals(messageType)) {
 				Log.d(TAG, "Message Type Error");
-				// Release the wake lock provided by the WakefulBroadcastReceiver.
+				// Release the wake lock provided by the
+				// WakefulBroadcastReceiver.
 				ZeppaGCMReceiver.completeWakefulIntent(intent);
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
 					.equals(messageType)) {
 				Log.d(TAG, "Message Type Deleted");
 				// If it's a regular GCM message, do some work.
-				// Release the wake lock provided by the WakefulBroadcastReceiver.
+				// Release the wake lock provided by the
+				// WakefulBroadcastReceiver.
 				ZeppaGCMReceiver.completeWakefulIntent(intent);
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
 					.equals(messageType)) {
+				Log.d(TAG, "Received Message: " + intent.getExtras().toString());
 				// This loop represents the service doing some work
 
-				if (intent.getExtras().getString("purpose")
-						.equalsIgnoreCase("payload")) {
-					Log.d(TAG, "Received Notification with Payload");
-					notificationIntents.add(intent);
+				// String payload = extras.getString("payload");
+				//
+				// if (payload == null || payload.isEmpty()) {
+				// ZeppaGCMReceiver.completeWakefulIntent(intent);
+				// return;
+				// }
 
-					if (apiClient != null && apiClient.isConnected()) {
-						executeNotificationRunnables(getApplication(),
-								getGoogleAccountCredential());
-					} else if (apiClient == null || !apiClient.isConnecting()) {
+				try {
+
+					String purpose = extras.getString("purpose");
+
+					if (purpose.equals("zeppaNotification")) {
+						String notificationIdString = extras
+								.getString("notificationId");
+						// String senderIdString = extras.getString("senderId");
+						// String eventIdString = extras.getString("eventId");
+						// long senderId = Long.parseLong(senderIdString);
+						// long eventId = Long.parseLong(eventIdString);
+						String expiresString = extras.getString("expires");
+
+						long notificationId = Long
+								.parseLong(notificationIdString);
+						long expires = Long.parseLong(expiresString);
+
+						// if (System.currentTimeMillis() > expires) {
+						// TODO: process notification
 						connectApiClient();
-					}
+						GoogleAccountCredential credential = getGoogleAccountCredential();
 
-				} else if (intent.getExtras().getString("purpose")
-						.equalsIgnoreCase("unmingle")) {
-					long userId = Long.valueOf(intent.getExtras().getString(
-							"fromUserId"));
-					try {
+						ThreadManager.execute(new NotificationReceivedRunnable(
+								(ZeppaApplication) getApplication(),
+								credential, notificationId, PrefsManager
+										.getLoggedInUserId(getApplication())));
 
-						DefaultUserInfoMediator mediator = (DefaultUserInfoMediator) ZeppaUserSingleton
-								.getInstance().getAbstractUserMediatorById(
-										userId);
-						mediator.setUserRelationship(null);
+						// ZeppaNotification notification =
+						// NotificationSingleton.getInstance().;
+						//
+						// DefaultUserInfoMediator info = ZeppaUserSingleton
+						// .getInstance()
+						// .fetchDefaultUserInfoMediatorWithBlocking(
+						// getApplicationContext(), senderId,
+						// credential);
+						//
+						// if (eventId > 0) {
+						// ZeppaEventSingleton.getInstance().getEventById(
+						// eventId);
+						// }
+
+						// } else {
+						// // Do nothing... for now
+						// // Received stale notification
+						// }
+
+					} else if (purpose.equals("userRelationshipDeleted")) {
+
+						// If this was received in error, recover
+						String recipientIdString = extras
+								.getString("recipientId");
+						long recipientId = Long.parseLong(recipientIdString);
+						long loggedInUserId = PrefsManager
+								.getLoggedInUserId(getApplicationContext());
+						if (recipientId != loggedInUserId) {
+							return;
+						}
+
+						// Receive the Sender Id
+						String senderIdString = extras.getString("senderId");
+						long senderId = Long.parseLong(senderIdString);
+
+						// Remove notifications from user
+						NotificationSingleton.getInstance()
+								.removeNotificationsFromUser(senderId);
+						// Remove unjoined events hosted by user
 						ZeppaEventSingleton.getInstance()
-								.removeMediatorsForUser(userId);
-						EventTagSingleton.getInstance().removeEventTagsForUser(
-								userId);
+								.removeMediatorsForUser(senderId, false);
+						// Remove relationship to user
+						ZeppaUserSingleton.getInstance()
+								.removeHeldMediatorById(senderId);
 
-						ZeppaUserSingleton.getInstance().notifyObservers();
-						ZeppaEventSingleton.getInstance().notifyObservers();
 						NotificationSingleton.getInstance().notifyObservers();
-						
-					} catch (NullPointerException e) {
-						e.printStackTrace();
+						ZeppaEventSingleton.getInstance().notifyObservers();
+						ZeppaUserSingleton.getInstance().notifyObservers();
+
+					} else if (purpose.equals("eventDeleted")) {
+
+						String eventIdString = extras.getString("eventId");
+						long eventId = Long.parseLong(eventIdString);
+
+						if (ZeppaEventSingleton.getInstance().removeEventById(
+								eventId)) {
+							ZeppaEventSingleton.getInstance().notifyObservers();
+
+							// Navigate away from page if user is viewing
+							// activity that was just deleted
+							ZeppaApplication application = (ZeppaApplication) getApplication();
+							if (application.getCurrentActivity() != null
+									&& application.getCurrentActivity() instanceof DefaultEventViewActivity) {
+								((DefaultEventViewActivity) ((ZeppaApplication) application)
+										.getCurrentActivity())
+										.onEventDeleted(eventId);
+							}
+
+						}
+
 					}
 
-				} else if(intent.getExtras().getString("purpose")
-						.equalsIgnoreCase("accountdeleted")){
-					
-					long userId = Long.valueOf(intent.getExtras().getString(
-							"fromUserId"));
-					try {
-
-						ZeppaUserSingleton.getInstance().removeHeldMediatorById(userId);
-						ZeppaEventSingleton.getInstance()
-								.removeMediatorsForUser(userId);
-						EventTagSingleton.getInstance().removeEventTagsForUser(
-								userId);
-						
-						ZeppaUserSingleton.getInstance().notifyObservers();
-						ZeppaEventSingleton.getInstance().notifyObservers();
-						NotificationSingleton.getInstance().notifyObservers();
-						
-					} catch (NullPointerException e) {
-						e.printStackTrace();
-					}
-				} else {
-					Log.d(TAG, "Notification Was Not Handled");
+				} catch (IllegalArgumentException e2) {
+					e2.printStackTrace();
+				} catch (Exception e3) {
+					e3.printStackTrace();
+				} finally {
+					ZeppaGCMReceiver.completeWakefulIntent(intent);
 				}
 
 			}
 		}
-		
 
 	}
 
@@ -148,32 +204,30 @@ public class ZeppaGCMIntentService extends IntentService implements
 	// This is just one simple example of what you might choose to do with
 	// a GCM message.
 
-	private void connectApiClient() {
+	private boolean connectApiClient() {
+
 		String heldAccountName = getSharedPreferences(Constants.SHARED_PREFS,
 				MODE_PRIVATE).getString(Constants.LOGGED_IN_ACCOUNT, null);
 
 		// User is not logged in and should not receive the notification
 		if (heldAccountName != null) {
-			initializeApiClient(heldAccountName);
-			apiClient.connect();
+
+			// Connect the api client;
+			GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this,
+					this, this);
+			builder.setAccountName(heldAccountName);
+			builder.addApi(Plus.API);
+			builder.addScope(Plus.SCOPE_PLUS_LOGIN);
+			apiClient = builder.build();
+
+			ConnectionResult result = apiClient.blockingConnect();
+
+			// returns true if the
+			return result.isSuccess();
+
 		}
-	}
 
-	/**
-	 * This method builds an apiClient instance copied from authenticated
-	 * fragment activity. Consider moving
-	 * 
-	 * @param accountName
-	 */
-	private void initializeApiClient(String accountName) {
-
-		GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this,
-				this, this);
-		builder.setAccountName(accountName);
-		builder.addApi(Plus.API);
-		builder.addScope(Plus.SCOPE_PLUS_LOGIN);
-		apiClient = builder.build();
-
+		return false;
 	}
 
 	/**
@@ -207,26 +261,24 @@ public class ZeppaGCMIntentService extends IntentService implements
 		} else {
 
 			// Copy intents and clear global list
-			List<Intent> copyIntents = new ArrayList<Intent>();
-			copyIntents.addAll(notificationIntents);
-			notificationIntents.clear();
+			// List<Intent> copyIntents = new ArrayList<Intent>();
+			// copyIntents.addAll(notificationIntents);
+			// notificationIntents.clear();
+			//
+			// Iterator<Intent> iterator = copyIntents.iterator();
+			//
+			// while (iterator.hasNext()) {
+			// Intent intent = iterator.next();
+			// Long notificationId = Long.valueOf(intent.getExtras()
+			// .getString("notificationId"));
+			//
 
-			Iterator<Intent> iterator = copyIntents.iterator();
-
-			while (iterator.hasNext()) {
-				Intent intent = iterator.next();
-				Long notificationId = Long.valueOf(intent.getExtras()
-						.getString("notificationId"));
-
-				ThreadManager.execute(new NotificationReceivedRunnable(
-						(ZeppaApplication) getApplication(), credential,
-						notificationId.longValue(), PrefsManager
-								.getLoggedInUserId(getApplication())));
-				
-				// Release the wake lock provided by the WakefulBroadcastReceiver.
-				ZeppaGCMReceiver.completeWakefulIntent(intent);
-
-			}
+			//
+			// // Release the wake lock provided by the
+			// WakefulBroadcastReceiver.
+			// ZeppaGCMReceiver.completeWakefulIntent(intent);
+			//
+			// }
 
 		}
 
@@ -235,8 +287,8 @@ public class ZeppaGCMIntentService extends IntentService implements
 	@Override
 	public void onConnected(Bundle connectionHint) {
 
-		executeNotificationRunnables(getApplication(),
-				getGoogleAccountCredential());
+		// executeNotificationRunnables(getApplication(),
+		// getGoogleAccountCredential());
 
 	}
 

@@ -196,8 +196,12 @@ public abstract class AbstractEventViewActivity extends
 	public void onConnected(Bundle connectionHint) {
 		super.onConnected(connectionHint);
 
+		
 		startFetchEventExtrasThread();
+		
 		fetchEventComments();
+		
+		
 		setSeenAllNotificationsForEvent();
 
 	}

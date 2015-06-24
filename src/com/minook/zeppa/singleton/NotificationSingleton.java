@@ -72,6 +72,28 @@ public class NotificationSingleton {
 		onNotificationDataChanged();
 	}
 
+	/**
+	 * Removes all held notifications sent from a given user
+	 * @param userId
+	 */
+	public void removeNotificationsFromUser(long userId){
+		
+		List<ZeppaNotification> entities = new ArrayList<ZeppaNotification>();
+		Iterator<ZeppaNotification> iterator = notifications.iterator();
+		while(iterator.hasNext()){
+			
+			ZeppaNotification notification = iterator.next();
+			if(notification.getSenderId().longValue() == userId){
+				entities.add(notification);
+			}
+		}
+		
+		if(!entities.isEmpty()){
+			notifications.removeAll(entities);
+		}
+		
+	}
+	
 	public void removeNotification(long notificationId) {
 
 		ZeppaNotification notification = null;

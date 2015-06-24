@@ -15,6 +15,7 @@ import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.mediator.DefaultEventTagMediator;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.singleton.EventTagSingleton;
+import com.minook.zeppa.singleton.EventTagSingleton.OnTagLoadListener;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
 public class MinglerTagAdapter extends AbstractTagAdapter implements
@@ -123,6 +124,14 @@ public class MinglerTagAdapter extends AbstractTagAdapter implements
 		}
 	}
 
+	@Override
+	protected boolean didLoadTags(){
+		DefaultUserInfoMediator mediator = (DefaultUserInfoMediator) ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(userId);
+		
+		return mediator.hasLoadedInitialTags();
+	}
+	
+	
 	@Override
 	public void onClick(View v) {
 

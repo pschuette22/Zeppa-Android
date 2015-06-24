@@ -33,7 +33,7 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 	// Private
 
 	private View layout;
-	private View loaderView;
+//	private View loaderView;
 	private PullToRefreshLayout pullToRefreshLayout;
 	private ListView feedList;
 	private FeedListAdapter flAdapter;
@@ -90,6 +90,8 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 		ZeppaEventSingleton.getInstance().registerEventLoadListener(this);
 		return layout;
 	}
+	
+	
 
 	// @Override
 	// public void onResume() {
@@ -102,16 +104,32 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 	public void onStart() {
 		feedList.setOnScrollListener(mScrollListener);
 
-		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial()
-				&& feedList.getHeaderViewsCount() == 0) {
-			loaderView = Utils.makeLoaderView(getActivity(),
-					"Finding Activities...");
-			feedList.addHeaderView(loaderView);
-		}
+//		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial() || ZeppaEventSingleton.getInstance().isLoadingEvents()) {			
+//			pullToRefreshLayout.setRefreshing(true);
+//		}
 
 		feedList.setAdapter(flAdapter);
 		feedList.setOnItemClickListener(flAdapter);
 		super.onStart();
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		if (!ZeppaEventSingleton.getInstance().hasLoadedInitial() || ZeppaEventSingleton.getInstance().isLoadingEvents()) {
+			pullToRefreshLayout.setRefreshing(true);
+			
+		}
+	}
+	
+	@Override
+	public void onPause() {
+		if(pullToRefreshLayout.isRefreshing()){
+			pullToRefreshLayout.setRefreshing(false);
+		}
+		super.onPause();
 	}
 
 	@Override
@@ -139,10 +157,10 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 
 	@Override
 	public void onZeppaEventsLoaded() {
-		if (loaderView != null) {
-			feedList.removeHeaderView(loaderView);
-			loaderView = null;
-		}
+//		if (loaderView != null) {
+//			feedList.removeHeaderView(loaderView);
+//			loaderView = null;
+//		}
 
 		pullToRefreshLayout.setRefreshing(false);
 
