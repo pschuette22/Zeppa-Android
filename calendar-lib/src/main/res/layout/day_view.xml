@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:minHeight="@dimen/min_cell_height"
+    android:minWidth="@dimen/min_cell_width">
+
+    <FrameLayout
+        android:id="@+id/today_frame"
+        android:layout_width="@dimen/text_height_width"
+        android:layout_height="@dimen/text_height_width"
+        android:layout_centerInParent="true"
+        android:background="@drawable/today" />
+
+    <FrameLayout
+        android:id="@+id/hasevents_frame"
+        android:layout_width="@dimen/text_height_width"
+        android:layout_height="@dimen/text_height_width"
+        android:layout_centerInParent="true"
+        android:background="@drawable/dayhasevents" />
+    
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="@dimen/text_height_width"
+        android:layout_height="@dimen/text_height_width"
+        android:layout_centerInParent="true"
+        android:background="@drawable/date_number_background"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/date_number_text_color" />
+
+
+</RelativeLayout>

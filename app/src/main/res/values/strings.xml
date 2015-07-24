@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- A -->
+    <string name="activity_title">Notifications</string>
+    <string name="add">Add</string>
+    <string name="add_account">Add Account</string>
+    <string name="add_event">Add Event</string>
+    <string name="add_friends">Add Friends</string>
+    <string name="add_invites">Add Invites</string>
+    <string name="addremove_tags">Add/Remove Tags</string>
+    <string name="agenda_title">Agenda</string>
+    <string name="app_name">Zeppa</string>
+
+    <!-- B -->
+    <string name="birthday:">Birthday:</string>
+
+    <!-- C -->
+    <string name="calendar_list_title">Calendars Synced</string>
+    <string name="calendar_title">Calendar</string>
+    <string name="cancel"> Cancel</string>
+    <string name="casual">Casual</string>
+    <string name="chime_in">Chime in&#8230;</string>
+    <string name="contacts_using">Friends Using Zeppa</string>
+    <string name="couldntfind">Couldn\'t find this&#8230; awkward</string>
+    <string name="create">Create</string>
+    <string name="create_account">Create Account</string>
+    <string name="create_event">Create Event</string>
+    <string name="create_tag">Create New Tag</string>
+    <string name="creating_profile">Creating Your Profile</string>
+
+    <!-- D -->
+    <string name="delete">Delete</string>
+    <string name="desciption_newevent">Anything to add?</string>
+    <string name="directions">Directions</string>
+    <string name="discussion_board">Discussion Board:</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="done"> Done</string>
+
+    <!-- E -->
+    <string name="edit">Edit</string>
+    <string name="email">Email</string>
+    <string name="email:">Email:</string>
+    <string name="enter_email_hint">Enter Google Account Email Address</string>
+    <string name="enter_phone">Phone Number</string>
+    <string name="error_deletetag">Error Deleting Tag</string>
+    <string name="error_network">Network Connection Error</string>
+    <string name="error_newevent">Error Creating Event</string>
+    <string name="error_signin">Sign in Error</string>
+    <string name="event_details">Event Details</string>
+    <string name="event_title">What?</string>
+    <string name="example_email">Example@gmail.com</string>
+
+    <!-- F -->
+    <string name="feed_title">Feed</string>
+    <string name="feedback">Feedback</string>
+    <string name="feedback_messagefromzeppa">In Our Never Ending Process To Improve Zeppa, We Would Love To Hear From You! Provide Any Feedback, Comments Or Suggestions Below And We Will Review It</string>
+    <string name="find_friends_message">This takes a long time if you have a lot of friends(Phone Contacts)</string>
+    <string name="find_time">Find a Time</string>
+    <string name="friday_calendar_short">Fr</string>
+    <string name="from">From</string>
+    <string name="feedback_title">Subject:</string>
+    <string name="feedback_main">Comments:</string>
+    <string name="follow_new">Following New Tags</string>
+    <string name="followers">Followers</string>
+
+    <!-- G -->
+    <string name="getting_details">Getting Account Details</string>
+    <string name="going">Going</string>
+    <string name="got_it">Got It</string>
+    <string name="guests_can_invite">Guests Can Send Invites</string>
+
+    <!-- H -->
+    <string name="hall_of_fame">Hall of Fame</string>
+    <string name="hint_givenname">First Name</string>
+    <string name="hint_familyname">Last Name</string>
+    <string name="home">Home</string>
+
+    <!-- I -->
+    <string name="insufficientfields_title">Unfilled Spots</string>
+    <string name="insufficientfields_message">Make sure all fields are filled out</string>
+    <string name="invlaid_text">Invalid Text</string>
+    <string name="invite">Invite</string>
+    <string name="invite_list">Invite List</string>
+    <string name="invite_only">Invite Only</string>
+    <string name="invite_people">Invite People</string>
+
+    <!-- J -->
+    <string name="join">Join</string>
+
+    <!-- L -->
+    <string name="leave">Leave</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="location_long_title">Set Maps Address</string>
+    <string name="location_long">42 Wallaby way, Sydney</string>
+    <string name="location_short">Where?</string>
+    <string name="login_activity">Login</string>
+
+    <!-- M -->
+    <string name="manage_tags">Manage Event Tags</string>
+    <string name="mass_email">Mass Email</string>
+    <string name="mass_text">Mass Text</string>
+    <string name="minglers">Minglers</string>
+    <string name="monday_calendar_short">Mo</string>
+    <string name="my_account">My Account</string>
+    <string name="my_profile">My Profile</string>
+
+    <!-- N -->
+    <string name="navigation_open">Nav Open</string>
+    <string name="navigation_closed">Nav Closed</string>
+    <string name="newtag">New Category Tag</string>
+    <string name="no">No</string>
+    <string name="no_repost">No Repost</string>
+    <string name="notifications">Notifications</string>
+
+    <!-- O -->
+    <string name="one_moment">One moment, please</string>
+
+    <!--
+         P 
+    	- Public/ Private threw errors w/out '_' appended
+    -->
+
+    <string name="password">Password</string>
+    <string name="pending_requests">Pending Friend Requests</string>
+    <string name="phone:">Phone:</string>
+    <string name="post">Post</string>
+    <string name="posting_event">Posting Event</string>
+    <string name="private_">Private</string>
+    <string name="public_">Public</string>
+
+    <!-- R -->
+    <string name="remember_me">Remember Me</string>
+    <string name="repost">Repost</string>
+    <string name="reposts">Reposts</string>
+
+    <!-- S -->
+    <string name="start_new">Start Something</string>
+    <string name="saturday_calendar_short">Sa</string>
+    <string name="send">Send</string>
+    <string name="send_feedback">Send Feedback</string>
+    <string name="settings">Settings</string>
+    <string name="sign_in">Sign In</string>
+    <string name="signing_in">Signing in&#8230;</string>
+    <string name="slogan">Life is too short to watch people live it</string>
+    <string name="stopwatching">Stop Watching</string>
+    <string name="sunday_calendar_short">Su</string>
+
+    <!-- T -->
+    <string name="to">To</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="text">Text</string>
+    <string name="tuesday_calendar_short">Tu</string>
+    <string name="thursday_calendar_short">Th</string>
+
+    <!-- U -->
+    <string name="unmingle">Unmingle</string>
+    <string name="usage">Usage</string>
+
+    <!-- V -->
+    <string name="verifying">Verifying Identity</string>
+
+    <!-- W -->
+    <string name="watching_title">Watching</string>
+    <string name="watch">Watch</string>
+    <string name="wednesday_calendar_short">We</string>
+
+    <!-- Y -->
+    <string name="yes">Yes</string>
+
+    <!-- Z -->
+    <string name="zeppa">Zeppa</string>
+    <string name="zeppacalendar_summary">@string/zeppa</string>
+    <string name="zeppacalendar_description">Calendar for all your activities started through Zeppa</string>
+
+    <!-- Content Description -->
+    <string name="contdesc_addexactlocation">Add Exact Location</string>
+    <string name="contdesc_addtag">Add New Tag</string>
+    <string name="contdesc_addtags">Add More Tags To Event</string>
+    <string name="contdesc_calendaroptions">Advanced Calendar Options</string>
+    <string name="contdesc_calendarviewtype">Calendar View Type</string>
+    <string name="contdesc_conflictionimage">Confliction Indication</string>
+    <string name="contdesc_contactimage">Contact Image</string>
+    <string name="contdesc_hostimage">Host Image</string>
+    <string name="contdesc_interactbtn">Manage Interaction</string>
+    <string name="contdesc_lastmonth">Go To Last Month</string>
+    <string name="contdesc_loginimage">Login Background</string>
+    <string name="contdesc_navlist_item">Navigation List Item Picture</string>
+    <string name="contdesc_navsuggestion">Navigation Suggestion</string>
+    <string name="contdesc_nextmonth">Go To Next Month</string>
+    <string name="contdesc_search">Search Friends</string>
+    <string name="contdesc_settingsbtn">Application Settings</string>
+    <string name="contdesc_slogan">Zeppa Slogan, "Life is too short to watch people live it"</string>
+    <string name="contdesc_titletext">Title Text</string>
+    <string name="contdesc_userimage">User Image</string>
+
+    <!-- Action Menu Options -->
+    <string name="menu_aboutus">About Us</string>
+    <string name="menu_activity">Activity</string>
+    <string name="menu_addcontact">Add Contact</string>
+    <string name="menu_explain">Explain This</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_newevent">New Event</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_signout">Sign Out</string>
+
+    <!-- Activity Titles -->
+    <string name="title_details">Details</string>
+
+    <!-- Error Description -->
+    <string name="error_newevent_title">You need to add a title!</string>
+    <string name="error_newevent_location">You need to let people know where this is!</string>
+    <string name="error_newevent_time">This isn\'t a good time&#8230;</string>
+
+    <!-- Toast Texts -->
+    <string name="toast_feedback_success">Feedback Sent!</string>
+    <string name="toast_network_error">Connection Error</string>
+
+    <!-- Static Arrays -->
+
+    <string-array name="navigation_options">
+        <item>@string/my_profile</item>
+        <item>@string/home</item>
+        <item>@string/minglers</item>
+        <item>@string/send_feedback</item>
+        <item>@string/settings</item>
+    </string-array>
+    <string-array name="home_tab_options">
+        <item>@string/calendar_title</item>
+        <item>@string/feed_title</item>
+        <item>@string/agenda_title</item>
+        <item>@string/activity_title</item>
+    </string-array>
+    <string-array name="event_types">
+        <item>@string/casual</item>
+        <item>@string/private_</item>
+    </string-array>
+
+</resources>

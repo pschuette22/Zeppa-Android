@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/baseview_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingEnd="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingStart="5dp"
+            android:paddingTop="20dp" >
+
+            <ImageView
+                android:id="@+id/baseview_previous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/navigation_previous_item" />
+
+            <ImageView
+                android:id="@+id/baseview_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/navigation_next_item" />
+
+            <!-- title is either Month Year or Day Day-Of-Month -->
+
+            <TextView
+                android:id="@+id/baseview_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@id/baseview_previous"
+                android:layout_toLeftOf="@id/baseview_next"
+                android:layout_toRightOf="@id/baseview_previous"
+                android:layout_toStartOf="@id/baseview_next"
+                android:gravity="center"
+                android:textAppearance="@android:attr/textAppearanceLarge"
+                android:textSize="25sp" />
+        </RelativeLayout>
+
+        <!-- This view may be hidden -->
+
+        <FrameLayout
+            android:id="@+id/baseview_monthviewholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/baseview_dayviewholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp" />
+    </LinearLayout>
+
+</ScrollView>

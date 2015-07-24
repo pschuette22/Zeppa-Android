@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/eventview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:background="@drawable/background_eventlist_item"
+    android:orientation="vertical" >
+
+    <!-- Info Display -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="2dp" >
+
+        <!-- Host Info -->
+
+        <LinearLayout
+            android:id="@+id/eventview_hostinfo"
+            android:layout_width="66dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/background_attribute_clickable"
+            android:orientation="vertical"
+            android:padding="2dp" >
+
+            <ImageView
+                android:id="@+id/eventview_hostimage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="@string/contdesc_contactimage"
+                android:padding="1dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_user_image" />
+
+            <TextView
+                android:id="@+id/eventview_hostname"
+                style="@style/black_txt12sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
+
+        <!-- Event Info -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/eventview_hostinfo"
+            android:layout_toRightOf="@id/eventview_hostinfo"
+            android:orientation="vertical" >
+
+            <!-- Title and conflict indicator -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true" >
+
+                <ImageView
+                    android:id="@+id/eventview_conflictionindicator"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:contentDescription="@string/contdesc_conflictionimage" />
+
+                <TextView
+                    android:id="@+id/eventview_eventtitle"
+                    style="@style/black_txt21sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toLeftOf="@id/eventview_conflictionindicator"
+                    android:layout_toStartOf="@id/eventview_conflictionindicator"
+                    android:maxLines="1" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/eventview_eventtime"
+                style="@style/black_txt14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_time"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_time"
+                android:gravity="center_vertical|start"
+                android:padding="3dp" />
+
+            <TextView
+                android:id="@+id/eventview_eventlocation"
+                style="@style/black_txt14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_location"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_location"
+                android:gravity="center_vertical|start"
+                android:padding="3dp" />
+
+            <TextView
+                android:id="@+id/eventview_description"
+                style="@style/black_txt14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:paddingBottom="3dp"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Button Bar -->
+
+    <include
+        android:id="@+id/eventview_quickactionbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        layout="@layout/view_eventactionbar" />
+
+</LinearLayout>

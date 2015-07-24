@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contacts_listitem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_listitem_default"
+    android:paddingBottom="3dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="3dp" >
+
+    <ImageView
+        android:id="@+id/contacts_listitem_picture"
+        android:layout_width="@dimen/view_contactlistitem_picture"
+        android:layout_height="@dimen/view_contactlistitem_picture"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/contdesc_contactimage"
+        android:padding="1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_user_image" />
+
+    <TextView
+        android:id="@+id/contacts_listitem_name"
+        style="@style/black_txt18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/contacts_listitem_picture"
+        android:layout_toRightOf="@id/contacts_listitem_picture" />
+
+</RelativeLayout>

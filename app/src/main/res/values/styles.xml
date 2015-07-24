@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Application theme -->
+    <style name="ZeppaTheme" parent="Theme.AppCompat.Light">
+        <item name="android:actionBarStyle">@style/CustomActionBarTheme</item>
+        <item name="actionBarStyle">@style/CustomActionBarTheme</item>
+    </style>
+
+    <!-- Action Bar Style -->
+    <style name="ZeppaActionBarStyle" parent="">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlHighlight">@color/teal_transparent_dark</item>
+    </style>
+
+    <style name="HeaderBar">
+        <item name="android:background">@color/teal</item>
+    </style>
+
+    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <!-- Taken from developer sight, names should be updated at some point -->
+
+    <style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:titleTextStyle">@style/actionbar_text</item>
+        <item name="titleTextStyle">@style/actionbar_text</item>
+        <item name="android:background">@color/teal</item>
+        <item name="background">@color/teal</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlHighlight">@color/teal_transparent_dark</item>
+    </style>
+
+</resources>

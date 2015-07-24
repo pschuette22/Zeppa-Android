@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_notification_seen"
+    android:id="@+id/notificationitem_background"
+    android:padding="3dp" >
+
+    <ImageView
+        android:id="@+id/notificationitem_userimage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/contdesc_userimage"
+        android:padding="1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_user_image" />
+
+    <TextView
+        android:id="@+id/notificationitem_date"
+        style="@style/gray_date_txt12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/notificationitem_userimage"
+        android:lines="1" />
+
+    <TextView
+        android:id="@+id/notificationitem_text"
+        style="@style/black_txt14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notificationitem_date"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@id/notificationitem_userimage"
+        android:lines="2" />
+
+</RelativeLayout>

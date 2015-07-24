@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@drawable/background_fragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true" >
+
+        <!-- Heading for contacts -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/contactfragment_contactimage"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/background_contact_picture"
+                android:contentDescription="@string/contdesc_contactimage"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/contactfragment_contactname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_margin="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_toLeftOf="@id/contactfragment_contactimage" />
+        </RelativeLayout>
+
+        <!-- This holds the tags
+        		NOTE: this is probably not the best type of element
+         -->
+
+        <LinearLayout
+            android:layout_margin="3dp"
+            android:id="@+id/contactfragment_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    
+        
+        
+    	<LinearLayout
+    	    android:layout_margin="3dp"
+    	    android:id="@+id/contactfragmnet_events"
+    	    android:layout_width="match_parent"
+    	    android:layout_height="wrap_content"
+    	    android:orientation="vertical"
+    	    android:divider="@color/gray_light"
+    	    android:dividerPadding="2dp"
+    	    />
+    
+    </LinearLayout>
+    
+</ScrollView>

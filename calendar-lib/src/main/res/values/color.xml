@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Day Text -->
+    <color name="daytext_interaction">#F3F3F3</color>
+    <color name="daytext_default">#403838</color>
+    
+    <color name="dayselected_color">#0AD2FF</color>
+    <color name="daytoday_color">#CBCBCB</color>
+    <color name="dayhasevents_color">#ACACAC</color>
+    
+    <color name="header_column_text">#8f000000</color>
+    <color name="header_column_background">#ffffffff</color>
+    <color name="header_row_background">#ffefefef</color>
+    <color name="day_background">#0f000000</color>
+    <color name="today_background">#1848adff</color>
+    
+</resources>
