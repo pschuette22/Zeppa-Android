@@ -210,7 +210,12 @@ public class EventTagSingleton {
 		return tagMediators.remove(mediator);
 	}
 
-	public void addEventTags(List<AbstractEventTagMediator> tagMediators) {
+	public void addEventTags(List<AbstractEventTagMediator> tagMediators, boolean doClear) {
+
+		if(doClear){
+			this.tagMediators.clear();
+		}
+
 		this.tagMediators.addAll(tagMediators);
 	}
 
@@ -266,7 +271,7 @@ public class EventTagSingleton {
 
 		if (tag != null) {
 			AbstractEventTagMediator mediator = new MyEventTagMediator(tag);
-			addEventTags(Arrays.asList(mediator));
+			addEventTags(Arrays.asList(mediator), false);
 
 			return ((MyEventTagMediator) mediator);
 		} else {

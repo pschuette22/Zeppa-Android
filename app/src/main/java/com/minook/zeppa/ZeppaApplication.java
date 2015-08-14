@@ -33,7 +33,6 @@ public class ZeppaApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		memoryObservers = new ArrayList<MemoryObserver>();
-
 	}
 
 	

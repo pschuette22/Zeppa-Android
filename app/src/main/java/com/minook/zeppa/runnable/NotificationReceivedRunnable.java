@@ -82,6 +82,9 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 
 			}
 
+			/*
+			* Verify that we have userinfo for the sender. If not, fetch it
+			* */
 			if (mediator == null) {
 				userInfo = buildUserInfoEndpoint()
 						.fetchZeppaUserInfoByParentId(
@@ -107,12 +110,20 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 
 			}
 
-			if (notification.getEventId() != null
+			/*
+			 * If this notification has an event associated with it, (eventId > 0)
+			 * Verify we hold the event, and if not, fetch it in the background
+			 */
+			if (notification.getEventId() != null && notification.getEventId().longValue() > 0
 					&& ZeppaEventSingleton.getInstance().getEventById(
 							notification.getEventId().longValue()) == null) {
 				ZeppaEvent event = buildEventEndpoint().getZeppaEvent(
 						notification.getEventId()).execute();
 
+				/**
+				 * This is a unique instance. If a user has two devices, an event is made on one and another user comments on this, the event will be fetched
+				 * Add the event to the datastore
+				 */
 				if (event.getHostId().longValue() == userId) {
 					eventMediator = new MyZeppaEventMediator(event);
 				} else {
@@ -133,9 +144,14 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 
 					eventMediator = new DefaultZeppaEventMediator(event,
 							relationship);
+
+					ZeppaEventSingleton.getInstance().addMediator(eventMediator);
 				}
 			}
 
+			/*
+			* If a change in the relationship between two users has been made, update it
+			* */
 			if (NotificationSingleton.getInstance().getNotificationTypeOrder(
 					notification) <= 1) {
 				if (userRelationship == null) {
@@ -163,9 +179,9 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 				infoMediator.setUserRelationship(userRelationship);
 			}
 
-			if (eventMediator != null) {
-				ZeppaEventSingleton.getInstance().addMediator(eventMediator);
-			}
+			/*
+			* If there was an event fetched
+			* */
 
 			boolean doPushNotification = true;
 

@@ -21,6 +21,7 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 
 	private AbstractZeppaEventMediator mediator;
 	private OnCommentLoadListener listener;
+	private static final int QUERY_LIMIT = 10;
 
 	public FetchEventCommentsRunnable(ZeppaApplication application,
 			GoogleAccountCredential credential,
@@ -49,7 +50,7 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 				task.setFilter(filterBuilder.toString());
 
 				task.setCursor(commentCursor);
-				task.setLimit(Integer.valueOf(10));
+				task.setLimit(QUERY_LIMIT);
 				task.setOrdering("created desc");
 				CollectionResponseEventComment response = task.execute();
 
@@ -73,6 +74,8 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 										.getZeppaUserInfo(
 												comment.getCommenterId())
 										.execute();
+								// Add this commenter singleton with the impression that there is no relationship to this user
+								// Assumes if there were, a mediator for this user would already be held
 								ZeppaUserSingleton.getInstance()
 										.addDefaultZeppaUserMediator(commenter,
 												null);
@@ -83,7 +86,7 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 						}
 					}
 
-					if (loadedComments.size() < 10) {
+					if (loadedComments.size() < QUERY_LIMIT) {
 						commentCursor = null;
 					} else {
 						// Set the next page token

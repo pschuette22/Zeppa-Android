@@ -47,25 +47,21 @@ public class LoginDeviceRunnable extends BaseRunnable {
 			String filter = "ownerId == " + userId.longValue();
 			String cursor = null;
 
-			do {
 				ListDeviceInfo listInfoTask = endpoint.listDeviceInfo();
 
 				listInfoTask.setFilter(filter);
 				listInfoTask.setCursor(cursor);
-				listInfoTask.setLimit(25);
 
 				CollectionResponseDeviceInfo response = listInfoTask.execute();
 
 				if (response != null && response.getItems() != null
 						&& !response.getItems().isEmpty()) {
 					userDevices.addAll(response.getItems());
-					cursor = response.getNextPageToken();
 
 				} else {
 					cursor = null;
 				}
 
-			} while (cursor != null);
 
 			// If one of the pulled devices matches this one, don't make it
 			// persistent

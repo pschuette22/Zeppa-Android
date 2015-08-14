@@ -30,12 +30,11 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 public class FeedFragment extends Fragment implements OnRefreshListener,
 		OnZeppaEventLoadListener {
 
-	// Private
 
 	private View layout;
-//	private View loaderView;
 	private PullToRefreshLayout pullToRefreshLayout;
 	private ListView feedList;
+	// Adapter for feed events
 	private FeedListAdapter flAdapter;
 
 	private OnScrollListener mScrollListener = new OnScrollListener() {
@@ -52,7 +51,7 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 
 			flAdapter.onScrollStop();
 
-			if ((firstVisibleItem + visibleItemCount) == totalItemCount) {
+			if (totalItemCount > 3 && (firstVisibleItem + visibleItemCount) == totalItemCount) {
 				ZeppaEventSingleton.getInstance().fetchMoreEvents(
 						(ZeppaApplication) getActivity().getApplication(),
 						((AuthenticatedFragmentActivity) getActivity())
@@ -122,6 +121,8 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 			pullToRefreshLayout.setRefreshing(true);
 			
 		}
+
+		flAdapter.notifyDataSetChanged();
 	}
 	
 	@Override
@@ -148,7 +149,7 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 					.getGoogleAccountCredential();
 			ZeppaEventSingleton.getInstance().fetchNewEvents(
 					(ZeppaApplication) getActivity().getApplication(),
-					credential, pullToRefreshLayout);
+					credential);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,10 +158,7 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 
 	@Override
 	public void onZeppaEventsLoaded() {
-//		if (loaderView != null) {
-//			feedList.removeHeaderView(loaderView);
-//			loaderView = null;
-//		}
+
 
 		pullToRefreshLayout.setRefreshing(false);
 

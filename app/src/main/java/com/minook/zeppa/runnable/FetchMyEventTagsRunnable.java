@@ -72,7 +72,7 @@ public class FetchMyEventTagsRunnable extends BaseRunnable {
 
 		} while (cursor != null);
 		
-		EventTagSingleton.getInstance().addEventTags(myTagList);
+		EventTagSingleton.getInstance().addEventTags(myTagList, true);
 		
 		try {
 			

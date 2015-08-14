@@ -27,7 +27,7 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements
 	protected AuthenticatedFragmentActivity activity;
 	protected List<AbstractZeppaEventMediator> eventMediators;
 
-	protected View loaderView;
+	protected long lastDataUpdateTime;
 
 	/**
 	 * EventListAdapter This class adapts a list of ZeppaEvents in the singleton
@@ -41,6 +41,7 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements
 	public AbstractEventListAdapter(AuthenticatedFragmentActivity activity) {
 		super();
 		this.activity = activity;
+		this.lastDataUpdateTime = -1;
 	}
 
 	@Override

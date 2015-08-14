@@ -31,6 +31,7 @@
         android:name=".ZeppaApplication"
         android:allowBackup="true"
         android:icon="@drawable/zeppa_apptile"
+        android:screenOrientation="portrait"
         android:label="@string/app_name"
         android:testOnly="false"
         android:theme="@style/ZeppaTheme"
@@ -88,7 +89,6 @@ S
         <activity
             android:name=".activity.NewEventActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
             android:theme="@style/CustomActionBarTheme" />
         <activity
             android:name=".activity.MinglerActivity"

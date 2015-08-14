@@ -10,13 +10,15 @@ import java.util.List;
 public class FeedListAdapter extends AbstractEventListAdapter implements ScrollStateListener {
 
 	private boolean isScrolling;
-	private boolean datasetIsStale;
-	
+	private boolean updateOnScrollStop;
+	private long lastUpdateTime;
+
+
 	public FeedListAdapter(AuthenticatedFragmentActivity activity) {
 		super(activity);
 		setEventMediators();
 		isScrolling = false;
-		datasetIsStale = false;
+		this.updateOnScrollStop = false;
 	}
 
 	@Override
@@ -27,7 +29,7 @@ public class FeedListAdapter extends AbstractEventListAdapter implements ScrollS
 	
 	@Override
 	protected void setEventMediators() {
-		eventMediators = ZeppaEventSingleton.getInstance().getEventMediators();
+		eventMediators = getCurrentEventMediators();
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class FeedListAdapter extends AbstractEventListAdapter implements ScrollS
 	public void onScrollStop() {
 		// TODO Auto-generated method stub
 		isScrolling = false;
-		if(datasetIsStale){
+		if(updateOnScrollStop){
 			notifyDataSetChanged();
 		}
 	}
@@ -48,10 +50,14 @@ public class FeedListAdapter extends AbstractEventListAdapter implements ScrollS
 	@Override
 	public void notifyDataSetChanged() {
 		if(isScrolling){
-			datasetIsStale = true;
+			this.updateOnScrollStop = true;
 		} else {
-			datasetIsStale = false;
-			super.notifyDataSetChanged();
+			this.updateOnScrollStop = false;
+
+			// Make sure the info is stale before updating
+			if(ZeppaEventSingleton.getInstance().isInfoStale(lastDataUpdateTime)) {
+				super.notifyDataSetChanged();
+			}
 		}
 	}
 

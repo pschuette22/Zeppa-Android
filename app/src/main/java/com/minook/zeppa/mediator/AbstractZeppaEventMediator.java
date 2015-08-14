@@ -364,7 +364,7 @@ public abstract class AbstractZeppaEventMediator implements
 	/**
 	 * This Method loads
 	 * 
-	 * @param credentail
+	 * @param credential
 	 * @return
 	 */
 	public void loadEventRelationships(ZeppaApplication application,
@@ -382,11 +382,14 @@ public abstract class AbstractZeppaEventMediator implements
 
 	}
 
-	/*
-	 * This Section deals with comments made on an event
-	 */
-
 	/**
+	 *
+	 * Execute a thread to load comments for this event
+	 *
+	 * @param application - application context
+	 * @param credential - authorization to query the server
+	 * @param listener - object to call back on when execution completes
+	 *
 	 */
 	public void loadComments(ZeppaApplication application,
 			GoogleAccountCredential credential, OnCommentLoadListener listener) {

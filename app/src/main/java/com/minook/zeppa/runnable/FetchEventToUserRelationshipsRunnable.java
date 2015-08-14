@@ -17,6 +17,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * @author  Pete Schuette
+ *
+ * This runnable is for retrieving all relationships for a given event *EXCLUDING* the current user
+ * We do this because we assume the application already holds this object
+ *
+ */
 public class FetchEventToUserRelationshipsRunnable extends BaseRunnable {
 
 	private long eventId;
@@ -40,7 +47,7 @@ public class FetchEventToUserRelationshipsRunnable extends BaseRunnable {
 
 		String filter = "eventId == " + eventId + " && userId != " + userId;
 		String cursor = null;
-		Integer limit = Integer.valueOf(30);
+		Integer limit = Integer.valueOf(50);
 
 		loadedRelationships = new ArrayList<ZeppaEventToUserRelationship>();
 		do {

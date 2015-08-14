@@ -31,14 +31,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import java.util.concurrent.Delayed;
+import java.util.concurrent.RunnableScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class ZeppaEventSingleton {
 
 	public interface OnZeppaEventLoadListener {
 		public void onZeppaEventsLoaded();
 	}
+
+
+
 
 	// private final String TAG = ZeppaEventSingleton.class.getName();
 
@@ -52,7 +57,10 @@ public class ZeppaEventSingleton {
 	private boolean isMoreEvents;
 
 	private String nextRelationshipPageToken;
+	// Last system time in millis a call was made to fetch new events
 	private long lastUpdateCallTime;
+	// Last system time events were added or removed
+	private long lastUpdateTime;
 
 	/*
 	 * Instance Handlers
@@ -73,6 +81,8 @@ public class ZeppaEventSingleton {
 		eventMediators = new ArrayList<AbstractZeppaEventMediator>();
 		eventLoadListeners = new ArrayList<OnZeppaEventLoadListener>();
 		this.lastUpdateCallTime = System.currentTimeMillis();
+		this.lastUpdateTime = System.currentTimeMillis();
+
 	}
 
 	/**
@@ -117,13 +127,26 @@ public class ZeppaEventSingleton {
 		// TODO: tighten belt a little more if possible
 	}
 
-	public void clearOldEvents() {
+	/**
+	 *
+	 * @param lastUpdateTime - epoch milliseconds when a set of events was last updated
+	 * @return true if changes have been made to local data since lastUpdateTime
+	 */
+	public boolean isInfoStale(long lastUpdateTime){
+		return lastUpdateTime < this.lastUpdateTime;
+	}
+
+	/**
+	 * Remove old events cause... they're old
+	 */
+	public synchronized void clearOldEvents() {
 
 		if (!eventMediators.isEmpty()) {
 			long currentTime = System.currentTimeMillis();
 
 			Iterator<AbstractZeppaEventMediator> iterator = eventMediators
 					.iterator();
+
 
 			List<AbstractZeppaEventMediator> remove = new ArrayList<AbstractZeppaEventMediator>();
 			while (iterator.hasNext()) {
@@ -136,7 +159,11 @@ public class ZeppaEventSingleton {
 				}
 			}
 
-			eventMediators.removeAll(remove);
+			// If a change occured as a result of this, notify the observers
+			if(eventMediators.removeAll(remove)){
+				this.lastUpdateTime = System.currentTimeMillis();
+				this.notifyObservers();
+			}
 
 		}
 	}
@@ -158,8 +185,14 @@ public class ZeppaEventSingleton {
 				}
 
 			}
-			if (remove != null) {
-				return eventMediators.remove(remove);
+
+			try {
+				if (eventMediators.remove(remove)) {
+					this.lastUpdateTime = System.currentTimeMillis();
+					return true;
+				}
+			} catch (NullPointerException e){
+				// remove was null or some other issue;
 			}
 		}
 
@@ -387,7 +420,7 @@ public class ZeppaEventSingleton {
 	 * 
 	 * @param mediator
 	 */
-	public void addMediator(AbstractZeppaEventMediator mediator) {
+	public synchronized void addMediator(AbstractZeppaEventMediator mediator) {
 
 		Iterator<AbstractZeppaEventMediator> iterator = eventMediators
 				.iterator();
@@ -399,7 +432,10 @@ public class ZeppaEventSingleton {
 
 		}
 
-		this.eventMediators.add(mediator);
+		if(this.eventMediators.add(mediator)){
+            Collections.sort(this.eventMediators);
+			this.lastUpdateTime = System.currentTimeMillis();
+		}
 	}
 
 	/**
@@ -412,6 +448,7 @@ public class ZeppaEventSingleton {
 	public boolean removeMediator(AbstractZeppaEventMediator mediator) {
 		boolean success = this.eventMediators.remove(mediator);
 		if (success) {
+			this.lastUpdateTime = System.currentTimeMillis();
 			notifyObservers();
 		}
 
@@ -451,8 +488,9 @@ public class ZeppaEventSingleton {
 			}
 		}
 
-		if (!removalList.isEmpty()) {
-			eventMediators.remove(removalList);
+		if (!removalList.isEmpty() && eventMediators.remove(removalList)) {
+			this.lastUpdateTime = System.currentTimeMillis();
+			this.notifyObservers();
 		}
 	}
 
@@ -514,8 +552,7 @@ public class ZeppaEventSingleton {
 	 */
 
 	public void fetchNewEvents(ZeppaApplication application,
-			GoogleAccountCredential credential,
-			PullToRefreshLayout pullToRefresh) {
+			GoogleAccountCredential credential) {
 
 		if (isLoadingEvents) {
 			return;
@@ -526,6 +563,7 @@ public class ZeppaEventSingleton {
 				credential, ZeppaUserSingleton.getInstance().getUserId()
 						.longValue(), lastUpdateCallTime));
 		lastUpdateCallTime = System.currentTimeMillis();
+
 	}
 
 	/**
