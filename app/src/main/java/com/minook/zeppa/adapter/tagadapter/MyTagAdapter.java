@@ -7,7 +7,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.EventTag;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTag;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;

@@ -1,11 +1,13 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.Eventtagendpoint.ListEventTag;
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.CollectionResponseEventTag;
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.EventTag;
-import com.appspot.zeppa_cloud_1821.eventtagfollowendpoint.Eventtagfollowendpoint.ListEventTagFollow;
-import com.appspot.zeppa_cloud_1821.eventtagfollowendpoint.model.CollectionResponseEventTagFollow;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseEventTag;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseEventTagFollow;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTag;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.mediator.DefaultEventTagMediator;
@@ -33,6 +35,10 @@ public class FetchMinglerTagsRunnable extends BaseRunnable {
 
 	@Override
 	public void run() {
+
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		String filter = "userId == " + minglerId;
 		String cursor = null;
 		Integer limit = Integer.valueOf(30);
@@ -43,7 +49,7 @@ public class FetchMinglerTagsRunnable extends BaseRunnable {
 		do {
 			try {
 
-				ListEventTag task = buildEventTagEndpoint().listEventTag();
+				Zeppaclientapi.ListEventTag task = api.listEventTag(credential.getToken());
 
 				task.setFilter(filter);
 				task.setCursor(cursor);
@@ -62,8 +68,8 @@ public class FetchMinglerTagsRunnable extends BaseRunnable {
 					while (iterator.hasNext()) {
 						try {
 							EventTag tag = iterator.next();
-							ListEventTagFollow task2 = buildEventTagFollowEndpoint()
-									.listEventTagFollow();
+							Zeppaclientapi.ListEventTagFollow task2 = api
+									.listEventTagFollow(credential.getToken());
 							task.setFilter("tagId == " + tag.getId()
 									+ " && followerId == " + userId);
 							task.setLimit(1);
@@ -86,6 +92,9 @@ public class FetchMinglerTagsRunnable extends BaseRunnable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
+				break;
 			}
 
 		} while (cursor != null);

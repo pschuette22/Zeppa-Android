@@ -1,10 +1,13 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.model.ZeppaEvent;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint.ListZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.CollectionResponseZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEventToUserRelationship;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
@@ -32,10 +35,13 @@ public class FetchEventsForMinglerRunnable extends BaseRunnable {
 		Integer limit = Integer.valueOf(25);
 		String ordering = "expires desc";
 
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		do {
 			try {
-				ListZeppaEventToUserRelationship task = buildEventRelationshipEndpoint()
-						.listZeppaEventToUserRelationship();
+				Zeppaclientapi.ListZeppaEventToUserRelationship task = api
+						.listZeppaEventToUserRelationship(credential.getToken());
 				task.setFilter(filter);
 				task.setCursor(cursor);
 				task.setLimit(limit);
@@ -57,9 +63,9 @@ public class FetchEventsForMinglerRunnable extends BaseRunnable {
 						if (!ZeppaEventSingleton.getInstance()
 								.relationshipAlreadyHeld(relationship)) {
 							try {
-								ZeppaEvent event = buildEventEndpoint()
+								ZeppaEvent event = api
 										.getZeppaEvent(
-												relationship.getEventId())
+												relationship.getEventId(), credential.getToken())
 										.execute();
 								ZeppaEventSingleton.getInstance().addMediator(
 										new DefaultZeppaEventMediator(event,
@@ -82,6 +88,9 @@ public class FetchEventsForMinglerRunnable extends BaseRunnable {
 
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
+				break;
 			}
 		} while (cursor != null);
 

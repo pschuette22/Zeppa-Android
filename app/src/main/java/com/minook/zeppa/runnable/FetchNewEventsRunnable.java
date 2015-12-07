@@ -1,13 +1,14 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.Zeppaeventendpoint;
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.model.ZeppaEvent;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint.ListZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.CollectionResponseZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaEventSingleton;
@@ -32,18 +33,21 @@ public class FetchNewEventsRunnable extends BaseRunnable {
 
 	@Override
 	public void run() {
+
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		String filter = "userId == " + userId + " && created > " + minCallTime;
 		Integer limit = Integer.valueOf(25);
 		String ordering = "created asc";
 		String cursor = null;
-		Zeppaeventtouserrelationshipendpoint relationshipEndpoint = buildEventRelationshipEndpoint();
-		Zeppaeventendpoint endpoint = buildEventEndpoint();
+
 
 		try {
 			do {
 
-				ListZeppaEventToUserRelationship task = relationshipEndpoint
-						.listZeppaEventToUserRelationship();
+				Zeppaclientapi.ListZeppaEventToUserRelationship task = api
+						.listZeppaEventToUserRelationship(credential.getToken());
 				task.setFilter(filter);
 				task.setCursor(cursor);
 				task.setLimit(limit);
@@ -61,11 +65,11 @@ public class FetchNewEventsRunnable extends BaseRunnable {
 						if (!ZeppaEventSingleton.getInstance()
 								.relationshipAlreadyHeld(relationship)) {
 							try {
-								ZeppaEvent event = endpoint.getZeppaEvent(
-										relationship.getEventId()).execute();
+								ZeppaEvent event = api.getZeppaEvent(
+										relationship.getEventId(), credential.getToken()).execute();
 
 								if(ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(event.getHostId().longValue()) == null){
-									ZeppaUserInfo info = buildUserInfoEndpoint().getZeppaUserInfo(event.getHostId().longValue()).execute();
+									ZeppaUserInfo info = api.getZeppaUserInfo(event.getHostId().longValue(), credential.getToken()).execute();
 									ZeppaUserSingleton.getInstance().addDefaultZeppaUserMediator(info, null);
 								}
 								
@@ -92,7 +96,7 @@ public class FetchNewEventsRunnable extends BaseRunnable {
 
 			} while (cursor != null);
 			
-		} catch (IOException e) {
+		} catch (IOException | GoogleAuthException e) {
 			e.printStackTrace();
 		}
 		

@@ -2,7 +2,7 @@ package com.minook.zeppa.singleton;
 
 import android.content.Context;
 
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.model.ZeppaNotification;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaNotification;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.PrefsManager;

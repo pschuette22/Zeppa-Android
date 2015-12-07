@@ -39,6 +39,8 @@ public class CloudEndpointUtils {
    */
   protected static final String LOCAL_APP_ENGINE_SERVER_URL = "http://localhost:8888/";
 
+  protected static final String FRONTEND_MODULE_SERVER_URL = "https://1-dot-zeppa-api-dot-zeppa-cloud-1821.appspot.com/";
+
   /*
    * The root URL of where your DevAppServer is running when it's being
    * accessed via the Android emulator (if you're running the DevAppServer
@@ -64,7 +66,6 @@ public class CloudEndpointUtils {
       builder.setRootUrl(LOCAL_APP_ENGINE_SERVER_URL_FOR_ANDROID
           + "/_ah/api/");
     }
-
     // only enable GZip when connecting to remote server
     final boolean enableGZip = builder.getRootUrl().startsWith("https:");
 

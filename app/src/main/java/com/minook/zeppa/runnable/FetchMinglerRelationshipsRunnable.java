@@ -1,17 +1,16 @@
 package com.minook.zeppa.runnable;
 
 
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.Zeppauserinfoendpoint;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.CollectionResponseZeppaUserToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaUserToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserToUserRelationship;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator.OnMinglerRelationshipsLoadedListener;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint.ListZeppaUserToUserRelationship;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,20 +33,21 @@ public class FetchMinglerRelationshipsRunnable extends BaseRunnable {
 
 	@Override
 	public void run() {
-		Zeppausertouserrelationshipendpoint endpoint = buildZeppaUserToUserRelationshipEndpoint();
-		Zeppauserinfoendpoint iEndpoint = buildUserInfoEndpoint();
+
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 		
 		List<ZeppaUserToUserRelationship> relationships = new ArrayList<ZeppaUserToUserRelationship>();
 
 		String filter = "creatorId == " + userId;
 		String cursor = null;
-		ListZeppaUserToUserRelationship listInfotask = null;
+		Zeppaclientapi.ListZeppaUserToUserRelationship listInfotask = null;
 
 		do {
 
 			try {
-				listInfotask = endpoint
-						.listZeppaUserToUserRelationship();
+				listInfotask = api
+						.listZeppaUserToUserRelationship(credential.getToken());
 
 				listInfotask.setFilter(filter);
 				listInfotask.setCursor(cursor);
@@ -68,6 +68,8 @@ public class FetchMinglerRelationshipsRunnable extends BaseRunnable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
 			}
 
 		} while (cursor != null);
@@ -80,10 +82,13 @@ public class FetchMinglerRelationshipsRunnable extends BaseRunnable {
 				ZeppaUserToUserRelationship relationship = iterator.next();
 				if(ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(relationship.getSubjectId()) == null){
 					try {
-						ZeppaUserInfo info = iEndpoint.getZeppaUserInfo(relationship.getSubjectId()).execute();
+						ZeppaUserInfo info = api.getZeppaUserInfo(relationship.getSubjectId(), credential.getToken()).execute();
 						ZeppaUserSingleton.getInstance().addDefaultZeppaUserMediator(info, relationship);
 						
 					} catch (IOException e){
+					} catch (GoogleAuthException ex){
+						ex.printStackTrace();
+						break;
 					}
 				}
 				
@@ -100,8 +105,8 @@ public class FetchMinglerRelationshipsRunnable extends BaseRunnable {
 		do {
 
 			try {
-				listInfotask = endpoint
-						.listZeppaUserToUserRelationship();
+				listInfotask = api
+						.listZeppaUserToUserRelationship(credential.getToken());
 
 				listInfotask.setFilter(filter);
 				listInfotask.setCursor(cursor);
@@ -122,6 +127,9 @@ public class FetchMinglerRelationshipsRunnable extends BaseRunnable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
+				break;
 			}
 
 		} while (cursor != null);
@@ -133,10 +141,12 @@ public class FetchMinglerRelationshipsRunnable extends BaseRunnable {
 				ZeppaUserToUserRelationship relationship = iterator.next();
 				if(ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(relationship.getCreatorId()) == null){
 					try {
-						ZeppaUserInfo info = iEndpoint.getZeppaUserInfo(relationship.getSubjectId()).execute();
+						ZeppaUserInfo info = api.getZeppaUserInfo(relationship.getSubjectId(), credential.getToken()).execute();
 						ZeppaUserSingleton.getInstance().addDefaultZeppaUserMediator(info, relationship);
 						
 					} catch (IOException e){
+					} catch (GoogleAuthException ex ) {
+						ex.printStackTrace();
 					}
 				}
 				

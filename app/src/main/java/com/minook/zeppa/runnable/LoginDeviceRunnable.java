@@ -1,10 +1,12 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.deviceinfoendpoint.Deviceinfoendpoint;
-import com.appspot.zeppa_cloud_1821.deviceinfoendpoint.Deviceinfoendpoint.ListDeviceInfo;
-import com.appspot.zeppa_cloud_1821.deviceinfoendpoint.model.CollectionResponseDeviceInfo;
-import com.appspot.zeppa_cloud_1821.deviceinfoendpoint.model.DeviceInfo;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseDeviceInfo;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.DeviceInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.gcm.ZeppaGCMUtils;
@@ -33,6 +35,9 @@ public class LoginDeviceRunnable extends BaseRunnable {
 	@Override
 	public void run() {
 
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		DeviceInfo info = ZeppaGCMUtils.getRegisteredDeviceInstance(
 				application, userId);
 
@@ -41,13 +46,12 @@ public class LoginDeviceRunnable extends BaseRunnable {
 		}
 
 		List<DeviceInfo> userDevices = new ArrayList<DeviceInfo>();
-		Deviceinfoendpoint endpoint = buildDeviceInfoEndpoint();
 
 		try {
 			String filter = "ownerId == " + userId.longValue();
 			String cursor = null;
 
-				ListDeviceInfo listInfoTask = endpoint.listDeviceInfo();
+				Zeppaclientapi.ListDeviceInfo listInfoTask = api.listDeviceInfo(credential.getToken());
 
 				listInfoTask.setFilter(filter);
 				listInfoTask.setCursor(cursor);
@@ -79,7 +83,7 @@ public class LoginDeviceRunnable extends BaseRunnable {
 										info.getRegistrationId().trim())) {
 
 							setDeviceLoggedinInfo(device);
-							device = endpoint.updateDeviceInfo(device)
+							device = api.updateDeviceInfo(credential.getToken(), device)
 									.execute();
 
 							application.setCurrentDeviceInfo(device);
@@ -94,10 +98,10 @@ public class LoginDeviceRunnable extends BaseRunnable {
 			}
 
 			setDeviceLoggedinInfo(info);
-			info = endpoint.insertDeviceInfo(info).execute();
+			info = api.insertDeviceInfo(credential.getToken(), info).execute();
 			application.setCurrentDeviceInfo(info);
 
-		} catch (IOException e) {
+		} catch (IOException | GoogleAuthException e) {
 			e.printStackTrace();
 			return; // If error occurred, don't do anything.
 		}

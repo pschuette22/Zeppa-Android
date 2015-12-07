@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,15 +22,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appspot.zeppa_cloud_1821.eventcommentendpoint.Eventcommentendpoint;
-import com.appspot.zeppa_cloud_1821.eventcommentendpoint.model.EventComment;
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.model.ZeppaEvent;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.model.ZeppaNotification;
-import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventComment;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaNotification;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;
@@ -589,12 +589,12 @@ public abstract class AbstractEventViewActivity extends
 	/**
 	 * Posts a comment to an event through a spun thread
 	 * 
-	 * @author DrunkWithFunk21
+	 * @author Pete Schuette
 	 * 
 	 */
 	private class PostCommentTask extends AsyncTask<Void, Void, Boolean> {
 
-		private GoogleAccountCredential credential;
+		private GoogleAccountCredential credential = null;
 		private EventComment comment;
 
 		public PostCommentTask(GoogleAccountCredential credential,
@@ -606,17 +606,19 @@ public abstract class AbstractEventViewActivity extends
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			Boolean success = Boolean.FALSE;
-			Eventcommentendpoint.Builder builder = new Eventcommentendpoint.Builder(
-					AndroidHttp.newCompatibleTransport(),
-					GsonFactory.getDefaultInstance(), credential);
-			builder = CloudEndpointUtils.updateBuilder(builder);
-			Eventcommentendpoint endpoint = builder.build();
+			// Build the api endpoint class
+			ApiClientHelper helper = new ApiClientHelper();
+			Zeppaclientapi api = helper.buildClientEndpoint();
 
 			try {
-				comment = endpoint.insertEventComment(comment).execute();
+				comment = api.insertEventComment(credential.getToken(), comment).execute();
 				eventMediator.addAllComments(Arrays.asList(comment));
 				success = Boolean.TRUE;
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (NullPointerException e){
+				Log.wtf("TAG", "Task didn't instantiate");
+			} catch (GoogleAuthException e) {
 				e.printStackTrace();
 			}
 

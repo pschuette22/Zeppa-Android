@@ -10,18 +10,17 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint.ListZeppaUserToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.model.ZeppaEvent;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint.ListZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.CollectionResponseZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.model.ZeppaNotification;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.CollectionResponseZeppaUserToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
-
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaUserToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaNotification;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserToUserRelationship;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.PrefsManager;
 import com.minook.zeppa.R;
@@ -61,10 +60,14 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 
 	@Override
 	public void run() {
+
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		try {
 
-			notification = buildNotificationEndpoint().getZeppaNotification(
-					notificationId).execute();
+			notification = api.getZeppaNotification(
+					notificationId, credential.getToken()).execute();
 
 			// Erroniously consumed this notification object, do not notify the
 			// user
@@ -86,11 +89,11 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 			* Verify that we have userinfo for the sender. If not, fetch it
 			* */
 			if (mediator == null) {
-				userInfo = buildUserInfoEndpoint()
+				userInfo = api
 						.fetchZeppaUserInfoByParentId(
-								notification.getSenderId()).execute();
-				ListZeppaUserToUserRelationship relationshipTask = buildZeppaUserToUserRelationshipEndpoint()
-						.listZeppaUserToUserRelationship();
+								notification.getSenderId(), credential.getToken()).execute();
+				Zeppaclientapi.ListZeppaUserToUserRelationship relationshipTask = api
+						.listZeppaUserToUserRelationship(credential.getToken());
 				relationshipTask.setFilter("(creatorId == " + userId
 						+ "|| creatorId == "
 						+ notification.getSenderId().longValue()
@@ -117,8 +120,8 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 			if (notification.getEventId() != null && notification.getEventId().longValue() > 0
 					&& ZeppaEventSingleton.getInstance().getEventById(
 							notification.getEventId().longValue()) == null) {
-				ZeppaEvent event = buildEventEndpoint().getZeppaEvent(
-						notification.getEventId()).execute();
+				ZeppaEvent event = api.getZeppaEvent(
+						notification.getEventId(), credential.getToken()).execute();
 
 				/**
 				 * This is a unique instance. If a user has two devices, an event is made on one and another user comments on this, the event will be fetched
@@ -129,8 +132,8 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 				} else {
 
 					ZeppaEventToUserRelationship relationship = null;
-					ListZeppaEventToUserRelationship task = buildEventRelationshipEndpoint()
-							.listZeppaEventToUserRelationship();
+					Zeppaclientapi.ListZeppaEventToUserRelationship task = api
+							.listZeppaEventToUserRelationship(credential.getToken());
 					task.setFilter("userId == " + userId + " && eventId == "
 							+ notification.getEventId().longValue());
 					task.setLimit(Integer.valueOf(1));
@@ -140,12 +143,12 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 					if (response != null && response.getItems() != null
 							&& !response.getItems().isEmpty()) {
 						relationship = response.getItems().get(0);
+
+						eventMediator = new DefaultZeppaEventMediator(event,
+								relationship);
+
+						ZeppaEventSingleton.getInstance().addMediator(eventMediator);
 					}
-
-					eventMediator = new DefaultZeppaEventMediator(event,
-							relationship);
-
-					ZeppaEventSingleton.getInstance().addMediator(eventMediator);
 				}
 			}
 
@@ -155,8 +158,8 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 			if (NotificationSingleton.getInstance().getNotificationTypeOrder(
 					notification) <= 1) {
 				if (userRelationship == null) {
-					ListZeppaUserToUserRelationship relationshipTask = buildZeppaUserToUserRelationshipEndpoint()
-							.listZeppaUserToUserRelationship();
+					Zeppaclientapi.ListZeppaUserToUserRelationship relationshipTask = api
+							.listZeppaUserToUserRelationship(credential.getToken());
 					relationshipTask.setFilter("(creatorId == " + userId
 							+ "|| creatorId == "
 							+ notification.getSenderId().longValue()
@@ -221,7 +224,7 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 				pushNotification();
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | GoogleAuthException e) {
 			e.printStackTrace();
 		}
 

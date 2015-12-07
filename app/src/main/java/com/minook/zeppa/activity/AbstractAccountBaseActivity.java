@@ -16,12 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appspot.zeppa_cloud_1821.photoinfoendpoint.Photoinfoendpoint;
-import com.appspot.zeppa_cloud_1821.photoinfoendpoint.model.PhotoInfo;
-import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.PhotoInfo;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;
@@ -290,13 +288,12 @@ public abstract class AbstractAccountBaseActivity extends
 						photo.setUrl(servingUrl);
 						photo.setOwnerEmail(userGmail);
 
-						Photoinfoendpoint.Builder endpointBuilder = new Photoinfoendpoint.Builder(
-								AndroidHttp.newCompatibleTransport(),
-								GsonFactory.getDefaultInstance(), credential);
-						endpointBuilder = CloudEndpointUtils
-								.updateBuilder(endpointBuilder);
-						Photoinfoendpoint endpoint = endpointBuilder.build();
-						photo = endpoint.insertPhotoInfo(photo).execute();
+						// Build the api endpoint class
+						ApiClientHelper helper = new ApiClientHelper();
+						Zeppaclientapi api = helper.buildClientEndpoint();
+
+						// Insert photo info
+						photo = api.insertPhotoInfo(credential.getToken(), photo).execute();
 
 						result = photo.getUrl();
 					}

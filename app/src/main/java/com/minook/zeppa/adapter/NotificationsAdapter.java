@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.model.ZeppaNotification;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaNotification;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;

@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.model.ZeppaNotification;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaNotification;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.tagadapter.MyTagAdapter;

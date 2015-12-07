@@ -1,10 +1,12 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.Eventtagendpoint;
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.Eventtagendpoint.ListEventTag;
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.CollectionResponseEventTag;
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.EventTag;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseEventTag;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTag;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.mediator.MyEventTagMediator;
@@ -28,18 +30,19 @@ public class FetchMyEventTagsRunnable extends BaseRunnable {
 	@Override
 	public void run() {
 
-		Eventtagendpoint endpoint = buildEventTagEndpoint();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		// TODO: List Query for all of this users event tags
 
 		String cursor = null;
-		String filter = "userId == " + userId.longValue();
+		String filter = "ownerId == " + userId.longValue();
 
 		List<AbstractEventTagMediator> myTagList = new ArrayList<AbstractEventTagMediator>();
 		do {
 
 			try {
-				ListEventTag listTagTask = endpoint.listEventTag();
+				Zeppaclientapi.ListEventTag listTagTask = api.listEventTag(credential.getToken());
 
 				listTagTask.setCursor(cursor);
 				listTagTask.setFilter(filter);
@@ -65,7 +68,7 @@ public class FetchMyEventTagsRunnable extends BaseRunnable {
 					}
 				}
 
-			} catch (IOException e) {
+			} catch (IOException | GoogleAuthException e) {
 				e.printStackTrace();
 				break;
 			}

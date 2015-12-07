@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.model.ZeppaNotification;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaNotification;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 
 import java.io.IOException;

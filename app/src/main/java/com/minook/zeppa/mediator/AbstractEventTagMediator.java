@@ -2,7 +2,7 @@ package com.minook.zeppa.mediator;
 
 import android.view.View;
 
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.EventTag;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTag;
 
 
 public abstract class AbstractEventTagMediator {

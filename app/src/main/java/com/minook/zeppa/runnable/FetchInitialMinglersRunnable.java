@@ -1,10 +1,13 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint.ListZeppaUserToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.CollectionResponseZeppaUserToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaUserToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserToUserRelationship;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
@@ -24,16 +27,20 @@ public class FetchInitialMinglersRunnable extends BaseRunnable {
 	@Override
 	public void run() {
 
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		String filter = "creatorId == " + userId;
 		String cursor = null;
 		Integer limit = Integer.valueOf(50);
 		String ordering = "created desc";
 
+
 		do {
 			try {
 
-				ListZeppaUserToUserRelationship task = buildZeppaUserToUserRelationshipEndpoint()
-						.listZeppaUserToUserRelationship();
+				Zeppaclientapi.ListZeppaUserToUserRelationship task = api
+						.listZeppaUserToUserRelationship(credential.getToken());
 				task.setFilter(filter);
 				task.setCursor(cursor);
 				task.setLimit(limit);
@@ -54,9 +61,9 @@ public class FetchInitialMinglersRunnable extends BaseRunnable {
 						try {
 							ZeppaUserInfo userInfo;
 
-							userInfo = buildUserInfoEndpoint()
+							userInfo = api
 									.fetchZeppaUserInfoByParentId(
-											relationship.getSubjectId())
+											relationship.getSubjectId(), credential.getToken())
 									.execute();
 
 							ZeppaUserSingleton.getInstance()
@@ -72,6 +79,9 @@ public class FetchInitialMinglersRunnable extends BaseRunnable {
 
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
+				break;
 			}
 		} while (cursor != null);
 
@@ -80,8 +90,8 @@ public class FetchInitialMinglersRunnable extends BaseRunnable {
 		do {
 			try {
 
-				ListZeppaUserToUserRelationship task = buildZeppaUserToUserRelationshipEndpoint()
-						.listZeppaUserToUserRelationship();
+				Zeppaclientapi.ListZeppaUserToUserRelationship task = api
+						.listZeppaUserToUserRelationship(credential.getToken());
 				task.setFilter(filter);
 				task.setCursor(cursor);
 				task.setLimit(limit);
@@ -100,9 +110,9 @@ public class FetchInitialMinglersRunnable extends BaseRunnable {
 						ZeppaUserToUserRelationship relationship = iterator
 								.next();
 						try {
-							ZeppaUserInfo userInfo = buildUserInfoEndpoint()
+							ZeppaUserInfo userInfo = api
 									.fetchZeppaUserInfoByParentId(
-											relationship.getCreatorId())
+											relationship.getCreatorId(), credential.getToken())
 									.execute();
 
 							ZeppaUserSingleton.getInstance()
@@ -118,6 +128,10 @@ public class FetchInitialMinglersRunnable extends BaseRunnable {
 
 			} catch (IOException e) {
 				e.printStackTrace();
+				break;
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
+				break;
 			}
 		} while (cursor != null);
 

@@ -4,15 +4,18 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.Zeppauserinfoendpoint;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.Zeppauserinfoendpoint.ListZeppaUserInfo;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.CollectionResponseZeppaUserInfo;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaUserInfo;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.adapter.MinglerFinderAdapter;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +43,6 @@ public class FindMinglersRunnable extends BaseRunnable {
 	public void run() {
 		// Initialize reused objects
 		ContentResolver resolver = application.getContentResolver();
-		StringBuilder builder = new StringBuilder();
 
 		/*
 		 * Query by numbers
@@ -51,52 +53,39 @@ public class FindMinglersRunnable extends BaseRunnable {
 				null, null);
 
 		if (numberCursor.moveToFirst()) {
-
+			List<String> phoneNumberList = new ArrayList<String>();
+			int characterCount = 0;
+            int totalNumberCount=0;
 			do {
 				try {
 					String number = getFormattedNumber(numberCursor);
 
-					if (!numberIsRecognized(number)) {
+					if (!numberIsRecognized(number) && !phoneNumberList.contains(number)) {
+							phoneNumberList.add(number);
+							characterCount+=number.length();
+                            totalNumberCount++;
 
-						if (builder.length() == 0) {
-							builder.append("(primaryUnformattedNumber == ");
-							builder.append("'");
-							builder.append(number);
-							builder.append("'");
-						} else {
-
-							if (builder.length() + number.length() > 1960
+							if (characterCount > 1750
 									|| numberCursor.isLast()) {
-								numberCursor.moveToPrevious();
-								builder.append(")");
 
-								String query = builder.toString();
 
-								executeQuery(query);
-
-								builder = new StringBuilder();
-
-							} else {
-								builder.append(" || primaryUnformattedNumber == ");
-								builder.append("'");
-								builder.append(number);
-								builder.append("'");
+								executeQuery(":p.contains(primaryUnformattedPhoneNumber)", "phoneNumberList", phoneNumberList);
+								phoneNumberList.clear();
+								characterCount=0;
 
 							}
 
-						}
+
 					}
 				} catch (IndexOutOfBoundsException e) {
 					// Dont do anything
 				}
 
-			} while (!numberCursor.isLast() && numberCursor.moveToNext());
+			} while (numberCursor.moveToNext());
 
 		}
 
 		numberCursor.close();
-
-		builder = new StringBuilder(); // make sure it is reset
 
 		/*
 		 * Iterate through all GMail addresses saved to phone and check if they
@@ -107,40 +96,28 @@ public class FindMinglersRunnable extends BaseRunnable {
 				null, null);
 
 		if (emailCursor.moveToFirst()) {
-
+			List<String> emailList = new ArrayList<String>();
+			int characterCount=0;
+            int totalEmailCount=0;
 			do {
 				String email = getEmail(emailCursor);
-				if (!emailIsRecognized(email)) {
-					if (builder.length() == 0) {
-						builder.append("(googleAccountEmail == ");
-						builder.append("'");
-						builder.append(email);
-						builder.append("'");
-					} else {
+				if (!emailIsRecognized(email) && !emailList.contains(email)) {
+						emailList.add(email);
+						characterCount+=email.length();
+                        totalEmailCount++;
 
-						if (builder.length() + email.length() > 1960
+						if (characterCount > 1750
 								|| emailCursor.isLast()) {
-							emailCursor.moveToPrevious();
-							builder.append(")");
 
-							String query = builder.toString();
-							executeQuery(query);
-
-							builder = new StringBuilder();
-
-						} else {
-							builder.append(" || googleAccountEmail == ");
-							builder.append("'");
-							builder.append(email);
-							builder.append("'");
+							executeQuery(":p.contains(googleAccountEmail)", "emailList", emailList);
+                            emailList.clear();
+                            characterCount=0;
 
 						}
 
-					}
-
 				}
 
-			} while (!emailCursor.isLast() && emailCursor.moveToNext());
+			} while (emailCursor.moveToNext());
 
 		}
 
@@ -161,16 +138,24 @@ public class FindMinglersRunnable extends BaseRunnable {
 		}
 	}
 
-	private void executeQuery(String filter) {
+	private void executeQuery(String filter, String listArgName, List<String> listArg) {
 
-		Zeppauserinfoendpoint endpoint = buildUserInfoEndpoint();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		String cursor = null;
+        JSONArray array = new JSONArray();
+        for(String s: listArg){
+            array.put(s);
+        }
+
 
 		try {
-			ListZeppaUserInfo listUserInfo = endpoint.listZeppaUserInfo();
+
+			Zeppaclientapi.ListZeppaUserInfo listUserInfo = api.listZeppaUserInfo(credential.getToken());
 			listUserInfo.setFilter(filter);
 			listUserInfo.setCursor(cursor);
+			listUserInfo.setJsonArgs(array.toString());
 			CollectionResponseZeppaUserInfo result = listUserInfo.execute();
 
 			if (result != null && result.getItems() != null
@@ -196,7 +181,7 @@ public class FindMinglersRunnable extends BaseRunnable {
 
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | GoogleAuthException e) {
 			e.printStackTrace();
 		}
 

@@ -1,7 +1,10 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEventToUserRelationship;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator.OnRelationshipsLoadedListener;
 
@@ -32,16 +35,20 @@ public class SendEventInvitesRunnable extends BaseRunnable {
 	@Override
 	public void run() {
 		// Insert new relationships, invited by you
+
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		if (insertRelationships != null) {
 			Iterator<ZeppaEventToUserRelationship> iterator = insertRelationships
 					.iterator();
 			while (iterator.hasNext()) {
 				ZeppaEventToUserRelationship relationship = iterator.next();
 				try {
-					buildEventRelationshipEndpoint()
-							.insertZeppaEventToUserRelationship(relationship)
+					api
+							.insertZeppaEventToUserRelationship(credential.getToken(), relationship)
 							.execute();
-				} catch (IOException e) {
+				} catch (IOException | GoogleAuthException e) {
 					e.printStackTrace();
 				}
 
@@ -55,10 +62,10 @@ public class SendEventInvitesRunnable extends BaseRunnable {
 			while (iterator2.hasNext()) {
 				ZeppaEventToUserRelationship relationship = iterator2.next();
 				try {
-					buildEventRelationshipEndpoint()
-							.updateZeppaEventToUserRelationship(relationship)
+					api
+							.updateZeppaEventToUserRelationship(credential.getToken(), relationship)
 							.execute();
-				} catch (IOException e) {
+				} catch (IOException | GoogleAuthException e) {
 					e.printStackTrace();
 				}
 

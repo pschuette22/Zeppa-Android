@@ -4,13 +4,12 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.CheckedTextView;
 
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.EventTag;
-import com.appspot.zeppa_cloud_1821.eventtagfollowendpoint.Eventtagfollowendpoint;
-import com.appspot.zeppa_cloud_1821.eventtagfollowendpoint.model.EventTagFollow;
-import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTag;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTagFollow;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.R;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 
@@ -50,7 +49,7 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 
 	/**
 	 * 
-	 * @param tag
+	 * @param credential
 	 * @param view
 	 */
 	public void followTagInAsync(GoogleAccountCredential credential, CheckedTextView view) {
@@ -75,19 +74,18 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 				tagFollow.setTagOwnerId(tag.getOwnerId());
 				tagFollow.setFollowerId(ZeppaUserSingleton.getInstance().getUserId());
 
-				Eventtagfollowendpoint.Builder endpointBuilder = new Eventtagfollowendpoint.Builder(
-						AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential);
-				endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-
-				Eventtagfollowendpoint endpoint = (Eventtagfollowendpoint) endpointBuilder
-						.build();
+				ApiClientHelper helper = new ApiClientHelper();
+				Zeppaclientapi api = helper.buildClientEndpoint();
 
 				try {
-					tagFollow = endpoint.insertEventTagFollow(tagFollow).execute();
+					tagFollow = api.insertEventTagFollow(credential.getToken(), tagFollow).execute();
 				} catch (IOException e) {
 					e.printStackTrace();
 					tagFollow = null;
+				} catch (GoogleAuthException ex) {
+
 				}
+
 				return tagFollow;
 			}
 
@@ -128,24 +126,21 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 				follow = (EventTagFollow) params[1];
 				view = (CheckedTextView) params[2];
 
-				Eventtagfollowendpoint.Builder endpointBuilder = new Eventtagfollowendpoint.Builder(
-						AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential);
-				endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-
-				Eventtagfollowendpoint endpoint = (Eventtagfollowendpoint) endpointBuilder
-						.build();
+				ApiClientHelper helper = new ApiClientHelper();
+				Zeppaclientapi api = helper.buildClientEndpoint();
 
 				try {
 
-					endpoint.removeEventTagFollow(myFollow.getKey().getId()).execute();
+					api.removeEventTagFollow(myFollow.getKey().getId(),credential.getToken()).execute();
 					return true;
 				} catch (IOException e) {
 					e.printStackTrace();
-					return false;
 				} catch (NullPointerException e){
 					e.printStackTrace();
-					return false;
+				} catch (GoogleAuthException ex) {
+					ex.printStackTrace();
 				}
+				return false;
 			}
 
 			@Override

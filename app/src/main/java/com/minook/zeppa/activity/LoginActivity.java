@@ -253,23 +253,9 @@ public class LoginActivity extends AuthenticatedFragmentActivity implements
 
 				try {
 
-					MyZeppaUserMediator mediator = null;
-
-					// try to fetch by logged in user id if held
-					Long loggedInUserId = PrefsManager
-							.getLoggedInUserId(getApplicationContext());
-					if (loggedInUserId > 0) {
-						mediator = ZeppaUserSingleton.getInstance()
-								.fetchLoggedInUserByIdWithBlocking(credential,
-										loggedInUserId);
-
-					}
-
-					// try to fetch user by authed email.
-					if (mediator == null) {
-						mediator = ZeppaUserSingleton.getInstance()
+					MyZeppaUserMediator mediator = ZeppaUserSingleton.getInstance()
 								.fetchLoggedInUserWithBlocking(credential);
-					}
+
 
 					if (mediator == null) {
 						// Happens if user deleted account from another device

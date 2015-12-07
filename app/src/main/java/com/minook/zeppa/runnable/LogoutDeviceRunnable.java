@@ -1,8 +1,11 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.deviceinfoendpoint.Deviceinfoendpoint;
-import com.appspot.zeppa_cloud_1821.deviceinfoendpoint.model.DeviceInfo;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.DeviceInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 
 import java.io.IOException;
@@ -20,13 +23,14 @@ public class LogoutDeviceRunnable extends BaseRunnable {
 	@Override
 	public void run() {
 
-		Deviceinfoendpoint endpoint = buildDeviceInfoEndpoint();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		currentDevice.setLoggedIn(Boolean.FALSE);
 		try {
-			endpoint.updateDeviceInfo(currentDevice).execute();
+			api.updateDeviceInfo(credential.getToken(), currentDevice).execute();
 
-		} catch (IOException e) {
+		} catch (IOException | GoogleAuthException e) {
 			e.printStackTrace();
 		}
 

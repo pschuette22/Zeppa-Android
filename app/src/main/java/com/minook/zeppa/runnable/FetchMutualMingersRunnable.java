@@ -1,9 +1,12 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint.ListZeppaUserToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.CollectionResponseZeppaUserToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaUserToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserToUserRelationship;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator.OnMinglerRelationshipsLoadedListener;
@@ -32,6 +35,10 @@ public class FetchMutualMingersRunnable extends BaseRunnable {
 
 	@Override
 	public void run() {
+
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		String filter = "creatorId == " + mediator.getUserId().longValue()
 				+ " && subjectId != " + userId
 				+ " && relationshipType == 'MINGLING'";
@@ -43,8 +50,8 @@ public class FetchMutualMingersRunnable extends BaseRunnable {
 		try {
 			do {
 
-				ListZeppaUserToUserRelationship task = buildZeppaUserToUserRelationshipEndpoint()
-						.listZeppaUserToUserRelationship();
+				Zeppaclientapi.ListZeppaUserToUserRelationship task = api
+						.listZeppaUserToUserRelationship(credential.getToken());
 				task.setFilter(filter);
 				task.setCursor(cursor);
 				task.setLimit(limit);
@@ -68,7 +75,7 @@ public class FetchMutualMingersRunnable extends BaseRunnable {
 				}
 
 			} while (cursor != null);
-		} catch (IOException e) {
+		} catch (IOException | GoogleAuthException e) {
 			e.printStackTrace();
 			try {
 				application.getCurrentActivity().runOnUiThread(new Runnable() {
@@ -92,8 +99,8 @@ public class FetchMutualMingersRunnable extends BaseRunnable {
 		try {
 			do {
 
-				ListZeppaUserToUserRelationship task = buildZeppaUserToUserRelationshipEndpoint()
-						.listZeppaUserToUserRelationship();
+				Zeppaclientapi.ListZeppaUserToUserRelationship task = api
+						.listZeppaUserToUserRelationship(credential.getToken());
 				task.setFilter(filter);
 				task.setCursor(cursor);
 				task.setLimit(limit);
@@ -117,7 +124,7 @@ public class FetchMutualMingersRunnable extends BaseRunnable {
 				}
 
 			} while (cursor != null);
-		} catch (IOException e) {
+		} catch (IOException | GoogleAuthException e) {
 			e.printStackTrace();
 			try {
 				application.getCurrentActivity().runOnUiThread(new Runnable() {

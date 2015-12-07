@@ -11,16 +11,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.appspot.zeppa_cloud_1821.zeppauserendpoint.Zeppauserendpoint;
-import com.appspot.zeppa_cloud_1821.zeppauserendpoint.model.ZeppaUser;
-import com.appspot.zeppa_cloud_1821.zeppauserendpoint.model.ZeppaUserInfo;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUser;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.PrefsManager;
 import com.minook.zeppa.R;
@@ -157,27 +156,27 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 				@Override
 				protected ZeppaUser doInBackground(Object... params) {
-
+					ZeppaUser result = null;
 					try {
 						ZeppaUser createdUser = (ZeppaUser) params[0];
 						progress = (ProgressDialog) params[1];
 						GoogleAccountCredential credential = getGoogleAccountCredential();
 
-						Zeppauserendpoint.Builder endpointBuilder = new Zeppauserendpoint.Builder(
-								AndroidHttp.newCompatibleTransport(),
-								new JacksonFactory(), credential);
-						endpointBuilder = CloudEndpointUtils
-								.updateBuilder(endpointBuilder);
-						Zeppauserendpoint endpoint = endpointBuilder.build();
+						// Build the api endpoint class
+						ApiClientHelper helper = new ApiClientHelper();
+						Zeppaclientapi api = helper.buildClientEndpoint();
 
-						ZeppaUser result = endpoint
-								.insertZeppaUser(createdUser).execute();
+						// Post request to insert this object
+						result = api
+								.insertZeppaUser(credential.getToken(), createdUser).execute();
 
-						return result;
 					} catch (IOException e) {
 						e.printStackTrace();
 						return null;
+					} catch (GoogleAuthException authEx) {
+						authEx.printStackTrace();
 					}
+					return result;
 				}
 
 				@Override
@@ -243,10 +242,7 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 			userInfo.setGoogleAccountEmail(userGmail);
 			userInfo.setPrimaryUnformattedNumber(userPhoneNumber);
 
-			Person currentPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
-			String personId = currentPerson.getId();
 
-			zeppaUser.setGoogleProfileId(personId);
 			zeppaUser.setUserInfo(userInfo);
 			zeppaUser.setZeppaCalendarId("Temporary Value");
 

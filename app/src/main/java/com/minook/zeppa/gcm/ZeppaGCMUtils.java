@@ -3,7 +3,7 @@ package com.minook.zeppa.gcm;
 import android.content.Context;
 import android.util.Log;
 
-import com.appspot.zeppa_cloud_1821.deviceinfoendpoint.model.DeviceInfo;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.DeviceInfo;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.minook.zeppa.Constants;
 

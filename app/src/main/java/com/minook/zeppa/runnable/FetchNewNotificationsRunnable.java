@@ -1,13 +1,15 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.model.ZeppaEvent;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint.ListZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.CollectionResponseZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.Zeppanotificationendpoint.ListZeppaNotification;
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.model.CollectionResponseZeppaNotification;
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.model.ZeppaNotification;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaNotification;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaNotification;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
 import com.minook.zeppa.singleton.NotificationSingleton;
@@ -31,6 +33,10 @@ public class FetchNewNotificationsRunnable extends BaseRunnable {
 
 	@Override
 	public void run() {
+
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		String filter = "receiverId == " + userId + " && created > "
 				+ lastCallTime;
 		String cursor = null;
@@ -39,8 +45,8 @@ public class FetchNewNotificationsRunnable extends BaseRunnable {
 
 		do {
 			try {
-				ListZeppaNotification task = buildNotificationEndpoint()
-						.listZeppaNotification();
+				Zeppaclientapi.ListZeppaNotification task = api
+						.listZeppaNotification(credential.getToken());
 				task.setFilter(filter);
 				task.setCursor(cursor);
 				task.setLimit(limit);
@@ -61,9 +67,9 @@ public class FetchNewNotificationsRunnable extends BaseRunnable {
 							if (ZeppaUserSingleton.getInstance()
 									.getAbstractUserMediatorById(
 											notification.getSenderId()) == null) {
-								ZeppaUserInfo info = buildUserInfoEndpoint()
+								ZeppaUserInfo info = api
 										.getZeppaUserInfo(
-												notification.getSenderId())
+												notification.getSenderId(), credential.getToken())
 										.execute();
 								ZeppaUserSingleton
 										.getInstance()
@@ -74,13 +80,13 @@ public class FetchNewNotificationsRunnable extends BaseRunnable {
 									&& ZeppaEventSingleton.getInstance()
 											.getEventById(
 													notification.getEventId()) == null) {
-								ZeppaEvent event = buildEventEndpoint()
+								ZeppaEvent event = api
 										.getZeppaEvent(
-												notification.getEventId())
+												notification.getEventId(), credential.getToken())
 										.execute();
 
-								ListZeppaEventToUserRelationship task2 = buildEventRelationshipEndpoint()
-										.listZeppaEventToUserRelationship();
+								Zeppaclientapi.ListZeppaEventToUserRelationship task2 = api
+										.listZeppaEventToUserRelationship(credential.getToken());
 								task2.setFilter("eventId == " + event.getId()
 										+ " && userId == " + userId);
 								task2.setLimit(1);
@@ -117,8 +123,9 @@ public class FetchNewNotificationsRunnable extends BaseRunnable {
 					
 				}
 
-			} catch (IOException e) {
+			} catch (IOException | GoogleAuthException e) {
 				e.printStackTrace();
+				break;
 			}
 		} while (cursor != null);
 		

@@ -2,9 +2,11 @@ package com.minook.zeppa.runnable;
 
 import android.widget.CheckedTextView;
 
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserToUserRelationship;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
@@ -29,13 +31,14 @@ public class RequestMingleRunnable extends BaseRunnable {
 	@Override
 	public void run() {
 
-		Zeppausertouserrelationshipendpoint endpoint = buildZeppaUserToUserRelationshipEndpoint();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		ZeppaUserToUserRelationship relationship = createRelationship();
 
 		try {
 
-			relationship = endpoint.insertZeppaUserToUserRelationship(
+			relationship = api.insertZeppaUserToUserRelationship(credential.getToken(),
 					relationship).execute();
 			dMediator.setUserRelationship(relationship);
 
@@ -54,7 +57,7 @@ public class RequestMingleRunnable extends BaseRunnable {
 				e.printStackTrace();
 			}
 
-		} catch (IOException ie) {
+		} catch (IOException | GoogleAuthException ie) {
 			ie.printStackTrace();
 
 			try {

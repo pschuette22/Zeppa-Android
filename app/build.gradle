@@ -49,15 +49,13 @@ dependencies {
     //    compile files('libs/httpcore-4.4.jar')
     //    compile files('libs/httpmime-4.3.jar')
     //    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
-//    compile('org.apache.httpcomponents:httpcore:4.4') {
-//        exclude module: 'httpmime'
-//    }
+    //    compile('org.apache.httpcomponents:httpcore:4.4') {
+    //        exclude module: 'httpmime'
+    //    }
     compile('org.apache.httpcomponents:httpmime:4.3.6') {
         exclude module: 'httpclient'
     }
     compile 'org.apache.httpcomponents:httpclient-android:4.3.5'
-
-
     //    compile files('libs/jackson-core-2.1.3.jar')
     //    compile files('libs/jsr305-1.3.9.jar')
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -86,9 +84,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.google.api-client:google-api-client:1.19.1'
     compile 'org.apache.james:apache-mime4j:0.7.2'
-//    compile 'org.apache.httpcomponents:httpclient:4.4'
-
-
-
-//    compile files('libs/zeppausertouserrelationshipendpoint-v1-1.20.0-SNAPSHOT.jar')
+    //    compile 'org.apache.httpcomponents:httpclient:4.4'
+    //    compile files('libs/zeppausertouserrelationshipendpoint-v1-1.20.0-SNAPSHOT.jar')
+    compile files('libs/zeppaclientapi-v1-1.20.0-SNAPSHOT.jar')
 }

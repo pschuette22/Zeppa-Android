@@ -1,10 +1,13 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.eventcommentendpoint.Eventcommentendpoint.ListEventComment;
-import com.appspot.zeppa_cloud_1821.eventcommentendpoint.model.CollectionResponseEventComment;
-import com.appspot.zeppa_cloud_1821.eventcommentendpoint.model.EventComment;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseEventComment;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventComment;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
@@ -37,11 +40,13 @@ public class FetchCommentsRunnable extends BaseRunnable {
 		String ordering = "created desc";
 
 		List<EventComment> result = new ArrayList<EventComment>();
-		
+
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		try {
 			do {
-				ListEventComment task = buildCommentEndpoint()
-						.listEventComment();
+				Zeppaclientapi.ListEventComment task = api.listEventComment(credential.getToken());
 				task.setFilter(filter);
 				task.setCursor(cursor);
 				task.setLimit(limit);
@@ -65,10 +70,10 @@ public class FetchCommentsRunnable extends BaseRunnable {
 							if (ZeppaUserSingleton.getInstance()
 									.getAbstractUserMediatorById(
 											comment.getCommenterId()) == null) {
-								ZeppaUserInfo info = buildUserInfoEndpoint()
+								ZeppaUserInfo info = api
 										.getZeppaUserInfo(
 												comment.getCommenterId()
-														.longValue()).execute();
+														.longValue(), credential.getToken()).execute();
 								ZeppaUserSingleton
 										.getInstance()
 										.addDefaultZeppaUserMediator(info, null);
@@ -78,6 +83,8 @@ public class FetchCommentsRunnable extends BaseRunnable {
 
 						} catch (IOException e) {
 							e.printStackTrace();
+						} catch (GoogleAuthException ex) {
+							ex.printStackTrace();
 						}
 					}
 					
@@ -95,6 +102,8 @@ public class FetchCommentsRunnable extends BaseRunnable {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (GoogleAuthException ex) {
+			ex.printStackTrace();
 		}
 		
 		mediator.addAllComments(result);

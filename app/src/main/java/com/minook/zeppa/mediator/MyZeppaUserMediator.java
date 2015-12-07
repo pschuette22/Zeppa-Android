@@ -1,12 +1,12 @@
 package com.minook.zeppa.mediator;
 
-import com.appspot.zeppa_cloud_1821.zeppauserendpoint.Zeppauserendpoint;
-import com.appspot.zeppa_cloud_1821.zeppauserendpoint.model.ZeppaUser;
-import com.appspot.zeppa_cloud_1821.zeppauserendpoint.model.ZeppaUserInfo;
-import com.google.api.client.extensions.android.http.AndroidHttp;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUser;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.ApiClientHelper;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ public class MyZeppaUserMediator extends AbstractZeppaUserMediator {
 	 * Constructs a new instance of MyZeppaUserManager</p> Should be only one
 	 * instance per session
 	 * 
-	 * @param zeppaUser
+	 * @param user
 	 *            object for user
 	 */
 	public MyZeppaUserMediator(ZeppaUser user) {
@@ -93,11 +93,8 @@ public class MyZeppaUserMediator extends AbstractZeppaUserMediator {
 			GoogleAccountCredential credential, String givenName,
 			String familyName, String imageUrl, String primaryUnformattedNumber) {
 		boolean success = false;
-		Zeppauserendpoint.Builder builder = new Zeppauserendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		builder = CloudEndpointUtils.updateBuilder(builder);
-		Zeppauserendpoint endpoint = builder.build();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		ZeppaUser userCopy = user.clone();
 		
@@ -120,12 +117,14 @@ public class MyZeppaUserMediator extends AbstractZeppaUserMediator {
 
 		userCopy.setUserInfo(info);
 		try {
-			userCopy = endpoint.updateZeppaUser(userCopy).execute();
+			userCopy = api.updateZeppaUser(credential.getToken(), userCopy).execute();
 			user = userCopy;
 			success = true;
 			loadImageInAsync(user.getUserInfo().getImageUrl());
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (GoogleAuthException ex) {
+			ex.printStackTrace();
 		}
 
 		return success;

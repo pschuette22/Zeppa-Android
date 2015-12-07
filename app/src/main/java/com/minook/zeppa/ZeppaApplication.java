@@ -2,7 +2,7 @@ package com.minook.zeppa;
 
 import android.app.Application;
 
-import com.appspot.zeppa_cloud_1821.deviceinfoendpoint.model.DeviceInfo;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.DeviceInfo;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.observer.MemoryObserver;

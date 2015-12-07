@@ -6,7 +6,7 @@ package com.minook.zeppa.mediator;
 import android.view.View;
 import android.widget.TextView;
 
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.EventTag;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTag;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;

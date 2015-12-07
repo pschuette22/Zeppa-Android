@@ -1,16 +1,15 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.Zeppaeventendpoint;
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.Zeppaeventendpoint.ListZeppaEvent;
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.model.CollectionResponseZeppaEvent;
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.model.ZeppaEvent;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint.ListZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.CollectionResponseZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.Zeppauserinfoendpoint;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaEvent;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
 import com.minook.zeppa.mediator.MyZeppaEventMediator;
@@ -35,7 +34,8 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 
 		// Fetch Hosted Events first
 
-		Zeppaeventendpoint endpoint = buildEventEndpoint();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		String cursor = null;
 		String filter = "hostId == " + userId + " && end > "
@@ -46,7 +46,7 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 		do {
  
 			try {
-				ListZeppaEvent listEventsTask = endpoint.listZeppaEvent();
+				Zeppaclientapi.ListZeppaEvent listEventsTask = api.listZeppaEvent(credential.getToken());
 
 				listEventsTask.setFilter(filter);
 				listEventsTask.setCursor(cursor);
@@ -80,21 +80,22 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 
 			} catch (IOException e) {
 				cursor = null;
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
+				break;
 			}
 		} while (cursor != null);
 
 		// Fetch Attending Events
-		Zeppaeventtouserrelationshipendpoint rEndpoint = buildEventRelationshipEndpoint();
-		Zeppauserinfoendpoint iEndpoint = buildUserInfoEndpoint();
 
 		filter = "userId == " + userId + " && isAttending == " + Boolean.TRUE + " && expires > " + System.currentTimeMillis();
 		// Know cursor is null at this point
 
 		do {
 
-			ListZeppaEventToUserRelationship task = null;
+			Zeppaclientapi.ListZeppaEventToUserRelationship task = null;
 			try {
-				task = rEndpoint.listZeppaEventToUserRelationship();
+				task = api.listZeppaEventToUserRelationship(credential.getToken());
 
 				task.setFilter(filter);
 				task.setCursor(cursor);
@@ -115,15 +116,15 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 
 						try {
 
-							ZeppaEvent event = endpoint.getZeppaEvent(
-									relationship.getEventId()).execute();
+							ZeppaEvent event = api.getZeppaEvent(
+									relationship.getEventId(), credential.getToken()).execute();
 
 							if (ZeppaUserSingleton.getInstance()
 									.getAbstractUserMediatorById(
 											relationship.getEventHostId()) == null) {
-								ZeppaUserInfo hostInfo = iEndpoint
+								ZeppaUserInfo hostInfo = api
 										.fetchZeppaUserInfoByParentId(
-												relationship.getUserId())
+												relationship.getUserId(), credential.getToken())
 										.execute();
 								ZeppaUserSingleton.getInstance()
 										.addDefaultZeppaUserMediator(hostInfo,
@@ -152,6 +153,8 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
 			}
 
 		} while (cursor != null);
@@ -161,9 +164,9 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 				+ System.currentTimeMillis();
 		do {
 
-			ListZeppaEventToUserRelationship task = null;
+			Zeppaclientapi.ListZeppaEventToUserRelationship task = null;
 			try {
-				task = rEndpoint.listZeppaEventToUserRelationship();
+				task = api.listZeppaEventToUserRelationship(credential.getToken());
 
 				task.setFilter(filter);
 				task.setCursor(cursor);
@@ -185,15 +188,15 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 						if (!ZeppaEventSingleton.getInstance()
 								.relationshipAlreadyHeld(relationship)) {
 							try {
-								ZeppaEvent event = endpoint.getZeppaEvent(
-										relationship.getEventId()).execute();
+								ZeppaEvent event = api.getZeppaEvent(
+										relationship.getEventId(), credential.getToken()).execute();
 
 								if (ZeppaUserSingleton.getInstance()
 										.getAbstractUserMediatorById(
 												relationship.getEventHostId()) == null) {
-									ZeppaUserInfo hostInfo = iEndpoint
+									ZeppaUserInfo hostInfo = api
 											.getZeppaUserInfo(
-													relationship.getUserId())
+													relationship.getUserId(), credential.getToken())
 											.execute();
 									ZeppaUserSingleton.getInstance()
 											.addDefaultZeppaUserMediator(
@@ -223,6 +226,10 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				break;
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
+				break;
 			}
 
 		} while (cursor != null);

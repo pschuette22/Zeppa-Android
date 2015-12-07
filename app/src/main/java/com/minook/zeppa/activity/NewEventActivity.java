@@ -26,7 +26,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.model.ZeppaEvent;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;
@@ -382,7 +383,7 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 								.createZeppaEventWithBlocking(
 										getGoogleAccountCredential(), event);
 
-					} catch (IOException e) {
+					} catch (IOException | GoogleAuthException e) {
 						e.printStackTrace();
 
 						event = null;

@@ -10,18 +10,14 @@ package com.minook.zeppa.singleton;
 
 import android.content.Context;
 
-import com.appspot.zeppa_cloud_1821.zeppauserendpoint.Zeppauserendpoint;
-import com.appspot.zeppa_cloud_1821.zeppauserendpoint.model.ZeppaUser;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.Zeppauserinfoendpoint;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.CollectionResponseZeppaUserToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.model.ZeppaUserToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppausertouserrelationshipendpoint.Zeppausertouserrelationshipendpoint.ListZeppaUserToUserRelationship;
-import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaUserToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUser;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserToUserRelationship;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.PrefsManager;
 import com.minook.zeppa.Utils;
 import com.minook.zeppa.ZeppaApplication;
@@ -31,7 +27,6 @@ import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
 import com.minook.zeppa.runnable.FindMinglersRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,10 +76,16 @@ public class ZeppaUserSingleton {
 		return singleton;
 	}
 
+	/**
+	 * Replace the singleton instance with a brand new one
+	 */
 	public void restore() {
 		singleton = new ZeppaUserSingleton();
 	}
 
+	/**
+	 * Clear held user mediators
+	 */
 	public void clear() {
 		heldUserMediators.clear();
 	}
@@ -113,15 +114,19 @@ public class ZeppaUserSingleton {
 	// }
 
 	public MyZeppaUserMediator fetchLoggedInUserWithBlocking(
-			GoogleAccountCredential credential) throws IOException {
+			GoogleAccountCredential credential) throws IOException, GoogleAuthException {
 
 		if (userMediator != null) {
 			return userMediator;
 		}
 
-		Zeppauserendpoint endpoint = buildZeppaUserEndpoint(credential);
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
-		ZeppaUser zeppaUser = endpoint.fetchCurrentZeppaUser().execute();
+		// Fetch the id token string identifying this signed in user
+		String idToken = credential.getToken();
+
+		ZeppaUser zeppaUser = api.fetchCurrentZeppaUser(idToken).execute();
 
 		if (zeppaUser == null) {
 			return null;
@@ -129,27 +134,6 @@ public class ZeppaUserSingleton {
 
 		MyZeppaUserMediator mediator = new MyZeppaUserMediator(zeppaUser);
 		this.userMediator = mediator;
-		return userMediator;
-
-	}
-
-	public MyZeppaUserMediator fetchLoggedInUserByIdWithBlocking(
-			GoogleAccountCredential credential, long userId) throws IOException {
-		// If mediator already exists, return it. Called erroneously
-		if (userMediator != null) {
-			return userMediator;
-		}
-
-		// build endpoint and execute get task
-		Zeppauserendpoint endpoint = buildZeppaUserEndpoint(credential);
-		ZeppaUser user = endpoint.getZeppaUser(userId).execute();
-
-		// if returned null object, return null
-		if (user == null) {
-			return null;
-		}
-		// if valid ZeppaUser object returned, create new mediator instance
-		this.userMediator = new MyZeppaUserMediator(user);
 		return userMediator;
 	}
 
@@ -444,20 +428,20 @@ public class ZeppaUserSingleton {
 		}
 
 		DefaultUserInfoMediator result = null;
-		Zeppauserinfoendpoint infoEndpoint = buildZeppaUserInfoEndpoint(credential);
-		Zeppausertouserrelationshipendpoint relationshipEndpoint = buildZeppaUserToUserRelationshipEndpoint(credential);
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		try {
-			ZeppaUserInfo info = infoEndpoint.fetchZeppaUserInfoByParentId(
-					userId).execute();
+			ZeppaUserInfo info = api.fetchZeppaUserInfoByParentId(
+					userId, credential.getToken()).execute();
 			if (info == null) {
 				return null;
 			}
 
 			long loggedInUserId = PrefsManager.getLoggedInUserId(context);
 
-			ListZeppaUserToUserRelationship listRequest = relationshipEndpoint
-					.listZeppaUserToUserRelationship();
+			Zeppaclientapi.ListZeppaUserToUserRelationship listRequest = api
+					.listZeppaUserToUserRelationship(credential.getToken());
 			listRequest.setFilter("(subjectId == " + loggedInUserId
 					+ " || creatorId == " + userId + ") && (subjectId == "
 					+ userId + " || creatorId == " + loggedInUserId + ")");
@@ -473,7 +457,7 @@ public class ZeppaUserSingleton {
 			}
 			result = new DefaultUserInfoMediator(info, relationship);
 
-		} catch (IOException e) {
+		} catch (IOException | GoogleAuthException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -564,55 +548,6 @@ public class ZeppaUserSingleton {
 		return false;
 	}
 
-	/**
-	 * Build an endpoint for ZeppaUser objects
-	 * 
-	 * @param credential
-	 * @return
-	 */
-	private Zeppauserendpoint buildZeppaUserEndpoint(
-			GoogleAccountCredential credential) {
-		Zeppauserendpoint.Builder builder = new Zeppauserendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		builder = CloudEndpointUtils.updateBuilder(builder);
-		Zeppauserendpoint endpoint = builder.build();
 
-		return endpoint;
-	}
-
-	/**
-	 * Build endpoint for ZeppaUserInfo objects
-	 * 
-	 * @param credential
-	 * @return
-	 */
-	private Zeppauserinfoendpoint buildZeppaUserInfoEndpoint(
-			GoogleAccountCredential credential) {
-		Zeppauserinfoendpoint.Builder builder = new Zeppauserinfoendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		builder = CloudEndpointUtils.updateBuilder(builder);
-		Zeppauserinfoendpoint endpoint = builder.build();
-
-		return endpoint;
-	}
-
-	/**
-	 * Build endpoint for ZeppaUserToUserRelationship objects
-	 * 
-	 * @param credential
-	 * @return
-	 */
-	private Zeppausertouserrelationshipendpoint buildZeppaUserToUserRelationshipEndpoint(
-			GoogleAccountCredential credential) {
-		Zeppausertouserrelationshipendpoint.Builder builder = new Zeppausertouserrelationshipendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		builder = CloudEndpointUtils.updateBuilder(builder);
-		Zeppausertouserrelationshipendpoint endpoint = builder.build();
-
-		return endpoint;
-	}
 
 }

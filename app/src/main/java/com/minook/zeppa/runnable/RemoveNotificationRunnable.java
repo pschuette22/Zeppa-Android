@@ -1,6 +1,9 @@
 package com.minook.zeppa.runnable;
 
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.singleton.NotificationSingleton;
 
@@ -18,8 +21,11 @@ public class RemoveNotificationRunnable extends BaseRunnable {
 
 	@Override
 	public void run() {
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		try {
-			buildNotificationEndpoint().removeZeppaNotification(notificationId).execute();
+			api.removeZeppaNotification(notificationId, credential.getToken()).execute();
 			application.getCurrentActivity().runOnUiThread(new Runnable(){
 
 				@Override
@@ -34,6 +40,8 @@ public class RemoveNotificationRunnable extends BaseRunnable {
 			e.printStackTrace();
 		} catch (NullPointerException e){
 			e.printStackTrace();
+		} catch (GoogleAuthException ex) {
+			ex.printStackTrace();
 		}
 		
 	}

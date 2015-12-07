@@ -17,12 +17,11 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
-import com.appspot.zeppa_cloud_1821.zeppafeedbackendpoint.Zeppafeedbackendpoint;
-import com.appspot.zeppa_cloud_1821.zeppafeedbackendpoint.model.ZeppaFeedback;
-import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaFeedback;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
@@ -78,7 +77,7 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 		case R.id.feedback_button_send:
 
 			if (fieldsAreOk()) {
-				new PostFeedbackInAsync().execute();
+				new PostFeedbackInAsync(ratingBar.getRating()).execute();
 
 			}
 
@@ -130,21 +129,24 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 
 	private class PostFeedbackInAsync extends AsyncTask<Void, Void, Boolean> {
 
+		double rating;
+
+		public PostFeedbackInAsync(double rating) {
+			this.rating = rating;
+		}
+
 		@Override
 		protected Boolean doInBackground(Void... params) {
 
 			GoogleAccountCredential credential = ((AuthenticatedFragmentActivity) getActivity())
 					.getGoogleAccountCredential();
-			Zeppafeedbackendpoint.Builder endpointBuilder = new Zeppafeedbackendpoint.Builder(
-					AndroidHttp.newCompatibleTransport(),
-					GsonFactory.getDefaultInstance(), credential);
-			endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
+			ApiClientHelper helper = new ApiClientHelper();
+			Zeppaclientapi api = helper.buildClientEndpoint();
 
-			Zeppafeedbackendpoint feedbackEndpoint = endpointBuilder.build();
+
 			boolean success = false;
 			try {
 				Log.d(TAG, "Executing insert Feedback Object operation");
-				double rating = ratingBar.getRating();
 
 				ZeppaFeedback feedback = new ZeppaFeedback();
 				feedback.setUserId(ZeppaUserSingleton.getInstance().getUserId());
@@ -154,11 +156,13 @@ public class FeedbackFragment extends Fragment implements OnClickListener {
 				feedback.setReleaseCode(Constants.APP_RELEASE_CODE);
 				feedback.setDeviceType("ANDROID");
 
-				feedbackEndpoint.insertZeppaFeedback(feedback).execute();
+				api.insertZeppaFeedback(credential.getToken(), feedback).execute();
 
 				success = true;
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (GoogleAuthException ex){
+				ex.printStackTrace();
 			}
 
 			return success;

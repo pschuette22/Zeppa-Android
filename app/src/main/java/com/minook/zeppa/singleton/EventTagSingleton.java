@@ -2,13 +2,12 @@ package com.minook.zeppa.singleton;
 
 import android.util.Log;
 
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.Eventtagendpoint;
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.EventTag;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTag;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
-import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.adapter.tagadapter.MyTagAdapter;
 import com.minook.zeppa.mediator.AbstractEventTagMediator;
 import com.minook.zeppa.mediator.DefaultEventTagMediator;
@@ -252,19 +251,17 @@ public class EventTagSingleton {
 	public MyEventTagMediator insertEventTag(EventTag tag,
 			GoogleAccountCredential credential) {
 
-		Eventtagendpoint.Builder endpointBuilder = new Eventtagendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				AndroidJsonFactory.getDefaultInstance(), credential);
-		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-		Eventtagendpoint endpoint = endpointBuilder.build();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 
 		try {
 
-			tag = endpoint.insertEventTag(tag).execute();
+			tag = api.insertEventTag(credential.getToken(), tag).execute();
 
 		} catch (GoogleAuthIOException aEx) {
 			Log.wtf(TAG, "AuthException");
-		} catch (IOException ioEx) {
+		} catch (IOException | GoogleAuthException ioEx) {
 			tag = null;
 			ioEx.printStackTrace();
 		}
@@ -292,23 +289,23 @@ public class EventTagSingleton {
 	 */
 	public boolean deleteEventTag(EventTag tag,
 			GoogleAccountCredential credential) {
-		boolean success = false;
 
-		Eventtagendpoint.Builder endpointBuilder = new Eventtagendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				AndroidJsonFactory.getDefaultInstance(), credential);
-		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-		Eventtagendpoint endpoint = endpointBuilder.build();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
+		boolean success = false;
 
 		try {
 
-			endpoint.removeEventTag(tag.getKey().getId()).execute();
+			api.removeEventTag(tag.getKey().getId(), credential.getToken()).execute();
 
 			success = true;
 		} catch (GoogleAuthIOException aEx) {
 			Log.wtf(TAG, "AuthException");
 		} catch (IOException ioEx) {
 			ioEx.printStackTrace();
+		} catch (GoogleAuthException ex) {
+			ex.printStackTrace();
 		}
 
 		// TODO: remove all instances of this tag

@@ -1,14 +1,15 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.model.ZeppaEvent;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint.ListZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.CollectionResponseZeppaEventToUserRelationship;
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.Zeppanotificationendpoint;
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.Zeppanotificationendpoint.ListZeppaNotification;
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.model.CollectionResponseZeppaNotification;
-import com.appspot.zeppa_cloud_1821.zeppanotificationendpoint.model.ZeppaNotification;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaEventToUserRelationship;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseZeppaNotification;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaNotification;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
 import com.minook.zeppa.singleton.NotificationSingleton;
@@ -33,7 +34,8 @@ public class FetchInitialNotificationsRunnable extends BaseRunnable {
 
 	@Override
 	public void run() {
-		Zeppanotificationendpoint notificationEndpoint = buildNotificationEndpoint();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		String filter = "recipientId == " + userId + " && expires > "
 				+ System.currentTimeMillis();
@@ -41,8 +43,8 @@ public class FetchInitialNotificationsRunnable extends BaseRunnable {
 		do {
 			try {
 
-				ListZeppaNotification listNotificationsTask = notificationEndpoint
-						.listZeppaNotification();
+				Zeppaclientapi.ListZeppaNotification listNotificationsTask = api
+						.listZeppaNotification(credential.getToken());
 
 				listNotificationsTask.setCursor(nextPageToken);
 				listNotificationsTask.setFilter(filter);
@@ -65,9 +67,9 @@ public class FetchInitialNotificationsRunnable extends BaseRunnable {
 							if (ZeppaUserSingleton.getInstance()
 									.getAbstractUserMediatorById(
 											notification.getSenderId().longValue()) == null) {
-								ZeppaUserInfo info = buildUserInfoEndpoint()
+								ZeppaUserInfo info = api
 										.fetchZeppaUserInfoByParentId(
-												notification.getSenderId())
+												notification.getSenderId(), credential.getToken())
 										.execute();
 								ZeppaUserSingleton
 										.getInstance()
@@ -78,13 +80,13 @@ public class FetchInitialNotificationsRunnable extends BaseRunnable {
 									&& ZeppaEventSingleton.getInstance()
 											.getEventById(
 													notification.getEventId().longValue()) == null) {
-								ZeppaEvent event = buildEventEndpoint()
+								ZeppaEvent event = api
 										.getZeppaEvent(
-												notification.getEventId().longValue())
+												notification.getEventId().longValue(), credential.getToken())
 										.execute();
 
-								ListZeppaEventToUserRelationship task = buildEventRelationshipEndpoint()
-										.listZeppaEventToUserRelationship();
+								Zeppaclientapi.ListZeppaEventToUserRelationship task = api
+										.listZeppaEventToUserRelationship(credential.getToken());
 								task.setFilter("eventId == " + event.getId()
 										+ " && userId == " + userId);
 								task.setLimit(1);
@@ -124,6 +126,10 @@ public class FetchInitialNotificationsRunnable extends BaseRunnable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				break;
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
+				break;
 			}
 
 		} while (nextPageToken != null);

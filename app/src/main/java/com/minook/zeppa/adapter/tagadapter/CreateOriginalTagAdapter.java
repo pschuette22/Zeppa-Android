@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.EventTag;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTag;
 import com.minook.zeppa.R;
 import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 

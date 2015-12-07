@@ -8,16 +8,14 @@ package com.minook.zeppa.singleton;
  * 
  */
 
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.Zeppaeventendpoint;
-import com.appspot.zeppa_cloud_1821.zeppaeventendpoint.model.ZeppaEvent;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.Zeppaeventtouserrelationshipendpoint;
-import com.appspot.zeppa_cloud_1821.zeppaeventtouserrelationshipendpoint.model.ZeppaEventToUserRelationship;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEventToUserRelationship;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
-import com.google.api.client.json.gson.GsonFactory;
-import com.minook.zeppa.CloudEndpointUtils;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.mediator.DefaultZeppaEventMediator;
@@ -31,10 +29,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.RunnableScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class ZeppaEventSingleton {
 
@@ -242,7 +236,6 @@ public class ZeppaEventSingleton {
 	/**
 	 * Register an adapter listening for changes made to the events list
 	 * 
-	 * @param adapter
 	 */
 	public void registerEventLoadListener(OnZeppaEventLoadListener listener) {
 		if (!eventLoadListeners.contains(listener)) {
@@ -253,7 +246,6 @@ public class ZeppaEventSingleton {
 	/**
 	 * Unregister an adapter listening for changes made to the events list
 	 * 
-	 * @param adapter
 	 */
 	public void unregisterEventLoadListener(OnZeppaEventLoadListener listener) {
 		eventLoadListeners.remove(listener);
@@ -398,15 +390,12 @@ public class ZeppaEventSingleton {
 	 */
 	public ZeppaEvent createZeppaEventWithBlocking(
 			GoogleAccountCredential credential, ZeppaEvent event)
-			throws IOException, GoogleAuthIOException {
+			throws IOException, GoogleAuthIOException, GoogleAuthException {
 
-		Zeppaeventendpoint.Builder endpointBuilder = new Zeppaeventendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				AndroidJsonFactory.getDefaultInstance(), credential);
-		endpointBuilder = CloudEndpointUtils.updateBuilder(endpointBuilder);
-		Zeppaeventendpoint eventEndpoint = endpointBuilder.build();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
-		return eventEndpoint.insertZeppaEvent(event).execute();
+		return api.insertZeppaEvent(credential.getToken(), event).execute();
 	}
 
 	/*
@@ -519,32 +508,6 @@ public class ZeppaEventSingleton {
 		}
 
 		return false;
-	}
-
-	protected Zeppaeventendpoint buildEventEndpoint(
-			GoogleAccountCredential credential) {
-		Zeppaeventendpoint.Builder builder = new Zeppaeventendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		CloudEndpointUtils.updateBuilder(builder);
-		Zeppaeventendpoint endpoint = builder.build();
-
-		return endpoint;
-	}
-
-	/**
-	 * @param credential
-	 * @return
-	 */
-	protected Zeppaeventtouserrelationshipendpoint buildEventRelationshipEndpoint(
-			GoogleAccountCredential credential) {
-		Zeppaeventtouserrelationshipendpoint.Builder builder = new Zeppaeventtouserrelationshipendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				GsonFactory.getDefaultInstance(), credential);
-		CloudEndpointUtils.updateBuilder(builder);
-		Zeppaeventtouserrelationshipendpoint endpoint = builder.build();
-
-		return endpoint;
 	}
 
 	/*

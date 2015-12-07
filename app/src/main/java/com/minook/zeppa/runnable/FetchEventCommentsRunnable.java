@@ -1,12 +1,13 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.eventcommentendpoint.Eventcommentendpoint;
-import com.appspot.zeppa_cloud_1821.eventcommentendpoint.Eventcommentendpoint.ListEventComment;
-import com.appspot.zeppa_cloud_1821.eventcommentendpoint.model.CollectionResponseEventComment;
-import com.appspot.zeppa_cloud_1821.eventcommentendpoint.model.EventComment;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.Zeppauserinfoendpoint;
-import com.appspot.zeppa_cloud_1821.zeppauserinfoendpoint.model.ZeppaUserInfo;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseEventComment;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventComment;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator;
 import com.minook.zeppa.mediator.AbstractZeppaEventMediator.OnCommentLoadListener;
@@ -40,13 +41,14 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 		filterBuilder.append("eventId == ");
 		filterBuilder.append(mediator.getEventId().longValue());
 
-		Eventcommentendpoint endpoint = buildCommentEndpoint();
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		String commentCursor = null;
 		List<EventComment> result = new ArrayList<EventComment>();
 		do {
 			try {
-				ListEventComment task = endpoint.listEventComment();
+				Zeppaclientapi.ListEventComment task = api.listEventComment(credential.getToken());
 				task.setFilter(filterBuilder.toString());
 
 				task.setCursor(commentCursor);
@@ -61,7 +63,6 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 					Iterator<EventComment> iterator = loadedComments.iterator();
 					List<EventComment> remove = new ArrayList<EventComment>();
 
-					Zeppauserinfoendpoint iEndpoint = buildUserInfoEndpoint();
 
 					while (iterator.hasNext()) {
 						EventComment comment = iterator.next();
@@ -70,9 +71,9 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 								.getAbstractUserMediatorById(
 										comment.getCommenterId()) == null) {
 							try {
-								ZeppaUserInfo commenter = iEndpoint
+								ZeppaUserInfo commenter = api
 										.getZeppaUserInfo(
-												comment.getCommenterId())
+												comment.getCommenterId(), credential.getToken())
 										.execute();
 								// Add this commenter singleton with the impression that there is no relationship to this user
 								// Assumes if there were, a mediator for this user would already be held
@@ -82,6 +83,8 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 							} catch (IOException e) {
 								e.printStackTrace();
 								remove.add(comment);
+							} catch (GoogleAuthException ex) {
+								ex.printStackTrace();
 							}
 						}
 					}
@@ -101,6 +104,10 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				listener.onErrorLoadingComments();
+				break;
+			} catch (GoogleAuthException ex) {
+				ex.printStackTrace();
 				listener.onErrorLoadingComments();
 				break;
 			}

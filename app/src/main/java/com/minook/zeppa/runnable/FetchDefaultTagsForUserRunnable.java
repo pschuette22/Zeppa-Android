@@ -1,13 +1,14 @@
 package com.minook.zeppa.runnable;
 
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.Eventtagendpoint;
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.Eventtagendpoint.ListEventTag;
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.CollectionResponseEventTag;
-import com.appspot.zeppa_cloud_1821.eventtagendpoint.model.EventTag;
-import com.appspot.zeppa_cloud_1821.eventtagfollowendpoint.Eventtagfollowendpoint.ListEventTagFollow;
-import com.appspot.zeppa_cloud_1821.eventtagfollowendpoint.model.CollectionResponseEventTagFollow;
-import com.appspot.zeppa_cloud_1821.eventtagfollowendpoint.model.EventTagFollow;
+
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseEventTag;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.CollectionResponseEventTagFollow;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTag;
+import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.EventTagFollow;
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.minook.zeppa.ApiClientHelper;
 import com.minook.zeppa.ZeppaApplication;
 import com.minook.zeppa.mediator.DefaultEventTagMediator;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
@@ -43,10 +44,14 @@ public class FetchDefaultTagsForUserRunnable extends BaseRunnable {
 		String cursor = null;
 		Integer limit = Integer.valueOf(50);
 		List<EventTagFollow> follows = new ArrayList<EventTagFollow>();
+
+		ApiClientHelper helper = new ApiClientHelper();
+		Zeppaclientapi api = helper.buildClientEndpoint();
+
 		do {
 			try {
-				ListEventTagFollow task = buildEventTagFollowEndpoint()
-						.listEventTagFollow();
+				Zeppaclientapi.ListEventTagFollow task = api
+						.listEventTagFollow(credential.getToken());
 				task.setFilter(filter);
 				task.setCursor(cursor);
 				task.setLimit(limit);
@@ -70,10 +75,12 @@ public class FetchDefaultTagsForUserRunnable extends BaseRunnable {
 					e2.printStackTrace();
 				}
 				return;
+			} catch (GoogleAuthException ex){
+				ex.printStackTrace();
+				break;
 			}
 		} while (cursor != null);
 
-		Eventtagendpoint endpoint = buildEventTagEndpoint();
 
 		filter = "userId == " + userIdMingler;
 		cursor = null;
@@ -84,7 +91,7 @@ public class FetchDefaultTagsForUserRunnable extends BaseRunnable {
 		do {
 			try {
 
-				ListEventTag task = endpoint.listEventTag();
+				Zeppaclientapi.ListEventTag task = api.listEventTag(credential.getToken());
 				task.setFilter(filter);
 				task.setCursor(cursor);
 				task.setLimit(limit);
@@ -137,6 +144,9 @@ public class FetchDefaultTagsForUserRunnable extends BaseRunnable {
 					e2.printStackTrace();
 				}
 				return;
+			} catch (GoogleAuthException ex){
+				ex.printStackTrace();
+				break;
 			}
 
 		} while (cursor != null);
