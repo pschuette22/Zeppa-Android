@@ -267,23 +267,23 @@ public class ZeppaUserSingleton {
 		List<String> numbers = new ArrayList<String>();
 
 		try {
-			numbers.add(userMediator.getUnformattedPhoneNumber());
+			numbers.add(userMediator.getPhoneNumber());
 		} catch (NullPointerException e) {
 
 		}
 
-		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
-				.iterator();
-		while (iterator.hasNext()) {
-			try {
-				String number = iterator.next().getUnformattedPhoneNumber();
-				numbers.add(number);
-			} catch (NullPointerException e) {
-				// Number is null
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+//		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
+//				.iterator();
+//		while (iterator.hasNext()) {
+//			try {
+//				String number = iterator.next().getUnformattedPhoneNumber();
+//				numbers.add(number);
+//			} catch (NullPointerException e) {
+//				// Number is null
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 
 		return numbers;
 	}
@@ -295,13 +295,13 @@ public class ZeppaUserSingleton {
 
 		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
 				.iterator();
-		while (iterator.hasNext()) {
-			try {
-				emails.add(iterator.next().getGmail());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+//		while (iterator.hasNext()) {
+//			try {
+//				emails.add(iterator.next().getGmail());
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 
 		return emails;
 	}
@@ -380,8 +380,8 @@ public class ZeppaUserSingleton {
 
 			// If the user is
 			if (!mediator.isMingling()
-					&& (!mediator.requestPending() || (mediator
-							.requestPending() && mediator.didSendRequest()))) {
+					&& (!mediator.isPendingRequest() || (mediator
+							.isPendingRequest() && mediator.didSendRequest()))) {
 				potentialConnectionList.add(mediator);
 			}
 		}
@@ -400,7 +400,7 @@ public class ZeppaUserSingleton {
 		while (iterator.hasNext()) {
 			DefaultUserInfoMediator mediator = iterator.next();
 
-			if (mediator.requestPending() && !mediator.didSendRequest()) {
+			if (mediator.isPendingRequest() && !mediator.didSendRequest()) {
 				pendingRequests.add(mediator);
 			}
 		}
@@ -432,8 +432,7 @@ public class ZeppaUserSingleton {
 		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		try {
-			ZeppaUserInfo info = api.fetchZeppaUserInfoByParentId(
-					userId, credential.getToken()).execute();
+			ZeppaUserInfo info = api.fetchZeppaUserInfoByParentId(credential.getToken(),userId).execute();
 			if (info == null) {
 				return null;
 			}
@@ -501,52 +500,52 @@ public class ZeppaUserSingleton {
 	 * Loader Methods
 	 */
 
-	public boolean emailIsRecognized(String email) {
-
-		if (getUserMediator().getGmail().equalsIgnoreCase(email)) {
-			return true;
-		}
-
-		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
-				.iterator();
-
-		while (iterator.hasNext()) {
-			DefaultUserInfoMediator mediator = iterator.next();
-			if (mediator.getGmail().equalsIgnoreCase(email)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public boolean numberIsRecognized(String number) {
-		try {
-			if (getUserMediator().getPrimaryPhoneNumber().equals(number)) {
-				return true;
-			}
-		} catch (NullPointerException e) {
-			// This user does not have a phone number attached to their account
-			return false;
-		}
-
-		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
-				.iterator();
-
-		while (iterator.hasNext()) {
-
-			try {
-				DefaultUserInfoMediator mediator = iterator.next();
-				String primaryNumber = mediator.getPrimaryPhoneNumber();
-				if (primaryNumber != null && primaryNumber.equals(number))
-					return true;
-			} catch (NullPointerException e) {
-				// User may not have a phone number attached to their account
-			}
-		}
-
-		return false;
-	}
+//	public boolean emailIsRecognized(String email) {
+//
+//		if (getUserMediator().getGmail().equalsIgnoreCase(email)) {
+//			return true;
+//		}
+//
+//		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
+//				.iterator();
+//
+//		while (iterator.hasNext()) {
+//			DefaultUserInfoMediator mediator = iterator.next();
+//			if (mediator.getGmail().equalsIgnoreCase(email)) {
+//				return true;
+//			}
+//		}
+//
+//		return false;
+//	}
+//
+//	public boolean numberIsRecognized(String number) {
+//		try {
+//			if (getUserMediator().getPrimaryPhoneNumber().equals(number)) {
+//				return true;
+//			}
+//		} catch (NullPointerException e) {
+//			// This user does not have a phone number attached to their account
+//			return false;
+//		}
+//
+//		Iterator<DefaultUserInfoMediator> iterator = heldUserMediators
+//				.iterator();
+//
+//		while (iterator.hasNext()) {
+//
+//			try {
+//				DefaultUserInfoMediator mediator = iterator.next();
+//				String primaryNumber = mediator.getPrimaryPhoneNumber();
+//				if (primaryNumber != null && primaryNumber.equals(number))
+//					return true;
+//			} catch (NullPointerException e) {
+//				// User may not have a phone number attached to their account
+//			}
+//		}
+//
+//		return false;
+//	}
 
 
 

@@ -63,7 +63,7 @@ public class FetchInitialMinglersRunnable extends BaseRunnable {
 
 							userInfo = api
 									.fetchZeppaUserInfoByParentId(
-											relationship.getSubjectId(), credential.getToken())
+											credential.getToken(),relationship.getSubjectId())
 									.execute();
 
 							ZeppaUserSingleton.getInstance()
@@ -112,7 +112,7 @@ public class FetchInitialMinglersRunnable extends BaseRunnable {
 						try {
 							ZeppaUserInfo userInfo = api
 									.fetchZeppaUserInfoByParentId(
-											relationship.getCreatorId(), credential.getToken())
+											credential.getToken(),relationship.getCreatorId())
 									.execute();
 
 							ZeppaUserSingleton.getInstance()

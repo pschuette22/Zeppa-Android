@@ -11,6 +11,7 @@
     <string name="addremove_tags">Add/Remove Tags</string>
     <string name="agenda_title">Agenda</string>
     <string name="app_name">Zeppa</string>
+    <string name="activities">Activities</string>
 
     <!-- B -->
     <string name="birthday:">Birthday:</string>
@@ -49,7 +50,7 @@
     <string name="error_signin">Sign in Error</string>
     <string name="event_details">Event Details</string>
     <string name="event_title">What?</string>
-    <string name="example_email">Example@gmail.com</string>
+    <string name="example_email">example@gmail.com</string>
 
     <!-- F -->
     <string name="feed_title">Feed</string>
@@ -109,6 +110,7 @@
     <string name="navigation_open">Nav Open</string>
     <string name="navigation_closed">Nav Closed</string>
     <string name="newtag">New Category Tag</string>
+    <string name="newactivity">New Activity</string>
     <string name="no">No</string>
     <string name="no_repost">No Repost</string>
     <string name="notifications">Notifications</string>
@@ -123,6 +125,7 @@
 
     <string name="password">Password</string>
     <string name="pending_requests">Pending Friend Requests</string>
+    <string name="people">People</string>
     <string name="phone:">Phone:</string>
     <string name="post">Post</string>
     <string name="posting_event">Posting Event</string>
@@ -145,6 +148,8 @@
     <string name="slogan">Life is too short to watch people live it</string>
     <string name="stopwatching">Stop Watching</string>
     <string name="sunday_calendar_short">Su</string>
+    <string name="squad_pod">Squad Pod</string>
+
 
     <!-- T -->
     <string name="to">To</string>
@@ -223,8 +228,8 @@
 
     <string-array name="navigation_options">
         <item>@string/my_profile</item>
-        <item>@string/home</item>
-        <item>@string/minglers</item>
+        <item>@string/activities</item>
+        <item>@string/people</item>
         <item>@string/send_feedback</item>
         <item>@string/settings</item>
     </string-array>

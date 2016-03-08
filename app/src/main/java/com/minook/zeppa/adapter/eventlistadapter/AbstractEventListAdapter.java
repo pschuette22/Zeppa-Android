@@ -33,11 +33,10 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements
 	 * EventListAdapter This class adapts a list of ZeppaEvents in the singleton
 	 * to a list of views It also handles generating said views
 	 * 
-	 * @param AuthenticatedFragmentActvity
+	 * @param AuthenticatedFragmentActivity
 	 *            activity Calling authenticated activity
 	 * 
 	 * */
-
 	public AbstractEventListAdapter(AuthenticatedFragmentActivity activity) {
 		super();
 		this.activity = activity;
@@ -49,7 +48,6 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements
 		if (eventMediators == null) {
 			return 0;
 		}
-
 		return eventMediators.size();
 	}
 
@@ -82,8 +80,6 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements
 			View quickActionBar = convertView
 					.findViewById(R.id.eventview_quickactionbar);
 			quickActionBar.findViewById(R.id.quickaction_join)
-					.setOnClickListener(this);
-			quickActionBar.findViewById(R.id.quickaction_text)
 					.setOnClickListener(this);
 			quickActionBar.findViewById(R.id.quickaction_watch)
 					.setOnClickListener(this);
@@ -141,11 +137,6 @@ public abstract class AbstractEventListAdapter extends BaseAdapter implements
 				((DefaultZeppaEventMediator) mediator)
 						.onJoinButtonClicked(activity);
 				ZeppaEventSingleton.getInstance().notifyObservers();
-				break;
-
-			case R.id.quickaction_text:
-				((DefaultZeppaEventMediator) mediator)
-						.onTextButtonClicked(activity);
 				break;
 
 			case R.id.quickaction_watch:

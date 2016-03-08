@@ -148,30 +148,12 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		}
 		
 	}
-	
-	
-	
 
 	@Override
 	protected void onDestroy() {
 		ZeppaEventSingleton.getInstance().unregisterEventLoadListener(this);
 		super.onDestroy();
 	}
-
-
-
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		
-	}
-
-//	@Override
-//	protected void onResume() {
-//		super.onResume();
-//		
-//	}
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
@@ -189,12 +171,7 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_minglerpage, menu);
 
-		try {
-			userMediator.getPrimaryPhoneNumber();
 
-		} catch (NullPointerException e) {
-			menu.findItem(R.id.action_textmingler).setVisible(false);
-		}
 		return true;
 	}
 
@@ -220,14 +197,6 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 			ZeppaUserSingleton.getInstance().notifyObservers();
 			onBackPressed();
 
-			return true;
-
-		case R.id.action_textmingler:
-			userMediator.sendTextMessage(this);
-			return true;
-
-		case R.id.action_emailmingler:
-			userMediator.sendEmail(this, null);
 			return true;
 
 		}
@@ -389,17 +358,6 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		userName.setText(userMediator.getDisplayName());
 		userMediator.setImageWhenReady(userImage);
 
-		try {
-			String phoneNumberText = userMediator.getPrimaryPhoneNumber();
-			userPhoneNumber.setText(phoneNumberText);
-
-		} catch (NullPointerException e) {
-			userPhoneNumber.setVisibility(View.GONE);
-
-		}
-
-		userGmail.setText(userMediator.getGmail());
-
 	}
 
 	private void showMutualMinglers() {
@@ -407,8 +365,9 @@ public class MinglerActivity extends AuthenticatedFragmentActivity implements
 		List<DefaultUserInfoMediator> mutualMingerMediators = ZeppaUserSingleton
 				.getInstance().getMinglersFrom(minglingIds);
 		if (mutualMingerMediators.isEmpty()) {
-			Toast.makeText(this, "No mutual minglers", Toast.LENGTH_SHORT)
-					.show();
+			// Don't do anything if you dont have any minglers in common
+//			Toast.makeText(this, "No mutual minglers", Toast.LENGTH_SHORT)
+//					.show();
 		} else {
 			MinglerListAdapter mutualMinglerListAdapter = new MinglerListAdapter(
 					this, mutualMingerMediators);

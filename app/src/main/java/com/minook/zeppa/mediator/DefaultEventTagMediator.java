@@ -130,8 +130,7 @@ public class DefaultEventTagMediator extends AbstractEventTagMediator {
 				Zeppaclientapi api = helper.buildClientEndpoint();
 
 				try {
-
-					api.removeEventTagFollow(myFollow.getKey().getId(),credential.getToken()).execute();
+					api.removeEventTagFollow(myFollow.getId(),credential.getToken()).execute();
 					return true;
 				} catch (IOException e) {
 					e.printStackTrace();

@@ -51,12 +51,10 @@ public class DeleteTagAdapter extends MyTagAdapter implements OnClickListener {
 	
 
 	private void deleteTagInAsync(View v, MyEventTagMediator mediator){
-		
-		
+
 		EventTagSingleton.getInstance().removeEventTagMediator(mediator);
 		ThreadManager.execute(new RemoveTagRunnable((ZeppaApplication) activity.getApplication(), activity.getGoogleAccountCredential(), mediator.getTagId().longValue()));
 		notifyDataSetChanged();
-		
 		
 	}
 	

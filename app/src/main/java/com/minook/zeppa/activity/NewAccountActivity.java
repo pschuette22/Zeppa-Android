@@ -239,8 +239,8 @@ public class NewAccountActivity extends AbstractAccountBaseActivity {
 
 		if (errorsList.isEmpty()) {
 
-			userInfo.setGoogleAccountEmail(userGmail);
-			userInfo.setPrimaryUnformattedNumber(userPhoneNumber);
+			zeppaUser.setAuthEmail(userGmail);
+			zeppaUser.setPhoneNumber(userPhoneNumber);
 
 
 			zeppaUser.setUserInfo(userInfo);

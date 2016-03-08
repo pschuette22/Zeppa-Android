@@ -69,7 +69,7 @@ public class FindMinglersRunnable extends BaseRunnable {
 									|| numberCursor.isLast()) {
 
 
-								executeQuery(":p.contains(primaryUnformattedPhoneNumber)", "phoneNumberList", phoneNumberList);
+								executeQuery("listParam.contains(phoneNumber)", phoneNumberList);
 								phoneNumberList.clear();
 								characterCount=0;
 
@@ -109,7 +109,7 @@ public class FindMinglersRunnable extends BaseRunnable {
 						if (characterCount > 1750
 								|| emailCursor.isLast()) {
 
-							executeQuery(":p.contains(googleAccountEmail)", "emailList", emailList);
+							executeQuery("listParam.contains(authEmail)", emailList);
                             emailList.clear();
                             characterCount=0;
 
@@ -138,7 +138,7 @@ public class FindMinglersRunnable extends BaseRunnable {
 		}
 	}
 
-	private void executeQuery(String filter, String listArgName, List<String> listArg) {
+	private void executeQuery(String filter, List<String> listArg) {
 
 		ApiClientHelper helper = new ApiClientHelper();
 		Zeppaclientapi api = helper.buildClientEndpoint();
@@ -166,17 +166,15 @@ public class FindMinglersRunnable extends BaseRunnable {
 				List<ZeppaUserInfo> uniqueInfoItems = new ArrayList<ZeppaUserInfo>();
 				while (iterator.hasNext()) {
 					ZeppaUserInfo info = iterator.next();
-					recognizedEmails.add(info.getGoogleAccountEmail());
 
-					if (info.getPrimaryUnformattedNumber() != null
-							&& !info.getPrimaryUnformattedNumber().isEmpty()) {
-						recognizedNumbers.add(info
-								.getPrimaryUnformattedNumber());
+					// If user id is unrecognized, add to list of users that should be added
+					if (ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(info.getKey().getParent().getId())==null) {
+						uniqueInfoItems.add(info);
 					}
 
-					uniqueInfoItems.add(info);
 				}
 
+				// Add the unique users to the UI
 				addMediatorsOnUIThread(uniqueInfoItems);
 
 			}
@@ -207,13 +205,13 @@ public class FindMinglersRunnable extends BaseRunnable {
 	 * @return True if recognized
 	 */
 	private boolean numberIsRecognized(String phoneNumber) {
-		Iterator<String> iterator = recognizedNumbers.iterator();
-
-		while (iterator.hasNext()) {
-			if (iterator.next().equalsIgnoreCase(phoneNumber)) {
-				return true;
-			}
-		}
+//		Iterator<String> iterator = recognizedNumbers.iterator();
+//
+//		while (iterator.hasNext()) {
+//			if (iterator.next().equalsIgnoreCase(phoneNumber)) {
+//				return true;
+//			}
+//		}
 		return false;
 	}
 

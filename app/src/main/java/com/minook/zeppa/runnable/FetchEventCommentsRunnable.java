@@ -72,8 +72,8 @@ public class FetchEventCommentsRunnable extends BaseRunnable {
 										comment.getCommenterId()) == null) {
 							try {
 								ZeppaUserInfo commenter = api
-										.getZeppaUserInfo(
-												comment.getCommenterId(), credential.getToken())
+										.fetchZeppaUserInfoByParentId(
+												credential.getToken(), comment.getCommenterId())
 										.execute();
 								// Add this commenter singleton with the impression that there is no relationship to this user
 								// Assumes if there were, a mediator for this user would already be held

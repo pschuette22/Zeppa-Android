@@ -45,7 +45,6 @@ public class DefaultEventViewActivity extends AbstractEventViewActivity
 		}
 
 		findViewById(R.id.quickaction_join).setOnClickListener(this);
-		findViewById(R.id.quickaction_text).setOnClickListener(this);
 		findViewById(R.id.quickaction_watch).setOnClickListener(this);
 
 		if (eventMediator.guestsMayInvite()) {
@@ -183,10 +182,7 @@ public class DefaultEventViewActivity extends AbstractEventViewActivity
 			eventMediator.convertQuickActionBar(this, barView);
 
 			return;
-		case R.id.quickaction_text:
-			((DefaultZeppaEventMediator) eventMediator)
-					.onTextButtonClicked(this);
-			return;
+
 		case R.id.quickaction_watch:
 			((DefaultZeppaEventMediator) eventMediator)
 					.onWatchButtonClicked(this);

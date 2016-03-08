@@ -11,8 +11,6 @@ import android.os.AsyncTask;
 import android.provider.CalendarContract.Instances;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
 import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEventToUserRelationship;
 import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserToUserRelationship;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.ZeppaApplication;
@@ -29,7 +26,6 @@ import com.minook.zeppa.activity.DefaultEventViewActivity;
 import com.minook.zeppa.runnable.ThreadManager;
 import com.minook.zeppa.runnable.UpdateEventToUserRelationshipRunnable;
 import com.minook.zeppa.singleton.EventTagSingleton;
-import com.minook.zeppa.singleton.ZeppaEventSingleton;
 
 import java.util.List;
 
@@ -75,27 +71,9 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 				.findViewById(R.id.quickaction_watch);
 		watchCheckBox.setTag(this);
 
-		TextView textButton = (TextView) barView
-				.findViewById(R.id.quickaction_text);
-		textButton.setTag(this);
 		CheckBox joinCheckBox = (CheckBox) barView
 				.findViewById(R.id.quickaction_join);
 		joinCheckBox.setTag(this);
-
-		AbstractZeppaUserMediator mediator = getHostMediator();
-
-		StringBuilder builder = new StringBuilder();
-
-		try {
-			mediator.getPrimaryPhoneNumber();
-			builder.append(context.getResources().getString(R.string.text));
-		} catch (NullPointerException e) {
-			builder.append(context.getResources().getString(R.string.email));
-		}
-
-		builder.append(" ");
-		builder.append(mediator.getGivenName());
-		textButton.setText(builder.toString());
 
 		watchCheckBox.setChecked(isWatching());
 		joinCheckBox.setChecked(isAttending());
@@ -241,22 +219,11 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 
 	}
 
-	public void onTextButtonClicked(AuthenticatedFragmentActivity activity) {
 
-		try {
-
-			((DefaultUserInfoMediator) getHostMediator())
-					.sendTextMessage(activity);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			((DefaultUserInfoMediator) getHostMediator()).sendEmail(activity,
-					null);
-
-		}
-
-	}
-
+	/**
+	 * Clicked when the user presses the join button on interface mapped to this Event
+	 * @param activity
+	 */
 	public void onJoinButtonClicked(AuthenticatedFragmentActivity activity) {
 
 		if (isAttending()) {
@@ -284,47 +251,47 @@ public class DefaultZeppaEventMediator extends AbstractZeppaEventMediator {
 	 * Always make calls through this to keep everything up to date
 	 */
 
-	/**
-	 * This starts a thread to persist the current state of the relationship
-	 * object
-	 */
-	public void updateRelationshipInAsync(ZeppaApplication application,
-			GoogleAccountCredential credential,
-			ZeppaEventToUserRelationship relationship) {
-
-		this.relationship = relationship;
-		ThreadManager.execute(new UpdateEventToUserRelationshipRunnable(
-				application, credential, relationship));
-
-	}
-
-	/**
-	 * Called when watch button is clicked to appropriately handle
-	 */
-
-	public void updateQuickActionBarUI(ViewParent parent) {
-
-		ZeppaEventSingleton.getInstance().notifyObservers();
-
-		if (parent instanceof ViewGroup) {
-
-			ViewGroup group = (ViewGroup) parent;
-			CheckBox watch = (CheckBox) group
-					.findViewById(R.id.quickaction_watch);
-			CheckBox join = (CheckBox) group
-					.findViewById(R.id.quickaction_join);
-
-			try {
-				watch.setChecked(relationship.getIsWatching());
-				join.setChecked(relationship.getIsAttending());
-
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-			}
-
-		}
-
-	}
+//	/**
+//	 * This starts a thread to persist the current state of the relationship
+//	 * object
+//	 */
+//	public void updateRelationshipInAsync(ZeppaApplication application,
+//			GoogleAccountCredential credential,
+//			ZeppaEventToUserRelationship relationship) {
+//
+//		this.relationship = relationship;
+//		ThreadManager.execute(new UpdateEventToUserRelationshipRunnable(
+//				application, credential, relationship));
+//
+//	}
+//
+//	/**
+//	 * Called when watch button is clicked to appropriately handle
+//	 */
+//
+//	public void updateQuickActionBarUI(ViewParent parent) {
+//
+//		ZeppaEventSingleton.getInstance().notifyObservers();
+//
+//		if (parent instanceof ViewGroup) {
+//
+//			ViewGroup group = (ViewGroup) parent;
+//			CheckBox watch = (CheckBox) group
+//					.findViewById(R.id.quickaction_watch);
+//			CheckBox join = (CheckBox) group
+//					.findViewById(R.id.quickaction_join);
+//
+//			try {
+//				watch.setChecked(relationship.getIsWatching());
+//				join.setChecked(relationship.getIsAttending());
+//
+//			} catch (NullPointerException e) {
+//				e.printStackTrace();
+//			}
+//
+//		}
+//
+//	}
 
 	public class DetermineAndSetConflictStatus extends
 			AsyncTask<Void, Void, ConflictStatus> {

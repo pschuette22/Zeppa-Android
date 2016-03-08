@@ -90,8 +90,8 @@ public class NotificationReceivedRunnable extends BaseRunnable {
 			* */
 			if (mediator == null) {
 				userInfo = api
-						.fetchZeppaUserInfoByParentId(
-								notification.getSenderId(), credential.getToken()).execute();
+						.fetchZeppaUserInfoByParentId(credential.getToken(),
+								notification.getSenderId()).execute();
 				Zeppaclientapi.ListZeppaUserToUserRelationship relationshipTask = api
 						.listZeppaUserToUserRelationship(credential.getToken());
 				relationshipTask.setFilter("(creatorId == " + userId

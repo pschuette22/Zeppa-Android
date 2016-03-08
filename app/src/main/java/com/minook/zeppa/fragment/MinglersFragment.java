@@ -23,6 +23,8 @@ import com.minook.zeppa.adapter.MinglerListAdapter;
 import com.minook.zeppa.singleton.ZeppaUserSingleton;
 import com.minook.zeppa.singleton.ZeppaUserSingleton.OnMinglersLoadListener;
 
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
@@ -69,10 +71,10 @@ public class MinglersFragment extends Fragment implements OnClickListener,
 		pullToRefreshLayout = (PullToRefreshLayout) layout
 				.findViewById(R.id.minglersfragment_ptr);
 
-//		ActionBarPullToRefresh.from(getActivity())
-//				.options(Options.create().scrollDistance(.4f).build())
-//				.allChildrenArePullable().listener(this)
-//				.setup(pullToRefreshLayout);
+		ActionBarPullToRefresh.from(getActivity())
+				.options(Options.create().scrollDistance(.4f).build())
+				.allChildrenArePullable().listener(this)
+				.setup(pullToRefreshLayout);
 		
 
 		

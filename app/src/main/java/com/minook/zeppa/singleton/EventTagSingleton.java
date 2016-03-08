@@ -272,6 +272,7 @@ public class EventTagSingleton {
 
 			return ((MyEventTagMediator) mediator);
 		} else {
+			// TODO: Notify the user that the tag was not inserted successfully
 			return null;
 		}
 

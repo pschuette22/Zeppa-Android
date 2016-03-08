@@ -379,7 +379,7 @@ public class MainActivity extends AuthenticatedFragmentActivity implements
 
 					break;
 
-				case 2: // Minglers
+				case 2: // People
 					iconResource = R.drawable.ic_minglers;
 
 					break;

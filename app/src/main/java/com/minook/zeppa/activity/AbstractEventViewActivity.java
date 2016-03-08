@@ -128,7 +128,7 @@ public abstract class AbstractEventViewActivity extends
 
 		// UI Elements
 		ActionBar actionBar = getSupportActionBar();
-		actionBar.setTitle(getResources().getString(R.string.title_details));
+		actionBar.setTitle(getResources().getString(R.string.squad_pod));
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(false);
@@ -469,17 +469,18 @@ public abstract class AbstractEventViewActivity extends
 
 	}
 
+	/**
+	 *
+	 * Inflate a dialog showing who is attending
+	 *
+	 */
 	private void showAttendingDialog() {
 
 		List<Long> attendingMediators = eventMediator.getAttendingUserIds();
 		List<DefaultUserInfoMediator> mediators = ZeppaUserSingleton
 				.getInstance().getMinglersFrom(attendingMediators);
-		if (mediators.isEmpty()) {
+		if (!mediators.isEmpty()) {
 
-			Toast.makeText(this, "Nobody joined yet", Toast.LENGTH_SHORT)
-					.show();
-
-		} else {
 			MinglerListAdapter mAdapter = new MinglerListAdapter(this,
 					mediators);
 
@@ -500,10 +501,16 @@ public abstract class AbstractEventViewActivity extends
 						}
 					});
 			builder.show();
+
+		} else {
+			// TODO: should we open invite page?
 		}
 
 	}
 
+	/**
+	 * Post a comment in the discussion board
+	 */
 	private void postComment() {
 		if (isConnected()) {
 			String message = commentText.getText().toString().trim();

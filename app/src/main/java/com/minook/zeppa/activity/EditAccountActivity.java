@@ -77,8 +77,8 @@ public class EditAccountActivity extends AbstractAccountBaseActivity {
 		imageUrl = myMediator.getUserInfo().getImageUrl();
 		myMediator.setImageWhenReady(userImage);
 		try {
-			userPhoneNumber = myMediator.getUnformattedPhoneNumber();
-			numberField.setText(myMediator.getPrimaryPhoneNumber());
+			userPhoneNumber = myMediator.getPhoneNumber();
+			numberField.setText(userPhoneNumber);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			numberField.setVisibility(View.GONE);

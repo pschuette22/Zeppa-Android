@@ -7,6 +7,7 @@ import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.minook.zeppa.ApiClientHelper;
+import com.minook.zeppa.Utils;
 
 import java.io.IOException;
 
@@ -59,20 +60,27 @@ public class MyZeppaUserMediator extends AbstractZeppaUserMediator {
 		return user.getKey().getId();
 	}
 
-	@Override
+	/**
+	 * Get the Auth email for this user
+	 * @return
+	 */
 	public String getGmail() {
-		return user.getUserInfo().getGoogleAccountEmail();
+		return user.getAuthEmail();
 	}
 
-	@Override
-	public String getUnformattedPhoneNumber() throws NullPointerException {
+	/**
+	 * Get the untouched phone number for this user
+	 * @return
+	 * @throws NullPointerException
+	 */
+	public String getPhoneNumber() throws NullPointerException {
 
-		String phoneNumber = user.getUserInfo().getPrimaryUnformattedNumber();
+		String phoneNumber = user.getPhoneNumber();
 		if (phoneNumber == null || phoneNumber.isEmpty()) {
 			throw new NullPointerException();
 		}
 
-		return phoneNumber;
+		return Utils.formatPhoneNumber(phoneNumber);
 	}
 
 	@Override
@@ -110,9 +118,9 @@ public class MyZeppaUserMediator extends AbstractZeppaUserMediator {
 		if (isValidString(imageUrl)) {
 			info.setImageUrl(imageUrl);
 		}
-		
+
 		if(isValidString(primaryUnformattedNumber)){
-			info.setPrimaryUnformattedNumber(primaryUnformattedNumber);
+			userCopy.setPhoneNumber(primaryUnformattedNumber);
 		}
 
 		userCopy.setUserInfo(info);

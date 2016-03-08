@@ -180,7 +180,7 @@ public class AuthenticatedFragmentActivity extends AppCompatActivity implements
 		
 		if(loggedInAccount == null){
 			// App Should crash if activity wants a credential and user is not logged in
-			throw new NullPointerException("No Logged In Account");
+			throw new NullPointerException("Not Logged In");
 		}
 		
 		credential.setSelectedAccountName(loggedInAccount);

@@ -82,7 +82,7 @@ public class FetchMinglerRelationshipsRunnable extends BaseRunnable {
 				ZeppaUserToUserRelationship relationship = iterator.next();
 				if(ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(relationship.getSubjectId()) == null){
 					try {
-						ZeppaUserInfo info = api.getZeppaUserInfo(relationship.getSubjectId(), credential.getToken()).execute();
+						ZeppaUserInfo info = api.fetchZeppaUserInfoByParentId(credential.getToken(),relationship.getSubjectId()).execute();
 						ZeppaUserSingleton.getInstance().addDefaultZeppaUserMediator(info, relationship);
 						
 					} catch (IOException e){
@@ -141,7 +141,7 @@ public class FetchMinglerRelationshipsRunnable extends BaseRunnable {
 				ZeppaUserToUserRelationship relationship = iterator.next();
 				if(ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(relationship.getCreatorId()) == null){
 					try {
-						ZeppaUserInfo info = api.getZeppaUserInfo(relationship.getSubjectId(), credential.getToken()).execute();
+						ZeppaUserInfo info = api.fetchZeppaUserInfoByParentId(credential.getToken(), relationship.getSubjectId()).execute();
 						ZeppaUserSingleton.getInstance().addDefaultZeppaUserMediator(info, relationship);
 						
 					} catch (IOException e){

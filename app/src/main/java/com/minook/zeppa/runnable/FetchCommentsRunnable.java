@@ -71,9 +71,10 @@ public class FetchCommentsRunnable extends BaseRunnable {
 									.getAbstractUserMediatorById(
 											comment.getCommenterId()) == null) {
 								ZeppaUserInfo info = api
-										.getZeppaUserInfo(
+										.fetchZeppaUserInfoByParentId(
+												credential.getToken(),
 												comment.getCommenterId()
-														.longValue(), credential.getToken()).execute();
+														.longValue()).execute();
 								ZeppaUserSingleton
 										.getInstance()
 										.addDefaultZeppaUserMediator(info, null);

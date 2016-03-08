@@ -97,7 +97,7 @@ public class FetchEventToUserRelationshipsRunnable extends BaseRunnable {
 						.getAbstractUserMediatorById(relationship.getUserId()) == null) {
 					try {
 						ZeppaUserInfo info = api.fetchZeppaUserInfoByParentId(
-								relationship.getUserId(), credential.getToken()).execute();
+								credential.getToken(),relationship.getUserId()).execute();
 
 						ZeppaUserSingleton.getInstance()
 								.addDefaultZeppaUserMediator(info, null);

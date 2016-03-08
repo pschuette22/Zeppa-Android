@@ -31,6 +31,7 @@ public class InsertZeppaUserToUserRelationshipRunnable extends BaseRunnable {
 			
 		} catch (IOException | GoogleAuthException e){
 			e.printStackTrace();
+			// TODO: notify the user and update the UI
 		}
 		
 	}

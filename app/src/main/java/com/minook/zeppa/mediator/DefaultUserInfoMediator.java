@@ -1,15 +1,12 @@
 package com.minook.zeppa.mediator;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserInfo;
 import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaUserToUserRelationship;
@@ -81,22 +78,8 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 	}
 
 	@Override
-	public String getGmail() {
-		return userInfo.getGoogleAccountEmail();
-	}
-
-	@Override
 	public Long getUserId() {
 		return userInfo.getKey().getParent().getId();
-	}
-
-	@Override
-	public String getUnformattedPhoneNumber() throws NullPointerException {
-		String phoneNumber = userInfo.getPrimaryUnformattedNumber();
-		if (phoneNumber == null || phoneNumber.isEmpty()) {
-			throw new NullPointerException();
-		}
-		return phoneNumber;
 	}
 
 	@Override
@@ -136,7 +119,8 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 		return relationship.getRelationshipType().equals("MINGLING");
 	}
 
-	public boolean requestPending() {
+
+	public boolean isPendingRequest() {
 		if (relationship == null)
 			return false;
 		else
@@ -206,7 +190,7 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 
 		requestConnect.setTag(this);
 
-		if (requestPending()) {
+		if (isPendingRequest()) {
 			requestConnect.setChecked(true);
 			requestConnect.setText("Requested");
 		} else {
@@ -316,31 +300,31 @@ public class DefaultUserInfoMediator extends AbstractZeppaUserMediator {
 
 	}
 
-	/**
-	 * Navigate user to text message conversations to this user
-	 * @param context
-	 */
-	public void sendTextMessage(Context context) {
-		try {
-		Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", getPrimaryPhoneNumber(), null));
-		context.startActivity(smsIntent);
-		} catch (ActivityNotFoundException e){
-			Toast.makeText(context, "Can't send SMS", Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	/**
-	 * Navigate user to default email client writing a message to this user
-	 * @param context
-	 * @param emailSubject
-	 */
-	public void sendEmail(Context context, String emailSubject) {
-		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-				"mailto", getGmail(), null));
-		emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
-		context.startActivity(Intent.createChooser(emailIntent, "Email "
-				+ getGivenName()));
-	}
+//	/**
+//	 * Navigate user to text message conversations to this user
+//	 * @param context
+//	 */
+//	public void sendTextMessage(Context context) {
+//		try {
+//		Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", getPrimaryPhoneNumber(), null));
+//		context.startActivity(smsIntent);
+//		} catch (ActivityNotFoundException e){
+//			Toast.makeText(context, "Can't send SMS", Toast.LENGTH_SHORT).show();
+//		}
+//	}
+//
+//	/**
+//	 * Navigate user to default email client writing a message to this user
+//	 * @param context
+//	 * @param emailSubject
+//	 */
+//	public void sendEmail(Context context, String emailSubject) {
+//		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+//				"mailto", getGmail(), null));
+//		emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
+//		context.startActivity(Intent.createChooser(emailIntent, "Email "
+//				+ getGivenName()));
+//	}
 
 	/**
 	 * This method returns an intent that points to UserActivity with this

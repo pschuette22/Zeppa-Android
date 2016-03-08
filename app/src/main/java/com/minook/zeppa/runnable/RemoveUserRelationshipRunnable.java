@@ -29,7 +29,7 @@ public class RemoveUserRelationshipRunnable extends BaseRunnable {
 		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		try {
-			api.removeZeppaUserToUserRelationship(relationshipId, credential.getToken())
+			api.removeZeppaUserToUserRelationship(relationshipId,credential.getToken())
 					.execute();
 
 		} catch (IOException | GoogleAuthException e) {

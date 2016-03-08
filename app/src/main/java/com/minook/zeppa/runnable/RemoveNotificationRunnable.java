@@ -25,7 +25,7 @@ public class RemoveNotificationRunnable extends BaseRunnable {
 		Zeppaclientapi api = helper.buildClientEndpoint();
 
 		try {
-			api.removeZeppaNotification(notificationId, credential.getToken()).execute();
+			api.removeZeppaNotification(notificationId,credential.getToken()).execute();
 			application.getCurrentActivity().runOnUiThread(new Runnable(){
 
 				@Override

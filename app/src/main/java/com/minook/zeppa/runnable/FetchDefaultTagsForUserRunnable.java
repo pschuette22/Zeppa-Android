@@ -82,7 +82,7 @@ public class FetchDefaultTagsForUserRunnable extends BaseRunnable {
 		} while (cursor != null);
 
 
-		filter = "userId == " + userIdMingler;
+		filter = "ownerId == " + userIdMingler;
 		cursor = null;
 		limit = Integer.valueOf(50);
 		String ordering = "created desc";

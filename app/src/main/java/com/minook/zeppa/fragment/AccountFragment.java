@@ -113,7 +113,7 @@ public class AccountFragment extends Fragment implements OnClickListener {
 		displayName.setText(userMediator.getDisplayName());
 
 		try {
-			phoneNumber.setText(userMediator.getPrimaryPhoneNumber());
+			phoneNumber.setText(userMediator.getPhoneNumber());
 		} catch (NullPointerException e) {
 			phoneNumber.setVisibility(View.GONE);
 		}

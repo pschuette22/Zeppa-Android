@@ -29,17 +29,9 @@ public abstract class AbstractZeppaUserMediator  implements Comparable<AbstractZ
 
 	public abstract String getDisplayName();
 
-	public abstract String getUnformattedPhoneNumber();
-
-	public abstract String getGmail();
-
 	protected abstract String getImageUrl();
 
 	public abstract Long getUserId();
-
-	public String getPrimaryPhoneNumber() throws NullPointerException {
-		return Utils.formatPhoneNumber(getUnformattedPhoneNumber());
-	}
 	
 	public void imageUpdated(){
 		loadingImage = true;

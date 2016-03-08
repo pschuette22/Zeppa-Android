@@ -70,7 +70,7 @@ public class FetchMoreEventsRunnable extends BaseRunnable {
 							
 							try {
 								if(ZeppaUserSingleton.getInstance().getAbstractUserMediatorById(relationship.getEventHostId().longValue()) == null){
-									ZeppaUserInfo info = api.getZeppaUserInfo(relationship.getEventHostId().longValue(), credential.getToken()).execute();
+									ZeppaUserInfo info = api.fetchZeppaUserInfoByParentId(credential.getToken(),relationship.getEventHostId().longValue()).execute();
 									ZeppaUserSingleton.getInstance().addDefaultZeppaUserMediator(info, null);
 								}
 								

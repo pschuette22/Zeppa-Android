@@ -124,7 +124,7 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 											relationship.getEventHostId()) == null) {
 								ZeppaUserInfo hostInfo = api
 										.fetchZeppaUserInfoByParentId(
-												relationship.getUserId(), credential.getToken())
+												credential.getToken(),relationship.getEventHostId())
 										.execute();
 								ZeppaUserSingleton.getInstance()
 										.addDefaultZeppaUserMediator(hostInfo,
@@ -195,8 +195,8 @@ public class FetchInitialEventsRunnable extends BaseRunnable {
 										.getAbstractUserMediatorById(
 												relationship.getEventHostId()) == null) {
 									ZeppaUserInfo hostInfo = api
-											.getZeppaUserInfo(
-													relationship.getUserId(), credential.getToken())
+											.fetchZeppaUserInfoByParentId(
+													credential.getToken(), relationship.getUserId())
 											.execute();
 									ZeppaUserSingleton.getInstance()
 											.addDefaultZeppaUserMediator(

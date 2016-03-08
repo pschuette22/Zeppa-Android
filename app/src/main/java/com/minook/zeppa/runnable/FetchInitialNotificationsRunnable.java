@@ -69,7 +69,7 @@ public class FetchInitialNotificationsRunnable extends BaseRunnable {
 											notification.getSenderId().longValue()) == null) {
 								ZeppaUserInfo info = api
 										.fetchZeppaUserInfoByParentId(
-												notification.getSenderId(), credential.getToken())
+												credential.getToken(),notification.getSenderId())
 										.execute();
 								ZeppaUserSingleton
 										.getInstance()
