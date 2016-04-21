@@ -25,6 +25,7 @@ import com.minook.zeppa.adapter.MinglerFinderAdapter;
 import com.minook.zeppa.mediator.AbstractZeppaUserMediator;
 import com.minook.zeppa.mediator.DefaultUserInfoMediator;
 import com.minook.zeppa.mediator.MyZeppaUserMediator;
+import com.minook.zeppa.mediator.VendorInfoMediator;
 import com.minook.zeppa.runnable.FindMinglersRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
 
@@ -48,6 +49,7 @@ public class ZeppaUserSingleton {
 
 	private MyZeppaUserMediator userMediator;
 	private List<DefaultUserInfoMediator> heldUserMediators;
+	private List<VendorInfoMediator> vendorInfoMediators;
 	private Date lastFindMinglersTaskExecutionDate;
 	private boolean hasLoadedInitial;
 
@@ -67,6 +69,7 @@ public class ZeppaUserSingleton {
 		lastFindMinglersTaskExecutionDate = null;
 		heldUserMediators = new ArrayList<DefaultUserInfoMediator>();
 		minglerLoadListeners = new ArrayList<OnMinglersLoadListener>();
+		vendorInfoMediators = new ArrayList<VendorInfoMediator>();
 
 	}
 
@@ -304,6 +307,24 @@ public class ZeppaUserSingleton {
 //		}
 
 		return emails;
+	}
+
+	/**
+	 * Get the vendor mediator by id or null if its not help
+	 * @param id
+	 * @return
+	 */
+	public VendorInfoMediator getVendorById(long id) {
+		for(VendorInfoMediator mediator: vendorInfoMediators){
+			if(mediator.getUserId().longValue()==id){
+				return mediator;
+			}
+		}
+		return null;
+	}
+
+	public void addVendorInfoMediator(VendorInfoMediator mediator) {
+		this.vendorInfoMediators.add(mediator);
 	}
 
 	private boolean listContainsId(List<Long> list, long id) {

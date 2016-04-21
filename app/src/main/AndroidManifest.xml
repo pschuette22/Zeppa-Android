@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="15"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="23" />
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
 
     <!-- android:icon="@drawable/zeppa_apptile" -->
@@ -39,15 +40,18 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAdzV3Wi4EVmmF34N-cwEEgic4lhj8AvCY"/>
 
         <activity
             android:name=".activity.AuthenticatedFragmentActivity"
             android:theme="@style/CustomActionBarTheme" >
         </activity>
-         <activity
-         android:name=".activity.AbstractAccountBaseActivity"
-         android:theme="@style/CustomActionBarTheme" >
-         </activity>
+         <!--<activity-->
+         <!--android:name=".activity.AbstractAccountBaseActivity"-->
+         <!--android:theme="@style/CustomActionBarTheme" >-->
+         <!--</activity>-->
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/app_name"

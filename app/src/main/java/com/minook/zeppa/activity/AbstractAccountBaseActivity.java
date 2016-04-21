@@ -16,28 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appspot.zeppa_cloud_1821.zeppaclientapi.Zeppaclientapi;
-import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.PhotoInfo;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.minook.zeppa.ApiClientHelper;
-import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -238,82 +221,82 @@ public abstract class AbstractAccountBaseActivity extends
 		protected String doInBackground(Void... params) {
 
 			String result = null;
-			try {
-
-				HttpClient client = new DefaultHttpClient();
-				HttpGet get = new HttpGet(Constants.IMAGEUPLOAD_URL);
-				HttpResponse response = client.execute(get);
-
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(
-								response.getEntity().getContent(), "UTF-8"));
-				String sResponse;
-				StringBuilder s = new StringBuilder();
-				while ((sResponse = reader.readLine()) != null) {
-					s = s.append(sResponse);
-				}
-
-				String uploadUrl = s.toString();
-
-				HttpPost postRequest = new HttpPost(uploadUrl);
-				MultipartEntityBuilder builder = MultipartEntityBuilder
-						.create();
-				builder.setBoundary(Constants.MULTIPARTENTITY_BOUNDRY);
-				builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-
-				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-				if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100,
-						stream)) {
-					byte[] byteArray = stream.toByteArray();
-
-					// builder.addTextBody("name", imageTitle);
-					// FormBodyPart part = new FormBodyPart("data", body)
-
-                    builder.addBinaryBody("data", byteArray, ContentType.create("image/jpeg"), null);
-
-					postRequest.setEntity(builder.build());
-
-					HttpResponse response1 = client.execute(postRequest);
-
-					InputStream instream = response1.getEntity().getContent();
-					String json = convertStreamToString(instream);
-
-					JSONObject object = new JSONObject(json);
-					String blobKey = object.getString("blobKey");
-					String servingUrl = object.getString("servingUrl");
-
-					if (servingUrl != null && !servingUrl.isEmpty()) {
-						PhotoInfo photo = new PhotoInfo();
-						photo.setBlobKey(blobKey);
-						photo.setUrl(servingUrl);
-						photo.setOwnerEmail(userGmail);
-
-						// Build the api endpoint class
-						ApiClientHelper helper = new ApiClientHelper();
-						Zeppaclientapi api = helper.buildClientEndpoint();
-
-						// Insert photo info
-						photo = api.insertPhotoInfo(credential.getToken(), photo).execute();
-
-						result = photo.getUrl();
-					}
-
-				} else {
-					//
-				}
-
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//
+//				HttpClient client = new DefaultHttpClient();
+//				HttpGet get = new HttpGet(Constants.IMAGEUPLOAD_URL);
+//				HttpResponse response = client.execute(get);
+//
+//				BufferedReader reader = new BufferedReader(
+//						new InputStreamReader(
+//								response.getEntity().getContent(), "UTF-8"));
+//				String sResponse;
+//				StringBuilder s = new StringBuilder();
+//				while ((sResponse = reader.readLine()) != null) {
+//					s = s.append(sResponse);
+//				}
+//
+//				String uploadUrl = s.toString();
+//
+//				HttpPost postRequest = new HttpPost(uploadUrl);
+//				MultipartEntityBuilder builder = MultipartEntityBuilder
+//						.create();
+//				builder.setBoundary(Constants.MULTIPARTENTITY_BOUNDRY);
+//				builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+//
+//				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//				if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100,
+//						stream)) {
+//					byte[] byteArray = stream.toByteArray();
+//
+//					// builder.addTextBody("name", imageTitle);
+//					// FormBodyPart part = new FormBodyPart("data", body)
+//
+//                    builder.addBinaryBody("data", byteArray, ContentType.create("image/jpeg"), null);
+//
+//					postRequest.setEntity(builder.build());
+//
+//					HttpResponse response1 = client.execute(postRequest);
+//
+//					InputStream instream = response1.getEntity().getContent();
+//					String json = convertStreamToString(instream);
+//
+//					JSONObject object = new JSONObject(json);
+//					String blobKey = object.getString("blobKey");
+//					String servingUrl = object.getString("servingUrl");
+//
+//					if (servingUrl != null && !servingUrl.isEmpty()) {
+//						PhotoInfo photo = new PhotoInfo();
+//						photo.setBlobKey(blobKey);
+//						photo.setUrl(servingUrl);
+//						photo.setOwnerEmail(userGmail);
+//
+//						// Build the api endpoint class
+//						ApiClientHelper helper = new ApiClientHelper();
+//						Zeppaclientapi api = helper.buildClientEndpoint();
+//
+//						// Insert photo info
+//						photo = api.insertPhotoInfo(credential.getToken(), photo).execute();
+//
+//						result = photo.getUrl();
+//					}
+//
+//				} else {
+//					//
+//				}
+//
+//			} catch (ClientProtocolException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (JSONException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 
 			return result;
 

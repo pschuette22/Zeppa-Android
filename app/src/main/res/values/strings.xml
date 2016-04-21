@@ -14,7 +14,7 @@
     <string name="activities">Activities</string>
 
     <!-- B -->
-    <string name="birthday:">Birthday:</string>
+    <!--<string name="birthday:">Birthday:</string>-->
 
     <!-- C -->
     <string name="calendar_list_title">Calendars Synced</string>
@@ -41,7 +41,7 @@
     <!-- E -->
     <string name="edit">Edit</string>
     <string name="email">Email</string>
-    <string name="email:">Email:</string>
+    <!--<string name="email:">Email:</string>-->
     <string name="enter_email_hint">Enter Google Account Email Address</string>
     <string name="enter_phone">Phone Number</string>
     <string name="error_deletetag">Error Deleting Tag</string>
@@ -126,7 +126,7 @@
     <string name="password">Password</string>
     <string name="pending_requests">Pending Friend Requests</string>
     <string name="people">People</string>
-    <string name="phone:">Phone:</string>
+    <!--<string name="phone:">Phone:</string>-->
     <string name="post">Post</string>
     <string name="posting_event">Posting Event</string>
     <string name="private_">Private</string>

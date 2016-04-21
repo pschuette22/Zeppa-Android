@@ -1,21 +1,23 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 'Google Inc.:Google APIs:21'
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+
+//    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.minook.zeppa"
         minSdkVersion 15
-        targetSdkVersion 21
+        targetSdkVersion 23
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt', 'proguard-google-api-client.txt'
-        }
-    }
+//    buildTypes {
+//        release {
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt', 'proguard-google-api-client.txt'
+//        }
+//    }
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
@@ -29,6 +31,7 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/notice.txt'
     }
+
 
 }
 
@@ -62,30 +65,18 @@ dependencies {
     compile project(':calendar-lib')
     compile project(':pagerslidingtab_lib')
     compile project(':pulltorefresh_lib')
-    compile files('libs/deviceinfoendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/eventcommentendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/eventtagendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/eventtagfollowendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/photoinfoendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/zeppaeventendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/zeppaeventtouserrelationshipendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/zeppafeedbackendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/zeppanotificationendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/zeppauserendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/zeppauserinfoendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/zeppausertouserrelationshipendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile 'com.google.android.gms:play-services-base:7.5.0'
-    compile 'com.google.android.gms:play-services-gcm:7.5.0'
-    compile 'com.google.android.gms:play-services-plus:7.5.0'
-    compile 'com.google.android.gms:play-services-identity:7.5.0'
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:support-v13:22.2.0'
+    compile files('libs/zeppaclientapi-v1-1.21.0-SNAPSHOT.jar')
+    compile 'com.google.android.gms:play-services-base:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    compile 'com.google.android.gms:play-services-plus:8.4.0'
+    compile 'com.google.android.gms:play-services-identity:8.4.0'
+    compile 'com.google.android.gms:play-services-location:8.4.0'
+    compile 'com.google.android.gms:play-services-maps:8.4.0'
+    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:support-v13:23.0.0'
     compile 'com.google.http-client:google-http-client-gson:1.20.0'
-    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.google.code.gson:gson:2.4'
     compile 'com.google.api-client:google-api-client:1.19.1'
     compile 'org.apache.james:apache-mime4j:0.7.2'
-    //    compile 'org.apache.httpcomponents:httpclient:4.4'
-    //    compile files('libs/zeppausertouserrelationshipendpoint-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/zeppaclientapi-v1-1.20.0-SNAPSHOT.jar')
-    compile files('libs/zeppaclientapi-v1-1.21.0-SNAPSHOT.jar')
+//    compile 'org.apache.httpcomponents:httpclient:4.4'
 }

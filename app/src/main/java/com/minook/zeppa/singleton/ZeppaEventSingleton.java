@@ -44,6 +44,9 @@ public class ZeppaEventSingleton {
 	private static ZeppaEventSingleton singleton;
 
 	private List<AbstractZeppaEventMediator> eventMediators;
+
+
+
 	private List<OnZeppaEventLoadListener> eventLoadListeners;
 
 	private boolean hasLoadedInitialEvents;

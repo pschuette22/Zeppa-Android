@@ -116,9 +116,9 @@ public abstract class AbstractZeppaEventMediator implements
 		TextView eventlocation = (TextView) convertView
 				.findViewById(R.id.eventview_eventlocation);
 
-		title.setText(event.getTitle());
-		eventTime.setText(Utils.getDisplayDatesString(event.getStart()
-				.longValue(), event.getEnd().longValue()));
+		title.setText(getTitle());
+		eventTime.setText(Utils.getDisplayDatesString(getStartInMillis()
+				.longValue(), getEndInMillis().longValue()));
 
 		String location = getDisplayLocation();
 		if (location == null) {
@@ -127,7 +127,7 @@ public abstract class AbstractZeppaEventMediator implements
 			eventlocation.setText(location);
 		}
 
-		description.setText(event.getDescription());
+		description.setText(getDescription());
 
 		ImageView conflictIndicator = (ImageView) convertView
 				.findViewById(R.id.eventview_conflictionindicator);
@@ -322,8 +322,7 @@ public abstract class AbstractZeppaEventMediator implements
 	}
 
 	public String getTimeString() {
-		return Utils.getDisplayDatesString(event.getStart().longValue(), event
-				.getEnd().longValue());
+		return Utils.getDisplayDatesString(getStartInMillis().longValue(), getEndInMillis().longValue());
 	}
 
 	public boolean doesMatchEventId(long eventId) {

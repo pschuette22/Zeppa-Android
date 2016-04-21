@@ -2,193 +2,431 @@
 <items version="2" >
 
     <item
-        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson2/1.19.0/81dbf9795d387d5e80e55346582d5f2fb81a42eb/google-http-client-jackson2-1.19.0.jar"
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-android/1.17.0-rc/f3fc9acc57c2a55fd17a421710f564b73dabda21/google-http-client-android-1.17.0-rc.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="81dbf9795d387d5e80e55346582d5f2fb81a42eb">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-jackson2-1.19.0-09b24a0a0992736381b0c398416b18390525aed1.jar" />
+        revision="23.0.2"
+        sha1="f3fc9acc57c2a55fd17a421710f564b73dabda21">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-android-1.17.0-rc_e357f0a09575346f77cf5419d95b16fe48174a58.jar" />
     </item>
     <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/zeppaworkspace/calendar-lib/unspecified/jars/classes.jar"
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.4/695b63d702f505b9b916e02272e3b6381bade7f/gson-2.4.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="6fd449e3fc0034632257728904b5afa9a1605f31">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/classes-28d678ab33dba205a55615fac99b3f673859b2b9.jar" />
+        revision="23.0.2"
+        sha1="0695b63d702f505b9b916e02272e3b6381bade7f">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/gson-2.4_74e9cfd8ba980a2b17b30ff6cb6241344f33858b.jar" />
     </item>
     <item
-        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.guava/guava-jdk5/13.0/381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7/guava-jdk5-13.0.jar"
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client/1.19.1/b09ccfa9ac71b52b60ba4c1ab630150685d58c32/google-api-client-1.19.1.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/guava-jdk5-13.0-c642ec3730a80743e05b200bd526c613cd0894d7.jar" />
+        revision="23.0.2"
+        sha1="b09ccfa9ac71b52b60ba4c1ab630150685d58c32">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-api-client-1.19.1_1f354b8754ea5520821fbdc7e5c50ec061f194d4.jar" />
     </item>
     <item
-        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.1.3/f6c3aed1cdfa21b5c1737c915186ea93a95a58bd/jackson-core-2.1.3.jar"
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/libs/zeppaclientapi-v1-1.21.0-SNAPSHOT.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="f6c3aed1cdfa21b5c1737c915186ea93a95a58bd">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/jackson-core-2.1.3-f71bd798f8d76853192a007594b3e8ad2c152fe4.jar" />
+        sha1="077df973e9fa9fa22fff452e38c615ff7a244528">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/zeppaclientapi-v1-1.21.0-SNAPSHOT_a26ea926e6e0346770b7761ffa141f5cb4aa56bb.jar" />
     </item>
     <item
-        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.20.0/93d82db2bca534960253f43424b2ba9d7638b4d2/google-http-client-1.20.0.jar"
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="93d82db2bca534960253f43424b2ba9d7638b4d2">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-1.20.0-f7ceb11b2534dce75c662259485705ae16172e28.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.3.6/cf8bacbf0d476c7f2221f861269365b66447f7ec/httpmime-4.3.6.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="cf8bacbf0d476c7f2221f861269365b66447f7ec">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/httpmime-4.3.6-b0baacfa8f118cd287d600a039a5ddf125dfaeaf.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="d405025c600055237c171a0bbabaa49d69696573">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/classes-4a304eec5eba31f4be09bdd62c65ff31511f2118.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="8d736fefa22d896e84a268354b3ed48a42663150">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/classes-ec6d0303e7dd13c39bff575696723bc4658b9ce9.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/1.3.9/40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf/jsr305-1.3.9.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/jsr305-1.3.9-3ac7c76eede1cc7b991b3fea576f4e5555c29ae5.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client-android/1.17.0-rc/cfef30e5d361e2fd2892eed93a183db48dcae153/google-api-client-android-1.17.0-rc.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="cfef30e5d361e2fd2892eed93a183db48dcae153">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-api-client-android-1.17.0-rc-7acdada291717e0524e132be96bb22fac49abd48.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="272bc5d7063f24bc3a33ea1d318cde8f31f5ec4c">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/classes-6fe628bb007198898604b9e8306e4f5b08498a2c.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/classes-da5977adb2194cef8bdd1d2f0b3aef4740a9d18f.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3/5fc52c41ef0239d1093a1eb7c3697036183677ce/gson-2.3.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="5fc52c41ef0239d1093a1eb7c3697036183677ce">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/gson-2.3-0209f4dd0b75214e4550bc1d6fe33d47462f7656.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-3986b66e037df20435c8f86039a85b09a4e5f365.jar" />
+        revision="23.0.2"
+        sha1="fef2b3e4b6b1b0e5fe7b69fa137a5fa55a3182ab">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-base-8.4.0_3d02baa5bbcac3219506a5a9ce256c3d674b68fe.jar" />
     </item>
     <item
         jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-android/4.3.5/82edcaec6c7b4599eaeaaf11167ceea41db42f33/httpclient-android-4.3.5.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="82edcaec6c7b4599eaeaaf11167ceea41db42f33">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/httpclient-android-4.3.5-2613a436f83203c5e740bdc291761cb08409c6aa.jar" />
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/httpclient-android-4.3.5_2613a436f83203c5e740bdc291761cb08409c6aa.jar" />
     </item>
     <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v13/22.2.0/jars/classes.jar"
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/zeppaworkspace/pulltorefresh_lib/unspecified/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="9aa93835393824b436f366120c9ba8a0260ce75d">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/classes-ffc5c7786053566cc99f74fff45dc90e8108d118.jar" />
+        revision="23.0.2"
+        sha1="caec664d2218a72042c07dbf6c94a2f5c86276d0">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/zeppaworkspace-pulltorefresh_lib-unspecified_3b6d3aff9dd05dadcddb33243f15185b3b7c1eed.jar" />
     </item>
     <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v13/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.3.6/cf8bacbf0d476c7f2221f861269365b66447f7ec/httpmime-4.3.6.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="79a5b6d9fbab3b5fb4c6f86a1ed7a17722fd937b">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-b2e4766d826c5cfba5b564bd6b12e75bdbc31794.jar" />
+        sha1="cf8bacbf0d476c7f2221f861269365b66447f7ec">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/httpmime-4.3.6_b0baacfa8f118cd287d600a039a5ddf125dfaeaf.jar" />
     </item>
     <item
-        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-android/1.17.0-rc/f3fc9acc57c2a55fd17a421710f564b73dabda21/google-http-client-android-1.17.0-rc.jar"
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="2d7fe76982677315c4dc4edfb459c8ca718a9d4c">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-gcm-8.4.0_aa9452ddd945e83e54d14536869dcf84a37b465f.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client-android/1.17.0-rc/cfef30e5d361e2fd2892eed93a183db48dcae153/google-api-client-android-1.17.0-rc.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="f3fc9acc57c2a55fd17a421710f564b73dabda21">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-android-1.17.0-rc-e357f0a09575346f77cf5419d95b16fe48174a58.jar" />
+        sha1="cfef30e5d361e2fd2892eed93a183db48dcae153">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-api-client-android-1.17.0-rc_7acdada291717e0524e132be96bb22fac49abd48.jar" />
     </item>
     <item
         jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.oauth-client/google-oauth-client/1.19.0/d473a8962e14a707a3716637e4898bb2dd9643f2/google-oauth-client-1.19.0.jar"
         jumboMode="false"
-        revision="22.0.1"
+        revision="23.0.2"
         sha1="d473a8962e14a707a3716637e4898bb2dd9643f2">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-oauth-client-1.19.0-620e6181baf8480ca46bc472acd3b96e7329777c.jar" />
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-oauth-client-1.19.0_620e6181baf8480ca46bc472acd3b96e7329777c.jar" />
     </item>
     <item
-        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-gson/1.20.0/9204765f39000f6109c927ac66c7963bf9c7df19/google-http-client-gson-1.20.0.jar"
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-basement-8.4.0_ed9982894e05b4176e97b90c905214327d6ce44c.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/1.3.9/40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf/jsr305-1.3.9.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="9204765f39000f6109c927ac66c7963bf9c7df19">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-gson-1.20.0-455de095567966149abe36d2c0b64bd48b7293e2.jar" />
+        sha1="40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/jsr305-1.3.9_3ac7c76eede1cc7b991b3fea576f4e5555c29ae5.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.1.3/f6c3aed1cdfa21b5c1737c915186ea93a95a58bd/jackson-core-2.1.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f6c3aed1cdfa21b5c1737c915186ea93a95a58bd">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/jackson-core-2.1.3_f71bd798f8d76853192a007594b3e8ad2c152fe4.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a8412b654dab86d57bf90683367488211c8a81f1">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-location-8.4.0_dab1f7fef967798e793e85f77dbabfce3623a607.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/SDKs/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/23.0.0/support-annotations-23.0.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="990e7f98a7bad86a40b1f0bcfeb039023afd0839">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.0_d1c752147e26490f091251700c1574276d1be8fb.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="613298b7aa012f121ce542881c0a599ebd8078f2">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-measurement-8.4.0_33e87f597e6a8a83413ec10415b7fab81572d7a2.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="4fcf0b1879f8caf497c073e1432d398e9e2988c1">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.0.0_946145c3f9edf938057b22de3a6e0790da441a8a.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson2/1.19.0/81dbf9795d387d5e80e55346582d5f2fb81a42eb/google-http-client-jackson2-1.19.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="81dbf9795d387d5e80e55346582d5f2fb81a42eb">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-jackson2-1.19.0_09b24a0a0992736381b0c398416b18390525aed1.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b82b8e847173c28efffcd291b2a0b1ae9ad17fa4">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-identity-8.4.0_96944c4c83a66fea08cc4bef9502d7a45e708149.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.guava/guava-jdk5/13.0/381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7/guava-jdk5-13.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/guava-jdk5-13.0_c642ec3730a80743e05b200bd526c613cd0894d7.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/zeppaworkspace/calendar-lib/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a131cf4072911f4a2277a1647caac15cd06652b4">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/zeppaworkspace-calendar-lib-unspecified_28d678ab33dba205a55615fac99b3f673859b2b9.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v13/23.0.0/jars/libs/internal_impl-23.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5d4bccb885c8a89d066ecb6c4addb553a99a79a2">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.0_ae3e467203c59fd007b475c8411c97fae6c98c08.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/jars/libs/internal_impl-23.0.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8bd336eeae661e8311330284897ee07f8ebaa297">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.0_e7c9bfc615fa228324b726ee2737402875229e6d.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1a78298e7724d5440d210bcb946b3493250d354d">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-plus-8.4.0_1a5452ae01b511b304782832d12fe8fb2bb27e3a.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="04de44f90606c77f3b28cf44861f306290505aac">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-maps-8.4.0_6db90be3afbcbc7b30c51cd661e341b13506099d.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.20.0/93d82db2bca534960253f43424b2ba9d7638b4d2/google-http-client-1.20.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="93d82db2bca534960253f43424b2ba9d7638b4d2">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-1.20.0_f7ceb11b2534dce75c662259485705ae16172e28.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.3.6/cf8bacbf0d476c7f2221f861269365b66447f7ec/httpmime-4.3.6.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="cf8bacbf0d476c7f2221f861269365b66447f7ec">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/httpmime-4.3.6_b0baacfa8f118cd287d600a039a5ddf125dfaeaf.jar" />
     </item>
     <item
         jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client/1.19.1/b09ccfa9ac71b52b60ba4c1ab630150685d58c32/google-api-client-1.19.1.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="b09ccfa9ac71b52b60ba4c1ab630150685d58c32">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-api-client-1.19.1-1f354b8754ea5520821fbdc7e5c50ec061f194d4.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/SDKs/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-71c557b19b3efae406bd5635e495e882a12536b4.jar" />
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-api-client-1.19.1_1f354b8754ea5520821fbdc7e5c50ec061f194d4.jar" />
     </item>
     <item
         jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/zeppaworkspace/pagerslidingtab_lib/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="39d36885379a5c29d3abc6ecdd2e8d57a9f713ec">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/classes-7ff524d3b6e78c46207c3c1ee308ba48a0934ad3.jar" />
+        sha1="f68c2eadda8d4974511d78c4e1ebb4302f6cba90">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/zeppaworkspace-pagerslidingtab_lib-unspecified_7ff524d3b6e78c46207c3c1ee308ba48a0934ad3.jar" />
     </item>
     <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/libs/zeppaclientapi-v1-1.21.0-SNAPSHOT.jar"
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v13/23.0.0/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="356d581da298c8e07dab8fa0740e0e2c03b041f7">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/zeppaclientapi-v1-1.21.0-SNAPSHOT-a26ea926e6e0346770b7761ffa141f5cb4aa56bb.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/classes-297fe97cbe76263d0d5abc853690b5feb4afee64.jar" />
-    </item>
-    <item
-        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="a78183f30e769a98ab4820794f597763088d3065">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/classes-374f707393bd468db93b44b357d8161badbd992d.jar" />
+        sha1="bb0ac3f3ee2d71854501cc28e52cc84a20209b41">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.android.support-support-v13-23.0.0_22ceecc71751ed8ac650130592a59a591783bbd0.jar" />
     </item>
     <item
         jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/zeppaworkspace/pulltorefresh_lib/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="8b34d3398e38f89e9e37b6599b44e1b69ad4545d">
-        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/classes-3b6d3aff9dd05dadcddb33243f15185b3b7c1eed.jar" />
+        sha1="113f97a8ee0343659c343749886eb2d647c9c384">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/zeppaworkspace-pulltorefresh_lib-unspecified_3b6d3aff9dd05dadcddb33243f15185b3b7c1eed.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-gson/1.20.0/9204765f39000f6109c927ac66c7963bf9c7df19/google-http-client-gson-1.20.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9204765f39000f6109c927ac66c7963bf9c7df19">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-gson-1.20.0_455de095567966149abe36d2c0b64bd48b7293e2.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.oauth-client/google-oauth-client/1.19.0/d473a8962e14a707a3716637e4898bb2dd9643f2/google-oauth-client-1.19.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d473a8962e14a707a3716637e4898bb2dd9643f2">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-oauth-client-1.19.0_620e6181baf8480ca46bc472acd3b96e7329777c.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-android/4.3.5/82edcaec6c7b4599eaeaaf11167ceea41db42f33/httpclient-android-4.3.5.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="82edcaec6c7b4599eaeaaf11167ceea41db42f33">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/httpclient-android-4.3.5_2613a436f83203c5e740bdc291761cb08409c6aa.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.1.3/f6c3aed1cdfa21b5c1737c915186ea93a95a58bd/jackson-core-2.1.3.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="f6c3aed1cdfa21b5c1737c915186ea93a95a58bd">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/jackson-core-2.1.3_f71bd798f8d76853192a007594b3e8ad2c152fe4.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/1.3.9/40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf/jsr305-1.3.9.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/jsr305-1.3.9_3ac7c76eede1cc7b991b3fea576f4e5555c29ae5.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="fef2b3e4b6b1b0e5fe7b69fa137a5fa55a3182ab">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-base-8.4.0_3d02baa5bbcac3219506a5a9ce256c3d674b68fe.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/libs/zeppaclientapi-v1-1.21.0-SNAPSHOT.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="424655546325b3813f19070c81103428bb168d55">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/zeppaclientapi-v1-1.21.0-SNAPSHOT_a26ea926e6e0346770b7761ffa141f5cb4aa56bb.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="8413c27b45b7fe61dca4a98159f65e2cee215f5a">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.0.0_9f96ab1876b825e1db99bc031018328e4a43f13e.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.guava/guava-jdk5/13.0/381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7/guava-jdk5-13.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/guava-jdk5-13.0_c642ec3730a80743e05b200bd526c613cd0894d7.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="2d7fe76982677315c4dc4edfb459c8ca718a9d4c">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-gcm-8.4.0_aa9452ddd945e83e54d14536869dcf84a37b465f.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-basement-8.4.0_ed9982894e05b4176e97b90c905214327d6ce44c.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson2/1.19.0/81dbf9795d387d5e80e55346582d5f2fb81a42eb/google-http-client-jackson2-1.19.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="81dbf9795d387d5e80e55346582d5f2fb81a42eb">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-jackson2-1.19.0_09b24a0a0992736381b0c398416b18390525aed1.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="b82b8e847173c28efffcd291b2a0b1ae9ad17fa4">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-identity-8.4.0_96944c4c83a66fea08cc4bef9502d7a45e708149.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/SDKs/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/23.0.0/support-annotations-23.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="990e7f98a7bad86a40b1f0bcfeb039023afd0839">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.0_d1c752147e26490f091251700c1574276d1be8fb.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="613298b7aa012f121ce542881c0a599ebd8078f2">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-measurement-8.4.0_33e87f597e6a8a83413ec10415b7fab81572d7a2.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="a8412b654dab86d57bf90683367488211c8a81f1">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-location-8.4.0_dab1f7fef967798e793e85f77dbabfce3623a607.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/zeppaworkspace/pagerslidingtab_lib/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="31414a8c97356babc90dfcc426d17e7fb97d203c">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/zeppaworkspace-pagerslidingtab_lib-unspecified_7ff524d3b6e78c46207c3c1ee308ba48a0934ad3.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client-android/1.17.0-rc/cfef30e5d361e2fd2892eed93a183db48dcae153/google-api-client-android-1.17.0-rc.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="cfef30e5d361e2fd2892eed93a183db48dcae153">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-api-client-android-1.17.0-rc_7acdada291717e0524e132be96bb22fac49abd48.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8413c27b45b7fe61dca4a98159f65e2cee215f5a">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.0.0_9f96ab1876b825e1db99bc031018328e4a43f13e.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v13/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="bb0ac3f3ee2d71854501cc28e52cc84a20209b41">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.android.support-support-v13-23.0.0_22ceecc71751ed8ac650130592a59a591783bbd0.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-android/1.17.0-rc/f3fc9acc57c2a55fd17a421710f564b73dabda21/google-http-client-android-1.17.0-rc.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f3fc9acc57c2a55fd17a421710f564b73dabda21">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-android-1.17.0-rc_e357f0a09575346f77cf5419d95b16fe48174a58.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/jars/libs/internal_impl-23.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="8bd336eeae661e8311330284897ee07f8ebaa297">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.0_e7c9bfc615fa228324b726ee2737402875229e6d.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4fcf0b1879f8caf497c073e1432d398e9e2988c1">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.0.0_946145c3f9edf938057b22de3a6e0790da441a8a.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="1a78298e7724d5440d210bcb946b3493250d354d">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-plus-8.4.0_1a5452ae01b511b304782832d12fe8fb2bb27e3a.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-gson/1.20.0/9204765f39000f6109c927ac66c7963bf9c7df19/google-http-client-gson-1.20.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="9204765f39000f6109c927ac66c7963bf9c7df19">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-gson-1.20.0_455de095567966149abe36d2c0b64bd48b7293e2.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.20.0/93d82db2bca534960253f43424b2ba9d7638b4d2/google-http-client-1.20.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="93d82db2bca534960253f43424b2ba9d7638b4d2">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/google-http-client-1.20.0_f7ceb11b2534dce75c662259485705ae16172e28.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="04de44f90606c77f3b28cf44861f306290505aac">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-maps-8.4.0_6db90be3afbcbc7b30c51cd661e341b13506099d.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/zeppaworkspace/calendar-lib/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="98d685b4ad3d0814601da45cd1d9b92a1c1362a3">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/zeppaworkspace-calendar-lib-unspecified_28d678ab33dba205a55615fac99b3f673859b2b9.jar" />
+    </item>
+    <item
+        jar="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/exploded-aar/com.android.support/support-v13/23.0.0/jars/libs/internal_impl-23.0.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5d4bccb885c8a89d066ecb6c4addb553a99a79a2">
+        <dex dex="/Users/DrunkWithFunk21/Workspace/AndroidStudio/zeppaworkspace/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.0_ae3e467203c59fd007b475c8411c97fae6c98c08.jar" />
     </item>
 
 </items>

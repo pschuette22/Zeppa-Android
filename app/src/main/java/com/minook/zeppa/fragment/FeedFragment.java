@@ -159,9 +159,7 @@ public class FeedFragment extends Fragment implements OnRefreshListener,
 	@Override
 	public void onZeppaEventsLoaded() {
 
-
 		pullToRefreshLayout.setRefreshing(false);
-
 		flAdapter.notifyDataSetChanged();
 
 	}

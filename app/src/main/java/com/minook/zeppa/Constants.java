@@ -96,6 +96,8 @@ public class Constants {
 
 	public static final String MULTIPARTENTITY_BOUNDRY = "****";
 
+	public static final String PLACES_API_KEY = "AIzaSyB-IlNHS9u8HmuybpFHPLu-gK_dDCqXM-w";
+
 	/*
 	 * Navigation items are for labeling back stack instances When back button
 	 * is pressed, this makes sure that correct nav item is selected

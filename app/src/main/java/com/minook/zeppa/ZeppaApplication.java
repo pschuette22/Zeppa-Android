@@ -8,6 +8,7 @@ import com.minook.zeppa.activity.AuthenticatedFragmentActivity;
 import com.minook.zeppa.observer.MemoryObserver;
 import com.minook.zeppa.runnable.FetchInitialMinglersRunnable;
 import com.minook.zeppa.runnable.FetchMyEventTagsRunnable;
+import com.minook.zeppa.runnable.FetchVendorEvents;
 import com.minook.zeppa.runnable.LoginDeviceRunnable;
 import com.minook.zeppa.runnable.SyncZeppaCalendarRunnable;
 import com.minook.zeppa.runnable.ThreadManager;
@@ -102,6 +103,8 @@ public class ZeppaApplication extends Application {
 				.execute(new LoginDeviceRunnable(this, credential, userId));
 
 		ThreadManager.execute(new SyncZeppaCalendarRunnable(this, credential));
+
+		ThreadManager.execute(new FetchVendorEvents(this,credential,"end>"+System.currentTimeMillis(),null));
 
 	}
 

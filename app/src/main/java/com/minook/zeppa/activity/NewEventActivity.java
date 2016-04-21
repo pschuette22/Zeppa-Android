@@ -1,5 +1,6 @@
 package com.minook.zeppa.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -7,6 +8,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -28,6 +30,13 @@ import android.widget.Toast;
 
 import com.appspot.zeppa_cloud_1821.zeppaclientapi.model.ZeppaEvent;
 import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.minook.zeppa.Constants;
 import com.minook.zeppa.R;
 import com.minook.zeppa.Utils;
@@ -47,7 +56,7 @@ import java.util.Locale;
 
 public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		OnClickListener, TimePickerDialog.OnTimeSetListener,
-		DatePickerDialog.OnDateSetListener {
+		DatePickerDialog.OnDateSetListener,GoogleApiClient.OnConnectionFailedListener {
 
 	/*
 	 * -------------- Activity Pieces -------------------
@@ -63,12 +72,17 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	private final static String PICKER_MONTH = "Picker Month Argument";
 	private final static String PICKER_YEAR = "Picker Year Argument";
 
+	// My Place Picker request code
+	private final static int REQUEST_PLACE_PICKER = 5;
+
 	// UI Variables
 
 	private Button cancelButton;
 	private Button doneButton;
 
 	private EditText titleField;
+
+	private Place selectedPlace;
 	private EditText descriptionField;
 	private EditText shortLocationField;
 
@@ -95,6 +109,8 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 	private CreateEventTagAdapter tagAdapter;
 	private InviteListAdapter invitesAdapter;
 
+	private GoogleApiClient mGoogleApiClient;
+
 	// Picker Variables:
 	// TODO: give user the option to select a different time format
 	private boolean is12HourFormat = true;
@@ -116,6 +132,10 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		titleField = (EditText) findViewById(R.id.neweventactivity_title);
 		descriptionField = (EditText) findViewById(R.id.neweventactivity_description);
 		shortLocationField = (EditText) findViewById(R.id.neweventactivity_shortlocation);
+
+		// Set the on click listener to initialize the place picker
+		shortLocationField.setOnClickListener(this);
+
 		startDateField = (TextView) findViewById(R.id.neweventactivity_startdate);
 		startTimeField = (TextView) findViewById(R.id.neweventactivity_starttime);
 		endDateField = (TextView) findViewById(R.id.neweventactivity_enddate);
@@ -179,6 +199,14 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 
 		setInvitesText();
 
+		// Setup the place picker
+		mGoogleApiClient = new GoogleApiClient
+				.Builder(this)
+				.addApi(Places.GEO_DATA_API)
+				.addApi(Places.PLACE_DETECTION_API)
+				.enableAutoManage(this, this)
+				.build();
+
 	}
 
 	@Override
@@ -187,7 +215,30 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		tagAdapter.drawTags();
 	}
 
-	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		// Switch through relevant request codes
+		switch (requestCode) {
+			case REQUEST_PLACE_PICKER:
+				// Result of place picker request
+				if(resultCode == Activity.RESULT_OK) {
+					// The user has selected a place. Extract the name and address.
+					final Place place = PlacePicker.getPlace(this,data);
+					this.selectedPlace = place;
+					this.shortLocationField.setText(place.getName());
+
+					return;
+				}
+
+
+				break;
+		}
+
+		super.onActivityResult(requestCode, resultCode, data);
+
+	}
+
 
 	// This handles when a user types in the description field
 
@@ -212,29 +263,48 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 				tagAdapter.createTagInAsync(newTagTextField);
 			}
 			break;
-		case R.id.neweventactivity_exactlocation:
-			AlertDialog.Builder addressDialog = new AlertDialog.Builder(this);
-			final EditText addressField = new EditText(this);
-			if (longLocation == null || longLocation.isEmpty()) {
-				addressField.setHint(R.string.location_long);
-			} else {
-				addressField.setText(longLocation);
+
+			case R.id.neweventactivity_exactlocation:
+			case R.id.neweventactivity_shortlocation:
+			// Initialize the place picker
+			try {
+				PlacePicker.IntentBuilder intentBuilder =
+						new PlacePicker.IntentBuilder();
+				Intent intent = intentBuilder.build(this);
+				// Start the intent by requesting a result,
+				// identified by a request code.
+				startActivityForResult(intent, REQUEST_PLACE_PICKER);
+
+			} catch (GooglePlayServicesRepairableException e) {
+				// ...
+			} catch (GooglePlayServicesNotAvailableException e) {
+				// ...
 			}
-			addressDialog.setView(addressField);
-			addressDialog.setPositiveButton(R.string.done,
-					new Dialog.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							longLocation = addressField.getText().toString();
-							dialog.dismiss();
-						}
-
-					});
-			addressDialog.setTitle(R.string.location_long_title);
-			addressDialog.create().show();
 
 			break;
+
+//			AlertDialog.Builder addressDialog = new AlertDialog.Builder(this);
+//			final EditText addressField = new EditText(this);
+//			if (longLocation == null || longLocation.isEmpty()) {
+//				addressField.setHint(R.string.location_long);
+//			} else {
+//				addressField.setText(longLocation);
+//			}
+//			addressDialog.setView(addressField);
+//			addressDialog.setPositiveButton(R.string.done,
+//					new Dialog.OnClickListener() {
+//
+//						@Override
+//						public void onClick(DialogInterface dialog, int which) {
+//							longLocation = addressField.getText().toString();
+//							dialog.dismiss();
+//						}
+//
+//					});
+//			addressDialog.setTitle(R.string.location_long_title);
+//			addressDialog.create().show();
+//
+//			break;
 
 		case R.id.neweventactivity_startdate:
 			isStartCalendar = true;
@@ -296,6 +366,24 @@ public class NewEventActivity extends AuthenticatedFragmentActivity implements
 		super.onBackPressed();
 		overridePendingTransition(R.anim.hold, R.anim.slide_down_out);
 	}
+
+
+
+	@Override
+	public void onConnectionFailed(ConnectionResult result) {
+		super.onConnectionFailed(result);
+	}
+
+	@Override
+	public void onConnected(Bundle connectionHint) {
+		super.onConnected(connectionHint);
+	}
+
+	@Override
+	public void onConnectionSuspended(int cause) {
+		super.onConnectionSuspended(cause);
+	}
+
 
 	/*
 	 * ---------------- Public Methods --------------------
